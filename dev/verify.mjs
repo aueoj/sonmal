@@ -29,7 +29,8 @@ const ONLY = (arg('--only', '') || '').split(',').filter(Boolean);
 /* 서버 없이 되는 것 — 매 바퀴 돌릴 필요가 없다 */
 const STATIC = [
   ['판 번호', ['dev/stamp.mjs', '--check'], '파일 주소에 판 번호가 붙어 있는가'],
-  ['자모 구별', ['dev/selftest.mjs'], '40개 손모양이 서로 구별되는가']
+  ['자모 구별', ['dev/selftest.mjs'], '40개 손모양이 서로 구별되는가'],
+  ['단어 출처', ['dev/words-check.mjs'], '새 단어가 사전 번호와 그림을 갖췄는가']
 ];
 
 /* 브라우저로 봐야 하는 것 */
