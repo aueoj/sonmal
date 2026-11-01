@@ -1,7 +1,6 @@
 /* 페이지가 실제로 어디에 접속하는지 전부 기록한다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1280, height: 860 } });
 const hits = new Map();
 p.on('request', r => {

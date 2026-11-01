@@ -1,8 +1,7 @@
 /* 클릭 없이 흘러가는지 확인한다. 단어 칩 한 번 누르는 것 외에는
    아무 조작 없이 읽어 주고 다음으로 넘어가야 한다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 const errs = [];
 p.on('pageerror', e => errs.push('PAGEERROR ' + e.message));

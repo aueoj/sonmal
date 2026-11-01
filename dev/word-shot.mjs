@@ -1,6 +1,5 @@
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
 const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });

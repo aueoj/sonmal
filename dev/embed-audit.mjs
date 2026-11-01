@@ -1,7 +1,6 @@
 /* 끼워진 프레임에서 카메라와 모델이 막혔을 때, 안내가 쓸모 있는지 확인한다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
 // 프레임 안에 넣고, 카메라와 모델을 둘 다 막는다
 await p.addInitScript(() => {

@@ -1,8 +1,7 @@
 /* 아티팩트 서비스가 페이지를 자기 스켈레톤 안에 중첩해 넣는다.
    그 중첩이 스타일·모듈·레이아웃을 깨지 않는지 그대로 재현해 확인한다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1280, height: 860 }, deviceScaleFactor: 2 });
 const errs = [];
 p.on('pageerror', e => errs.push(e.message));

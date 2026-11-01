@@ -1,7 +1,6 @@
 /* 화면을 쓰는 동안 각 영역이 세로로 얼마를 차지하는지 잰다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 for (const [w, h] of [[1440, 900], [1440, 760], [1280, 720]]) {
   const p = await b.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 2 });
   await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });

@@ -1,8 +1,7 @@
 /* hidden 속성이 붙은 요소가 정말 안 보이는지 확인한다.
    클래스에 display를 주면 브라우저 기본 [hidden]{display:none} 를 이겨 버린다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1280, height: 860 } });
 // JS를 끄고 — file:// 로 열어 모듈이 안 돌 때와 같은 상태
 await p.route('**/js/*.js', r => r.abort());

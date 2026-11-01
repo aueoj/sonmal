@@ -1,8 +1,7 @@
 /* 카메라를 쓸 수 없는 자리(내장 프레임, 비보안 컨텍스트)에서도
    전체 흐름을 볼 수 있는지 확인한다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 const errs = [];
 p.on('pageerror', e => errs.push(e.message));

@@ -1,7 +1,6 @@
 /* 카메라가 막혔을 때 진단이 뜨는지, 무엇을 짚는지 확인한다. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox', '--use-fake-device-for-media-stream'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const ctx = await b.newContext({ viewport: { width: 1280, height: 860 }, deviceScaleFactor: 2, permissions: [] });
 const p = await ctx.newPage();
 const errs = []; p.on('pageerror', e => errs.push(e.message));

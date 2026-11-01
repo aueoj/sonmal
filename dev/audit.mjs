@@ -1,7 +1,6 @@
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
+import { launch } from './browser.mjs';
 const URL = process.argv[2] || 'http://localhost:8777/index.html?mock=1';
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 const errs = [];
 p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });

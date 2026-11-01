@@ -1,8 +1,7 @@
 /* 전체 루프를 모의 입력으로 끝까지 돌린다.
    말 → 자모 분해 → 손모양 → 랜드마크 → 특징 → 판정 → 확정 → 한글 재합성. */
-import pw from '/opt/node-tools/node_modules/playwright/index.js';
-const { chromium } = pw;
-const b = await chromium.launch({ args: ['--no-sandbox'] });
+import { launch } from './browser.mjs';
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 const errs = [];
 const GOTO = 'http://localhost:8777/index.html?mock=1';
