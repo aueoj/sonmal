@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011529';
-import { getPose } from './jamoData.js?v=202611011529';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011529';
-import { describe } from './poseFeatures.js?v=202611011529';
-import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611011529';
-import { Tracker } from './tracker.js?v=202611011529';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011529';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011529';
-import { diagnose } from './diagnose.js?v=202611011529';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011538';
+import { getPose } from './jamoData.js?v=202611011538';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011538';
+import { describe } from './poseFeatures.js?v=202611011538';
+import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611011538';
+import { Tracker } from './tracker.js?v=202611011538';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011538';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011538';
+import { diagnose } from './diagnose.js?v=202611011538';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -52,8 +52,8 @@ const state = {
   tracker: null, listener: null, live: false,
   hand: 'right',
   holdSince: 0, trail: [], scores: [], lastStep: '',
-  wordTimer: null, wordStep: 0, wordSince: 0, spokenSyllable: -1,
-  lostSince: 0, repeatTimer: null,
+  wordTimer: null, wordStep: 0, wordSince: 0,
+  lostSince: 0, repeatTimer: null, spokenPart: -1,
   settling: false   // 한 칸을 끝내고 다음으로 넘어가는 사이. 이때 들어오는 프레임은 흘린다.
 };
 
@@ -90,12 +90,13 @@ function setUtterance(text) {
   /* 음절 번호는 어절마다 0부터 다시 매겨진다. 그대로 두면 '뒤 왼쪽'의
      뒤(0)와 왼(0)이 한 글자로 묶여 "뒤왼"으로 읽힌다. 이어서 매긴다. */
   let syllable = 0;
+  let partIndex = 0;
   for (const part of planUtterance(text)) {
     if (state.seq.length) state.seq.push({ role: 'space', jamo: ' ' });
     // 별칭으로 말했어도 칸에는 그 수어의 이름을 보여 준다 ('반갑습니다' → 안녕하세요)
     if (part.kind === 'word') {
-      state.seq.push({ role: 'word', sign: part.sign, jamo: part.sign.word });
-      syllable += 1;
+      state.seq.push({ role: 'word', sign: part.sign, jamo: part.sign.word, partIndex });
+      syllable += 1; partIndex += 1;
       continue;
     }
     const units = toFingerspell(part.text);
@@ -106,11 +107,13 @@ function setUtterance(text) {
       if (u.syllableIndex > max) max = u.syllableIndex;
     }
     if (max >= 0) syllable = max + 1;
+    for (const u of units) u.partIndex = partIndex;
+    partIndex += 1;
     state.seq.push(...units);
   }
   state.at = -1;
   state.got = [];
-  state.spokenSyllable = -1;
+  state.spokenPart = -1;
   el.read.textContent = '';
   el.typed.value = '';
   paintChips(text);
@@ -220,21 +223,26 @@ function completeWord(u) {
   el.fill.style.width = '100%';
   const node = el.seq.querySelector(`[data-i="${state.at}"]`);
   if (node) node.dataset.lock = '1';
-  say(u.jamo);
-  setTimeout(advance, 420);
+  setTimeout(() => { advance(); speakFinishedPart(); }, 420);
 }
 
-/* 음절이 완성될 때마다 그 음절을 읽어 준다 */
-function speakFinishedSyllable() {
-  const done = state.seq.slice(0, state.at).filter(u => u.role !== 'word' && u.role !== 'space');
+/* 한 어절을 다 하면 그 어절을 읽어 준다.
+   자모 하나하나를 읽으면 '안녕하세요'가 '안','녕','하','세','요'로 들려 말이 되지 않는다. */
+function speakFinishedPart() {
+  const done = state.seq.slice(0, state.at).filter(u => u.role !== 'space');
   const last = done[done.length - 1];
-  if (!last || last.syllableIndex === undefined) return;
+  if (!last || last.partIndex === undefined) return;
+
   const next = state.seq[state.at];
-  const sameSyllable = next && next.syllableIndex === last.syllableIndex;
-  if (sameSyllable || last.syllableIndex === state.spokenSyllable) return;
-  state.spokenSyllable = last.syllableIndex;
-  const jamos = done.filter(u => u.syllableIndex === last.syllableIndex).map(u => u.jamo);
-  say(composeFromJamo(jamos));
+  if (next && next.partIndex === last.partIndex) return;   // 아직 같은 어절 안이다
+  if (last.partIndex === state.spokenPart) return;
+  state.spokenPart = last.partIndex;
+
+  const part = done.filter(u => u.partIndex === last.partIndex);
+  const text = part[0]?.role === 'word'
+    ? part[0].jamo
+    : composeFromJamo(part.map(u => u.jamo));
+  say(text);
 }
 
 /* 끝나도 멈추지 않는다. 잠깐 쉬었다가 처음으로 돌아가, 다시 하면 다시 읽어 준다. */
@@ -246,7 +254,7 @@ function finish() {
   paintSeq();
   clearTimeout(state.repeatTimer);
   state.repeatTimer = setTimeout(() => {
-    state.at = -1; state.got = []; state.spokenSyllable = -1;
+    state.at = -1; state.got = []; state.spokenPart = -1;
     for (const n of el.seq.querySelectorAll('.unit[data-i]')) delete n.dataset.lock;
     advance();
   }, REPEAT_MS);
@@ -338,7 +346,7 @@ function onFrame(lms, handedness) {
       if (node) node.dataset.lock = '1';
       state.got.push(current.jamo);
       advance();
-      speakFinishedSyllable();
+      speakFinishedPart();
     }
   } else {
     state.holdSince = 0;
