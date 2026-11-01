@@ -13,7 +13,7 @@ const $ = id => document.getElementById(id);
 const el = {
   camera: document.querySelector('.camera'),
   video: $('cam'), overlay: $('overlay'), camEmpty: $('cam-empty'),
-  camStatus: $('cam-status'), btnCam: $('btn-cam'),
+  camStatus: $('cam-status'), btnCam: $('btn-cam'), btnDemo: $('btn-demo'),
   heard: $('heard'), heardText: $('heard-text'),
   glyph: $('glyph'), hand: $('hand'), flag: $('flag'),
   note: $('note'), mnemo: $('mnemo'),
@@ -27,7 +27,11 @@ const el = {
   btnSources: $('btn-sources'), chart: $('chart')
 };
 
-const MOCK = new URLSearchParams(location.search).has('mock');
+let MOCK = new URLSearchParams(location.search).has('mock');
+
+/* 카메라를 쓸 수 없는 자리도 있다. 내장 프레임은 권한 정책으로 막기도 하고,
+   보안 컨텍스트가 아니면 API 자체가 없다. 그럴 때 빈 화면을 내밀지 않는다. */
+const CAM_AVAILABLE = Boolean(navigator.mediaDevices?.getUserMedia);
 const ACCEPT = 0.74;        // 이 점수를 넘고
 const HOLD_MS = 450;        // 이만큼 버티면 맞은 것으로 본다
 const NEAR = 0.58;
@@ -260,8 +264,10 @@ function drawLandmarks(ctx, lms, w, h) {
 
 /* ── 켜고 끄기 ───────────────────────────────── */
 
-async function startCamera() {
+async function startCamera({ demo = false } = {}) {
+  if (demo) MOCK = true;
   el.btnCam.disabled = true;
+  el.btnDemo.disabled = true;
   el.btnCam.textContent = '여는 중…';
   el.note.textContent = MOCK
     ? '모의 입력을 준비하고 있습니다.'
@@ -281,10 +287,12 @@ async function startCamera() {
     }
   } catch (err) {
     el.btnCam.disabled = false;
+    el.btnDemo.disabled = false;
     el.btnCam.textContent = '카메라 켜기';
     el.note.textContent =
       err?.name === 'NotAllowedError' ? '카메라 권한이 거부되었습니다. 브라우저 주소창의 카메라 아이콘에서 허용으로 바꾸고 다시 눌러 주세요.'
       : err?.name === 'NotFoundError' ? '쓸 수 있는 카메라를 찾지 못했습니다. 연결을 확인하고 다시 눌러 주세요.'
+      : err?.name === 'NotSupportedError' || !CAM_AVAILABLE ? '이 자리에서는 카메라를 쓸 수 없습니다. 카메라 없이 둘러보기로 전체 흐름을 볼 수 있습니다.'
       : /import|fetch|network|Failed to/i.test(err?.message ?? '') ? '손 인식 모델을 내려받지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.'
       : `카메라를 열지 못했습니다. ${err?.message ?? ''}`;
   }
@@ -329,7 +337,12 @@ function init() {
     el.btnListen.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
   }
 
-  el.btnCam.addEventListener('click', startCamera);
+  el.btnCam.addEventListener('click', () => startCamera());
+  el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
+  if (!CAM_AVAILABLE) {
+    el.btnCam.disabled = true;
+    el.btnCam.title = '이 자리에서는 카메라를 쓸 수 없습니다';
+  }
   el.btnListen.addEventListener('click', startListening);
   el.btnReplay.addEventListener('click', () => speak(composeFromJamo(state.got).trim()));
   el.typedForm.addEventListener('submit', e => {

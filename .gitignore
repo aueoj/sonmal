@@ -1,3 +1,6 @@
 .DS_Store
 node_modules/
 *.log
+
+# 아티팩트 래퍼 재현본 (dev/wrapped-audit.mjs 가 만든다)
+wrapped-preview.html
