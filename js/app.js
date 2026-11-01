@@ -168,6 +168,7 @@ function advance() {
 
 /* 단어 수어는 동작이 여럿이라 저절로 흐른다. 누를 것이 없다. */
 function showWord(u) {
+  stopWordTimer();            // 이미 돌던 타이머가 있으면 먼저 멈춘다.
   const w = u.sign;
   const frames = WORD_POSE_FILES[w.word]?.length ?? 1;
   state.wordStep = 0; state.wordSeen = 0; state.wordSince = 0;
@@ -193,6 +194,9 @@ function showWord(u) {
 }
 
 function paintWordStep(w, frames) {
+  // 지금 칸이 이 단어가 아니면 그리지 않는다. 남은 타이머가 자모 그림을 덮지 않게.
+  const cur = state.seq[state.at];
+  if (!cur || cur.role !== 'word' || cur.sign !== w) return stopWordTimer();
   el.art.innerHTML = wordArt(w.word, state.wordStep);
   el.step.textContent = w.steps?.[state.wordStep] ?? w.수형;
   if (frames > 1) el.fill.style.width = `${Math.round(((state.wordStep + 1) / frames) * 100)}%`;

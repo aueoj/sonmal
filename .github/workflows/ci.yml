@@ -48,6 +48,9 @@ jobs:
       - name: 그림이 늘어나거나 눌리지 않는가
         run: node dev/aspect-audit.mjs
 
+      - name: 단어 그림이 자모 자리에 남지 않는가
+        run: node dev/art-audit.mjs
+
       # 허용한 곳 말고 다른 데로 접속하면 여기서 멈춘다
       - name: 영상·소리가 새어 나가지 않는가
         run: node dev/egress-audit.mjs
