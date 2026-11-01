@@ -22,38 +22,34 @@ await p.addInitScript(() => {
 await p.goto(GOTO, { waitUntil: 'networkidle' });
 const PHRASE = process.argv[2] || '고맙습니다';
 await p.fill('#typed', PHRASE);
-await p.click('.typed button[type=submit]');
+await p.press('#typed', 'Enter');
 await p.click('#btn-cam');
 await p.waitForTimeout(600);
 
-const total = await p.evaluate(() => document.querySelectorAll('#strip .unit[data-i]').length);
+const total = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-i]').length);
 // 멈춤은 '시간이 얼마 지났나'가 아니라 '진행이 멈춘 채 얼마나 있었나'로 본다.
 const STALL_MS = 6000, DEADLINE = Date.now() + 60000;
 let last = -1, lastChange = Date.now(), stuckAt = null;
 while (Date.now() < DEADLINE) {
-  const done = await p.evaluate(() => document.querySelectorAll('#strip .unit[data-state="done"]').length);
+  const done = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-state="done"]').length);
   if (done >= total) break;
   // 단어 수어 구간은 인식하지 않는다. 사람이 누르듯 '다음'을 눌러 넘긴다.
-  const next = await p.$('#btn-next:not([hidden])');
-  if (next) { await next.click(); lastChange = Date.now(); await p.waitForTimeout(150); continue; }
   if (done !== last) { last = done; lastChange = Date.now(); }
   else if (Date.now() - lastChange > STALL_MS) { stuckAt = done; break; }
   await p.waitForTimeout(250);
 }
 
 const r = await p.evaluate(() => ({
-  done: document.querySelectorAll('#strip .unit[data-state="done"]').length,
-  total: document.querySelectorAll('#strip .unit[data-i]').length,
-  locks: document.querySelectorAll('#strip .unit[data-lock="1"]').length,
-  count: document.getElementById('count').textContent,
-  result: document.getElementById('result').textContent,
-  meterPct: document.getElementById('meter-pct').textContent,
-  meterState: document.querySelector('.meter').dataset.state,
-  replayDisabled: document.getElementById('btn-replay').disabled,
+  done: document.querySelectorAll('#seq .unit[data-state="done"]').length,
+  total: document.querySelectorAll('#seq .unit[data-i]').length,
+  locks: document.querySelectorAll('#seq .unit[data-lock="1"]').length,
+  count: '',
+  result: document.getElementById('read').textContent,
+  meterPct: '', meterState: document.querySelector('.guide').dataset.state, replayDisabled: false,
   spoken: window.__spoken
 }));
 
-const outText = (r.result.match(/읽으면\s*(.+)$/) || [])[1]?.trim() ?? '';
+const outText = r.spoken.join('');
 console.log(`문장              ${PHRASE}`);
 console.log(`확정 자모          ${r.done} / ${r.total}${stuckAt !== null ? `  ← ${stuckAt}번째에서 멈춤` : ''}`);
 console.log(`확정 애니메이션 남음   ${r.locks}개  ${r.locks > 0 ? '(innerHTML이 지우지 않음)' : '← 지워짐'}`);

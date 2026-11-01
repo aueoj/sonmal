@@ -22,20 +22,20 @@ say('→ 둘 다 반전 + JS도 반전?', mirror.canvas.includes('-1') ? '이중
 
 // strip-rail 자동 최소 크기
 const strip = await p.evaluate(() => {
-  const r = document.getElementById('strip');
+  const r = document.getElementById('seq');
   return { minWidth: getComputedStyle(r).minWidth, scrollW: r.scrollWidth, clientW: r.clientWidth };
 });
 say('strip-rail min-width', strip.minWidth + (strip.minWidth === 'auto' ? '  ← flex 최소 크기 함정' : ''));
 
 // 직접 입력 폼이 실제로 동작하는가 (렌더 확인이 아니라 상호작용)
 await p.fill('#typed', '반갑습니다!');
-await p.click('.typed button[type=submit]');
+await p.press('#typed', 'Enter');
 await p.waitForTimeout(250);
 const afterForm = await p.evaluate(() => ({
   heard: document.getElementById('heard-text').textContent,
-  units: [...document.querySelectorAll('#strip .unit:not(.gap)')].map(u => u.textContent),
-  count: document.getElementById('count').textContent,
-  glyph: document.getElementById('glyph').textContent
+  units: [...document.querySelectorAll('#seq .unit:not(.gap)')].map(u => u.textContent),
+  count: '',
+  glyph: document.getElementById('guide-name').textContent
 }));
 say('폼 제출 → 들은 말', afterForm.heard);
 say('폼 제출 → 자모', afterForm.units.join(''));
