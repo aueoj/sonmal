@@ -144,6 +144,7 @@ export function planUtterance(text) {
 }
 
 export const SOURCES = [
+  { name: '서울시 수어사전', url: 'https://wis.seoul.go.kr/wfs/dhs/udr/signDictionary.do', note: '공식 동작 확인용 참고 링크 · 현재 연습 그림은 사용자 제공 자료 기반' },
   { name: '국립국어원 한국수어사전', url: 'https://sldict.korean.go.kr/',
     note: '수어 동영상, 수형 사진, 수형 설명, 용례' },
   { name: '공공데이터포털 — 한국수어사전 표제어 및 용례', url: 'https://www.data.go.kr/data/15122687/fileData.do',

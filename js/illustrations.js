@@ -1,27 +1,21 @@
-// 원본 PNG를 수정하지 않고 각 그림의 표시 영역만 지정한다.
-const ROOT = new URL('../assets/sheets/', import.meta.url).href;
-const JAMO = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ',
-  'ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅛ','ㅜ','ㅠ','ㅡ','ㅣ',
-  'ㅘ','ㅚ','ㅙ','ㅝ','ㅞ','ㅟ','ㅢ']; // 첫 번째 중복 ㅙ는 ㅚ로 표기
+// 각 파일에는 글자 없는 동작 한 장만 담는다. 도표 전체를 표시하지 않는다.
+const STEP_BASE = new URL('../assets/word-steps/', import.meta.url).href;
+const POSES = {"안녕하세요": ["01-01.png", "01-02.png"], "감사합니다": ["02-01.png", "02-02.png", "02-03.png"], "미안합니다": ["03-01.png", "03-02.png"], "괜찮아요": ["04-01.png", "04-02.png", "04-03.png"], "네": ["05-01.png", "05-02.png"], "아니요": ["06-01.png", "06-02.png"], "도와주세요": ["07-01.png", "07-02.png", "07-03.png"], "다시": ["08-01.png", "08-02.png", "08-03.png"], "천천히": ["09-01.png", "09-02.png", "09-03.png"], "이해했어요": ["10-01.png", "10-02.png", "10-03.png"], "물": ["11-01.png", "11-02.png"], "화장실": ["12-01.png", "12-02.png"]};
+const SHEET_BASE = new URL('../assets/sheets/', import.meta.url).href;
+const JAMO = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ','ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅛ','ㅜ','ㅠ','ㅡ','ㅣ','ㅘ','ㅚ','ㅙ','ㅝ','ㅞ','ㅟ','ㅢ'];
 const ROWS = [[20,160],[235,155],[433,150],[625,155],[820,140]];
-const DOUBLE = { 'ㄲ':[30,30,330,250], 'ㄸ':[390,70,390,180], 'ㅃ':[810,20,300,245],
-  'ㅆ':[1160,20,365,245], 'ㅉ':[20,395,400,155] };
-const WORDS = ['안녕하세요','감사합니다','미안합니다','괜찮아요','네','아니요',
-  '도와주세요','다시','천천히','이해했어요','물','화장실'];
-function artwork(sheet, box, label) {
-  return `<svg class="sheet-art" viewBox="${box.join(' ')}" role="img" aria-label="${label}" preserveAspectRatio="xMidYMid meet"><image href="${ROOT}sheet-${sheet}.png" width="${sheet === 1 ? 1199 : 1536}" height="${sheet === 1 ? 1312 : 1024}" /></svg>`;
-}
+const DOUBLE = {'ㄲ':[30,30,330,250],'ㄸ':[390,70,390,180],'ㅃ':[810,20,300,245],'ㅆ':[1160,20,365,245],'ㅉ':[20,395,400,155]};
 export function jamoArt(jamo) {
-  if (DOUBLE[jamo]) return artwork(3, DOUBLE[jamo], `${jamo} 지문자 손모양`);
-  const i = JAMO.indexOf(jamo);
-  if (i < 0) return '';
-  const col = i % 7, [y,h] = ROWS[Math.floor(i/7)];
-  return artwork(2, [Math.max(0,col*1536/7-5), y, Math.min(1536/7+10,1536-col*1536/7), h], `${jamo} 지문자 손모양`);
+  const i = JAMO.indexOf(jamo), pair = DOUBLE[jamo];
+  if (i < 0 && !pair) return '';
+  const col = i % 7, row = ROWS[Math.floor(i/7)];
+  const box = pair ?? [Math.max(0,col*1536/7-5),row[0],Math.min(1536/7+10,1536-col*1536/7),row[1]];
+  return `<svg class="sheet-art" viewBox="${box.join(' ')}" role="img" aria-label="${jamo} 지문자 손모양" preserveAspectRatio="xMidYMid meet"><image href="${SHEET_BASE}sheet-${pair?3:2}.png" width="1536" height="1024" /></svg>`;
 }
-export function wordArt(word) {
-  const i = WORDS.indexOf(word);
-  if (i < 0) return '';
-  // 라벨은 HTML로 표시한다. 머리·손·이동 화살표는 모두 포함한다.
-  const row = Math.floor(i/3), col = i%3;
-  return artwork(1, [col*399.66, [10,350,680,1000][row],399.66,[280,260,250,245][row]], `${word} 수어 동작`);
+export function wordArt(word, step = 0) {
+  const frames = POSES[word];
+  if (!frames) return '';
+  const index = Math.max(0, Math.min(step, frames.length - 1));
+  return `<img class="word-pose" src="${STEP_BASE}${frames[index]}" alt="${word} 동작 ${index + 1}" decoding="async" data-frame="${index + 1}">`;
 }
+export const WORD_POSE_FILES = POSES;

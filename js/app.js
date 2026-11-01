@@ -2,13 +2,13 @@
 
 import { toFingerspell, composeFromJamo } from './hangul.js';
 import { getPose, ALL_POSES } from './jamoData.js';
-import { renderHand, renderWordSign } from './handRenderer.js?v=illustrations-2';
+import { renderHand, renderWordSign } from './handRenderer.js?v=poses-3';
 import { describe } from './poseFeatures.js';
 import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js';
-import { Tracker } from './tracker.js?v=illustrations-2';
+import { Tracker } from './tracker.js?v=poses-3';
 import { createListener, speak, support, hasKoreanVoice } from './speech.js';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=illustrations-2';
-import { diagnose } from './diagnose.js?v=illustrations-2';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=poses-3';
+import { diagnose } from './diagnose.js?v=poses-3';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -32,6 +32,7 @@ const el = {
   btnSources: $('btn-sources'), chart: $('chart'),
   guide: $('motion-guide'), guideSequence: $('guide-sequence'),
   guideProgress: $('guide-progress'), guideWord: $('guide-word-detail'),
+  guideHand: $('guide-hand'), guideMirrorNote: $('guide-mirror-note'),
   guidePrev: $('guide-prev'), guideNext: $('guide-next'), guideStepCount: $('guide-step-count')
 };
 
@@ -160,6 +161,18 @@ function paintGuide() {
   el.guideNext.textContent = state.guideStep < steps.length - 1 ? '다음 단계' : unit?.role === 'word' ? '다음 동작' : '카메라로 확인 중';
   el.guideStepCount.textContent = finished ? '완료' : `${state.guideStep + 1} / ${steps.length} 단계`;
   el.guideNext.dataset.last = String(state.guideStep >= steps.length - 1);
+  if (unit?.role === 'word') {
+    const frame = renderWordSign(unit.sign, { step: state.guideStep });
+    const card = el.guideSequence.querySelector('[aria-current="step"] .sm-word');
+    if (card) card.outerHTML = frame;
+    const side = el.hand.querySelector('.word-art');
+    if (side) side.innerHTML = frame;
+    const caption = $('word-pose-caption');
+    if (caption) caption.textContent = steps[state.guideStep] ?? '';
+  }
+  el.guideHand.closest('label').hidden = unit?.role !== 'word';
+  el.guideMirrorNote.hidden = unit?.role !== 'word';
+
 
 }
 
@@ -219,9 +232,7 @@ function showWord(u) {
   el.glyph.textContent = '';
   el.hand.innerHTML =
     `<div class="word-art">${renderWordSign(w)}</div>` +
-    `<div class="word-steps"><p class="word-name">${w.word}</p><ol>` +
-    (w.steps ?? []).map(t => `<li>${t}</li>`).join('') +
-    `</ol><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
+    `<div class="word-steps"><p class="word-name">${w.word}</p><p id="word-pose-caption">${w.steps?.[0] ?? ''}</p><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
     (w.비수지 ? ` · ${w.비수지}` : '') + '</p></div>';
   el.flag.hidden = false;
   el.flag.textContent = '검수 전';
@@ -436,6 +447,14 @@ function stopListening() {
 /* ── 시작 ───────────────────────────────────── */
 
 function init() {
+  const setGuideHand = () => {
+    document.body.dataset.guideHand = el.guideHand.value;
+    const hand = el.guideHand.value === 'right' ? '오른손' : '왼손';
+    const side = el.guideHand.value === 'right' ? '오른쪽' : '왼쪽';
+    el.guideMirrorNote.textContent = `거울 화면 기준 · ${hand}은 화면 ${side}. 그림과 같은 쪽으로 움직여 보세요.`;
+  };
+  el.guideHand.addEventListener('change', setGuideHand);
+  setGuideHand();
   if (support.listen) {
     state.listener = createListener({
       onInterim: t => { el.heard.dataset.interim = 'true'; el.heardText.textContent = t; },
@@ -458,6 +477,12 @@ function init() {
     if (el.guideNext.dataset.last !== 'true') { state.guideStep++; paintGuide(); }
     else if (state.seq[state.at]?.role === 'word') { state.got.push(state.seq[state.at].jamo); advance(); }
   });
+  $('practice-words').innerHTML = WORD_SIGNS.map((w, i) => `<button type="button" data-word-index="${i}">${w.word}</button>`).join('');
+  $('practice-words').addEventListener('click', e => { const b = e.target.closest('[data-word-index]'); if (b) setUtterance(WORD_SIGNS[Number(b.dataset.wordIndex)].word); });
+  const phrases = ['안녕하세요 감사합니다', '미안합니다 괜찮아요', '다시 천천히', '천천히 도와주세요', '물 도와주세요', '화장실 도와주세요', '네 이해했어요', '아니요 다시', '괜찮아요 감사합니다', '이해했어요 감사합니다'];
+  $('practice-phrases').innerHTML = phrases.map((phrase, i) => `<button type="button" data-phrase-index="${i}">${phrase}</button>`).join('');
+  $('practice-phrases').addEventListener('click', e => { const b = e.target.closest('[data-phrase-index]'); if (b) setUtterance(phrases[Number(b.dataset.phraseIndex)]); });
+
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
   el.btnNext.addEventListener('click', () => {

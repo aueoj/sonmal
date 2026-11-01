@@ -308,3 +308,29 @@ dialog a { color: var(--indigo); }
 .guide-number { position: absolute; left: 0; top: 0; }
 .guide-word-detail { text-align: center; }
 .guide-controls { justify-content: center; }
+
+/* 개별 동작 PNG와 거울 화면의 좌우를 맞춘다. 글자는 이미지와 분리한다. */
+.jamo-pose, .word-pose { display: block; width: 100%; height: 100%; object-fit: contain; }
+body[data-guide-hand="right"] .word-pose { transform: scaleX(-1); }
+body[data-guide-hand="left"] .word-pose { transform: none; }
+.guide-step[data-kind="word"] .sm-word { width: 230px; height: 190px; display: block; }
+.guide-mirror-note { text-align: center; font-size: 11px; line-height: 1.5; color: #ddd; margin: 4px 0; }
+.guide-hand-label { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0 8px; }
+.guide-hand-label select { color: white; background: #242424; border: 1px solid #aaa; border-radius: 5px; padding: 3px 8px; }
+.word-art { height: 260px; }
+.word-art .sm-word { height: 100%; }
+.word-library { font-size: 12px; }
+.word-library summary { cursor: pointer; font-weight: 600; }
+#practice-words { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0; }
+#practice-words button { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); padding: 5px 8px; font: inherit; cursor: pointer; }
+.word-library p { color: var(--muted); font-size: 11px; }
+@media (max-height: 740px) and (min-width: 901px) {
+  .guide-step[data-kind="word"] .sm-word { height: 120px; }
+  .motion-guide { max-height: 85%; }
+}
+/* 인물 카드는 그림만 담고, 단계 설명은 하단 가이드에서 읽는다. */
+.word-card .word-steps { display: none; }
+.card.word-card { aspect-ratio: auto; height: auto; }
+
+#practice-phrases { display: flex; flex-direction: column; gap: 5px; }
+#practice-phrases button { border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--ink); padding: 5px 8px; text-align: left; font: inherit; cursor: pointer; }
