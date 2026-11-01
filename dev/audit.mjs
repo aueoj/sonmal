@@ -32,7 +32,7 @@ await p.fill('#typed', '반갑습니다!');
 await p.press('#typed', 'Enter');
 await p.waitForTimeout(250);
 const afterForm = await p.evaluate(() => ({
-  heard: document.getElementById('heard-text').textContent,
+  heard: document.getElementById('typed').value,
   units: [...document.querySelectorAll('#seq .unit:not(.gap)')].map(u => u.textContent),
   count: '',
   glyph: document.getElementById('guide-name').textContent

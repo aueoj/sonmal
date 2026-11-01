@@ -2,6 +2,16 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'none';
+  script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src https://fonts.gstatic.com;
+  img-src 'self' data: blob:;
+  media-src 'self' blob: mediastream:;
+  connect-src 'self' https://cdn.jsdelivr.net https://storage.googleapis.com;
+  worker-src 'self' blob:;
+  form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
@@ -48,7 +58,9 @@ if (location.protocol === 'file:') {
     <div class="cam-prompt">
       <div>
         <p class="cam-title">카메라를 켜면 손을 읽어 드립니다</p>
-        <p class="cam-body">영상과 손 좌표는 이 브라우저 안에서만 처리되고 어디로도 전송되지 않습니다.</p>
+        <p class="cam-body">영상과 손 좌표는 이 브라우저 안에서만 처리됩니다. 녹화하지 않고 어디로도 보내지 않습니다.
+          다만 <b>말하기</b>를 누르면 브라우저가 마이크 소리를 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플).
+          소리를 보내고 싶지 않으면 옆 칸에 문장을 입력하세요.</p>
       </div>
       <div class="cam-actions">
         <button class="primary" id="btn-cam" type="button">카메라 켜기</button>
@@ -69,8 +81,7 @@ if (location.protocol === 'file:') {
     <div class="chart" id="chart"></div>
   </div>
 
-  <!-- 들은 말과 읽어 준 말은 영상 위에 겹쳐 둔다 -->
-  <p class="heard" id="heard" hidden><span id="heard-text"></span></p>
+  <!-- 읽어 준 말만 영상 위에 잠깐 띄운다 -->
   <p class="spoken" id="spoken" hidden aria-live="polite"></p>
 
   <!-- 중하단: 말하기. 화면에서 제일 눈에 띄어야 한다 -->

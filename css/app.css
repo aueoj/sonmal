@@ -71,13 +71,12 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 .chart figcaption { font-family: var(--kr); font-weight: 600; font-size: var(--t-label); }
 
 /* 들은 말 · 읽어 준 말 */
-.heard, .spoken {
-  position: absolute; left: var(--s5); z-index: 3; margin: 0; max-width: 46ch;
-  background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md);
+.spoken {
+  position: absolute; top: var(--s5); right: var(--s5); z-index: 3; margin: 0; max-width: 40ch;
+  background: var(--paper); border: 1px solid var(--jade); border-radius: var(--r-md);
   padding: var(--s2) var(--s4); font-family: var(--kr); font-size: var(--t-body);
+  color: var(--jade); font-weight: 600;
 }
-.heard { top: var(--s5); color: var(--muted); }
-.spoken { top: var(--s5); left: auto; right: var(--s5); border-color: var(--jade); color: var(--jade); font-weight: 600; }
 
 /* 중하단 말하기 — 화면에서 제일 눈에 띄어야 한다 */
 .say {

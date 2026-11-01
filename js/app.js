@@ -26,7 +26,7 @@ const el = {
   diag: $('diag'), diagVerdict: $('diag-verdict'), diagList: $('diag-list'),
   diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagNewTab: $('diag-newtab'),
   chips: $('chips'), handRight: $('hand-right'), handLeft: $('hand-left'),
-  heard: $('heard'), heardText: $('heard-text'), spoken: $('spoken'),
+  spoken: $('spoken'),
   sayForm: $('say-form'), btnListen: $('btn-listen'), typed: $('typed'),
   guide: $('guide'), art: $('guide-art'), name: $('guide-name'), step: $('guide-step'),
   track: $('track'), fill: $('fill'), seq: $('seq'), read: $('read'),
@@ -84,8 +84,6 @@ function setUtterance(text) {
   state.got = [];
   state.spokenSyllable = -1;
   el.read.textContent = '';
-  el.heard.hidden = false;
-  el.heardText.textContent = text;
   el.typed.value = '';
   paintChips(text);
   buildSeq();
@@ -347,11 +345,14 @@ async function showDiagnosis() {
 function startListening() {
   if (!state.listener) { el.typed.focus(); return; }
   document.body.classList.add('listening');
-  el.heard.hidden = false;
-  el.heardText.textContent = '말씀하세요';
+  el.typed.value = '';
+  el.typed.placeholder = '듣고 있습니다…';
   state.listener.start();
 }
-const stopListening = () => document.body.classList.remove('listening');
+function stopListening() {
+  document.body.classList.remove('listening');
+  el.typed.placeholder = '또는 문장을 입력하고 엔터';
+}
 
 function setHand(hand) {
   state.hand = hand;
@@ -378,17 +379,20 @@ function init() {
 
   if (support.listen) {
     state.listener = createListener({
-      onInterim: t => { el.heardText.textContent = t; },
+      onInterim: t => { el.typed.value = t; },      // 들은 말은 입력칸에 그대로 보여 준다
       onResult: t => setUtterance(t),
       onEnd: stopListening,
-      onError: () => { stopListening(); el.heardText.textContent = '다시 말하거나 입력해 주세요'; }
+      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '못 알아들었습니다. 다시 말하거나 입력해 주세요'; }
     });
   } else {
     el.btnListen.disabled = true;
     el.btnListen.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
   }
+  el.btnListen.title = support.listen
+    ? '누르면 브라우저가 마이크 소리를 음성 인식 서버로 보냅니다. 보내고 싶지 않으면 옆 칸에 입력하세요.'
+    : '이 브라우저는 음성 인식을 지원하지 않습니다';
   if (support.speak && !hasKoreanVoice())
-    el.btnListen.title = '한국어 목소리가 없어 읽어 주는 소리가 나지 않을 수 있습니다';
+    el.btnListen.title += ' 한국어 목소리가 없어 읽어 주는 소리는 나지 않을 수 있습니다.';
 
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
@@ -409,8 +413,15 @@ function init() {
     el.sources.querySelector('button[type="submit"]')?.focus();
   });
   el.sourcesBody.innerHTML = `
-    <p>말하거나 손으로 하면 손말이 읽어 줍니다. 영상과 손 좌표는 이 브라우저 안에서만
-       처리되며 어디로도 전송되지 않습니다.</p>
+    <p><b>영상은 기기 밖으로 나가지 않습니다.</b> 카메라 영상과 손 좌표는 이 브라우저 안에서만
+       처리되고, 녹화하거나 저장하거나 전송하지 않습니다. 손을 알아보는 일도 기기 안에서 합니다.</p>
+    <p><b>음성은 다릅니다.</b> 말하기를 누르면 브라우저가 마이크 소리를 제조사의 음성 인식
+       서버로 보냅니다(크롬은 구글, 사파리는 애플). 손말이 보내는 것이 아니라 브라우저가 보내는
+       것이고, 저희가 막거나 들여다볼 수 없습니다. 소리를 보내고 싶지 않으면 문장을 입력해 주세요.
+       읽어 주는 소리는 기기 안에서 만들어집니다.</p>
+    <p>이 페이지가 접속하는 곳은 글꼴(fonts.googleapis.com), 손 인식 코드(cdn.jsdelivr.net),
+       손 인식 모델 파일(storage.googleapis.com) 셋뿐이고, 모두 내려받기만 합니다.
+       그 밖의 주소로는 접속하지 못하도록 페이지에 못을 박아 두었습니다.</p>
     <p>손모양과 단어 ${WORD_SIGNS.length}개는 제공받은 도표를 읽어 만든 것으로,
        국립국어원 한국수어사전과 대조해 확인해야 합니다.</p>
     <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>`;
