@@ -11,8 +11,8 @@
 const BASE = new URL('../assets/jamo/', import.meta.url).href;
 const WORD_BASE = new URL('../assets/word/', import.meta.url).href;
 
-/** 쌍자음은 단독 그림이 없다. 기본 자음 그림을 쓰고 이동 화살표를 덧붙인다. */
-const imageFor = pose => `${BASE}${encodeURIComponent(pose.base ?? pose.jamo)}.png`;
+/* 40자 모두 제 그림이 있다. 쌍자음은 손 두 개로 그려져 있어 화살표가 필요 없다. */
+const imageFor = pose => `${BASE}${encodeURIComponent(pose.jamo)}.png`;
 
 /**
  * @param {object} pose jamoData의 자세 레코드
@@ -22,11 +22,7 @@ const imageFor = pose => `${BASE}${encodeURIComponent(pose.base ?? pose.jamo)}.p
 export function renderHand(pose, opts = {}) {
   const size = opts.size ?? 240;
   const alt = `${pose.jamo} 지문자 손모양. ${pose.note}`;
-  const arrow = pose.motion
-    ? `<svg class="sm-move" viewBox="0 0 48 24" aria-hidden="true">
-         <path d="M4 12 H38" /><path d="M31 5 L39 12 L31 19" />
-       </svg>`
-    : '';
+  const arrow = '';
   return `<span class="sm-hand" style="--sm-size:${size}px">
     <img src="${imageFor(pose)}" alt="${alt}" width="${size}" height="${size}" loading="lazy" decoding="async">
     ${arrow}
