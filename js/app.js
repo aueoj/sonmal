@@ -29,7 +29,9 @@ const el = {
   btnListen: $('btn-listen'), btnReplay: $('btn-replay'),
   typedForm: $('typed-form'), typed: $('typed'),
   result: $('result'), sources: $('sources'), sourcesBody: $('sources-body'),
-  btnSources: $('btn-sources'), chart: $('chart')
+  btnSources: $('btn-sources'), chart: $('chart'),
+  guide: $('motion-guide'), guideSequence: $('guide-sequence'),
+  guideProgress: $('guide-progress'), guideWord: $('guide-word-detail')
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
@@ -78,6 +80,7 @@ function setUtterance(text, { spoken = false } = {}) {
   el.heardText.textContent = text;
 
   buildStrip();
+  buildGuide();
   advance();
   if (spoken) el.typed.value = '';
 }
@@ -108,6 +111,44 @@ function paintStrip() {
   const done = state.seq.slice(0, Math.max(0, state.at)).filter(u => u.role !== 'space').length;
   el.count.textContent = `${done} / ${total}`;
   el.strip.querySelector('[data-state="now"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+  paintGuide();
+}
+
+// 그림은 문장이 바뀔 때만 만들고, 진행 중에는 현재 차례만 갱신한다.
+function buildGuide() {
+  let number = 0;
+  el.guideSequence.innerHTML = state.seq.map((unit, index) => {
+    if (unit.role === 'space') return '';
+    const pose = getPose(unit.jamo);
+    const art = unit.role === 'word' ? renderWordSign(unit.sign)
+      : pose ? renderHand(pose, { size: 76 }) : '';
+    return `<li class="guide-step" data-kind="${unit.role}" data-i="${index}" data-state="todo">
+      <span class="guide-number">${++number}</span>${art}<strong>${unit.jamo}</strong>
+      ${pose?.motion ? '<small>옆으로 이동 →</small>' : ''}</li>`;
+  }).join('');
+}
+
+function paintGuide() {
+  el.guide.hidden = !state.live || !state.seq.length;
+  if (el.guide.hidden) return;
+  for (const item of el.guideSequence.children) {
+    const index = Number(item.dataset.i);
+    item.dataset.state = index < state.at ? 'done' : index === state.at ? 'now' : 'todo';
+    if (index === state.at) item.setAttribute('aria-current', 'step');
+    else item.removeAttribute('aria-current');
+  }
+  const current = el.guideSequence.querySelector('[aria-current="step"]');
+  if (current) {
+    // 가이드 내부만 가로로 이동한다. 모바일 페이지 전체를 끌어내리지 않는다.
+    el.guideSequence.scrollLeft = Math.max(0,
+      current.offsetLeft - el.guideSequence.offsetLeft - el.guideSequence.clientWidth / 2 + current.offsetWidth / 2);
+  }
+  el.guideProgress.textContent = state.at >= state.seq.length ? '모두 따라 했어요' : el.count.textContent;
+  const unit = state.seq[state.at];
+  el.guideWord.hidden = unit?.role !== 'word';
+  el.guideWord.innerHTML = unit?.role === 'word'
+    ? `<p>${unit.sign.word} · 동작 순서</p><ol>${(unit.sign.steps ?? []).map(step => `<li>${step}</li>`).join('')}</ol>`
+    : '';
 }
 
 function advance() {
@@ -319,6 +360,7 @@ async function startCamera({ demo = false } = {}) {
     state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
     const { mode } = await state.tracker.start();
     state.live = true;
+    paintGuide();
     el.camera.classList.add('live');
     el.camStatus.dataset.state = mode === 'mock' ? 'mock' : 'on';
     el.camStatus.querySelector('span').textContent = mode === 'mock' ? '모의 입력' : '카메라 켜짐';

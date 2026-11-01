@@ -43,6 +43,7 @@ if (location.protocol === 'file:') {
 </header>
 
 <main class="stage">
+  <div class="camera-column">
   <section class="camera" aria-label="카메라">
     <video id="cam" playsinline muted></video>
     <canvas id="overlay"></canvas>
@@ -75,6 +76,13 @@ if (location.protocol === 'file:') {
       <span class="heard-text" id="heard-text"></span>
     </div>
   </section>
+
+  <section class="motion-guide" id="motion-guide" aria-label="따라 할 동작 순서" hidden>
+    <div class="motion-guide-head"><h2>이 순서로 따라 하세요</h2><span id="guide-progress" aria-live="polite"></span></div>
+    <ol class="guide-sequence" id="guide-sequence"></ol>
+    <div class="guide-word-detail" id="guide-word-detail" hidden></div>
+  </section>
+  </div>
 
   <aside class="rail" id="coach" aria-label="코치">
     <div class="card" id="card">
