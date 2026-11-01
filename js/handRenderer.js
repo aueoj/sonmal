@@ -7,21 +7,25 @@
  * 그려 각자의 테두리가 경계를 만든다.
  */
 
-const VB = { w: 240, h: 300 };
+/* 손을 90도·180도 돌리면 그림이 원래 상자 밖으로 나간다. 모든 자모의
+   실제 범위를 재서 제일 넓은 쪽에 맞춘 상자를 쓴다. 자모마다 상자를 따로
+   잡으면 글자마다 손 크기가 달라지므로, 하나를 공유해 비례를 지킨다. */
+const VB = { x: -8, y: 36, w: 300, h: 340 };
+const MIRROR_AXIS = 240;   // 2 × PIVOT.x — 뒤집기는 손 중심선을 기준으로 한다
 const PIVOT = { x: 120, y: 206 };
 const FINGERS = ['index', 'middle', 'ring', 'pinky'];
 
 const RIG = {
-  index:  { root: [100, 170], base: -8, len: [48, 28, 20], w: 20 },
-  middle: { root: [122, 163], base: -1, len: [52, 30, 21], w: 21 },
-  ring:   { root: [143, 168], base: 7,  len: [49, 28, 20], w: 20 },
-  pinky:  { root: [161, 180], base: 17, len: [40, 24, 17], w: 17 },
-  thumb:  { root: [92, 228],  base: -54, len: [44, 34],    w: 24 }
+  index:  { root: [100, 170], base: -8, len: [48, 28, 20], w: 23 },
+  middle: { root: [122, 163], base: -1, len: [52, 30, 21], w: 24 },
+  ring:   { root: [143, 168], base: 7,  len: [49, 28, 20], w: 23 },
+  pinky:  { root: [161, 180], base: 17, len: [40, 24, 17], w: 20 },
+  thumb:  { root: [92, 228],  base: -54, len: [44, 34],    w: 27 }
 };
 
 const BEND = [60, 70, 44];
 const FORESHORTEN = 0.24;
-const OUTLINE = 5.5;          // 테두리 두께(한쪽)
+const OUTLINE = 7;            // 테두리 두께(한쪽)
 const SIDE_SQUEEZE = 0.56;    // 손날이 보일 때 손바닥이 좁아지는 비율
 
 const DIR_ROT = { up: 0, right: 90, down: 180 };
@@ -143,7 +147,8 @@ export function renderHand(pose, opts = {}) {
       + `<path class="sm-motion" d="M202 277 L213 286 L202 295"/>`
     : '';
 
-  return `<svg class="sm-hand" viewBox="0 0 ${VB.w} ${VB.h}" width="${size}" height="${(size * VB.h) / VB.w}"
+  return `<svg class="sm-hand" viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}"
+  width="${size}" height="${Math.round((size * VB.h) / VB.w)}" preserveAspectRatio="xMidYMid meet"
   role="img" aria-label="${pose.jamo} 지문자 손모양. ${pose.note}">
   <g transform="${rotAttr}${squeeze}">${body.join('')}${detail}</g>${motion}
 </svg>`;

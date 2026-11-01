@@ -83,7 +83,7 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   border-radius: var(--r-md); padding: var(--s1) 0 2px;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
-.chart svg { width: 100%; height: 66px; }
+.chart svg { width: 100%; height: 62px; }
 .chart figcaption { font-family: var(--kr); font-weight: 600; font-size: var(--t-label); }
 .chart figure[data-check="1"] figcaption { color: var(--amber); }
 .cam-empty-title { font-family: var(--kr); font-size: var(--t-title); font-weight: 600; letter-spacing: var(--track-tight); margin: 0 0 var(--s2); }
@@ -111,6 +111,7 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   position: relative; background: var(--panel); border-radius: var(--r-lg);
   aspect-ratio: 1 / 1; display: grid; place-items: center; overflow: hidden;
 }
+.hand { padding: var(--s3); width: 100%; height: 100%; }
 /* 히어로 — 지문자는 한글 자모 모양을 본뜬 체계다. 글자를 손 뒤에 깔아
    왜 이 손모양인지가 설명 없이 읽히게 한다. */
 .glyph {
@@ -119,13 +120,13 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   color: #e9e9ee; user-select: none;
 }
 .hand { position: relative; z-index: 1; display: grid; place-items: center; }
-.hand svg { display: block; width: auto; height: 100%; max-height: 248px; }
+.hand svg { display: block; width: 100%; height: 100%; max-height: 100%; }
 
-.sm-fill { fill: #fbe3d2; stroke: #2f3a4c; stroke-width: 5.5; stroke-linejoin: round; }
-.sm-edge { fill: none; stroke: #2f3a4c; stroke-linecap: round; stroke-linejoin: round; }
-.sm-skin { fill: none; stroke: #fbe3d2; stroke-linecap: round; stroke-linejoin: round; }
-.sm-line { fill: none; stroke: #2f3a4c; stroke-width: 3; stroke-linecap: round; opacity: .42; }
-.sm-dot  { fill: #2f3a4c; opacity: .38; }
+.sm-fill { fill: #f9dcc7; stroke: #2c3a4e; stroke-width: 7; stroke-linejoin: round; }
+.sm-edge { fill: none; stroke: #2c3a4e; stroke-linecap: round; stroke-linejoin: round; }
+.sm-skin { fill: none; stroke: #f9dcc7; stroke-linecap: round; stroke-linejoin: round; }
+.sm-line { fill: none; stroke: #2c3a4e; stroke-width: 3.5; stroke-linecap: round; opacity: .4; }
+.sm-dot  { fill: #2c3a4e; opacity: .35; }
 .sm-motion { fill: none; stroke: var(--indigo); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
 
 .flag {
@@ -133,6 +134,18 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   background: var(--amber-soft); color: var(--amber);
   font-size: var(--t-micro); padding: 2px var(--s2); border-radius: var(--r-sm);
 }
+
+.card.word-card { aspect-ratio: auto; min-height: 220px; align-items: stretch; }
+.card.word-card .hand { display: block; }
+.word-steps { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s3); height: 100%; }
+.word-name { font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
+  letter-spacing: var(--track-tight); margin: 0; }
+/* 동작은 실제로 순서가 있다. 그래서 번호를 붙인다. */
+.word-steps ol { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: var(--s2); }
+.word-steps li { font-family: var(--kr); font-size: var(--t-body); color: var(--ink-soft); }
+.word-hands { font-family: var(--kr); font-size: var(--t-label); color: var(--muted); margin: auto 0 0; }
+.next { align-self: flex-start; }
+.unit.word { width: auto; padding: 0 var(--s3); font-size: 15px; }
 
 .read { display: flex; flex-direction: column; gap: var(--s2); }
 .note { font-family: var(--kr); font-size: var(--t-lead); margin: 0; max-width: 34ch; }

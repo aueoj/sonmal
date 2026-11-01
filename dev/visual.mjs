@@ -6,7 +6,7 @@ const OUT = '/tmp/claude-0/-home-user/1666e45b-ba5d-5fdf-99c9-cdf6defa90e5/scrat
 for (const scheme of ['light', 'dark']) {
   const p = await b.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: scheme, deviceScaleFactor: 2 });
   await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
-  await p.fill('#typed', '안녕하세요');
+  await p.fill('#typed', '서울특별시');
   await p.click('.typed button[type=submit]');
   await p.click('#btn-cam');
   // 몇 글자 진행된 코칭 중간 상태를 잡는다

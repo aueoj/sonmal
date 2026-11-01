@@ -6,7 +6,7 @@ import { renderHand } from './handRenderer.js';
 import { describe } from './poseFeatures.js';
 import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js';
 import { Tracker } from './tracker.js';
-import { createListener, speak, support } from './speech.js';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js';
 import { planUtterance, SOURCES, WORD_SIGNS } from './words.js';
 import { diagnose } from './diagnose.js';
 
@@ -15,6 +15,7 @@ const el = {
   camera: document.querySelector('.camera'),
   video: $('cam'), overlay: $('overlay'), camEmpty: $('cam-empty'),
   camStatus: $('cam-status'), btnCam: $('btn-cam'), btnDemo: $('btn-demo'),
+  card: $('card'), btnNext: $('btn-next'),
   diag: $('diag'), diagVerdict: $('diag-verdict'), diagList: $('diag-list'),
   diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagNewTab: $('diag-newtab'),
   camPrompt: document.querySelector('.cam-prompt'),
@@ -59,9 +60,13 @@ const DIR_KO = { up: '위', right: '옆', down: '아래' };
 /* ── 시퀀스 ─────────────────────────────────── */
 
 function setUtterance(text, { spoken = false } = {}) {
-  const plan = planUtterance(text);
-  const spellText = plan.map(p => p.text).join(' ');
-  state.seq = toFingerspell(spellText);
+  // 사전에 있으면 단어 수어로, 없으면 지문자로. 실제 한국수어가 쓰는 순서다.
+  state.seq = [];
+  for (const part of planUtterance(text)) {
+    if (state.seq.length) state.seq.push({ jamo: ' ', role: 'space', syllable: ' ' });
+    if (part.kind === 'word') state.seq.push({ role: 'word', sign: part.sign, jamo: part.text });
+    else state.seq.push(...toFingerspell(part.text));
+  }
   state.at = -1;
   state.got = [];
   state.doneAt = 0;
@@ -85,9 +90,9 @@ function buildStrip() {
     return;
   }
   el.strip.innerHTML = state.seq.map((u, i) =>
-    u.role === 'space'
-      ? '<span class="unit gap"></span>'
-      : `<span class="unit" data-state="todo" data-i="${i}">${u.jamo}</span>`
+    u.role === 'space' ? '<span class="unit gap"></span>'
+    : u.role === 'word' ? `<span class="unit word" data-state="todo" data-i="${i}">${u.jamo}</span>`
+    : `<span class="unit" data-state="todo" data-i="${i}">${u.jamo}</span>`
   ).join('');
   paintStrip();
 }
@@ -119,8 +124,12 @@ function advance() {
   if (i >= state.seq.length) return finish();
 
   const u = state.seq[i];
-  const pose = getPose(u.jamo);
   paintStrip();
+
+  if (u.role === 'word') return showWord(u);
+
+  el.card.classList.remove('word-card');
+  const pose = getPose(u.jamo);
 
   if (!pose) {
     el.glyph.textContent = u.jamo;
@@ -134,6 +143,8 @@ function advance() {
   el.glyph.textContent = u.jamo;
   el.hand.innerHTML = renderHand(pose, { size: 240 });
   el.flag.hidden = pose.confidence !== 'check';
+  el.flag.textContent = '확인 필요';
+  el.btnNext.hidden = true;
   el.note.textContent = pose.note;
   el.mnemo.textContent = pose.mnemonic;
   el.pShape.textContent = (pose.fingers?.length ? `${pose.fingers.length}손가락` : '주먹')
@@ -147,6 +158,32 @@ function advance() {
   if (state.tracker?.mock) state.tracker.setMockPose(pose);
 }
 
+/* 단어 수어는 아직 따라한 것을 인식하지 못한다. 할 수 있는 척하지 않고
+   동작을 순서대로 보여 준 뒤 사용자가 넘기게 한다. */
+function showWord(u) {
+  const w = u.sign;
+  el.card.classList.add('word-card');
+  el.glyph.textContent = '';
+  el.hand.innerHTML =
+    `<div class="word-steps"><p class="word-name">${w.word}</p><ol>` +
+    (w.steps ?? []).map(t => `<li>${t}</li>`).join('') +
+    `</ol><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
+    (w.비수지 ? ` · ${w.비수지}` : '') + '</p></div>';
+  el.flag.hidden = false;
+  el.flag.textContent = '검수 전';
+  el.note.textContent = w.수형;
+  el.mnemo.textContent = `${w.수향} · ${w.수위}`;
+  el.pShape.textContent = w.hands === 2 ? '두 손' : '한 손';
+  el.pView.textContent = w.수향.replace('손바닥이 ', '');
+  el.pDir.textContent = w.수동;
+  el.meterLabel.textContent = '이 단어는 아직 인식하지 못합니다';
+  el.meterPct.textContent = '';
+  el.meterFill.style.width = '0%';
+  el.meter.dataset.state = '';
+  el.hint.textContent = '동작을 따라해 본 뒤 다음을 누르세요.';
+  el.btnNext.hidden = false;
+}
+
 function finish() {
   const text = composeFromJamo(state.got).trim();
   el.meterLabel.textContent = '다 따라했습니다';
@@ -156,6 +193,7 @@ function finish() {
   el.hint.textContent = '';
   el.result.innerHTML = text ? `따라한 대로 읽으면 <b>${text}</b>` : '';
   el.btnReplay.disabled = !text;
+  el.btnNext.hidden = true;
   state.doneAt = Date.now();
   if (text) speak(text);
   paintStrip();
@@ -170,6 +208,9 @@ function onFrame(lms, handedness) {
   if (el.overlay.height !== h) el.overlay.height = h;
   ctx.clearRect(0, 0, w, h);
 
+  // 단어 수어 구간은 인식하지 않는다. 미터를 건드리면 카드의 안내가 덮인다.
+  if (state.seq[state.at]?.role === 'word') return;
+
   if (!lms) {
     el.meterLabel.textContent = '손이 보이지 않습니다';
     el.meterPct.textContent = '—';
@@ -183,7 +224,8 @@ function onFrame(lms, handedness) {
   drawLandmarks(ctx, lms, w, h);
 
   const current = state.seq[state.at];
-  const pose = current ? getPose(current.jamo) : null;
+  if (!current) return;
+  const pose = getPose(current.jamo);
   if (!pose) return;
 
   const feat = describe(lms, handedness, true);
@@ -280,10 +322,14 @@ async function startCamera({ demo = false } = {}) {
     el.camStatus.dataset.state = mode === 'mock' ? 'mock' : 'on';
     el.camStatus.querySelector('span').textContent = mode === 'mock' ? '모의 입력' : '카메라 켜짐';
     const cur = state.seq[state.at];
-    const curPose = cur ? getPose(cur.jamo) : null;
-    if (curPose) {
-      el.note.textContent = curPose.note;
-      if (state.tracker.mock) state.tracker.setMockPose(curPose);
+    if (cur?.role === 'word') {
+      showWord(cur);                       // 카메라 안내 문구가 덮어쓴 카드를 되돌린다
+    } else if (cur) {
+      const curPose = getPose(cur.jamo);
+      if (curPose) {
+        el.note.textContent = curPose.note;
+        if (state.tracker.mock) state.tracker.setMockPose(curPose);
+      }
     }
   } catch (err) {
     el.btnCam.disabled = false;
@@ -354,6 +400,11 @@ function init() {
 
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
+  el.btnNext.addEventListener('click', () => {
+    const u = state.seq[state.at];
+    if (u?.role === 'word') state.got.push(u.jamo);
+    advance();
+  });
   el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera(); });
   el.diagNewTab.addEventListener('click', () => window.open(location.href, '_blank', 'noopener'));
   el.btnListen.addEventListener('click', startListening);
@@ -381,6 +432,15 @@ function init() {
     <p><strong>손모양은 확인이 필요합니다.</strong> 지문자 도표를 읽어 만든 것이라
        이웃 자모와 구별이 모호한 글자에는 화면에 '확인 필요'를 붙여 두었습니다.</p>
     <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>`;
+
+  // 목소리는 운영체제가 준다. 없으면 다 따라한 뒤에야 알게 되므로 미리 말한다.
+  const sayVoice = () => {
+    if (!support.speak) el.btnReplay.title = '이 브라우저는 음성 출력을 지원하지 않습니다';
+    else if (!hasKoreanVoice()) el.btnReplay.title = '한국어 목소리가 없어 소리가 나지 않을 수 있습니다';
+    else el.btnReplay.title = '따라한 대로 다시 읽어 줍니다';
+  };
+  sayVoice();
+  if (support.speak) speechSynthesis.addEventListener?.('voiceschanged', sayVoice);
 
   // 카메라를 켜기 전에 보이는 전체 지문자 표
   el.chart.innerHTML = ALL_POSES.filter(p => !p.motion).map(p =>

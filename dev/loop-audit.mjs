@@ -33,6 +33,9 @@ let last = -1, lastChange = Date.now(), stuckAt = null;
 while (Date.now() < DEADLINE) {
   const done = await p.evaluate(() => document.querySelectorAll('#strip .unit[data-state="done"]').length);
   if (done >= total) break;
+  // 단어 수어 구간은 인식하지 않는다. 사람이 누르듯 '다음'을 눌러 넘긴다.
+  const next = await p.$('#btn-next:not([hidden])');
+  if (next) { await next.click(); lastChange = Date.now(); await p.waitForTimeout(150); continue; }
   if (done !== last) { last = done; lastChange = Date.now(); }
   else if (Date.now() - lastChange > STALL_MS) { stuckAt = done; break; }
   await p.waitForTimeout(250);

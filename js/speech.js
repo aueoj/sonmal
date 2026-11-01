@@ -48,6 +48,11 @@ if (support.speak) {
   voice = pickVoice();
 }
 
+/** 한국어 목소리가 깔려 있는가. 없으면 읽기는 하되 소리가 안 나거나 어색하다. */
+export function hasKoreanVoice() {
+  return support.speak && Boolean(voice ?? pickVoice());
+}
+
 export function speak(text, { rate = 0.95 } = {}) {
   if (!support.speak || !text) return;
   speechSynthesis.cancel();

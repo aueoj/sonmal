@@ -35,48 +35,51 @@ const mk = (jamo, kind, fingers, dir, view, opts = {}) => ({
 
 export const CONSONANTS = [
   mk('ㄱ', 'consonant', [I], 'down', 'side', {
-    bent: true,
-    note: '주먹을 쥐고 검지만 펴 아래로 내리되 둘째 마디를 꺾는다. 손날이 보인다.',
-    mnemonic: '꺾어 내린 검지가 ㄱ의 두 획이다.', confidence: 'check' }),
+    thumb: 'out',
+    note: '검지를 곧게 펴 아래로 내리고 엄지를 옆으로 뻗는다. 손날이 보인다.',
+    mnemonic: '내린 검지와 뻗은 엄지가 ㄱ의 두 획이다.' }),
   mk('ㄴ', 'consonant', [I], 'right', 'side', {
-    note: '검지를 곧게 펴 옆으로 뻗는다. 손날이 보인다.',
+    thumb: 'out',
+    note: '검지를 옆으로 뻗고 엄지를 세운다. 손날이 보인다.',
     mnemonic: '옆으로 뻗은 검지가 ㄴ의 밑획이다.' }),
   mk('ㄷ', 'consonant', [I, M], 'right', 'side', {
     note: '검지와 중지를 붙여 펴고 옆으로 뻗는다.',
-    mnemonic: '나란한 두 획이 ㄷ의 위아래 가로획이다.', confidence: 'check' }),
+    mnemonic: '나란한 두 획이 ㄷ의 위아래 가로획이다.' }),
   mk('ㄹ', 'consonant', [I, M, R], 'right', 'side', {
     note: '검지·중지·약지를 펴고 옆으로 뻗는다.',
-    mnemonic: '세 획이 ㄹ의 가로획 셋이다.', confidence: 'check' }),
+    mnemonic: '세 획이 ㄹ의 가로획 셋이다.' }),
   mk('ㅁ', 'consonant', [], 'up', 'back', {
     note: '손가락을 모두 접어 주먹을 쥔다. 손등이 보인다.',
-    mnemonic: '꽉 닫은 주먹이 ㅁ의 네모다.', confidence: 'check' }),
+    mnemonic: '꽉 닫은 주먹이 ㅁ의 네모다.' }),
   mk('ㅂ', 'consonant', [I, M, R, P], 'up', 'palm', {
     note: '네 손가락을 모아 펴 세우고 엄지만 접는다. 손바닥이 보인다.',
     mnemonic: '나란히 선 네 손가락이 ㅂ의 기둥이다.' }),
-  mk('ㅅ', 'consonant', [I], 'down', 'palm', {
-    note: '검지를 곧게 펴 아래로 내린다. 손바닥이 보인다.',
-    mnemonic: '아래로 내린 한 획이 ㅅ의 빗침이다.', confidence: 'check' }),
+  mk('ㅅ', 'consonant', [I, M], 'down', 'palm', {
+    spreadWide: true, thumb: 'out',
+    note: '검지와 중지를 벌려 아래로 내린다. 손바닥이 보인다.',
+    mnemonic: '아래로 벌어진 두 획이 ㅅ의 빗침이다.' }),
   mk('ㅇ', 'consonant', [M, R, P], 'up', 'palm', {
     special: 'circle', thumb: 'circle',
     note: '엄지와 검지 끝을 맞붙여 고리를 만들고 나머지 세 손가락은 편다.',
     mnemonic: '엄지와 검지가 만든 고리가 그대로 ㅇ이다.' }),
-  mk('ㅈ', 'consonant', [I, M], 'down', 'palm', {
-    spreadWide: true,
-    note: '검지와 중지를 벌려 펴고 아래로 내린다.',
-    mnemonic: '아래로 벌어진 두 획이 ㅈ이다.', confidence: 'check' }),
+  mk('ㅈ', 'consonant', [I, M], 'down', 'back', {
+    spreadWide: true, thumb: 'out',
+    note: '검지와 중지를 벌려 아래로 내린다. 손등이 보인다.',
+    mnemonic: 'ㅅ과 같은 수형을 수향만 바꾸어 쓴다.', confidence: 'check' }),
   mk('ㅊ', 'consonant', [I, M, R], 'down', 'palm', {
-    note: '검지·중지·약지를 펴고 아래로 내린다.',
-    mnemonic: 'ㅈ에 획이 하나 더해져 ㅊ이 된다.', confidence: 'check' }),
-  mk('ㅋ', 'consonant', [I], 'down', 'side', {
-    note: '검지를 곧게 펴 아래로 내린다. 손날이 보인다.',
-    mnemonic: 'ㄱ과 같은 자리에서 검지를 꺾지 않고 곧게 내린다.', confidence: 'check' }),
-  mk('ㅌ', 'consonant', [I, M], 'right', 'back', {
-    spreadWide: true,
-    note: '검지와 중지를 벌려 펴고 옆으로 뻗는다. 손등이 보인다.',
-    mnemonic: 'ㄷ와 손가락 수가 같다. 벌림과 수향으로 갈린다.', confidence: 'check' }),
-  mk('ㅍ', 'consonant', [], 'up', 'palm', {
-    note: '손가락을 모두 접어 주먹을 쥔다. 손바닥이 보인다.',
-    mnemonic: 'ㅁ과 같은 주먹을 수향만 바꾸어 쓴다.', confidence: 'check' }),
+    spreadWide: true, thumb: 'out',
+    note: '검지·중지·약지를 벌려 아래로 내린다. 손바닥이 보인다.',
+    mnemonic: 'ㅅ에 획이 하나 더해져 ㅊ이 된다.' }),
+  mk('ㅋ', 'consonant', [I, M, R], 'down', 'back', {
+    thumb: 'out',
+    note: '검지·중지·약지를 모아 아래로 내린다. 손등이 보인다.',
+    mnemonic: 'ㅊ과 같은 수형을 수향과 벌림으로 가른다.', confidence: 'check' }),
+  mk('ㅌ', 'consonant', [I, M, R], 'up', 'back', {
+    note: '검지·중지·약지를 모아 세운다. 손등이 보인다.',
+    mnemonic: '세운 세 손가락이 ㅌ의 가로획 셋이다.' }),
+  mk('ㅍ', 'consonant', [I, M, R, P], 'right', 'side', {
+    note: '네 손가락을 모아 펴고 옆으로 뻗는다. 손날이 보인다.',
+    mnemonic: '옆으로 누운 네 획이 ㅍ의 기둥들이다.' }),
   mk('ㅎ', 'consonant', [], 'up', 'side', {
     special: 'thumbup', thumb: 'up',
     note: '주먹을 쥐고 엄지만 위로 세운다.',

@@ -59,6 +59,11 @@
 
 * { box-sizing: border-box; }
 
+/* 브라우저 기본 [hidden]{display:none} 은 클래스 하나에도 진다.
+   .diag 나 .heard 처럼 display 를 주는 요소가 hidden 인데도 보이게 되므로
+   스크립트가 돌기 전의 화면이 빈 상자로 깨진다. 여기서 못을 박는다. */
+[hidden] { display: none !important; }
+
 html, body {
   margin: 0;
   height: 100%;

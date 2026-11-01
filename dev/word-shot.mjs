@@ -1,0 +1,17 @@
+import pw from '/opt/node-tools/node_modules/playwright/index.js';
+const { chromium } = pw;
+const b = await chromium.launch({ args: ['--no-sandbox'] });
+const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
+await p.fill('#typed', '병원 어디');
+await p.click('.typed button[type=submit]');
+await p.click('#btn-cam');
+await p.waitForSelector('#btn-next:not([hidden])', { timeout: 10000 });
+await p.waitForTimeout(400);
+await p.screenshot({ path: '/tmp/claude-0/-home-user/1666e45b-ba5d-5fdf-99c9-cdf6defa90e5/scratchpad/word.png' });
+console.log('단어 카드:', await p.evaluate(() => document.querySelector('.word-name')?.textContent));
+console.log('단계:', await p.evaluate(() => [...document.querySelectorAll('.word-steps li')].map(l=>l.textContent)));
+console.log('배지:', await p.evaluate(() => document.getElementById('flag').textContent));
+console.log('오류', errs.length ? errs : '없음');
+await b.close();
