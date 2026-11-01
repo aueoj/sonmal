@@ -267,3 +267,70 @@ dialog a { color: var(--indigo); }
   .sub { display: none; }
   .params { grid-template-columns: 1fr 1fr; }
 }
+
+/* 투명 그림을 카메라 하단의 검정 그라데이션 위에 올린다. */
+.camera-column { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; }
+.sheet-art { display: block; width: 100%; height: 100%; overflow: hidden; }
+.motion-guide { position: absolute; inset: auto 0 0; z-index: 4; color: white; border: 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,.72) 28%, rgba(0,0,0,.94)); padding: 38px 20px 14px; max-height: 60%; overflow-y: auto; }
+.motion-guide-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; text-shadow: 0 1px 4px #000; }
+.motion-guide-head h2 { margin: 0; font-size: 14px; font-family: var(--kr); }
+.motion-guide-head span { font-size: 12px; color: #ddd; }
+.guide-sequence { position: relative; display: flex; gap: 14px; margin: 8px 0 0; padding: 0 0 4px; list-style: none; overflow-x: auto; }
+.guide-step { position: relative; flex: 0 0 88px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px; background: transparent; border-bottom: 2px solid transparent; opacity: .5; }
+.guide-step .sm-hand { height: 82px; width: 80px; }
+.guide-step .sm-word { height: 120px; width: 150px; }
+.guide-step[data-kind="word"] { flex-basis: 158px; }
+.guide-step strong { font-size: 14px; }
+.guide-number { align-self: flex-start; font-size: 11px; color: #ddd; }
+.guide-step small { font-size: 10px; color: #d3d0ff; }
+.guide-step[data-state="now"] { opacity: 1; border-color: #b6adff; }
+.guide-step[data-state="done"] { opacity: .7; }
+.guide-step[data-state="done"] .guide-number::after { content: ' ✓'; color: #8aefb5; }
+.guide-word-detail { margin: 8px 0; font-size: 15px; line-height: 1.6; color: white; }
+.guide-controls { display: flex; align-items: center; gap: 12px; }
+.guide-controls button { border: 1px solid #ffffff70; border-radius: 8px; padding: 6px 12px; background: #ffffff15; color: white; font: inherit; font-size: 12px; cursor: pointer; }
+.guide-controls button:disabled { opacity: .4; cursor: default; }
+.guide-controls span { font-size: 12px; }
+.camera.live .heard { top: 12px; bottom: auto; }
+@media (max-width: 900px) {
+  .camera-column { flex: none; }
+  .camera.live { min-height: max(650px, 80svh); }
+  .motion-guide { max-height: 60%; padding: 30px 12px 12px; }
+  .camera.live .heard { top: 12px; bottom: auto; }
+}
+
+/* 현재 동작 하나를 크게 보여 주고, 다음 단계는 사용자가 넘긴다. */
+.guide-step { display: none; }
+.guide-step[data-state="now"] { display: flex; flex: 0 0 min(100%, 280px); border: 0; padding: 0; }
+.guide-step .sm-hand { height: 140px; width: 210px; }
+.guide-step[data-kind="word"] .sm-word { height: 150px; width: 230px; }
+.guide-sequence { overflow: visible; justify-content: center; }
+.guide-number { position: absolute; left: 0; top: 0; }
+.guide-word-detail { text-align: center; }
+.guide-controls { justify-content: center; }
+
+/* 개별 동작 PNG와 거울 화면의 좌우를 맞춘다. 글자는 이미지와 분리한다. */
+.jamo-pose, .word-pose { display: block; width: 100%; height: 100%; object-fit: contain; }
+body[data-guide-hand="right"] .word-pose { transform: scaleX(-1); }
+body[data-guide-hand="left"] .word-pose { transform: none; }
+.guide-step[data-kind="word"] .sm-word { width: 230px; height: 190px; display: block; }
+.guide-mirror-note { text-align: center; font-size: 11px; line-height: 1.5; color: #ddd; margin: 4px 0; }
+.guide-hand-label { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0 8px; }
+.guide-hand-label select { color: white; background: #242424; border: 1px solid #aaa; border-radius: 5px; padding: 3px 8px; }
+.word-art { height: 260px; }
+.word-art .sm-word { height: 100%; }
+.word-library { font-size: 12px; }
+.word-library summary { cursor: pointer; font-weight: 600; }
+#practice-words { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0; }
+#practice-words button { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); padding: 5px 8px; font: inherit; cursor: pointer; }
+.word-library p { color: var(--muted); font-size: 11px; }
+@media (max-height: 740px) and (min-width: 901px) {
+  .guide-step[data-kind="word"] .sm-word { height: 120px; }
+  .motion-guide { max-height: 85%; }
+}
+/* 인물 카드는 그림만 담고, 단계 설명은 하단 가이드에서 읽는다. */
+.word-card .word-steps { display: none; }
+.card.word-card { aspect-ratio: auto; height: auto; }
+
+#practice-phrases { display: flex; flex-direction: column; gap: 5px; }
+#practice-phrases button { border: 1px solid var(--line); border-radius: 7px; background: var(--paper); color: var(--ink); padding: 5px 8px; text-align: left; font: inherit; cursor: pointer; }

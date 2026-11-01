@@ -82,11 +82,9 @@ export async function diagnose() {
   if (!window.isSecureContext) {
     verdict = '보안 연결이 아니라 카메라가 열리지 않습니다';
     advice = 'https 주소나 localhost에서 열어 주세요.';
-  } else if (embedded && (camErr?.name === 'NotAllowedError' || modelBlocked)) {
+  } else if (policy === false) {
     verdict = '여기서는 카메라를 쓸 수 없습니다';
-    advice = modelBlocked
-      ? '끼워진 프레임이 카메라와 손 인식 모델을 둘 다 막고 있습니다. 새 탭에서 열거나, 내려받아 내 컴퓨터에서 서버를 띄워 열어야 합니다.'
-      : '끼워진 프레임이 카메라를 막고 있습니다. 새 탭에서 열거나, 내려받아 내 컴퓨터에서 서버를 띄워 열어야 합니다.';
+    advice = '이 화면을 제공하는 사이트가 카메라를 허용하지 않았습니다. Claude 아티팩트 밖의 독립된 HTTPS 사이트나 내 컴퓨터에서 실행해 주세요. 같은 아티팩트 주소를 새 탭에서 여는 것만으로는 해결되지 않을 수 있습니다.';
   } else if (camErr?.name === 'NotAllowedError') {
     verdict = '카메라 권한이 거부되었습니다';
     advice = '주소창의 카메라 아이콘에서 허용으로 바꾸고 다시 눌러 주세요.';
@@ -96,6 +94,9 @@ export async function diagnose() {
   } else if (camErr?.name === 'NotReadableError') {
     verdict = '다른 프로그램이 카메라를 쓰고 있습니다';
     advice = '화상회의나 다른 탭을 닫고 다시 눌러 주세요.';
+  } else if (modelBlocked) {
+    verdict = '손 인식 모델을 내려받지 못했습니다';
+    advice = '카메라 권한과는 별개의 다운로드 오류입니다. 인터넷 연결과 모델 서버(storage.googleapis.com) 접근 허용을 확인해 주세요.';
   } else if (modErr) {
     verdict = '손 인식 모듈을 내려받지 못했습니다';
     advice = '이 페이지가 외부 스크립트를 막고 있거나 인터넷이 끊겼습니다.';

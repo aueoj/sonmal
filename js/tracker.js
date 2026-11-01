@@ -26,30 +26,38 @@ export class Tracker {
   async start() {
     if (this.mock) { this.running = true; this._mockLoop(); return { mode: 'mock' }; }
 
-    const { HandLandmarker, FilesetResolver } = await import(
-      /* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`
-    );
-    const fileset = await FilesetResolver.forVisionTasks(`${TASKS_VISION}/wasm`);
-    const opts = delegate => ({
-      baseOptions: { modelAssetPath: MODEL, delegate },
-      runningMode: 'VIDEO',
-      numHands: 1,
-      minHandDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
-    });
-    // GPU 위임을 못 쓰는 기기가 있다. 그때는 CPU로 한 번 더 시도한다.
-    try {
-      this.landmarker = await HandLandmarker.createFromOptions(fileset, opts('GPU'));
-    } catch {
-      this.landmarker = await HandLandmarker.createFromOptions(fileset, opts('CPU'));
+    // 권한과 장치를 먼저 확인한다. 모델 실패를 카메라 권한 실패와 구분한다.
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('카메라는 HTTPS 또는 localhost에서 사용할 수 있습니다.');
     }
-
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
-      audio: false
-    });
-    this.video.srcObject = stream;
-    await this.video.play();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+        audio: false
+      });
+      this.video.srcObject = stream;
+      await this.video.play();
+      const { HandLandmarker, FilesetResolver } = await import(
+        /* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`
+      );
+      const fileset = await FilesetResolver.forVisionTasks(`${TASKS_VISION}/wasm`);
+      const opts = delegate => ({
+        baseOptions: { modelAssetPath: MODEL, delegate },
+        runningMode: 'VIDEO',
+        numHands: 1,
+        minHandDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+      // GPU 위임을 못 쓰는 기기가 있다. 그때는 CPU로 한 번 더 시도한다.
+      try {
+        this.landmarker = await HandLandmarker.createFromOptions(fileset, opts('GPU'));
+      } catch {
+        this.landmarker = await HandLandmarker.createFromOptions(fileset, opts('CPU'));
+      }
+    } catch (error) {
+      this.stop();
+      throw error;
+    }
     this.running = true;
     this._loop();
     return { mode: 'camera' };
@@ -59,6 +67,8 @@ export class Tracker {
     this.running = false;
     const s = this.video?.srcObject;
     if (s) { s.getTracks().forEach(t => t.stop()); this.video.srcObject = null; }
+    this.landmarker?.close();
+    this.landmarker = null;
   }
 
   setMockPose(pose) { this.mockPose = pose; }

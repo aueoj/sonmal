@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/tokens.css?v=poses-4">
+<link rel="stylesheet" href="css/app.css?v=poses-4">
 </head>
 <body>
 <!-- 모듈 스크립트는 file:// 에서 돌지 않는다. 그러면 아래 화면이 전부 빈 껍데기가
@@ -43,6 +43,7 @@ if (location.protocol === 'file:') {
 </header>
 
 <main class="stage">
+  <div class="camera-column">
   <section class="camera" aria-label="카메라">
     <video id="cam" playsinline muted></video>
     <canvas id="overlay"></canvas>
@@ -74,9 +75,20 @@ if (location.protocol === 'file:') {
       <span class="heard-label">들은 말</span>
       <span class="heard-text" id="heard-text"></span>
     </div>
+
+  <section class="motion-guide" id="motion-guide" aria-label="따라 할 동작 순서" hidden>
+    <div class="motion-guide-head"><h2>이 순서로 따라 하세요</h2><span id="guide-progress" aria-live="polite"></span></div>
+    <ol class="guide-sequence" id="guide-sequence"></ol>
+    <div class="guide-word-detail" id="guide-word-detail" aria-live="polite"></div>
+    <p class="guide-mirror-note" id="guide-mirror-note"></p>
+    <label class="guide-hand-label">인물 가이드 기준 손 <select id="guide-hand"><option value="right">오른손</option><option value="left">왼손</option></select></label>
+    <div class="guide-controls"><button type="button" id="guide-prev">이전 단계</button><span id="guide-step-count"></span><button type="button" id="guide-next">다음 단계</button></div>
   </section>
+  </section>
+  </div>
 
   <aside class="rail" id="coach" aria-label="코치">
+    <details class="word-library"><summary>연습할 표현 고르기 · 12개</summary><div id="practice-words"></div><p>표현 이어서 연습</p><div id="practice-phrases"></div><p>사용자 제공 표현 · 표준사전 대조 전</p><a href="https://wis.seoul.go.kr/wfs/dhs/udr/signDictionary.do" target="_blank" rel="noopener">서울시 수어사전에서 더 보기</a></details>
     <div class="card" id="card">
       <div class="glyph" id="glyph" aria-hidden="true"></div>
       <div class="hand" id="hand"></div>
@@ -128,6 +140,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js"></script>
+<script type="module" src="js/app.js?v=poses-4"></script>
 </body>
 </html>

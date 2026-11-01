@@ -2,13 +2,13 @@
 
 import { toFingerspell, composeFromJamo } from './hangul.js';
 import { getPose, ALL_POSES } from './jamoData.js';
-import { renderHand, renderWordSign } from './handRenderer.js';
+import { renderHand, renderWordSign } from './handRenderer.js?v=poses-4';
 import { describe } from './poseFeatures.js';
 import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js';
-import { Tracker } from './tracker.js';
+import { Tracker } from './tracker.js?v=poses-4';
 import { createListener, speak, support, hasKoreanVoice } from './speech.js';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js';
-import { diagnose } from './diagnose.js';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=poses-4';
+import { diagnose } from './diagnose.js?v=poses-4';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -29,7 +29,11 @@ const el = {
   btnListen: $('btn-listen'), btnReplay: $('btn-replay'),
   typedForm: $('typed-form'), typed: $('typed'),
   result: $('result'), sources: $('sources'), sourcesBody: $('sources-body'),
-  btnSources: $('btn-sources'), chart: $('chart')
+  btnSources: $('btn-sources'), chart: $('chart'),
+  guide: $('motion-guide'), guideSequence: $('guide-sequence'),
+  guideProgress: $('guide-progress'), guideWord: $('guide-word-detail'),
+  guideHand: $('guide-hand'), guideMirrorNote: $('guide-mirror-note'),
+  guidePrev: $('guide-prev'), guideNext: $('guide-next'), guideStepCount: $('guide-step-count')
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
@@ -42,6 +46,7 @@ const state = {
   seq: [], at: -1, got: [],
   tracker: null, listener: null, live: false,
   holdSince: 0, trail: [], scores: [], lastHint: '',
+  guideStep: 0, guideAt: -1,
   doneAt: 0
 };
 
@@ -78,6 +83,7 @@ function setUtterance(text, { spoken = false } = {}) {
   el.heardText.textContent = text;
 
   buildStrip();
+  buildGuide();
   advance();
   if (spoken) el.typed.value = '';
 }
@@ -108,6 +114,66 @@ function paintStrip() {
   const done = state.seq.slice(0, Math.max(0, state.at)).filter(u => u.role !== 'space').length;
   el.count.textContent = `${done} / ${total}`;
   el.strip.querySelector('[data-state="now"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+  paintGuide();
+}
+
+// 그림은 문장이 바뀔 때만 만들고, 진행 중에는 현재 차례만 갱신한다.
+function buildGuide() {
+  let number = 0;
+  el.guideSequence.innerHTML = state.seq.map((unit, index) => {
+    if (unit.role === 'space') return '';
+    const pose = getPose(unit.jamo);
+    const art = unit.role === 'word' ? renderWordSign(unit.sign)
+      : pose ? renderHand(pose, { size: 76 }) : '';
+    return `<li class="guide-step" data-kind="${unit.role}" data-i="${index}" data-state="todo">
+      <span class="guide-number">${++number}</span>${art}<strong>${unit.jamo}</strong>
+      ${pose?.motion ? '<small>옆으로 이동 →</small>' : ''}</li>`;
+  }).join('');
+}
+
+function paintGuide() {
+  el.guide.hidden = !state.live || !state.seq.length;
+  if (el.guide.hidden) return;
+  for (const item of el.guideSequence.children) {
+    const index = Number(item.dataset.i);
+    item.dataset.state = index < state.at ? 'done' : index === state.at ? 'now' : 'todo';
+    if (index === state.at) item.setAttribute('aria-current', 'step');
+    else item.removeAttribute('aria-current');
+  }
+  const current = el.guideSequence.querySelector('[aria-current="step"]');
+  if (current) {
+    // 가이드 내부만 가로로 이동한다. 모바일 페이지 전체를 끌어내리지 않는다.
+    el.guideSequence.scrollLeft = Math.max(0,
+      current.offsetLeft - el.guideSequence.offsetLeft - el.guideSequence.clientWidth / 2 + current.offsetWidth / 2);
+  }
+  el.guideProgress.textContent = state.at >= state.seq.length ? '모두 따라 했어요' : el.count.textContent;
+  const unit = state.seq[state.at];
+  if (state.guideAt !== state.at) { state.guideAt = state.at; state.guideStep = 0; }
+  const pose = unit && getPose(unit.jamo);
+  const steps = unit?.role === 'word' ? (unit.sign.steps ?? [])
+    : pose ? [pose.note, ...(pose.motion ? ['손모양을 유지하고 옆으로 이동하세요.'] : ['같은 손모양을 잠시 유지해 주세요.'])] : [];
+  state.guideStep = Math.min(state.guideStep, Math.max(0, steps.length - 1));
+  const finished = state.at >= state.seq.length;
+  el.guideWord.hidden = false;
+  el.guideWord.textContent = finished ? '모든 동작을 따라 했어요.' : steps[state.guideStep] ?? '';
+  el.guidePrev.disabled = finished || state.guideStep === 0;
+  el.guideNext.disabled = finished || (unit?.role !== 'word' && state.guideStep >= steps.length - 1);
+  el.guideNext.textContent = state.guideStep < steps.length - 1 ? '다음 단계' : unit?.role === 'word' ? '다음 동작' : '카메라로 확인 중';
+  el.guideStepCount.textContent = finished ? '완료' : `${state.guideStep + 1} / ${steps.length} 단계`;
+  el.guideNext.dataset.last = String(state.guideStep >= steps.length - 1);
+  if (unit?.role === 'word') {
+    const frame = renderWordSign(unit.sign, { step: state.guideStep });
+    const card = el.guideSequence.querySelector('[aria-current="step"] .sm-word');
+    if (card) card.outerHTML = frame;
+    const side = el.hand.querySelector('.word-art');
+    if (side) side.innerHTML = frame;
+    const caption = $('word-pose-caption');
+    if (caption) caption.textContent = steps[state.guideStep] ?? '';
+  }
+  el.guideHand.closest('label').hidden = unit?.role !== 'word';
+  el.guideMirrorNote.hidden = unit?.role !== 'word';
+
+
 }
 
 function advance() {
@@ -166,9 +232,7 @@ function showWord(u) {
   el.glyph.textContent = '';
   el.hand.innerHTML =
     `<div class="word-art">${renderWordSign(w)}</div>` +
-    `<div class="word-steps"><p class="word-name">${w.word}</p><ol>` +
-    (w.steps ?? []).map(t => `<li>${t}</li>`).join('') +
-    `</ol><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
+    `<div class="word-steps"><p class="word-name">${w.word}</p><p id="word-pose-caption">${w.steps?.[0] ?? ''}</p><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
     (w.비수지 ? ` · ${w.비수지}` : '') + '</p></div>';
   el.flag.hidden = false;
   el.flag.textContent = '검수 전';
@@ -261,7 +325,7 @@ function onFrame(lms, handedness) {
 
   // 떨림을 거르려고, 기준을 넘긴 상태가 일정 시간 이어져야 확정한다
   const now = performance.now();
-  if (smooth >= ACCEPT) {
+  if (smooth >= ACCEPT && state.guideStep >= 1) {
     if (!state.holdSince) state.holdSince = now;
     if (now - state.holdSince >= HOLD_MS) {
       const node = el.strip.querySelector(`[data-i="${state.at}"]`);
@@ -314,11 +378,12 @@ async function startCamera({ demo = false } = {}) {
   el.btnCam.textContent = '여는 중…';
   el.note.textContent = MOCK
     ? '모의 입력을 준비하고 있습니다.'
-    : '손 인식 모델을 내려받고 있습니다. 처음 한 번만 걸립니다.';
+    : '카메라 권한을 허용해 주세요. 허용 후 손 인식 모델을 준비합니다.';
   try {
     state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
     const { mode } = await state.tracker.start();
     state.live = true;
+    paintGuide();
     el.camera.classList.add('live');
     el.camStatus.dataset.state = mode === 'mock' ? 'mock' : 'on';
     el.camStatus.querySelector('span').textContent = mode === 'mock' ? '모의 입력' : '카메라 켜짐';
@@ -382,6 +447,14 @@ function stopListening() {
 /* ── 시작 ───────────────────────────────────── */
 
 function init() {
+  const setGuideHand = () => {
+    document.body.dataset.guideHand = el.guideHand.value;
+    const hand = el.guideHand.value === 'right' ? '오른손' : '왼손';
+    const side = el.guideHand.value === 'right' ? '오른쪽' : '왼쪽';
+    el.guideMirrorNote.textContent = `거울 화면 기준 · ${hand}은 화면 ${side}. 그림과 같은 쪽으로 움직여 보세요.`;
+  };
+  el.guideHand.addEventListener('change', setGuideHand);
+  setGuideHand();
   if (support.listen) {
     state.listener = createListener({
       onInterim: t => { el.heard.dataset.interim = 'true'; el.heardText.textContent = t; },
@@ -398,6 +471,17 @@ function init() {
     el.btnListen.disabled = true;
     el.btnListen.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
   }
+
+  el.guidePrev.addEventListener('click', () => { state.guideStep = Math.max(0, state.guideStep - 1); paintGuide(); });
+  el.guideNext.addEventListener('click', () => {
+    if (el.guideNext.dataset.last !== 'true') { state.guideStep++; paintGuide(); }
+    else if (state.seq[state.at]?.role === 'word') { state.got.push(state.seq[state.at].jamo); advance(); }
+  });
+  $('practice-words').innerHTML = WORD_SIGNS.map((w, i) => `<button type="button" data-word-index="${i}">${w.word}</button>`).join('');
+  $('practice-words').addEventListener('click', e => { const b = e.target.closest('[data-word-index]'); if (b) setUtterance(WORD_SIGNS[Number(b.dataset.wordIndex)].word); });
+  const phrases = ['안녕하세요 감사합니다', '미안합니다 괜찮아요', '다시 천천히', '천천히 도와주세요', '물 도와주세요', '화장실 도와주세요', '네 이해했어요', '아니요 다시', '괜찮아요 감사합니다', '이해했어요 감사합니다'];
+  $('practice-phrases').innerHTML = phrases.map((phrase, i) => `<button type="button" data-phrase-index="${i}">${phrase}</button>`).join('');
+  $('practice-phrases').addEventListener('click', e => { const b = e.target.closest('[data-phrase-index]'); if (b) setUtterance(phrases[Number(b.dataset.phraseIndex)]); });
 
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
