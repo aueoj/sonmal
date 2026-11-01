@@ -2,13 +2,13 @@
 
 import { toFingerspell, composeFromJamo } from './hangul.js';
 import { getPose, ALL_POSES } from './jamoData.js';
-import { renderHand, renderWordSign } from './handRenderer.js';
+import { renderHand, renderWordSign } from './handRenderer.js?v=illustrations-2';
 import { describe } from './poseFeatures.js';
 import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js';
-import { Tracker } from './tracker.js';
+import { Tracker } from './tracker.js?v=illustrations-2';
 import { createListener, speak, support, hasKoreanVoice } from './speech.js';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js';
-import { diagnose } from './diagnose.js';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=illustrations-2';
+import { diagnose } from './diagnose.js?v=illustrations-2';
 
 const $ = id => document.getElementById(id);
 const el = {
