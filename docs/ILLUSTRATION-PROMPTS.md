@@ -101,7 +101,7 @@ Scene: Her right hand (viewer's left) is a fist with only the little finger exte
 사전 9474: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=9474  
 원문: 오른 주먹의 1·2·4지를 펴서 등이 밖으로 향하게 벌려 1·2지 끝을 오른쪽 눈 옆에 댄다.
 
-**sl9474-01.png** 검지·중지·새끼를 펴서 검지·중지 끝을 오른쪽 눈 옆에 댄다
+**sl9474-01.png** 검지와 중지, 새끼를 펴서 검지와 중지 끝을 오른쪽 눈 옆에 댄다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -156,7 +156,7 @@ Scene: Same hands: the palm of the upright flat her right hand (viewer's left) i
 사전 7422: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=7422  
 원문: 오른 주먹의 5지 바닥을 1·2지의 손톱에 가볍게 대고 손등이 밖으로 향하게 하여 왼쪽 아래로 내리며 1·2지를 편다.
 
-**sl7422-01.png** 엄지로 검지·중지 손톱을 누르고 어깨 앞에 든다
+**sl7422-01.png** 엄지로 검지와 중지 손톱을 누르고 어깨 앞에 든다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -198,7 +198,7 @@ Scene: Her left hand (viewer's right) stays flat and palm down. The vertical fla
 사전 5993: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=5993  
 원문: 왼 주먹의 1·2지를 펴서 끝이 오른쪽으로 등이 밖으로 향하게 벌린 다음, 그 사이로 오른 주먹의 1지를 펴서 끝을 안에서 밖으로 내밀었다가 다시 밖에서 안으로 밀어 넣는다.
 
-**sl5993-01.png** 왼손 검지·중지를 옆으로 벌려 든다
+**sl5993-01.png** 왼손 검지와 중지를 옆으로 벌려 든다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -240,7 +240,7 @@ Scene: The C-shaped her right hand (viewer's left) (index finger and thumb curve
 사전 971: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=971  
 원문: 오른손을 펴서 손바닥이 밖으로 향하게 세워 2·3·4지를 벌리고 1·5지를 ‘C’자 모양으로 구부린다.
 
-**sl971-01.png** 중지·약지·새끼를 벌려 펴고 검지와 엄지를 C자로 구부린다
+**sl971-01.png** 중지, 약지, 새끼를 벌려 펴고 검지와 엄지를 C자로 구부린다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -316,7 +316,7 @@ Scene: Her right hand (viewer's left) is open with the fingers bent like a claw,
 사전 3874: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=3874  
 원문: 두 주먹의 1·5지를 펴고 손등이 밖으로 향하게 하여 1지 끝을 양쪽 가슴 앞에 대고 상하로 두 번 엇갈리게 움직인다.
 
-**sl3874-01.png** 두 손 검지·엄지를 펴서 검지 끝을 양쪽 가슴에 댄다
+**sl3874-01.png** 두 손 검지와 엄지를 펴서 검지 끝을 양쪽 가슴에 댄다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -337,7 +337,7 @@ Scene: Both hands have only the index finger and thumb extended (L shape), backs
 사전 9078: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=9078  
 원문: 오른 주먹을 코에 1·5지 옆면이 닿게 댄다.
 
-**sl9078-01.png** 주먹의 엄지·검지 쪽 옆면을 코에 댄다
+**sl9078-01.png** 주먹의 엄지와 검지 쪽 옆면을 코에 댄다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -410,7 +410,7 @@ Scene: Her right hand (viewer's left) is slightly cupped with the palm facing up
 사전 2336: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=2336  
 원문: 1·5지 끝을 맞댄 오른손을 가슴에 대고 같은 모양의 왼손을 그 밑에 대면서 놀라는 표정을 지으며 두 손을 동시에 편다.
 
-**sl2336-01.png** 검지·엄지 끝을 맞댄 두 손을 가슴 앞에 위아래로 둔다
+**sl2336-01.png** 검지와 엄지 끝을 맞댄 두 손을 가슴 앞에 위아래로 둔다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -627,7 +627,7 @@ Flat vector illustration in exactly this style: a friendly young woman, upper bo
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended straight up, pad facing the viewer, in front of her chest, moving to her left. Questioning expression.
 ```
 
-**sl7256-02.png** 검지·중지를 구부린 두 주먹의 새끼 쪽을 두 번 맞부딪친다
+**sl7256-02.png** 검지와 중지를 구부린 두 주먹의 새끼 쪽을 두 번 맞부딪친다
 
 ```
 Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.

@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011703';
-import { getPose } from './jamoData.js?v=202611011703';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011703';
-import { describe } from './poseFeatures.js?v=202611011703';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011703';
-import { Tracker } from './tracker.js?v=202611011703';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011703';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011703';
-import { diagnose } from './diagnose.js?v=202611011703';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011710';
+import { getPose } from './jamoData.js?v=202611011710';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011710';
+import { describe } from './poseFeatures.js?v=202611011710';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011710';
+import { Tracker } from './tracker.js?v=202611011710';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011710';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011710';
+import { diagnose } from './diagnose.js?v=202611011710';
 
 const $ = id => document.getElementById(id);
 const el = {
