@@ -7,19 +7,23 @@
 import { FINGERS, angleToDir } from './poseFeatures.js';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
-const DIR_KO = { up: '위', right: '옆', down: '아래', left: '반대쪽' };
+const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
 const FINGER_KO = { index: '검지', middle: '중지', ring: '약지', pinky: '새끼손가락' };
-const VIEW_KO = { palm: '손바닥이 보이게', back: '손등이 보이게', side: '손날이 보이게' };
 
 /** 두 각도 사이의 원형 거리(0~180도) */
 const angleGap = (a, b) => Math.abs((((a - b) % 360) + 540) % 360 - 180);
 
+const FLIP_DIR = { right: 'left', left: 'right', up: 'up', down: 'down' };
+
 /**
- * @param {object} feat poseFeatures.describe 결과
+ * @param {object} feat poseFeatures.describe 결과 (화면 좌표 기준)
  * @param {object} pose jamoData 자세 레코드
+ * @param {{mirrored?:boolean}} opts 그림을 좌우로 뒤집어 보여 주고 있으면 true.
+ *   그때는 따라하는 방향도 뒤집히므로 기대 방향을 같이 뒤집는다.
  * @returns {{score:number, parts:object, hint:?string, hintKind:?string}}
  */
-export function scorePose(feat, pose) {
+export function scorePose(feat, pose, { mirrored = false } = {}) {
+  const wantDir = mirrored ? (FLIP_DIR[pose.dir] ?? pose.dir) : pose.dir;
   const want = new Set(pose.fingers ?? []);
 
   // 수형 — 펴야 할 손가락은 펴고, 접어야 할 손가락은 접었는가
@@ -37,16 +41,23 @@ export function scorePose(feat, pose) {
   shape /= FINGERS.length;
 
   // 엄지 — 폄·접음·고리
-  const thumbTarget = pose.thumb === 'in' ? 0.25 : pose.thumb === 'circle' ? 0.45 : 0.95;
-  const thumbScore = 1 - Math.min(1, Math.abs(thumbTarget - feat.thumbExtension) / 0.55);
+  /* 고리를 만드는 자모(ㅇ·ㅎ)의 엄지는 편 것도 접은 것도 아니다.
+     고리 거리로 이미 보고 있으므로 엄지는 따로 따지지 않는다. */
+  const ringed = pose.special === 'circle';
+  const thumbTarget = pose.thumb === 'in' ? 0.25 : 0.95;
+  const thumbScore = ringed ? 1
+    : 1 - Math.min(1, Math.abs(thumbTarget - feat.thumbExtension) / 0.55);
 
-  // 수향
-  const viewScore = feat.facing === pose.view ? 1 : (feat.facing === 'side' || pose.view === 'side' ? 0.35 : 0.1);
+  /* 수향은 거의 보지 않는다.
+     손바닥·손등·손날 구분은 도표에서 읽어낸 것이 아니라 추측이라, 이것으로
+     사람을 고치게 하면 그림대로 한 사람에게 틀렸다고 말하게 된다.
+     손 모양과 가리키는 방향만으로 판정하고, 수향은 참고로만 남긴다. */
+  const viewScore = feat.facing === pose.view ? 1 : 0.7;
 
   // 수동(방향) — 주먹처럼 펴진 손가락이 없으면 방향을 따지지 않는다
   // 꺾은 손가락은 끝 방향이 흔들리므로 방향을 느슨하게 본다
   const hasDir = (pose.fingers ?? []).length > 0 && !pose.bent;
-  const dirGap = hasDir ? angleGap(feat.angle, DIR_DEG[pose.dir] ?? 0) : 0;
+  const dirGap = hasDir ? angleGap(feat.angle, DIR_DEG[wantDir] ?? 0) : 0;
   const dirScore = hasDir ? Math.max(0, 1 - dirGap / 75) : 1;
 
   // 벌림 — 검지와 중지를 둘 다 펴는 자모에서만 본다
@@ -55,19 +66,17 @@ export function scorePose(feat, pose) {
   const spreadScore = bothUp ? Math.max(0, 1 - Math.abs(feat.spread - spreadTarget) / 20) : 1;
 
   // 고리 — 엄지와 검지 끝이 붙었는가. ㅇ·ㅎ에서만 본다.
-  const wantRing = pose.special === 'circle';
+  const wantRing = ringed;
   const pinchScore = wantRing ? Math.max(0, 1 - Math.max(0, feat.pinch - 0.22) / 0.33)
                               : Math.min(1, 0.45 + feat.pinch);
 
-  const score = 0.33 * shape + 0.12 * thumbScore + 0.17 * viewScore + 0.22 * dirScore + 0.10 * spreadScore + 0.09 * pinchScore;
+  const score = 0.46 * shape + 0.11 * thumbScore + 0.04 * viewScore + 0.26 * dirScore + 0.08 * spreadScore + 0.05 * pinchScore;
 
   let hint = null, hintKind = null;
   if (wantRing && pinchScore < 0.6) {
     hint = '엄지와 검지 끝을 맞붙여 고리를 만드세요'; hintKind = '수형';
   } else if (hasDir && dirScore < 0.6) {
-    hint = `손끝을 ${DIR_KO[pose.dir]}으로 향하게 하세요`; hintKind = '수동';
-  } else if (viewScore < 0.6) {
-    hint = `손을 돌려 ${VIEW_KO[pose.view]} 하세요`; hintKind = '수향';
+    hint = `손끝을 ${DIR_KO[wantDir]}으로 향하게 하세요`; hintKind = '수동';
   } else if (worst && worstGap > 0.35) {
     hint = (pose.bent && worst === 'index') ? '검지 둘째 마디를 직각으로 꺾으세요'
          : want.has(worst) ? `${FINGER_KO[worst]}를 끝까지 펴세요` : `${FINGER_KO[worst]}를 접으세요`;

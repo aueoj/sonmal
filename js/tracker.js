@@ -45,8 +45,8 @@ export class Tracker {
         baseOptions: { modelAssetPath: MODEL, delegate },
         runningMode: 'VIDEO',
         numHands: 1,
-        minHandDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5
+        minHandDetectionConfidence: 0.3,
+        minTrackingConfidence: 0.3
       });
       // GPU 위임을 못 쓰는 기기가 있다. 그때는 CPU로 한 번 더 시도한다.
       try {
@@ -90,7 +90,7 @@ export class Tracker {
     const lm = this.mockPose ? landmarksFor(this.mockPose, this.mockNoise) : null;
     // 쌍자음은 손 전체가 옆으로 움직여야 한다. 모의 입력도 그 움직임을 만들어야
     // 움직임 검출 경로가 실제로 시험된다.
-    if (lm && this.mockPose?.motion) {
+    if (lm && (this.mockPose?.motion || this.mockMotion)) {
       // 사람이 쌍자음을 지을 때 손을 옮기는 폭은 손 길이의 절반 남짓이다.
       // 정규화 좌표에서 손 길이가 약 0.44이므로 진폭 0.22를 쓴다.
       const phase = (performance.now() % 1200) / 1200;

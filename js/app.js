@@ -35,22 +35,34 @@ const el = {
 
 let MOCK = new URLSearchParams(location.search).has('mock');
 
-const ACCEPT = 0.74;        // 이 점수를 넘고
-const HOLD_MS = 420;        // 이만큼 버티면 맞은 것으로 본다
-const NEAR = 0.58;
+/* 문턱은 재서 정했다. dev/calibrate.mjs 가 맞는 자세와 틀린 자세의 점수를
+   전부 재어 가르는 자리를 찾는다. 0.88 에서 맞는 자세는 전부 통과하고
+   틀린 자세는 2.7%만 통과한다. 0.74 에서는 틀린 자세의 20%가 통과했다. */
+const ACCEPT = 0.88;        // 이 점수를 넘고
+const HOLD_MS = 500;        // 이만큼 버티면 맞은 것으로 본다
+const NEAR = 0.70;
 const SHIFT_THRESHOLD = 0.35;
 const SMOOTH_N = 7;
-const STEP_MS = 500;        // 동작이 여러 개인 단어는 이 간격으로 흐른다
-const WORD_HOLD_MS = 1300;  // 손이 이만큼 보이면 따라한 것으로 본다
+const STEP_MS = 1000;       // 동작이 여러 개인 단어는 이 간격으로 흐른다
+const WORD_MOVE = 0.34;     // 손이 이만큼 움직여야 '따라했다'로 본다 (손 길이 대비)
+const REPEAT_MS = 1400;     // 다 하고 나서 처음으로 돌아가기까지
 
 const state = {
   seq: [], at: -1, got: [],
   tracker: null, listener: null, live: false,
   hand: 'right',
   holdSince: 0, trail: [], scores: [], lastStep: '',
-  wordTimer: null, wordStep: 0, wordSeen: 0, wordSince: 0, spokenSyllable: -1,
+  wordTimer: null, wordStep: 0, wordSince: 0, spokenSyllable: -1,
+  lostSince: 0, repeatTimer: null,
   settling: false   // 한 칸을 끝내고 다음으로 넘어가는 사이. 이때 들어오는 프레임은 흘린다.
 };
+
+/** 자취가 가로세로로 얼마나 퍼졌는지 */
+function spread2d(trail) {
+  if (trail.length < 4) return 0;
+  const xs = trail.map(p => p.x), ys = trail.map(p => p.y);
+  return Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+}
 
 const median = xs => {
   const a = [...xs].sort((p, q) => p - q);
@@ -73,12 +85,28 @@ function say(text) {
 
 function setUtterance(text) {
   stopWordTimer();
+  clearTimeout(state.repeatTimer);
   state.seq = [];
+  /* 음절 번호는 어절마다 0부터 다시 매겨진다. 그대로 두면 '뒤 왼쪽'의
+     뒤(0)와 왼(0)이 한 글자로 묶여 "뒤왼"으로 읽힌다. 이어서 매긴다. */
+  let syllable = 0;
   for (const part of planUtterance(text)) {
     if (state.seq.length) state.seq.push({ role: 'space', jamo: ' ' });
     // 별칭으로 말했어도 칸에는 그 수어의 이름을 보여 준다 ('반갑습니다' → 안녕하세요)
-    if (part.kind === 'word') state.seq.push({ role: 'word', sign: part.sign, jamo: part.sign.word });
-    else state.seq.push(...toFingerspell(part.text));
+    if (part.kind === 'word') {
+      state.seq.push({ role: 'word', sign: part.sign, jamo: part.sign.word });
+      syllable += 1;
+      continue;
+    }
+    const units = toFingerspell(part.text);
+    let max = -1;
+    for (const u of units) {
+      if (u.syllableIndex === undefined) continue;
+      u.syllableIndex += syllable;
+      if (u.syllableIndex > max) max = u.syllableIndex;
+    }
+    if (max >= 0) syllable = max + 1;
+    state.seq.push(...units);
   }
   state.at = -1;
   state.got = [];
@@ -128,6 +156,7 @@ function advance() {
 
   const pose = getPose(u.jamo);
   if (!pose) { state.got.push(u.jamo); return setTimeout(advance, 400); }
+  if (state.tracker?.mock) state.tracker.mockMotion = false;
 
   el.art.innerHTML = jamoArt(u.jamo);
   el.name.textContent = u.jamo;
@@ -148,17 +177,19 @@ function showWord(u) {
   el.fill.style.width = '0%';
   paintWordStep(w, frames);
   // 단어는 손모양을 가리지 않고 손이 보이는지만 본다. 모의 입력에도 손을 하나 띄운다.
-  if (state.tracker?.mock) state.tracker.setMockPose(getPose('ㅂ'));
+  if (state.tracker?.mock) {
+    state.tracker.setMockPose(getPose('ㅂ'));
+    state.tracker.mockMotion = true;   // 모의 입력도 움직여야 통과한다
+  }
 
+  // 동작은 멈추지 않고 돈다. 따라할 때까지 계속 보여 준다.
   state.wordTimer = setInterval(() => {
     state.wordStep = (state.wordStep + 1) % frames;
     paintWordStep(w, frames);
-    // 카메라가 없으면 두 바퀴 보여 주고 넘어간다
-    if (!state.live && state.wordStep === 0) {
-      state.wordSeen += 1;
-      if (state.wordSeen >= 2) completeWord(u);
-    }
   }, STEP_MS);
+  el.step.textContent = state.live
+    ? (w.steps?.[0] ?? w.수형)
+    : '카메라를 켜면 따라한 것을 알아봅니다';
 }
 
 function paintWordStep(w, frames) {
@@ -197,12 +228,19 @@ function speakFinishedSyllable() {
   say(composeFromJamo(jamos));
 }
 
+/* 끝나도 멈추지 않는다. 잠깐 쉬었다가 처음으로 돌아가, 다시 하면 다시 읽어 준다. */
 function finish() {
   stopWordTimer();
   el.guide.dataset.state = 'hit';
   el.fill.style.width = '100%';
-  el.step.textContent = '다 따라했습니다';
+  el.step.textContent = '좋아요. 다시 해 볼까요';
   paintSeq();
+  clearTimeout(state.repeatTimer);
+  state.repeatTimer = setTimeout(() => {
+    state.at = -1; state.got = []; state.spokenSyllable = -1;
+    for (const n of el.seq.querySelectorAll('.unit[data-i]')) delete n.dataset.lock;
+    advance();
+  }, REPEAT_MS);
 }
 
 /* ── 카메라가 보는 것 ───────────────────────── */
@@ -217,41 +255,57 @@ function onFrame(lms, handedness) {
   const current = state.seq[state.at];
   if (!current || state.settling) return;
 
-  // 단어 구간은 손이 보이는 동안 따라한 것으로 본다
+  /* 단어는 손모양을 가릴 수 없다. 대신 '한 바퀴 동안 손이 보였고 그 사이에
+     실제로 움직였는가'를 본다. 가만히 들고만 있으면 통과하지 않는다. */
   if (current.role === 'word') {
     const now = performance.now();
-    if (lms) {
-      drawLandmarks(ctx, lms, w, h);
-      if (!state.wordSince) state.wordSince = now;
-      const held = now - state.wordSince;
-      el.guide.dataset.state = held > WORD_HOLD_MS * 0.6 ? 'near' : '';
-      if (held >= WORD_HOLD_MS) completeWord(current);
-    } else {
-      state.wordSince = 0;
-    }
+    if (!lms) { state.wordSince = 0; state.trail = []; return; }
+    drawLandmarks(ctx, lms, w, h);
+
+    const f = describe(lms, handedness, true);
+    state.trail.push({ x: f.centroid.x, y: f.centroid.y, t: now });
+    while (state.trail.length && now - state.trail[0].t > 2600) state.trail.shift();
+
+    if (!state.wordSince) state.wordSince = now;
+    const need = (WORD_POSE_FILES[current.sign.word]?.length ?? 1) * STEP_MS;
+    const held = now - state.wordSince;
+    const moved = spread2d(state.trail) / (f.scale || 1);
+
+    const ready = held >= need && moved >= WORD_MOVE;
+    el.guide.dataset.state = ready ? 'hit' : (held > need * 0.5 ? 'near' : '');
+    el.fill.style.width = `${Math.round(Math.min(1, Math.max(held / need, moved / WORD_MOVE)) * 100)}%`;
+    if (!ready && held > need * 0.6 && moved < WORD_MOVE)
+      el.step.textContent = '그림처럼 손을 움직여 보세요';
+    if (ready) completeWord(current);
     return;
   }
 
   if (!lms) {
-    el.step.textContent = '손이 보이지 않습니다';
-    el.fill.style.width = '0%';
-    el.guide.dataset.state = '';
-    state.holdSince = 0; state.scores = [];
+    // 추적은 끊기기 마련이다. 잠깐 끊겼다고 쌓은 것을 버리지 않는다.
+    if (!state.lostSince) state.lostSince = performance.now();
+    if (performance.now() - state.lostSince > 700) {
+      el.step.textContent = '손이 보이지 않습니다';
+      el.fill.style.width = '0%';
+      el.guide.dataset.state = '';
+      state.holdSince = 0; state.scores = [];
+    }
     return;
   }
+  state.lostSince = 0;
   drawLandmarks(ctx, lms, w, h);
 
   const pose = getPose(current.jamo);
   if (!pose) return;
 
-  // 왼손으로 하면 좌우가 뒤집힌 모양이 된다. 좌표를 한 번 더 뒤집어 맞춘다.
-  const feat = describe(lms, handedness, state.hand === 'right');
+  // 좌표는 늘 화면 기준으로 본다. 영상 위에 겹쳐 그리는 뼈대와 같은 기준이어야 한다.
+  const feat = describe(lms, handedness, true);
   const t = performance.now();
   state.trail.push({ x: feat.centroid.x, t });
   while (state.trail.length && t - state.trail[0].t > MOTION_WINDOW_MS * 1.5) state.trail.shift();
 
   const base = pose.motion ? getPose(pose.base) ?? pose : pose;
-  const r = scorePose(feat, base);
+  // 오른손을 고르면 그림을 뒤집어 보여 주므로, 따라하는 방향도 같이 뒤집힌다
+  const r = scorePose(feat, base, { mirrored: state.hand === 'right' });
   let score = r.score;
   let hint = r.hint;
   if (pose.motion && detectLateralShift(state.trail, feat.scale, t) <= SHIFT_THRESHOLD) {
