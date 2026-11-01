@@ -1,4 +1,4 @@
-import { jamoArt, wordArt } from './illustrations.js?v=poses-3';
+import { jamoArt, wordArt } from './illustrations.js?v=poses-4';
 /* handRenderer.js — 자모의 손모양 그림을 내놓는다.
  *
  * 그림은 사용자가 제공한 지문자 도표를 자모별로 잘라 둔 것을 그대로 쓴다

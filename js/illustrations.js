@@ -2,15 +2,16 @@
 const STEP_BASE = new URL('../assets/word-steps/', import.meta.url).href;
 const POSES = {"안녕하세요": ["01-01.png", "01-02.png"], "감사합니다": ["02-01.png", "02-02.png", "02-03.png"], "미안합니다": ["03-01.png", "03-02.png"], "괜찮아요": ["04-01.png", "04-02.png", "04-03.png"], "네": ["05-01.png", "05-02.png"], "아니요": ["06-01.png", "06-02.png"], "도와주세요": ["07-01.png", "07-02.png", "07-03.png"], "다시": ["08-01.png", "08-02.png", "08-03.png"], "천천히": ["09-01.png", "09-02.png", "09-03.png"], "이해했어요": ["10-01.png", "10-02.png", "10-03.png"], "물": ["11-01.png", "11-02.png"], "화장실": ["12-01.png", "12-02.png"]};
 const SHEET_BASE = new URL('../assets/sheets/', import.meta.url).href;
-const JAMO = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ','ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅛ','ㅜ','ㅠ','ㅡ','ㅣ','ㅘ','ㅚ','ㅙ','ㅝ','ㅞ','ㅟ','ㅢ'];
-const ROWS = [[20,160],[235,155],[433,150],[625,155],[820,140]];
-const DOUBLE = {'ㄲ':[30,30,330,250],'ㄸ':[390,70,390,180],'ㅃ':[810,20,300,245],'ㅆ':[1160,20,365,245],'ㅉ':[20,395,400,155]};
+const JAMO_BOXES = {"ㄱ": [91, 31, 122, 144], "ㄴ": [285, 42, 146, 123], "ㄷ": [489, 51, 149, 110], "ㄹ": [699, 54, 152, 107], "ㅁ": [939, 43, 92, 133], "ㅂ": [1147, 26, 90, 151], "ㅅ": [1338, 31, 109, 140], "ㅇ": [91, 243, 107, 143], "ㅈ": [300, 247, 123, 132], "ㅊ": [506, 246, 124, 136], "ㅋ": [712, 246, 121, 134], "ㅌ": [904, 267, 151, 104], "ㅍ": [1134, 252, 97, 131], "ㅎ": [1332, 251, 120, 127], "ㅏ": [95, 444, 84, 131], "ㅐ": [312, 443, 84, 132], "ㅑ": [520, 444, 82, 131], "ㅒ": [723, 441, 84, 134], "ㅓ": [900, 469, 148, 86], "ㅔ": [1112, 469, 144, 86], "ㅕ": [1320, 469, 155, 86], "ㅖ": [64, 665, 154, 84], "ㅗ": [307, 637, 97, 130], "ㅛ": [515, 633, 94, 135], "ㅜ": [718, 636, 94, 126], "ㅠ": [930, 636, 91, 131], "ㅡ": [1114, 658, 137, 92], "ㅣ": [1352, 645, 86, 122], "ㅘ": [49, 831, 166, 125], "ㅚ": [301, 834, 91, 121], "ㅙ": [474, 833, 163, 123], "ㅝ": [680, 832, 195, 117], "ㅞ": [931, 832, 176, 120], "ㅟ": [1091, 832, 198, 120], "ㅢ": [1335, 850, 130, 89], "ㄲ": [52, 64, 282, 209], "ㄸ": [394, 107, 368, 125], "ㅃ": [824, 49, 274, 210], "ㅆ": [1179, 51, 326, 208], "ㅉ": [33, 417, 373, 128]};
+const DOUBLE = new Set(["ㄲ", "ㄸ", "ㅃ", "ㅆ", "ㅉ"]);
+let clipSequence = 0;
 export function jamoArt(jamo) {
-  const i = JAMO.indexOf(jamo), pair = DOUBLE[jamo];
-  if (i < 0 && !pair) return '';
-  const col = i % 7, row = ROWS[Math.floor(i/7)];
-  const box = pair ?? [Math.max(0,col*1536/7-5),row[0],Math.min(1536/7+10,1536-col*1536/7),row[1]];
-  return `<svg class="sheet-art" viewBox="${box.join(' ')}" role="img" aria-label="${jamo} 지문자 손모양" preserveAspectRatio="xMidYMid meet"><image href="${SHEET_BASE}sheet-${pair?3:2}.png" width="1536" height="1024" /></svg>`;
+  const box = JAMO_BOXES[jamo];
+  if (!box) return '';
+  const pair = DOUBLE.has(jamo);
+  // SVG의 종횡비 여백으로 도표의 이웃 글자가 새어 나오지 않게 원본 좌표에서 자른다.
+  const clipId = `jamo-art-${++clipSequence}`;
+  return `<svg class="sheet-art" viewBox="${box.join(' ')}" role="img" aria-label="${jamo} 지문자 손모양" preserveAspectRatio="xMidYMid meet"><defs><clipPath id="${clipId}" clipPathUnits="userSpaceOnUse"><rect x="${box[0]}" y="${box[1]}" width="${box[2]}" height="${box[3]}" /></clipPath></defs><image href="${SHEET_BASE}sheet-${pair?3:2}.png" width="1536" height="1024" clip-path="url(#${clipId})" /></svg>`;
 }
 export function wordArt(word, step = 0) {
   const frames = POSES[word];
