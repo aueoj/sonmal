@@ -129,7 +129,32 @@ export const VOWELS = [
     mnemonic: '옆으로 누운 한 획이 ㅡ다.', confidence: 'check' }),
   mk('ㅣ', 'vowel', [I], 'up', 'side', {
     note: '검지를 곧게 세운다. 손날이 보인다.',
-    mnemonic: '곧게 선 한 획이 ㅣ다.', confidence: 'check' })
+    mnemonic: '곧게 선 한 획이 ㅣ다.', confidence: 'check' }),
+
+  /* 복합모음 — 도표에 단독 손모양이 있다. 다만 도표가 기본 모음과 같은 수형을
+     다시 쓰는 곳이 있어, 손모양만으로는 기본 모음과 갈리지 않는 자모가 있다.
+     연습은 '지금 만들 자모'와 견주어 판정하므로 진행에는 지장이 없다. */
+  mk('ㅘ', 'vowel', [I], 'up', 'back', { thumb: 'out',
+    note: 'ㅗ와 ㅏ를 한 손에 담아 검지를 세우고 엄지를 옆으로 뻗는다.',
+    mnemonic: 'ㅗ 다음에 ㅏ가 오는 것이 ㅘ다.', confidence: 'check' }),
+  mk('ㅚ', 'vowel', [I], 'up', 'side', { thumb: 'out',
+    note: 'ㅗ와 ㅣ를 한 손에 담아 검지를 세운다. 손날이 보인다.',
+    mnemonic: 'ㅗ 다음에 ㅣ가 오는 것이 ㅚ다.', confidence: 'check' }),
+  mk('ㅙ', 'vowel', [I, M], 'up', 'back', { thumb: 'out',
+    note: '검지와 중지를 세우고 엄지를 옆으로 뻗는다.',
+    mnemonic: 'ㅗ 다음에 ㅐ가 오는 것이 ㅙ다.', confidence: 'check' }),
+  mk('ㅝ', 'vowel', [I], 'down', 'back', { thumb: 'out',
+    note: 'ㅜ와 ㅓ를 한 손에 담아 검지를 아래로 내린다.',
+    mnemonic: 'ㅜ 다음에 ㅓ가 오는 것이 ㅝ다.', confidence: 'check' }),
+  mk('ㅞ', 'vowel', [I, M], 'down', 'back', { thumb: 'out',
+    note: '검지와 중지를 아래로 내린다. 손등이 보인다.',
+    mnemonic: 'ㅜ 다음에 ㅔ가 오는 것이 ㅞ다.', confidence: 'check' }),
+  mk('ㅟ', 'vowel', [I], 'right', 'side', { thumb: 'up',
+    note: 'ㅜ와 ㅣ를 한 손에 담아 검지를 옆으로 뻗고 엄지를 세운다.',
+    mnemonic: 'ㅜ 다음에 ㅣ가 오는 것이 ㅟ다.', confidence: 'check' }),
+  mk('ㅢ', 'vowel', [I], 'up', 'back', { thumb: 'up',
+    note: 'ㅡ와 ㅣ를 한 손에 담아 검지를 세우고 엄지를 세운다.',
+    mnemonic: 'ㅡ 다음에 ㅣ가 오는 것이 ㅢ다.', confidence: 'check' })
 ];
 
 /* 쌍자음 — 도표에 단독 항목이 없다. 기본 자음 손모양을 유지한 채 손 전체를

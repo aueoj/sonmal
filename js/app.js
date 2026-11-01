@@ -2,7 +2,7 @@
 
 import { toFingerspell, composeFromJamo } from './hangul.js';
 import { getPose, ALL_POSES } from './jamoData.js';
-import { renderHand } from './handRenderer.js';
+import { renderHand, renderWordSign } from './handRenderer.js';
 import { describe } from './poseFeatures.js';
 import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js';
 import { Tracker } from './tracker.js';
@@ -165,6 +165,7 @@ function showWord(u) {
   el.card.classList.add('word-card');
   el.glyph.textContent = '';
   el.hand.innerHTML =
+    `<div class="word-art">${renderWordSign(w)}</div>` +
     `<div class="word-steps"><p class="word-name">${w.word}</p><ol>` +
     (w.steps ?? []).map(t => `<li>${t}</li>`).join('') +
     `</ol><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
