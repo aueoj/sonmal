@@ -15,5 +15,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          gh api --method POST "repos/$GH_REPO/pages/deployments/5590e51151efc69b0aa012d6b2804af86a611408/cancel"
-          gh api --method POST "repos/$GH_REPO/pages/builds"
+          if response=$(gh api --method POST "repos/$GH_REPO/pages/deployments/5590e51151efc69b0aa012d6b2804af86a611408/cancel" 2>&1); then
+            gh api --method POST "repos/$GH_REPO/pages/builds"
+          else
+            while IFS= read -r line; do printf '::error::%s\n' "$line"; done <<< "$response"
+            exit 1
+          fi
