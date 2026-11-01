@@ -40,19 +40,32 @@ console.log(`카메라를 눌렀을 때 → "${verdict}" | 버튼 되살아남 $
 const escape = await p.isVisible('#diag-demo');
 console.log(`진단 화면에 둘러보기 길 ${escape ? '있음' : '없음  ← 막다른 길이다'}`);
 await p.click('#diag-demo');
-let done = 0, stuck = false;
-try {
-  await p.waitForFunction(() => {
-    const u = document.querySelectorAll('#seq .unit[data-i]');
-    return u.length > 0 && [...u].every(n => n.dataset.state === 'done');
-  }, null, { timeout: 60000 });
-} catch { stuck = true; }
+// 진행이 멈춘 채 오래 있으면 멈춘 것으로 본다 (loop-audit 와 같은 잣대)
+let stuck = false;
+{
+  const DEADLINE = Date.now() + 60000;
+  let last = -1, lastChange = Date.now();
+  while (true) {
+    const s = await p.evaluate(() => {
+      const u = [...document.querySelectorAll('#seq .unit[data-i]')];
+      return { n: u.length, done: u.filter(x => x.dataset.state === 'done').length };
+    });
+    if (s.n > 0 && s.done === s.n) break;
+    if (s.done !== last) { last = s.done; lastChange = Date.now(); }
+    if (Date.now() - lastChange > 15000 || Date.now() > DEADLINE) { stuck = `${s.done}/${s.n}에서 15초 넘게 그대로`; break; }
+    await p.waitForTimeout(250);
+  }
+}
 const r = await p.evaluate(() => ({
   done: [...document.querySelectorAll('#seq .unit[data-i]')].filter(n => n.dataset.state === 'done').length,
   total: document.querySelectorAll('#seq .unit[data-i]').length,
-  read: document.getElementById('read').textContent.trim()
+  read: document.getElementById('read').textContent.trim(),
+  url: location.pathname + location.search,
+  diagOpen: !document.getElementById('diag').hidden,
+  live: document.getElementById('camera').classList.contains('live')
 }));
-console.log(`둘러보기로 ${r.done}/${r.total} 완주 → "${r.read}"${stuck ? '  ← 중간에 멈췄다' : ''}`);
+console.log(`둘러보기로 ${r.done}/${r.total} 완주 → "${r.read}"${stuck ? `  ← 중간에 멈췄다: ${stuck}` : ''}`);
+console.log(`주소 ${r.url} | 진단 보임 ${r.diagOpen} | 라이브 ${r.live}`);
 console.log('콘솔 오류', errs.length ? errs.slice(0, 3).join(' | ') : '없음');
 await b.close();
 
