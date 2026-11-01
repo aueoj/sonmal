@@ -19,4 +19,16 @@ export function wordArt(word, step = 0) {
   const index = Math.max(0, Math.min(step, frames.length - 1));
   return `<img class="word-pose" src="${STEP_BASE}${frames[index]}" alt="${word} 동작 ${index + 1}" decoding="async" data-frame="${index + 1}">`;
 }
+
+/* 동작을 한 장씩 새로 만들면 넘어갈 때마다 불러오느라 화면이 잠깐 빈다.
+   전부 한 번에 만들어 겹쳐 두고 보여 줄 것만 바꾸면 끊기지 않는다. */
+export function wordFilm(word) {
+  const frames = POSES[word];
+  if (!frames) return '';
+  return frames.map((f, i) =>
+    `<img class="word-pose" src="${STEP_BASE}${f}" alt="${word} 동작 ${i + 1}"
+      data-frame="${i}" ${i === 0 ? 'data-on="1"' : ''} decoding="async">`).join('');
+}
+
+export function wordFrameCount(word) { return POSES[word]?.length ?? 0; }
 export const WORD_POSE_FILES = POSES;

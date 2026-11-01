@@ -112,6 +112,11 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   background: var(--panel); border-radius: var(--r-md); overflow: hidden; padding: var(--s2);
 }
 .guide-art img, .guide-art .sheet-art { max-width: 100%; max-height: 100%; object-fit: contain; }
+/* 동작 여러 장을 겹쳐 두고 한 장만 보인다. 넘어갈 때 다시 불러오지 않아 끊기지 않는다. */
+.guide-art { position: relative; }
+.guide-art .word-pose { position: absolute; inset: var(--s2); width: auto; height: auto;
+  margin: auto; visibility: hidden; }
+.guide-art .word-pose[data-on] { visibility: visible; }
 /* 도표의 손은 왼손으로 그려져 있다. 오른손을 고르면 뒤집어 보여 준다. */
 body[data-hand="right"] .guide-art img, body[data-hand="right"] .guide-art .sheet-art,
 body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art { transform: scaleX(-1); }

@@ -11,29 +11,64 @@ export const support = {
   speak: typeof globalThis.speechSynthesis !== 'undefined'
 };
 
-export function createListener({ lang = 'ko-KR', onInterim, onResult, onEnd, onError } = {}) {
+/**
+ * 문장이 끝날 때까지 듣는다.
+ *
+ * continuous 를 끄면 말하다 잠깐 쉬는 순간 브라우저가 거기서 끝낸다.
+ * 문장형으로 말하면 첫 마디만 잡히므로 계속 듣게 두고, 말이 멎은 뒤
+ * 잠깐 기다렸다가 마무리한다. 중간에 브라우저가 멋대로 끝내면 다시 잇는다.
+ */
+export function createListener({ lang = 'ko-KR', silenceMs = 1800,
+                                 onInterim, onResult, onEnd, onError } = {}) {
   if (!SR) return null;
   const rec = new SR();
   rec.lang = lang;
   rec.interimResults = true;
-  rec.continuous = false;
+  rec.continuous = true;
   rec.maxAlternatives = 1;
 
+  let settled = '';        // 지금까지 확정된 말
+  let wanted = false;      // 사용자가 아직 듣기를 원하는가
+  let idle = null;
+
+  const armIdle = () => {
+    clearTimeout(idle);
+    idle = setTimeout(() => { wanted = false; try { rec.stop(); } catch {} }, silenceMs);
+  };
+
   rec.onresult = e => {
-    let interim = '', final = '';
+    let interim = '';
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) final += t; else interim += t;
+      if (e.results[i].isFinal) settled += t;
+      else interim += t;
     }
-    if (interim && onInterim) onInterim(interim);
-    if (final && onResult) onResult(final.trim());
+    onInterim?.((settled + interim).trim());
+    armIdle();
   };
-  rec.onerror = e => onError?.(e.error);
-  rec.onend = () => onEnd?.();
+
+  rec.onerror = e => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;   // 흔하고 치명적이지 않다
+    wanted = false;
+    onError?.(e.error);
+  };
+
+  rec.onend = () => {
+    if (wanted) { try { rec.start(); return; } catch { /* 못 이으면 마무리한다 */ } }
+    clearTimeout(idle);
+    const text = settled.trim();
+    settled = '';
+    if (text) onResult?.(text);
+    onEnd?.();
+  };
 
   return {
-    start() { try { rec.start(); } catch { /* 이미 듣는 중 */ } },
-    stop() { try { rec.stop(); } catch { /* 이미 멈춤 */ } }
+    start() {
+      settled = ''; wanted = true;
+      try { rec.start(); armIdle(); } catch { /* 이미 듣는 중 */ }
+    },
+    stop() { wanted = false; clearTimeout(idle); try { rec.stop(); } catch {} },
+    get listening() { return wanted; }
   };
 }
 

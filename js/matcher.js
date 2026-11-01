@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611011524';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611011529';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -43,10 +43,15 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
   // 엄지 — 폄·접음·고리
   /* 고리를 만드는 자모(ㅇ·ㅎ)의 엄지는 편 것도 접은 것도 아니다.
      고리 거리로 이미 보고 있으므로 엄지는 따로 따지지 않는다. */
+  /* 엄지를 펴는 것이 그 글자를 만드는 자모(ㅏ·ㅓ·ㅎ 처럼)에서만 엄지를 따진다.
+     '접음'은 도표에서 읽은 것이 아니라 기본값에 가깝다. 아래를 가리킬 때
+     엄지가 조금 뜨는 것은 자연스러운데, 그걸 틀렸다고 하면 그림대로 한
+     사람이 고치라는 말을 듣는다. 아주 활짝 편 경우에만 깎는다. */
   const ringed = pose.special === 'circle';
-  const thumbTarget = pose.thumb === 'in' ? 0.25 : 0.95;
+  const thumbMatters = pose.thumb === 'out' || pose.thumb === 'up';
   const thumbScore = ringed ? 1
-    : 1 - Math.min(1, Math.abs(thumbTarget - feat.thumbExtension) / 0.55);
+    : thumbMatters ? 1 - Math.min(1, Math.max(0, 0.95 - feat.thumbExtension) / 0.55)
+    : 1 - Math.min(1, Math.max(0, feat.thumbExtension - 0.78) / 0.22);
 
   /* 수향은 거의 보지 않는다.
      손바닥·손등·손날 구분은 도표에서 읽어낸 것이 아니라 추측이라, 이것으로
@@ -84,7 +89,7 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
   } else if (bothUp && spreadScore < 0.55) {
     hint = pose.spreadWide ? '검지와 중지를 벌리세요' : '검지와 중지를 붙이세요'; hintKind = '수형';
   } else if (thumbScore < 0.6) {
-    hint = pose.thumb === 'in' ? '엄지를 접으세요' : '엄지를 펴세요'; hintKind = '수형';
+    hint = thumbMatters ? '엄지를 옆으로 펴세요' : '엄지를 너무 벌리지 마세요'; hintKind = '수형';
   }
 
   return {

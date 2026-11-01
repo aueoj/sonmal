@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011524';
-import { getPose } from './jamoData.js?v=202611011524';
-import { jamoArt, wordArt, WORD_POSE_FILES } from './illustrations.js?v=202611011524';
-import { describe } from './poseFeatures.js?v=202611011524';
-import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611011524';
-import { Tracker } from './tracker.js?v=202611011524';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011524';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011524';
-import { diagnose } from './diagnose.js?v=202611011524';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011529';
+import { getPose } from './jamoData.js?v=202611011529';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011529';
+import { describe } from './poseFeatures.js?v=202611011529';
+import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611011529';
+import { Tracker } from './tracker.js?v=202611011529';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011529';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011529';
+import { diagnose } from './diagnose.js?v=202611011529';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -176,6 +176,7 @@ function showWord(u) {
   el.name.textContent = w.word;
   el.guide.dataset.state = '';
   el.fill.style.width = '0%';
+  el.art.innerHTML = wordFilm(w.word);   // 모든 동작을 한 번에 만들어 둔다
   paintWordStep(w, frames);
   // 단어는 손모양을 가리지 않고 손이 보이는지만 본다. 모의 입력에도 손을 하나 띄운다.
   if (state.tracker?.mock) {
@@ -193,11 +194,15 @@ function showWord(u) {
     : '카메라를 켜면 따라한 것을 알아봅니다';
 }
 
+/* 그림은 showWord 에서 한 번만 만든다. 여기서는 보여 줄 것만 바꾼다. */
 function paintWordStep(w, frames) {
-  // 지금 칸이 이 단어가 아니면 그리지 않는다. 남은 타이머가 자모 그림을 덮지 않게.
+  // 지금 칸이 이 단어가 아니면 건드리지 않는다. 남은 타이머가 자모 그림을 덮지 않게.
   const cur = state.seq[state.at];
   if (!cur || cur.role !== 'word' || cur.sign !== w) return stopWordTimer();
-  el.art.innerHTML = wordArt(w.word, state.wordStep);
+  for (const img of el.art.querySelectorAll('.word-pose')) {
+    if (Number(img.dataset.frame) === state.wordStep) img.dataset.on = '1';
+    else delete img.dataset.on;
+  }
   el.step.textContent = w.steps?.[state.wordStep] ?? w.수형;
   if (frames > 1) el.fill.style.width = `${Math.round(((state.wordStep + 1) / frames) * 100)}%`;
 }
@@ -402,9 +407,11 @@ async function showDiagnosis() {
 
 function startListening() {
   if (!state.listener) { el.typed.focus(); return; }
+  if (state.listener.listening) return state.listener.stop();   // 한 번 더 누르면 끝낸다
   document.body.classList.add('listening');
+  el.btnListen.querySelector('span')?.remove();
   el.typed.value = '';
-  el.typed.placeholder = '듣고 있습니다…';
+  el.typed.placeholder = '듣고 있습니다. 다 말하면 잠깐 기다리세요';
   state.listener.start();
 }
 function stopListening() {
