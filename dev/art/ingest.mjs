@@ -5,6 +5,7 @@
  *   node dev/art/ingest.mjs            들어온 것을 검사만 한다
  *   node dev/art/ingest.mjs --apply    검사를 통과한 단어를 옮기고 wordArt.js·manifest 를 새로 쓴다
  *   node dev/art/ingest.mjs --check    지금 연결된 그림 파일이 다 있는지, 남는 파일은 없는지 본다
+ *   --hold 9466,5993                     사람이 보고 보류한 항목은 incoming 에 남겨 둔다
  *
  * 받는 조건
  *   - 표제어 번호가 js/wordBank.js 에 있고 status 가 'ok' 다
@@ -21,6 +22,8 @@ const IN = ROOT + 'assets/incoming/';
 const OUT = ROOT + 'assets/word-steps/';
 const APPLY = process.argv.includes('--apply');
 const CHECK = process.argv.includes('--check');
+const holdAt = process.argv.indexOf('--hold');
+const HOLD = new Set(holdAt > -1 ? (process.argv[holdAt + 1] ?? '').split(',').filter(Boolean) : []);
 
 const pngSize = buf => buf.readUInt32BE(0) === 0x89504e47
   ? { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) } : null;
@@ -70,6 +73,7 @@ let ready = 0, held = 0;
 for (const [no, got] of groups) {
   const w = WORD_BANK.find(x => x.entryNo === no);
   const why = [];
+  if (HOLD.has(no)) why.push(`「${w?.word ?? no}」는 사람이 보고 보류했다 (--hold)`);
   if (!w) why.push(`표제어 ${no} 가 wordBank 에 없다`);
   else {
     if (w.status !== 'ok') why.push(`「${w.word}」는 확인이 끝나지 않았다 (${w.메모 ?? w.status})`);

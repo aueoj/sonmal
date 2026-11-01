@@ -38,8 +38,8 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611011710';
-import { WORD_BASIS } from './wordArt.js?v=202611011710';
+import { WORD_BANK } from './wordBank.js?v=202611012354';
+import { WORD_BASIS } from './wordArt.js?v=202611012354';
 
 /* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
    사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
@@ -64,7 +64,7 @@ const LEGACY_SIGNS = [
     steps: ['주먹을 가슴에 댄다','둥글게 두어 번 문지른다'],
     hands: 1, source: '사용자 제공 도표', recognizable: false },
 
-  { word: '괜찮아요', aliases: ['괜찮다','괜찮습니다','좋아요'],
+  { word: '괜찮아요', aliases: ['괜찮다','괜찮습니다'],
     수형: '엄지와 검지로 고리를 만들고 나머지는 편다', 수향: '손바닥이 앞',
     수위: '어깨 높이', 수동: '제자리에서 보인다',
     steps: ['엄지와 검지 끝을 맞붙인다','나머지 세 손가락을 편다','어깨 높이에서 보인다'],

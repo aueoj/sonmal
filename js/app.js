@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011710';
-import { getPose } from './jamoData.js?v=202611011710';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011710';
-import { describe } from './poseFeatures.js?v=202611011710';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011710';
-import { Tracker } from './tracker.js?v=202611011710';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011710';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011710';
-import { diagnose } from './diagnose.js?v=202611011710';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611012354';
+import { getPose } from './jamoData.js?v=202611012354';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611012354';
+import { describe } from './poseFeatures.js?v=202611012354';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611012354';
+import { Tracker } from './tracker.js?v=202611012354';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611012354';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611012354';
+import { diagnose } from './diagnose.js?v=202611012354';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -465,6 +465,14 @@ function init() {
     const b = e.target.closest('.chip');
     if (b) setUtterance(b.dataset.word);
   });
+  /* 칩이 넘치면 오른쪽 끝을 흐리게 해 더 있다는 것을 보인다. 끝까지 밀면 흐림을 걷는다. */
+  const markMore = () => {
+    const c = el.chips;
+    c.dataset.more = c.scrollLeft + c.clientWidth < c.scrollWidth - 2 ? '1' : '';
+  };
+  el.chips.addEventListener('scroll', markMore, { passive: true });
+  addEventListener('resize', markMore);
+  markMore();
 
   el.handRight.addEventListener('click', () => setHand('right'));
   el.handLeft.addEventListener('click', () => setHand('left'));

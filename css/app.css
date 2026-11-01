@@ -23,6 +23,8 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   overflow-x: auto; scrollbar-width: none; padding: var(--s2) 0;
 }
 .chips::-webkit-scrollbar { display: none; }
+.chips[data-more="1"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
 .chip {
   flex: none; background: var(--panel); border: 1px solid transparent;
   border-radius: 999px; padding: 5px var(--s3);
@@ -125,6 +127,9 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   margin: auto; visibility: hidden; }
 .guide-art .word-pose[data-on] { visibility: visible; }
 /* 도표의 손은 왼손으로 그려져 있다. 오른손을 고르면 뒤집어 보여 준다. */
+/* 단어 그림은 검은 바탕에 인물이 가운데 있다. 정사각 칸을 꽉 채워 양옆 검은 여백만 잘라 손을 크게 보인다. */
+.guide-art:has(.word-pose) { background: #000; padding: 0; }
+.guide-art .word-pose { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 body[data-hand="right"] .guide-art img, body[data-hand="right"] .guide-art .sheet-art,
 body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art { transform: scaleX(-1); }
 
