@@ -9,7 +9,7 @@
 ## 공통 스타일
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 ```
 
 ## 01 안녕하세요  ·  기본
@@ -20,7 +20,7 @@ Flat vector illustration in exactly this style: a friendly young woman, upper bo
 **sl3331-01.png** 왼 주먹을 쥐고 오른 손바닥으로 왼팔을 쓸어내린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) is a closed fist with the forearm held horizontally in front of her waist. Her right hand (viewer's left) is open and flat, palm down, stroking along the top of the left forearm from the elbow toward the wrist. Calm, polite smile.
 ```
@@ -28,7 +28,7 @@ Scene: Her left hand (viewer's right) is a closed fist with the forearm held hor
 **sl3331-02.png** 두 주먹을 가슴 앞에서 아래로 내린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands are closed fists held side by side in front of her lower chest, palms facing down, knuckles facing forward, as if pressing both fists slightly downward. Calm, polite smile.
 ```
@@ -41,7 +41,7 @@ Scene: Both hands are closed fists held side by side in front of her lower chest
 **sl2372-01.png** 왼손을 손바닥이 아래로 펴고 오른손을 모로 세운다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) is flat with the palm facing down, fingers pointing to her right, held in front of her chest. Her right hand (viewer's left) is flat and held vertically on its edge (thumb on top, little-finger edge at the bottom), fingertips pointing forward away from her body, raised a few centimetres above the back of the left hand. Warm smile.
 ```
@@ -49,7 +49,7 @@ Scene: Her left hand (viewer's right) is flat with the palm facing down, fingers
 **sl2372-02.png** 오른손 새끼 쪽 옆면을 왼 손등에 두 번 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Same hands: the little-finger edge of her right hand (viewer's left) (held vertically, fingertips pointing forward) is touching the back of the flat palm-down left hand, like a gentle chop. Warm smile, head slightly bowed.
 ```
@@ -62,7 +62,7 @@ Scene: Same hands: the little-finger edge of her right hand (viewer's left) (hel
 **sl9917-01.png** 검지와 엄지로 동그라미를 만들어 이마에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) makes a small circle by touching the tip of the index finger to the tip of the thumb, the other three fingers extended; the circle is placed against the middle of her forehead. Her left hand (viewer's right) is flat, palm down, fingertips pointing to her right, in front of her chest. Apologetic expression.
 ```
@@ -70,7 +70,7 @@ Scene: Her right hand (viewer's left) makes a small circle by touching the tip o
 **sl9917-02.png** 손을 펴며 내려 왼 손등 위에 얹는다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is now fully open and flat, palm down, resting on top of the back of her left hand (viewer's right), which is flat, palm down, fingertips pointing to her right, in front of her chest. Apologetic expression.
 ```
@@ -83,7 +83,7 @@ Scene: Her right hand (viewer's left) is now fully open and flat, palm down, res
 **sl9466-01.png** 주먹에서 새끼손가락만 편다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the little finger (pinky) extended straight up, held just in front of her chin, palm facing her. Other hand relaxed down. Gentle smile.
 ```
@@ -91,7 +91,7 @@ Scene: Her right hand (viewer's left) is a fist with only the little finger (pin
 **sl9466-02.png** 새끼손가락 끝을 턱에 가볍게 두 번 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the little finger extended; the pad of the little-finger tip is touching the middle of her chin. Gentle smile.
 ```
@@ -104,7 +104,7 @@ Scene: Her right hand (viewer's left) is a fist with only the little finger exte
 **sl9474-01.png** 검지와 중지, 새끼를 펴서 검지와 중지 끝을 오른쪽 눈 옆에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has the index, middle and little fingers extended and spread, ring finger and thumb folded, back of the hand facing outward; the tips of the index and middle fingers touch the side of her right eye. Friendly expression.
 ```
@@ -117,7 +117,7 @@ Scene: Her right hand (viewer's left) has the index, middle and little fingers e
 **sl24036-01.png** 손바닥이 앞을 보게 편 손을 세운다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is open and flat, held upright in front of her chest with the palm facing the viewer, fingers together pointing up, slightly to her right. Neutral expression with a slight head shake.
 ```
@@ -125,7 +125,7 @@ Scene: Her right hand (viewer's left) is open and flat, held upright in front of
 **sl24036-02.png** 좌우로 흔든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is open and flat, upright in front of her chest, palm facing the viewer, now shifted slightly to her left (mid-wave). Neutral expression with a slight head shake.
 ```
@@ -138,7 +138,7 @@ Scene: Her right hand (viewer's left) is open and flat, upright in front of her 
 **sl5447-01.png** 왼손은 엄지를 세운 주먹, 오른손은 펴서 세운다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) is a fist with the thumb sticking straight up (thumbs-up), the pad of the thumb facing the viewer, held in front of her chest. Her right hand (viewer's left) is open, flat and upright, palm facing the back of that thumb, a short distance away from it. Earnest expression.
 ```
@@ -146,7 +146,7 @@ Scene: Her left hand (viewer's right) is a fist with the thumb sticking straight
 **sl5447-02.png** 오른 손바닥을 왼 엄지 등에 두 번 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Same hands: the palm of the upright flat her right hand (viewer's left) is pressed against the back of the raised left thumb. Earnest expression.
 ```
@@ -159,7 +159,7 @@ Scene: Same hands: the palm of the upright flat her right hand (viewer's left) i
 **sl7422-01.png** 엄지로 검지와 중지 손톱을 누르고 어깨 앞에 든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is raised in front of her right shoulder, back of the hand facing the viewer; the thumb presses on the fingernails of the curled index and middle fingers (as if ready to flick); ring and little fingers folded. Neutral expression.
 ```
@@ -167,7 +167,7 @@ Scene: Her right hand (viewer's left) is raised in front of her right shoulder, 
 **sl7422-02.png** 왼쪽 아래로 내리며 검지와 중지를 편다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has moved down and across to the front of her chest, now with the index and middle fingers flicked open and extended (a V shape), thumb, ring and little fingers folded, back of the hand facing the viewer. Neutral expression.
 ```
@@ -180,7 +180,7 @@ Scene: Her right hand (viewer's left) has moved down and across to the front of 
 **sl9928-01.png** 왼 손등 위에 오른손을 모로 세워 얹는다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) is flat, palm down, fingertips pointing to her right, in front of her lower chest. Her right hand (viewer's left) is flat and held vertically on its edge (little-finger edge down), resting on the back of the left hand near the wrist, fingertips pointing forward. Calm expression.
 ```
@@ -188,7 +188,7 @@ Scene: Her left hand (viewer's right) is flat, palm down, fingertips pointing to
 **sl9928-02.png** 오른손을 천천히 앞으로 내민다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) stays flat and palm down. The vertical flat her right hand (viewer's left) has slid slowly forward along the back of the left hand and is now past the left fingertips. Calm, unhurried expression.
 ```
@@ -201,7 +201,7 @@ Scene: Her left hand (viewer's right) stays flat and palm down. The vertical fla
 **sl5993-01.png** 왼손 검지와 중지를 옆으로 벌려 든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) has the index and middle fingers extended and spread in a V, pointing to her right (sideways), back of the hand facing the viewer, in front of her chest; other fingers folded. Her right hand (viewer's left) is a fist with only the index finger extended, its tip just behind the gap of the V. Thoughtful expression.
 ```
@@ -209,7 +209,7 @@ Scene: Her left hand (viewer's right) has the index and middle fingers extended 
 **sl5993-02.png** 그 사이로 오른 검지를 내밀었다가 다시 넣는다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Same hands: the extended right index finger is pushed forward through the gap between the left index and middle fingers. Understanding nod.
 ```
@@ -222,7 +222,7 @@ Scene: Same hands: the extended right index finger is pushed forward through the
 **sl10981-01.png** 검지와 엄지를 구부려 컵을 쥔 모양을 만든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has the index finger and thumb extended and curved into a C shape as if holding a small cup, other fingers folded, held just in front of her chin. Neutral expression.
 ```
@@ -230,7 +230,7 @@ Scene: Her right hand (viewer's left) has the index finger and thumb extended an
 **sl10981-02.png** 입으로 기울여 올린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: The C-shaped her right hand (viewer's left) (index finger and thumb curved) is raised to her mouth and tilted toward her lips as if drinking from a cup.
 ```
@@ -243,7 +243,7 @@ Scene: The C-shaped her right hand (viewer's left) (index finger and thumb curve
 **sl971-01.png** 중지, 약지, 새끼를 벌려 펴고 검지와 엄지를 C자로 구부린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is held up in front of her chest with the palm facing the viewer: the middle, ring and little fingers are extended upward and spread apart, while the index finger and thumb curve into an open 'C' shape (not touching). Neutral expression.
 ```
@@ -256,7 +256,7 @@ Scene: Her right hand (viewer's left) is held up in front of her chest with the 
 **sl9387-01.png** 두 손 엄지 등을 배에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands are relaxed and open in front of her stomach, the backs of both thumbs touching her belly, fingers loosely open. Hungry expression with slightly drooping eyebrows.
 ```
@@ -264,7 +264,7 @@ Scene: Both hands are relaxed and open in front of her stomach, the backs of bot
 **sl9387-02.png** 네 손가락을 엄지로 모아 누르며 몸을 조금 숙인다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands at her stomach: the four fingers of each hand are brought together and pressed onto the pad of its thumb, pressing into the belly; her upper body leans forward slightly. Hungry, weak expression.
 ```
@@ -277,7 +277,7 @@ Scene: Both hands at her stomach: the four fingers of each hand are brought toge
 **sl1086-01.png** 엄지를 세운 주먹을 배 앞에 둔다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with the thumb sticking straight up, held in front of her stomach. Angry expression with furrowed brows.
 ```
@@ -285,7 +285,7 @@ Scene: Her right hand (viewer's left) is a fist with the thumb sticking straight
 **sl1086-02.png** 힘주어 가슴 쪽으로 올린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left), still a thumbs-up fist, has been pushed forcefully upward to the front of her chest. Angry expression with furrowed brows.
 ```
@@ -298,7 +298,7 @@ Scene: Her right hand (viewer's left), still a thumbs-up fist, has been pushed f
 **sl7240-01.png** 검지와 엄지 끝을 맞대어 오른쪽 눈 밑에 댔다가 내린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has the tips of the index finger and thumb touching (other fingers folded), placed just under her right eye like a falling tear. Sad expression with downturned mouth.
 ```
@@ -306,7 +306,7 @@ Scene: Her right hand (viewer's left) has the tips of the index finger and thumb
 **sl7240-02.png** 손가락을 펴서 구부려 가슴에 대고 돌린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is open with the fingers bent like a claw, fingertips placed on the centre of her chest, as if circling over the heart. Sad expression with downturned mouth.
 ```
@@ -319,7 +319,7 @@ Scene: Her right hand (viewer's left) is open with the fingers bent like a claw,
 **sl3874-01.png** 두 손 검지와 엄지를 펴서 검지 끝을 양쪽 가슴에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands have only the index finger and thumb extended (L shape), backs of the hands facing the viewer, index fingertips pointing at either side of her chest; her right hand is higher and her left hand is lower. Big happy smile.
 ```
@@ -327,7 +327,7 @@ Scene: Both hands have only the index finger and thumb extended (L shape), backs
 **sl3874-02.png** 두 손을 위아래로 엇갈리게 움직인다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands have only the index finger and thumb extended (L shape), backs facing the viewer, index fingertips at either side of her chest; now her right hand is lower and her left hand is higher. Big happy smile.
 ```
@@ -340,7 +340,7 @@ Scene: Both hands have only the index finger and thumb extended (L shape), backs
 **sl9078-01.png** 주먹의 엄지와 검지 쪽 옆면을 코에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a loose fist placed against her nose so that the side formed by the thumb and index finger touches the nose. Pleased smile.
 ```
@@ -353,7 +353,7 @@ Scene: Her right hand (viewer's left) is a loose fist placed against her nose so
 **sl23960-01.png** 검지와 엄지를 약간 구부려 끝을 턱에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has the index finger and thumb extended and slightly bent (other fingers folded), their tips touching her chin. Displeased expression, head turned slightly as if shaking it.
 ```
@@ -366,7 +366,7 @@ Scene: Her right hand (viewer's left) has the index finger and thumb extended an
 **sl10967-01.png** 두 손 엄지 끝을 몸 가운데 위아래에 대고 손가락을 떤다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands are open with fingers spread, palms toward her body, fingers pointing sideways; the right hand is placed high on the centre of her chest and the left hand lower near her stomach, both thumb tips touching the centre line of her body, fingers trembling. Frightened expression.
 ```
@@ -379,7 +379,7 @@ Scene: Both hands are open with fingers spread, palms toward her body, fingers p
 **sl12438-01.png** 두 손바닥을 양쪽 가슴에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both open palms are placed flat on either side of her chest. Tired expression with half-closed eyes.
 ```
@@ -387,7 +387,7 @@ Scene: Both open palms are placed flat on either side of her chest. Tired expres
 **sl12438-02.png** 힘없이 밑으로 내린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both open hands have dropped limply down to the level of her stomach, palms facing her body, fingers hanging down. Exhausted expression with drooping shoulders.
 ```
@@ -400,7 +400,7 @@ Scene: Both open hands have dropped limply down to the level of her stomach, pal
 **sl5621-01.png** 손바닥이 위로 오게 약간 오므린 손을 좌우로 흔든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is slightly cupped with the palm facing up, held in front of her chest, shaking side to side. Pained expression with furrowed brows.
 ```
@@ -413,7 +413,7 @@ Scene: Her right hand (viewer's left) is slightly cupped with the palm facing up
 **sl2336-01.png** 검지와 엄지 끝을 맞댄 두 손을 가슴 앞에 위아래로 둔다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands have the index fingertip touching the thumb tip; the right hand is against her upper chest and the left hand is just below it. Neutral face about to react.
 ```
@@ -421,7 +421,7 @@ Scene: Both hands have the index fingertip touching the thumb tip; the right han
 **sl2336-02.png** 놀란 표정으로 두 손을 동시에 편다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands have sprung wide open with all fingers spread, still in front of her chest, one above the other. Surprised expression with wide eyes and open mouth.
 ```
@@ -434,7 +434,7 @@ Scene: Both hands have sprung wide open with all fingers spread, still in front 
 **sl10223-01.png** 엄지는 오른쪽 볼, 네 손가락은 왼쪽 볼에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) spans her lower face: the four fingers rest on her left cheek and the thumb rests on her right cheek, palm toward her face. Happy, glowing smile.
 ```
@@ -442,7 +442,7 @@ Scene: Her right hand (viewer's left) spans her lower face: the four fingers res
 **sl10223-02.png** 내리며 손가락을 모아 붙인다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has slid down below her chin and the fingertips and thumb are drawn together into a bunched point. Happy, glowing smile.
 ```
@@ -455,7 +455,7 @@ Scene: Her right hand (viewer's left) has slid down below her chin and the finge
 **sl5127-01.png** 약간 구부린 손끝을 가슴에 대고 천천히 두 바퀴 돌린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is slightly bent with the fingertips placed on the centre of her chest, as if slowly circling over the heart. Worried expression with raised inner eyebrows.
 ```
@@ -468,7 +468,7 @@ Scene: Her right hand (viewer's left) is slightly bent with the fingertips place
 **sl11536-01.png** 오른 손바닥을 가슴 가운데에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is open and flat with the palm placed on the centre of her chest, thumb up. Neutral expression.
 ```
@@ -481,7 +481,7 @@ Scene: Her right hand (viewer's left) is open and flat with the palm placed on t
 **sl6450-01.png** 검지로 상대를 가리키며 약간 내민다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended, pointing straight toward the viewer, held in front of her chest. Neutral expression.
 ```
@@ -494,7 +494,7 @@ Scene: Her right hand (viewer's left) is a fist with only the index finger exten
 **sl8265-01.png** 오른 손바닥을 가슴에 댄다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is open and flat with the palm placed on her chest. Neutral expression.
 ```
@@ -502,7 +502,7 @@ Scene: Her right hand (viewer's left) is open and flat with the palm placed on h
 **sl8265-02.png** 손등이 위로 오게 몸 앞에서 크게 한 바퀴 돌린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is open and flat, back of the hand facing up, sweeping in a wide horizontal circle in front of her stomach. Neutral, inclusive expression.
 ```
@@ -515,7 +515,7 @@ Scene: Her right hand (viewer's left) is open and flat, back of the hand facing 
 **sl8472-01.png** 검지 끝이 약간 아래를 보게 하여 내린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended, pointing slightly downward in front of her body. Neutral expression.
 ```
@@ -528,7 +528,7 @@ Scene: Her right hand (viewer's left) is a fist with only the index finger exten
 **sl11234-01.png** 왼손 엄지를 세우고 오른 검지로 그 등을 가리킨다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her left hand (viewer's right) is a fist with the thumb raised, the pad of the thumb facing the viewer, in front of her chest. Her right hand (viewer's left) is a fist with only the index finger extended, its tip pointing at the back of the left thumb. Neutral expression.
 ```
@@ -541,7 +541,7 @@ Scene: Her left hand (viewer's right) is a fist with the thumb raised, the pad o
 **sl7224-01.png** 검지를 세워 좌우로 두 번 흔든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended straight up, the pad of the finger facing the viewer, held in front of her chest, shaking side to side. Questioning expression with raised eyebrows.
 ```
@@ -554,7 +554,7 @@ Scene: Her right hand (viewer's left) is a fist with only the index finger exten
 **sl8799-01.png** 검지를 세워 왼쪽으로 흔든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended straight up, pad facing the viewer, in front of her chest, moving to her left. Questioning expression with raised eyebrows.
 ```
@@ -562,7 +562,7 @@ Scene: Her right hand (viewer's left) is a fist with only the index finger exten
 **sl8799-02.png** 반쯤 구부린 손을 손바닥이 아래로 오게 내리다 멈춘다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is half-bent with the palm facing down, held in front of her chest as if setting something down and stopping. Questioning expression with raised eyebrows.
 ```
@@ -575,7 +575,7 @@ Scene: Her right hand (viewer's left) is half-bent with the palm facing down, he
 **sl8602-01.png** 모로 세운 왼손 위에 오른손을 모로 세워 올린다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands are open and held vertically on their edges in front of her chest, fingers pointing forward; the right hand rests on top of the left hand. Questioning expression with raised eyebrows.
 ```
@@ -583,7 +583,7 @@ Scene: Both hands are open and held vertically on their edges in front of her ch
 **sl8602-02.png** 오른손을 엄지부터 차례로 접는다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: The left hand stays vertical on its edge; the right hand on top has started folding its fingers one by one into the palm, starting with the thumb (as if counting). Questioning expression with raised eyebrows.
 ```
@@ -596,7 +596,7 @@ Scene: The left hand stays vertical on its edge; the right hand on top has start
 **sl5394-01.png** 구부린 손가락 등으로 오른뺨을 위아래로 두 번 문지른다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) has its fingers bent; the backs of the bent fingers lightly rub her right cheek. Questioning expression with raised eyebrows.
 ```
@@ -609,7 +609,7 @@ Scene: Her right hand (viewer's left) has its fingers bent; the backs of the ben
 **sl7713-01.png** 검지 끝을 오른쪽 관자놀이에 대고 의문스러운 표정을 짓는다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended, the fingertip touching her right temple. Puzzled, questioning expression with one eyebrow raised.
 ```
@@ -622,7 +622,7 @@ Scene: Her right hand (viewer's left) is a fist with only the index finger exten
 **sl7256-01.png** 검지를 세워 왼쪽으로 흔든다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her right hand (viewer's left) is a fist with only the index finger extended straight up, pad facing the viewer, in front of her chest, moving to her left. Questioning expression.
 ```
@@ -630,8 +630,50 @@ Scene: Her right hand (viewer's left) is a fist with only the index finger exten
 **sl7256-02.png** 검지와 중지를 구부린 두 주먹의 새끼 쪽을 두 번 맞부딪친다
 
 ```
-Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Both hands are fists with the index and middle fingers extended and hooked (bent), held upright in front of her chest; the little-finger sides of the two fists are knocking together. Questioning expression.
+```
+
+## 36 학교  ·  생활
+
+사전 1352: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=1352
+원문: 두 손을 펴서 손끝이 위로 손등이 밖으로 향하게 얼굴 앞에 세워 한 번 당긴다.
+
+**sl1352-01.png** 두 손을 펴서 손등이 밖을 향하게 얼굴 앞에 세운다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Both hands open flat, fingers straight together upward, held in front of face at shoulder width. BACKS of hands face viewer, palms toward her face. Show fingernails, no palm creases. Hands a little away from face.
+```
+
+**sl1352-02.png** 두 손을 얼굴 쪽으로 한 번 당긴다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Both open flat hands are now closer to the face, fingers straight upward, BACKS facing viewer and palms facing her cheeks. End of one inward pull, same configuration.
+```
+
+## 37 먹다  ·  생활
+
+사전 10419: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=10419
+원문: 오른손을 펴서, 손바닥이 위로 향하게 하여 두 번 입으로 올린다.
+
+**sl10419-01.png** 오른손을 펴 손바닥이 위를 향하게 입 아래에 둔다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Her RIGHT hand, on viewer left, is fully open with straight fingers together and PALM UP like a flat tray, held below her mouth at upper chest. Left arm rests down.
+```
+
+**sl10419-02.png** 손바닥이 위인 채 입으로 올린다 (두 번 반복)
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Her RIGHT flat open hand is raised near lips, PALM UP, fingers straight together aimed toward her mouth, not pinched. Left arm relaxed. End pose of lifting open hand toward mouth.
 ```
 

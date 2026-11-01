@@ -6,8 +6,8 @@ js/wordBank.js 의 단계마다 한 장. 영어로 쓴 이유는 이미지 모�
   python3 dev/art/prompts.py > docs/ILLUSTRATION-PROMPTS.md
 """
 STYLE = (
-    "Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; "
-    "dark navy hair parted in the middle with a low bun; peach skin; simple dot eyes; plain white long-sleeve top; "
+    "Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; "
+    "dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; "
     "thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; "
     "landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. "
     "No text, no letters, no arrows, no motion lines, no labels, no frames. "
@@ -109,6 +109,8 @@ FRAMES = {
   f"{R} is a fist with only the index finger extended straight up, pad facing the viewer, in front of her chest, moving to her left. Questioning expression.",
   "Both hands are fists with the index and middle fingers extended and hooked (bent), held upright in front of her chest; the little-finger sides of the two fists are knocking together. Questioning expression."],
 }
+
+FRAMES.update({'학교': ['Both hands open flat, fingers straight together upward, held in front of face at shoulder width. BACKS of hands face viewer, palms toward her face. Show fingernails, no palm creases. Hands a little away from face.', 'Both open flat hands are now closer to the face, fingers straight upward, BACKS facing viewer and palms facing her cheeks. End of one inward pull, same configuration.'], '먹다': ['Her RIGHT hand, on viewer left, is fully open with straight fingers together and PALM UP like a flat tray, held below her mouth at upper chest. Left arm rests down.', 'Her RIGHT flat open hand is raised near lips, PALM UP, fingers straight together aimed toward her mouth, not pinched. Left arm relaxed. End pose of lifting open hand toward mouth.']})
 
 if __name__ == '__main__':
     import json, re, subprocess
