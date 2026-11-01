@@ -28,6 +28,10 @@ jobs:
           npm i -D playwright@1.49.1 >/dev/null
           npx playwright install --with-deps chromium
 
+      # 판 번호가 빠지면 브라우저가 옛 파일을 계속 쓴다
+      - name: 파일에 판 번호가 붙어 있는가
+        run: node dev/stamp.mjs --check
+
       - name: 자모가 서로 구별되는가
         run: node dev/selftest.mjs
 
