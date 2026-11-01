@@ -30,13 +30,19 @@ export class Tracker {
       /* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`
     );
     const fileset = await FilesetResolver.forVisionTasks(`${TASKS_VISION}/wasm`);
-    this.landmarker = await HandLandmarker.createFromOptions(fileset, {
-      baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' },
+    const opts = delegate => ({
+      baseOptions: { modelAssetPath: MODEL, delegate },
       runningMode: 'VIDEO',
       numHands: 1,
       minHandDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5
     });
+    // GPU 위임을 못 쓰는 기기가 있다. 그때는 CPU로 한 번 더 시도한다.
+    try {
+      this.landmarker = await HandLandmarker.createFromOptions(fileset, opts('GPU'));
+    } catch {
+      this.landmarker = await HandLandmarker.createFromOptions(fileset, opts('CPU'));
+    }
 
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },

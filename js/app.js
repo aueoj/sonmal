@@ -8,12 +8,16 @@ import { scorePose, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js';
 import { Tracker } from './tracker.js';
 import { createListener, speak, support } from './speech.js';
 import { planUtterance, SOURCES, WORD_SIGNS } from './words.js';
+import { diagnose } from './diagnose.js';
 
 const $ = id => document.getElementById(id);
 const el = {
   camera: document.querySelector('.camera'),
   video: $('cam'), overlay: $('overlay'), camEmpty: $('cam-empty'),
   camStatus: $('cam-status'), btnCam: $('btn-cam'), btnDemo: $('btn-demo'),
+  diag: $('diag'), diagVerdict: $('diag-verdict'), diagList: $('diag-list'),
+  diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagNewTab: $('diag-newtab'),
+  camPrompt: document.querySelector('.cam-prompt'),
   heard: $('heard'), heardText: $('heard-text'),
   glyph: $('glyph'), hand: $('hand'), flag: $('flag'),
   note: $('note'), mnemo: $('mnemo'),
@@ -28,10 +32,6 @@ const el = {
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
-
-/* 카메라를 쓸 수 없는 자리도 있다. 내장 프레임은 권한 정책으로 막기도 하고,
-   보안 컨텍스트가 아니면 API 자체가 없다. 그럴 때 빈 화면을 내밀지 않는다. */
-const CAM_AVAILABLE = Boolean(navigator.mediaDevices?.getUserMedia);
 const ACCEPT = 0.74;        // 이 점수를 넘고
 const HOLD_MS = 450;        // 이만큼 버티면 맞은 것으로 본다
 const NEAR = 0.58;
@@ -289,13 +289,28 @@ async function startCamera({ demo = false } = {}) {
     el.btnCam.disabled = false;
     el.btnDemo.disabled = false;
     el.btnCam.textContent = '카메라 켜기';
-    el.note.textContent =
-      err?.name === 'NotAllowedError' ? '카메라 권한이 거부되었습니다. 브라우저 주소창의 카메라 아이콘에서 허용으로 바꾸고 다시 눌러 주세요.'
-      : err?.name === 'NotFoundError' ? '쓸 수 있는 카메라를 찾지 못했습니다. 연결을 확인하고 다시 눌러 주세요.'
-      : err?.name === 'NotSupportedError' || !CAM_AVAILABLE ? '이 자리에서는 카메라를 쓸 수 없습니다. 카메라 없이 둘러보기로 전체 흐름을 볼 수 있습니다.'
-      : /import|fetch|network|Failed to/i.test(err?.message ?? '') ? '손 인식 모델을 내려받지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.'
-      : `카메라를 열지 못했습니다. ${err?.message ?? ''}`;
+    await showDiagnosis();
   }
+}
+
+/* 막힌 자리를 한 줄로 뭉뚱그리지 않고 단계별로 보여 준다.
+   그래야 다음에 무엇을 할지 고를 수 있다. */
+async function showDiagnosis() {
+  el.diagVerdict.textContent = '어디서 막혔는지 확인하는 중…';
+  el.diagList.innerHTML = '';
+  el.diagAdvice.textContent = '';
+  el.camPrompt.hidden = true;
+  el.diag.hidden = false;
+
+  const { rows, verdict, advice, embedded } = await diagnose();
+  const mark = { ok: '○', bad: '✕', unknown: '–' };
+  el.diagVerdict.textContent = verdict;
+  el.diagList.innerHTML = rows.map(r =>
+    `<li data-state="${r.state}"><b>${mark[r.state]}</b><span>${r.label}</span>` +
+    (r.detail ? `<em>— ${r.detail}</em>` : '') + '</li>').join('');
+  el.diagAdvice.textContent = advice;
+  el.diagNewTab.hidden = !embedded;
+  el.note.textContent = verdict;
 }
 
 function startListening() {
@@ -339,10 +354,8 @@ function init() {
 
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
-  if (!CAM_AVAILABLE) {
-    el.btnCam.disabled = true;
-    el.btnCam.title = '이 자리에서는 카메라를 쓸 수 없습니다';
-  }
+  el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera(); });
+  el.diagNewTab.addEventListener('click', () => window.open(location.href, '_blank', 'noopener'));
   el.btnListen.addEventListener('click', startListening);
   el.btnReplay.addEventListener('click', () => speak(composeFromJamo(state.got).trim()));
   el.typedForm.addEventListener('submit', e => {

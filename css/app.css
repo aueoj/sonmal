@@ -53,7 +53,26 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: var(--s6); flex-wrap: wrap;
 }
-.cam-actions { display: flex; align-items: center; gap: var(--s2); }
+.cam-actions { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
+
+/* 카메라가 막혔을 때 어느 단계에서 막혔는지 */
+.diag {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: var(--s5); max-width: 62ch; display: flex; flex-direction: column; gap: var(--s3);
+}
+.diag-verdict { font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
+  letter-spacing: var(--track-tight); margin: 0; }
+.diag-advice { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); margin: 0; }
+.diag-advice:empty { display: none; }
+.diag-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.diag-list li { display: flex; align-items: baseline; gap: var(--s2);
+  font-family: var(--kr); font-size: var(--t-label); }
+.diag-list b { flex: none; width: 1.1em; font-weight: 600; }
+.diag-list li[data-state="ok"] b { color: var(--jade); }
+.diag-list li[data-state="bad"] b { color: #c0392e; }
+.diag-list li[data-state="unknown"] b { color: var(--faint); }
+.diag-list span { color: var(--ink-soft); }
+.diag-list em { font-style: normal; color: var(--muted); }
 /* 카메라를 켜기 전에는 이 자리가 비어 있을 이유가 없다. 전체 표를 깔아 둔다. */
 .chart {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
