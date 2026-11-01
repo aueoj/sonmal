@@ -1,0 +1,35 @@
+name: Recover Pages publication
+on:
+  push:
+    branches: [gh-pages]
+    paths: [.github/workflows/recover-pages.yml]
+permissions:
+  contents: read
+  pages: write
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recover stalled Pages configuration
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          report_error() {
+            while IFS= read -r line; do printf '::error::%s\n' "$line"; done <<< "$1"
+          }
+          # Verify creation authorization before touching the existing site.
+          if probe=$(gh api --method POST "repos/$GH_REPO/pages" -f 'source[branch]=gh-pages' -f 'source[path]=/' 2>&1); then
+            exit 0
+          fi
+          if [[ "$probe" != *"already exists"* ]]; then
+            report_error "$probe"
+            exit 1
+          fi
+          gh api --method DELETE "repos/$GH_REPO/pages"
+          if response=$(gh api --method POST "repos/$GH_REPO/pages" -f 'source[branch]=gh-pages' -f 'source[path]=/' 2>&1); then
+            printf '%s\n' "$response"
+          else
+            report_error "$response"
+            exit 1
+          fi
