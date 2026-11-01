@@ -1,0 +1,24 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>지문자 컨택트 시트</title>
+<style>
+ body{margin:0;padding:20px;background:#fff;font:13px/1.5 system-ui;color:#0d0e11}
+ .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+ .cell{border-radius:10px;padding:8px 6px 4px;text-align:center}
+ .cell.c{background:#e4f0f8} .cell.v{background:#e6f0e4} .cell.m{background:#f0ecf8}
+ .cap{font-weight:700;font-size:18px;margin-top:2px}
+ .q{font-size:10px;color:#8a7a3a}
+ .sm-fill{fill:#fbe3d2;stroke:#2f3a4c;stroke-width:5.5;stroke-linejoin:round}
+ .sm-edge{fill:none;stroke:#2f3a4c;stroke-linecap:round;stroke-linejoin:round}
+ .sm-skin{fill:none;stroke:#fbe3d2;stroke-linecap:round;stroke-linejoin:round}
+ .sm-line{fill:none;stroke:#2f3a4c;stroke-width:3;stroke-linecap:round;opacity:.45}
+ .sm-dot{fill:#2f3a4c;opacity:.4}
+ .sm-motion{fill:none;stroke:#5e6ad2;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+ svg{display:block;margin:0 auto}
+</style></head><body><div class="grid" id="g"></div>
+<script type="module">
+import {CONSONANTS,VOWELS,MOTION_LETTERS} from '../js/jamoData.js';
+const cls=p=>p.motion?'m':(p.kind==='vowel'?'v':'c');
+import {renderHand} from '../js/handRenderer.js';
+document.getElementById('g').innerHTML=[...CONSONANTS,...VOWELS,...MOTION_LETTERS].map(p=>
+ `<div class="cell ${cls(p)}">${renderHand(p,{size:128})}<div class="cap">${p.jamo}</div>
+  <div class="q">${p.confidence==='check'?'확인 필요':'&nbsp;'}</div></div>`).join('');
+</script></body></html>

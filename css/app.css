@@ -1,0 +1,227 @@
+/* app.css — 손말 화면
+   카메라가 화면의 주인이다. 크롬은 손이 있는 자리를 덮지 않는다. */
+
+body { display: flex; flex-direction: column; overflow: hidden; }
+
+.skip {
+  position: absolute; left: var(--s4); top: -60px; z-index: 50;
+  background: var(--ink); color: var(--paper); padding: var(--s2) var(--s4);
+  border-radius: var(--r-md); text-decoration: none; font-size: var(--t-label);
+}
+.skip:focus { top: var(--s2); }
+
+/* ── 상단 바 ───────────────────────────────────── */
+.bar {
+  height: var(--bar); flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--s4); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: baseline; gap: var(--s3); min-width: 0; }
+.mark { font-family: var(--kr); font-weight: 700; font-size: 16px; letter-spacing: -0.03em; }
+.sub { font-size: var(--t-label); color: var(--muted); white-space: nowrap; }
+.bar-right { display: flex; align-items: center; gap: var(--s4); }
+
+.status { display: inline-flex; align-items: center; gap: var(--s2); font-size: var(--t-label); color: var(--muted); }
+.status i { width: 6px; height: 6px; border-radius: 50%; background: var(--line-strong); }
+.status[data-state="on"] i { background: var(--jade); }
+.status[data-state="mock"] i { background: var(--amber); }
+.status[data-state="on"], .status[data-state="mock"] { color: var(--ink-soft); }
+
+/* ── 무대 ─────────────────────────────────────── */
+.stage { flex: 1; display: flex; min-height: 0; }
+
+.camera {
+  position: relative; flex: 1; min-width: 0;
+  background: var(--panel); overflow: hidden;
+  display: grid; place-items: center;
+}
+.camera video, .camera canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transform: scaleX(-1);
+}
+.camera canvas { pointer-events: none; }
+
+.cam-empty {
+  position: absolute; inset: 0; z-index: 2; overflow-y: auto;
+  padding: var(--s6) var(--s6) var(--s7);
+  display: flex; flex-direction: column; gap: var(--s6);
+}
+.cam-prompt {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--s6); flex-wrap: wrap;
+}
+/* 카메라를 켜기 전에는 이 자리가 비어 있을 이유가 없다. 전체 표를 깔아 둔다. */
+.chart {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
+  gap: var(--s2); align-content: start;
+}
+.chart figure {
+  margin: 0; background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-md); padding: var(--s1) 0 2px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.chart svg { width: 100%; height: 66px; }
+.chart figcaption { font-family: var(--kr); font-weight: 600; font-size: var(--t-label); }
+.chart figure[data-check="1"] figcaption { color: var(--amber); }
+.cam-empty-title { font-family: var(--kr); font-size: var(--t-title); font-weight: 600; letter-spacing: var(--track-tight); margin: 0 0 var(--s2); }
+.cam-empty-body { font-size: var(--t-body); color: var(--muted); margin: 0; max-width: 46ch; }
+.camera.live .cam-empty { display: none; }
+
+.heard {
+  position: absolute; left: var(--s5); bottom: var(--s5); z-index: 3;
+  display: flex; align-items: baseline; gap: var(--s3); max-width: calc(100% - var(--s8));
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-md); padding: var(--s2) var(--s4);
+}
+.heard-label { font-size: var(--t-micro); color: var(--muted); flex: none; }
+.heard-text { font-family: var(--kr); font-size: var(--t-lead); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.heard[data-interim="true"] .heard-text { color: var(--muted); }
+
+/* ── 코치 레일 ─────────────────────────────────── */
+.rail {
+  width: var(--rail); flex: none; border-left: 1px solid var(--line);
+  padding: var(--s5); display: flex; flex-direction: column; gap: var(--s5);
+  overflow-y: auto;
+}
+
+.card {
+  position: relative; background: var(--panel); border-radius: var(--r-lg);
+  aspect-ratio: 1 / 1; display: grid; place-items: center; overflow: hidden;
+}
+/* 히어로 — 지문자는 한글 자모 모양을 본뜬 체계다. 글자를 손 뒤에 깔아
+   왜 이 손모양인지가 설명 없이 읽히게 한다. */
+.glyph {
+  position: absolute; left: -2px; top: -14px;
+  font-family: var(--kr); font-weight: 700; font-size: 184px; line-height: .86;
+  color: #e9e9ee; user-select: none;
+}
+.hand { position: relative; z-index: 1; display: grid; place-items: center; }
+.hand svg { display: block; width: auto; height: 100%; max-height: 248px; }
+
+.sm-fill { fill: #fbe3d2; stroke: #2f3a4c; stroke-width: 5.5; stroke-linejoin: round; }
+.sm-edge { fill: none; stroke: #2f3a4c; stroke-linecap: round; stroke-linejoin: round; }
+.sm-skin { fill: none; stroke: #fbe3d2; stroke-linecap: round; stroke-linejoin: round; }
+.sm-line { fill: none; stroke: #2f3a4c; stroke-width: 3; stroke-linecap: round; opacity: .42; }
+.sm-dot  { fill: #2f3a4c; opacity: .38; }
+.sm-motion { fill: none; stroke: var(--indigo); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+
+.flag {
+  position: absolute; top: var(--s3); right: var(--s3); z-index: 2;
+  background: var(--amber-soft); color: var(--amber);
+  font-size: var(--t-micro); padding: 2px var(--s2); border-radius: var(--r-sm);
+}
+
+.read { display: flex; flex-direction: column; gap: var(--s2); }
+.note { font-family: var(--kr); font-size: var(--t-lead); margin: 0; max-width: 34ch; }
+.mnemo { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); margin: 0; max-width: 36ch; }
+
+.meter { display: flex; flex-direction: column; gap: var(--s2); }
+.meter-head { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--t-label); color: var(--muted); }
+.pct { font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+.track { height: 4px; background: var(--panel-deep); border-radius: 2px; overflow: hidden; }
+.fill { height: 100%; width: 0; background: var(--indigo); transition: width .12s linear, background-color .2s var(--ease); }
+.meter[data-state="hit"] .fill { background: var(--jade); }
+.meter[data-state="near"] .fill { background: var(--amber); }
+.hint { font-family: var(--kr); font-size: var(--t-body); color: var(--ink-soft); margin: 0; min-height: 1.6em; }
+
+.params { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); margin: 0; padding-top: var(--s4); border-top: 1px solid var(--line); }
+.params div { display: flex; flex-direction: column; gap: 2px; }
+.params dt { font-size: var(--t-micro); color: var(--faint); }
+.params dd { margin: 0; font-family: var(--kr); font-size: var(--t-label); color: var(--ink-soft); }
+
+/* ── 자모 시퀀스 ───────────────────────────────── */
+.strip {
+  flex: none; height: var(--strip); border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: var(--s4); padding: 0 var(--s4);
+}
+.strip-rail { flex: 1; display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: none; }
+.strip-rail::-webkit-scrollbar { display: none; }
+.strip-empty { font-size: var(--t-label); color: var(--faint); margin: 0; }
+
+.unit {
+  flex: none; width: 38px; height: 46px; border-radius: var(--r-md);
+  display: grid; place-items: center; font-family: var(--kr); font-weight: 600; font-size: 19px;
+  color: var(--faint); border: 1px solid transparent;
+  transition: color .18s var(--ease), background-color .18s var(--ease), border-color .18s var(--ease);
+}
+.unit[data-state="done"] { color: var(--jade); background: var(--jade-soft); }
+.unit[data-state="now"] { color: var(--ink); background: var(--indigo-soft); border-color: var(--indigo-line); }
+.unit[data-state="todo"] { color: var(--faint); background: var(--panel); }
+.unit.gap { width: 12px; background: none; border: none; }
+.strip-count { flex: none; font-size: var(--t-label); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* 손모양이 맞아떨어지는 순간 — 이 화면의 유일한 비조작 모션 */
+@keyframes lockin { from { box-shadow: 0 0 0 0 rgba(60,158,107,.45); } to { box-shadow: 0 0 0 12px rgba(60,158,107,0); } }
+.unit[data-lock="1"] { animation: lockin .5s var(--ease); }
+
+/* ── 조작부 ───────────────────────────────────── */
+.controls {
+  flex: none; height: 60px; border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: var(--s3); padding: 0 var(--s4);
+}
+.spacer { flex: 1; }
+.result { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); }
+.result b { color: var(--ink); font-weight: 600; }
+
+button { cursor: pointer; white-space: nowrap; border-radius: var(--r-md); border: 1px solid transparent; }
+button:disabled { opacity: .45; cursor: default; }
+.primary { background: var(--indigo); color: #fff; padding: var(--s2) var(--s4); font-weight: 500; font-size: var(--t-body); }
+.primary:hover:not(:disabled) { background: #5460c6; }
+.primary kbd { font: inherit; font-size: var(--t-micro); opacity: .75; margin-left: var(--s2); border: 1px solid rgba(255,255,255,.35); border-radius: 3px; padding: 0 4px; }
+.ghost { background: var(--paper); border-color: var(--line); color: var(--ink-soft); padding: var(--s2) var(--s3); font-size: var(--t-label); }
+.ghost:hover:not(:disabled) { background: var(--panel); }
+.listening .primary { background: var(--jade); }
+
+.typed { display: flex; gap: var(--s2); }
+.typed input {
+  width: 260px; background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--r-md); padding: var(--s2) var(--s3); font-size: var(--t-body); font-family: var(--kr);
+}
+.typed input::placeholder { color: var(--faint); }
+
+/* ── 출처 ─────────────────────────────────────── */
+dialog { border: 1px solid var(--line); border-radius: var(--r-lg); padding: var(--s6); max-width: 60ch; color: var(--ink); background: var(--paper); }
+dialog::backdrop { background: rgba(13,14,17,.32); }
+dialog h2 { font-family: var(--kr); font-size: var(--t-title); margin: 0 0 var(--s4); letter-spacing: var(--track-tight); }
+dialog p { font-family: var(--kr); font-size: var(--t-body); color: var(--ink-soft); margin: 0 0 var(--s3); max-width: 56ch; }
+dialog ul { margin: 0 0 var(--s5); padding-left: 1.1em; }
+dialog li { font-family: var(--kr); font-size: var(--t-body); color: var(--ink-soft); margin-bottom: var(--s2); }
+dialog a { color: var(--indigo); }
+
+/* ── 좁은 화면 ─────────────────────────────────── */
+@media (max-width: 900px) {
+  html, body { height: auto; overflow: visible; }
+  body { min-height: 100%; }
+  .stage { flex-direction: column; }
+
+  /* 카메라를 켜기 전에는 절대 배치를 쓰지 않는다. 표가 페이지를 밀어내게 둔다. */
+  .camera { display: block; min-height: 0; }
+  .camera video, .camera canvas { display: none; }
+  .camera.live { min-height: 56vh; }
+  .camera.live video, .camera.live canvas { display: block; }
+
+  .cam-empty { position: static; overflow: visible; padding: var(--s5) var(--s4) var(--s6); }
+  .cam-prompt { flex-direction: column; align-items: flex-start; gap: var(--s4); }
+  .chart { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
+  .chart svg { height: 54px; }
+
+  .heard { position: static; width: fit-content; margin: 0 var(--s4) var(--s4); max-width: calc(100% - var(--s7)); }
+  .camera.live .heard { position: absolute; left: var(--s4); bottom: var(--s4); margin: 0; }
+
+  .rail { width: auto; border-left: none; border-top: 1px solid var(--line); overflow: visible; }
+  .card { aspect-ratio: 3 / 2; }
+  .hand svg { max-height: 200px; }
+  .glyph { font-size: 132px; }
+
+  .strip { height: auto; padding: var(--s3) var(--s4); }
+  .controls { height: auto; flex-wrap: wrap; padding: var(--s3) var(--s4) var(--s5); gap: var(--s2); }
+  .typed { flex: 1 1 100%; order: 3; }
+  .typed input { width: 100%; }
+  .spacer { display: none; }
+  .result { flex: 1 1 100%; order: 4; }
+}
+
+@media (max-width: 420px) {
+  .sub { display: none; }
+  .params { grid-template-columns: 1fr 1fr; }
+}
