@@ -1,0 +1,19 @@
+name: Clear stalled Pages publication
+on:
+  push:
+    branches: [gh-pages]
+    paths: [.github/workflows/repair-pages.yml]
+permissions:
+  contents: read
+  pages: write
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel stalled publication and request a fresh Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh api --method POST "repos/$GH_REPO/pages/deployments/5590e51151efc69b0aa012d6b2804af86a611408/cancel"
+          gh api --method POST "repos/$GH_REPO/pages/builds"
