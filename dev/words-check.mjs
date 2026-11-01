@@ -7,6 +7,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { WORD_SIGNS } from '../js/words.js';
 import { WORD_POSE_FILES } from '../js/illustrations.js';
+import { WORD_BANK } from '../js/wordBank.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const LEGACY = new Set(['안녕하세요', '감사합니다', '미안합니다', '괜찮아요', '네', '아니요',
@@ -44,7 +45,23 @@ for (const w of WORD_SIGNS) {
     if (!w[k]) bad.push(`${tag} ${k}이 비었다`);
 }
 
-console.log(`단어 ${WORD_SIGNS.length}개 · 사전 대조 끝 ${WORD_SIGNS.filter(w => w.entryNo).length}개`);
+/* 사전 단어 창고도 스스로 맞아야 한다. 그림이 붙기 전부터 본다. */
+const seenNo = new Map(), bankOwner = new Map();
+for (const w of WORD_BANK) {
+  const tag = `창고「${w.word}」`;
+  const m = SLDICT.exec(w.sourceUrl ?? '');
+  if (!m || m[1] !== w.entryNo) bad.push(`${tag} 항목 번호와 주소가 맞지 않는다`);
+  if (seenNo.has(w.entryNo)) bad.push(`${tag} 항목 ${w.entryNo} 가 「${seenNo.get(w.entryNo)}」와 겹친다`);
+  seenNo.set(w.entryNo, w.word);
+  if (!w.원문) bad.push(`${tag} 사전 원문이 없다`);
+  if (!w.steps?.length || w.steps.length !== w.check?.length) bad.push(`${tag} 단계와 판정 힌트 수가 다르다`);
+  for (const k of [w.word, ...(w.aliases ?? [])]) {
+    if (bankOwner.has(k) && bankOwner.get(k) !== w.word) bad.push(`${tag} '${k}'가 창고「${bankOwner.get(k)}」에도 있다`);
+    bankOwner.set(k, w.word);
+  }
+}
+
+console.log(`단어 ${WORD_SIGNS.length}개 · 사전 대조 끝 ${WORD_SIGNS.filter(w => w.entryNo).length}개 · 사전 창고 ${WORD_BANK.length}개`);
 for (const s of warn) console.log('  · ' + s);
 for (const s of bad) console.log('  ✕ ' + s);
 process.exit(bad.length ? 1 : 0);

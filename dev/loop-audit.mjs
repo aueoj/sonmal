@@ -24,7 +24,8 @@ const PHRASE = process.argv[2] || '고맙습니다';
 // 들은 말 그대로가 아니라 '그 수어가 뜻하는 말'이 나와야 맞다.
 const EXPECT = await p.evaluate(async (ph) => {
   const m = await import('/js/words.js');
-  return m.lookupWord(ph)?.word ?? ph;
+  // 어절마다 읽는다. 사전에 있는 말은 대표말로 바뀐다.
+  return ph.trim().split(/\s+/).map(t => m.lookupWord(t)?.word ?? t).join(' ');
 }, PHRASE).catch(() => PHRASE);
 await p.fill('#typed', PHRASE);
 await p.press('#typed', 'Enter');
@@ -53,7 +54,7 @@ const r = await p.evaluate(() => ({
   spoken: window.__spoken
 }));
 
-const outText = r.spoken.join('');
+const outText = r.spoken.join(' ');
 console.log(`문장              ${PHRASE}`);
 console.log(`확정 자모          ${r.done} / ${r.total}${stuckAt !== null ? `  ← ${stuckAt}번째에서 멈춤` : ''}`);
 console.log(`확정 표시 남음       ${r.locks}개 / ${r.total}칸${r.locks > r.total ? '  ← 쌓이고 있다' : ''}`);

@@ -38,8 +38,13 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
+import { WORD_BANK } from './wordBank.js?v=202611011703';
+import { WORD_BASIS } from './wordArt.js?v=202611011703';
+
+/* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
+   사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
 /** @type {WordSign[]} */
-export const WORD_SIGNS = [
+const LEGACY_SIGNS = [
   { word: '안녕하세요', aliases: ['안녕','안녕하십니까','반갑습니다'],
     수형: '손가락을 모아 편 손', 수향: '손바닥이 앞', 수위: '얼굴 옆',
     수동: '좌우로 가볍게 흔든다', 비수지: '눈을 맞추고 가볍게 웃는다',
@@ -115,6 +120,22 @@ export const WORD_SIGNS = [
     steps: ['검지를 세운다','가리키려는 쪽으로 향한다'],
     hands: 1, source: '사용자 제공 도표', recognizable: false }
 ];
+
+/* 화면에 올리는 단어
+   1. 사전 기준 그림이 검수되어 들어온 단어(basis 'sldict') → wordBank 의 사전 기록
+   2. 아직 옛 그림뿐인 단어(basis 'legacy') → 옛 기록
+   3. 그림이 없는 단어 → 올리지 않는다. 그림 없이 동작을 글로만 보여 주지 않는다. */
+const legacyBy = new Map(LEGACY_SIGNS.map(w => [w.word, w]));
+const bankBy = new Map(WORD_BANK.map(w => [w.word, w]));
+const order = [...WORD_BANK.map(w => w.word), ...LEGACY_SIGNS.map(w => w.word)];
+
+/** @type {WordSign[]} */
+export const WORD_SIGNS = [...new Set(order)].flatMap(word => {
+  const basis = WORD_BASIS[word];
+  if (basis === 'sldict' && bankBy.has(word)) return [{ ...bankBy.get(word), recognizable: false }];
+  if (basis === 'legacy' && legacyBy.has(word)) return [legacyBy.get(word)];
+  return [];
+});
 
 const byWord = new Map();
 for (const w of WORD_SIGNS) {
