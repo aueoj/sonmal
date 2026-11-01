@@ -31,6 +31,11 @@ export function renderHand(pose, opts = {}) {
 
 /** 단어 수어 그림. 도표의 동작 연속 그림을 그대로 쓴다. */
 export function renderWordSign(sign) {
+  if (sign.art) {
+    const { sheet, cell } = sign.art;
+    return `<span class="word-sprite" role="img" aria-label="${sign.word} 수어 참고 일러스트. ${sign.수형}"
+      style="background-image:url('${WORD_BASE}sheet-${sheet}.png');background-position:${(cell % 3) * 50}% ${Math.floor(cell / 3) * 100}%"></span>`;
+  }
   return `<img class="sm-word" src="${WORD_BASE}${encodeURIComponent(sign.word)}.png"
     alt="${sign.word} 수어. ${sign.수형}" loading="lazy" decoding="async">`;
 }

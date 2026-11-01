@@ -131,6 +131,15 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 .sm-move { position: absolute; right: 6%; bottom: 6%; width: 22%; height: auto;
   fill: none; stroke: var(--indigo); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .sm-word { display: block; width: 100%; height: auto; }
+.word-sprite { display: block; width: 100%; aspect-ratio: 1; background-size: 300% 200%; background-repeat: no-repeat; background-color: white; }
+#words { width: min(720px, calc(100vw - 32px)); max-height: 85dvh; overflow: auto; }
+#word-search { width: 100%; padding: 10px; margin: 8px 0 16px; border: 1px solid #d5d9e0; border-radius: 8px; font: inherit; }
+.word-library-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 20px; }
+.word-choice { padding: 6px; border: 1px solid #d5d9e0; border-radius: 10px; background: white; color: inherit; font: inherit; cursor: pointer; }
+.word-choice:hover, .word-choice:focus-visible { border-color: #365b72; background: #edf4f6; }
+.word-choice .word-sprite { pointer-events: none; }
+.word-source-note { font-size: 12px; line-height: 1.6; }
+.word-reference { max-width: 100%; max-height: 300px; object-fit: contain; }
 
 .flag {
   position: absolute; top: var(--s3); right: var(--s3); z-index: 2;
@@ -141,6 +150,8 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 .card.word-card { aspect-ratio: auto; align-items: stretch; }
 .card.word-card .hand { display: flex; flex-direction: column; gap: var(--s3); height: auto; }
 .card.word-card .hand { display: block; }
+.card.word-card .hand > * { height: auto; }
+.card.word-card .glyph { display: none; }
 .word-art { width: 100%; border-radius: var(--r-md); overflow: hidden; }
 .word-steps { padding: var(--s4); display: flex; flex-direction: column; gap: var(--s3); height: 100%; }
 .word-name { font-family: var(--kr); font-size: var(--t-title); font-weight: 600;

@@ -169,9 +169,14 @@ function showWord(u) {
     `<div class="word-steps"><p class="word-name">${w.word}</p><ol>` +
     (w.steps ?? []).map(t => `<li>${t}</li>`).join('') +
     `</ol><p class="word-hands">${w.hands === 2 ? '두 손' : '한 손'}` +
-    (w.비수지 ? ` · ${w.비수지}` : '') + '</p></div>';
+    (w.비수지 ? ` · ${w.비수지}` : '') + '</p>' +
+    (w.sourceEntries ? '<p>국립국어원 한국수어사전: ' + w.sourceEntries.map(s =>
+      `<a href="https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=${s.entryNo}&amp;top_category=CTE" target="_blank" rel="noopener noreferrer">${s.label}</a>`).join(' · ') + '</p>' : '') +
+    '<p class="word-source-note">손가락 번호: 1 검지 · 2 중지 · 3 약지 · 4 소지 · 5 엄지. 일러스트는 검수 전이므로 원자료 동작과 함께 보세요.</p>' +
+    (w.referenceImages?.length ? '<details><summary>공식 원본 그림과 비교</summary>' +
+      w.referenceImages.map(url => `<img class="word-reference" src="${url}" alt="국립국어원 ${w.word} 수형 참고 그림" loading="lazy" referrerpolicy="no-referrer">`).join('') + '</details>' : '') + '</div>';
   el.flag.hidden = false;
-  el.flag.textContent = '검수 전';
+  el.flag.textContent = w.reviewNote ?? '검수 전';
   el.note.textContent = w.수형;
   el.mnemo.textContent = `${w.수향} · ${w.수위}`;
   el.pShape.textContent = w.hands === 2 ? '두 손' : '한 손';
@@ -382,6 +387,26 @@ function stopListening() {
 /* ── 시작 ───────────────────────────────────── */
 
 function init() {
+  const wordsDialog = $('words');
+  const drawWords = () => {
+    const query = $('word-search').value.trim();
+    const matches = WORD_SIGNS.filter(w => [w.word, ...w.aliases].some(t => t.includes(query)));
+    $('word-library').innerHTML = ['기본 회화', '감정·상태', '지시·질문'].map(category => {
+      const items = matches.filter(w => w.category === category);
+      return items.length ? `<h3>${category}</h3><div class="word-library-group">` + items.map(w =>
+        `<button type="button" class="word-choice" data-word="${w.word}">${renderWordSign(w)}<span>${w.word}</span></button>`).join('') + '</div>' : '';
+    }).join('') || '<p>등록된 표현이 없습니다. 입력창에서 지문자로 연습할 수 있습니다.</p>';
+  };
+  $('btn-words').addEventListener('click', () => { drawWords(); wordsDialog.showModal(); $('word-search').focus(); });
+  $('word-search').addEventListener('input', drawWords);
+  $('word-library').addEventListener('click', e => {
+    const button = e.target.closest('[data-word]');
+    if (!button) return;
+    wordsDialog.close(); el.typed.value = button.dataset.word; setUtterance(button.dataset.word);
+  });
+  $('love-example').addEventListener('click', () => {
+    wordsDialog.close(); el.typed.value = '나는 너를 사랑해'; setUtterance(el.typed.value);
+  });
   if (support.listen) {
     state.listener = createListener({
       onInterim: t => { el.heard.dataset.interim = 'true'; el.heardText.textContent = t; },
@@ -427,9 +452,10 @@ function init() {
   el.sourcesBody.innerHTML = `
     <p>말한 문장을 한글 지문자로 풀어 보여주고, 따라한 손모양을 다시 말로 읽어 줍니다.
        영상과 손 좌표는 이 브라우저 안에서만 처리되며 어디로도 전송되지 않습니다.</p>
-    <p><strong>단어 단위 수어</strong>는 아직 사전이 비어 있어 모든 말을 지문자로 풉니다.
-       실제 한국수어에서도 지문자는 수어 단어로 표현하기 어려운 말을 적을 때 쓰는 보충 수단입니다.
-       현재 등록된 단어 ${WORD_SIGNS.length}개.</p>
+    <p><strong>회화 낱말 ${WORD_SIGNS.length}개</strong>는 국립국어원 한국수어사전의 개별 표제어를 참고했습니다.
+       등록된 표현은 낱말 그림으로, 미등록 표현은 지문자로 보여줍니다.
+       문장을 한국수어 문법으로 번역하거나 단어 동작을 카메라로 판정하지는 않습니다.</p>
+    <p>생성 일러스트는 전문가 검수 전입니다. 각 낱말 카드의 공식 사전 링크에서 원본 그림·영상과 비교할 수 있습니다.</p>
     <p><strong>손모양은 확인이 필요합니다.</strong> 지문자 도표를 읽어 만든 것이라
        이웃 자모와 구별이 모호한 글자에는 화면에 '확인 필요'를 붙여 두었습니다.</p>
     <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>`;

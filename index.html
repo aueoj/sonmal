@@ -37,6 +37,7 @@ if (location.protocol === 'file:') {
     <span class="sub">한글 지문자 연습</span>
   </div>
   <div class="bar-right">
+    <button class="ghost" id="btn-words" type="button">회화 단어</button>
     <button class="ghost" id="btn-sources" type="button">자료 출처</button>
     <span class="status" id="cam-status" data-state="off"><i></i><span>카메라 꺼짐</span></span>
   </div>
@@ -125,6 +126,16 @@ if (location.protocol === 'file:') {
 <dialog id="sources" aria-labelledby="sources-title">
   <h2 id="sources-title">이 연습 도구가 선 자리</h2>
   <div id="sources-body"></div>
+  <form method="dialog"><button class="primary" type="submit">닫기</button></form>
+</dialog>
+
+<dialog id="words" aria-labelledby="words-title">
+  <h2 id="words-title">회화 단어 연습</h2>
+  <p>공식 사전의 낱말을 참고한 일러스트입니다. 문장은 한국어 순서대로 낱말을 연습하며, 한국수어 문장 번역은 아닙니다.</p>
+  <label for="word-search">단어 찾기</label>
+  <input id="word-search" type="search" placeholder="배고파, 사랑해, 이것…" autocomplete="off">
+  <div id="word-library"></div>
+  <button class="ghost" type="button" id="love-example">나는 너를 사랑해 연습</button>
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
