@@ -75,12 +75,13 @@ if (location.protocol === 'file:') {
       <span class="heard-label">들은 말</span>
       <span class="heard-text" id="heard-text"></span>
     </div>
-  </section>
 
   <section class="motion-guide" id="motion-guide" aria-label="따라 할 동작 순서" hidden>
     <div class="motion-guide-head"><h2>이 순서로 따라 하세요</h2><span id="guide-progress" aria-live="polite"></span></div>
     <ol class="guide-sequence" id="guide-sequence"></ol>
-    <div class="guide-word-detail" id="guide-word-detail" hidden></div>
+    <div class="guide-word-detail" id="guide-word-detail" aria-live="polite"></div>
+    <div class="guide-controls"><button type="button" id="guide-prev">이전 단계</button><span id="guide-step-count"></span><button type="button" id="guide-next">다음 단계</button></div>
+  </section>
   </section>
   </div>
 

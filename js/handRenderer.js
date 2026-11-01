@@ -1,3 +1,4 @@
+import { jamoArt, wordArt } from './illustrations.js';
 /* handRenderer.js — 자모의 손모양 그림을 내놓는다.
  *
  * 그림은 사용자가 제공한 지문자 도표를 자모별로 잘라 둔 것을 그대로 쓴다
@@ -21,6 +22,8 @@ const imageFor = pose => `${BASE}${encodeURIComponent(pose.base ?? pose.jamo)}.p
  */
 export function renderHand(pose, opts = {}) {
   const size = opts.size ?? 240;
+  const sheet = jamoArt(pose.jamo);
+  if (sheet) return `<span class="sm-hand" style="--sm-size:${size}px">${sheet}</span>`;
   const alt = `${pose.jamo} 지문자 손모양. ${pose.note}`;
   const arrow = pose.motion
     ? `<svg class="sm-move" viewBox="0 0 48 24" aria-hidden="true">
@@ -35,6 +38,8 @@ export function renderHand(pose, opts = {}) {
 
 /** 단어 수어 그림. 도표의 동작 연속 그림을 그대로 쓴다. */
 export function renderWordSign(sign) {
+  const sheet = wordArt(sign.word);
+  if (sheet) return `<span class="sm-word">${sheet}</span>`;
   return `<img class="sm-word" src="${WORD_BASE}${encodeURIComponent(sign.word)}.png"
     alt="${sign.word} 수어. ${sign.수형}" loading="lazy" decoding="async">`;
 }

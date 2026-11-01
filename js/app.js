@@ -31,7 +31,8 @@ const el = {
   result: $('result'), sources: $('sources'), sourcesBody: $('sources-body'),
   btnSources: $('btn-sources'), chart: $('chart'),
   guide: $('motion-guide'), guideSequence: $('guide-sequence'),
-  guideProgress: $('guide-progress'), guideWord: $('guide-word-detail')
+  guideProgress: $('guide-progress'), guideWord: $('guide-word-detail'),
+  guidePrev: $('guide-prev'), guideNext: $('guide-next'), guideStepCount: $('guide-step-count')
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
@@ -44,6 +45,7 @@ const state = {
   seq: [], at: -1, got: [],
   tracker: null, listener: null, live: false,
   holdSince: 0, trail: [], scores: [], lastHint: '',
+  guideStep: 0, guideAt: -1,
   doneAt: 0
 };
 
@@ -145,10 +147,20 @@ function paintGuide() {
   }
   el.guideProgress.textContent = state.at >= state.seq.length ? '모두 따라 했어요' : el.count.textContent;
   const unit = state.seq[state.at];
-  el.guideWord.hidden = unit?.role !== 'word';
-  el.guideWord.innerHTML = unit?.role === 'word'
-    ? `<p>${unit.sign.word} · 동작 순서</p><ol>${(unit.sign.steps ?? []).map(step => `<li>${step}</li>`).join('')}</ol>`
-    : '';
+  if (state.guideAt !== state.at) { state.guideAt = state.at; state.guideStep = 0; }
+  const pose = unit && getPose(unit.jamo);
+  const steps = unit?.role === 'word' ? (unit.sign.steps ?? [])
+    : pose ? [pose.note, ...(pose.motion ? ['손모양을 유지하고 옆으로 이동하세요.'] : ['같은 손모양을 잠시 유지해 주세요.'])] : [];
+  state.guideStep = Math.min(state.guideStep, Math.max(0, steps.length - 1));
+  const finished = state.at >= state.seq.length;
+  el.guideWord.hidden = false;
+  el.guideWord.textContent = finished ? '모든 동작을 따라 했어요.' : steps[state.guideStep] ?? '';
+  el.guidePrev.disabled = finished || state.guideStep === 0;
+  el.guideNext.disabled = finished || (unit?.role !== 'word' && state.guideStep >= steps.length - 1);
+  el.guideNext.textContent = state.guideStep < steps.length - 1 ? '다음 단계' : unit?.role === 'word' ? '다음 동작' : '카메라로 확인 중';
+  el.guideStepCount.textContent = finished ? '완료' : `${state.guideStep + 1} / ${steps.length} 단계`;
+  el.guideNext.dataset.last = String(state.guideStep >= steps.length - 1);
+
 }
 
 function advance() {
@@ -302,7 +314,7 @@ function onFrame(lms, handedness) {
 
   // 떨림을 거르려고, 기준을 넘긴 상태가 일정 시간 이어져야 확정한다
   const now = performance.now();
-  if (smooth >= ACCEPT) {
+  if (smooth >= ACCEPT && state.guideStep >= 1) {
     if (!state.holdSince) state.holdSince = now;
     if (now - state.holdSince >= HOLD_MS) {
       const node = el.strip.querySelector(`[data-i="${state.at}"]`);
@@ -441,6 +453,11 @@ function init() {
     el.btnListen.title = '이 브라우저는 음성 인식을 지원하지 않습니다';
   }
 
+  el.guidePrev.addEventListener('click', () => { state.guideStep = Math.max(0, state.guideStep - 1); paintGuide(); });
+  el.guideNext.addEventListener('click', () => {
+    if (el.guideNext.dataset.last !== 'true') { state.guideStep++; paintGuide(); }
+    else if (state.seq[state.at]?.role === 'word') { state.got.push(state.seq[state.at].jamo); advance(); }
+  });
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
   el.btnNext.addEventListener('click', () => {
