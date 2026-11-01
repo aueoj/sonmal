@@ -7,3 +7,4 @@ wrapped-preview.html
 node_modules/
 package.json
 package-lock.json
+.verify-report.txt

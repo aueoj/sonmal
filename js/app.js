@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011556';
-import { getPose } from './jamoData.js?v=202611011556';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011556';
-import { describe } from './poseFeatures.js?v=202611011556';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011556';
-import { Tracker } from './tracker.js?v=202611011556';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011556';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011556';
-import { diagnose } from './diagnose.js?v=202611011556';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011625';
+import { getPose } from './jamoData.js?v=202611011625';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011625';
+import { describe } from './poseFeatures.js?v=202611011625';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011625';
+import { Tracker } from './tracker.js?v=202611011625';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011625';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011625';
+import { diagnose } from './diagnose.js?v=202611011625';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -24,7 +24,7 @@ const el = {
   camEmpty: $('cam-empty'), camPrompt: document.querySelector('.cam-prompt'),
   btnCam: $('btn-cam'), btnDemo: $('btn-demo'), chart: $('chart'),
   diag: $('diag'), diagVerdict: $('diag-verdict'), diagList: $('diag-list'),
-  diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagNewTab: $('diag-newtab'),
+  diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagDemo: $('diag-demo'), diagNewTab: $('diag-newtab'),
   chips: $('chips'), handRight: $('hand-right'), handLeft: $('hand-left'),
   spoken: $('spoken'),
   sayForm: $('say-form'), btnListen: $('btn-listen'), typed: $('typed'),
@@ -421,6 +421,7 @@ async function showDiagnosis() {
   el.diagVerdict.textContent = '어디서 막혔는지 확인하는 중…';
   el.diagList.innerHTML = ''; el.diagAdvice.textContent = '';
   el.camPrompt.hidden = true; el.diag.hidden = false;
+  el.btnCam.disabled = false; el.btnDemo.disabled = false;
   const { rows, verdict, advice, embedded } = await diagnose();
   const mark = { ok: '○', bad: '✕', unknown: '–' };
   el.diagVerdict.textContent = verdict;
@@ -488,6 +489,10 @@ function init() {
   el.btnCam.addEventListener('click', () => startCamera());
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
   el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera(); });
+  el.diagDemo.addEventListener('click', () => {
+    el.diag.hidden = true; el.camPrompt.hidden = false;
+    startCamera({ demo: true });
+  });
   el.diagNewTab.addEventListener('click', () => window.open(location.href, '_blank', 'noopener'));
   el.btnListen.addEventListener('click', startListening);
   el.sayForm.addEventListener('submit', e => {

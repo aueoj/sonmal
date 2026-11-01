@@ -85,6 +85,14 @@ export async function diagnose() {
   } else if (policy === false) {
     verdict = '여기서는 카메라를 쓸 수 없습니다';
     advice = '이 화면을 제공하는 사이트가 카메라를 허용하지 않았습니다. Claude 아티팩트 밖의 독립된 HTTPS 사이트나 내 컴퓨터에서 실행해 주세요. 같은 아티팩트 주소를 새 탭에서 여는 것만으로는 해결되지 않을 수 있습니다.';
+  } else if (!hasApi) {
+    verdict = '이 브라우저에서 카메라를 열 수 없습니다';
+    advice = '브라우저가 카메라 API 자체를 내주지 않습니다. 시크릿 창이나 오래된 브라우저, 혹은 카메라를 막은 프레임 안일 수 있습니다. 크롬이나 엣지의 일반 창에서 열어 주세요.';
+  } else if (camErr?.name === 'NotAllowedError' && embedded) {
+    // 프레임 안에서는 주소창에서 허용해도 소용이 없다.
+    // 브라우저가 featurePolicy 를 알려주지 않아도 끼워진 자리라는 것은 알 수 있다.
+    verdict = '끼워진 화면이라 카메라가 막혔습니다';
+    advice = '이 화면은 다른 사이트 안에 끼워져 있습니다. 권한을 거부한 적이 없다면 바깥 사이트가 막은 것이고, 주소창에서 허용해도 풀리지 않습니다. 독립된 주소에서 직접 열어 주세요.';
   } else if (camErr?.name === 'NotAllowedError') {
     verdict = '카메라 권한이 거부되었습니다';
     advice = '주소창의 카메라 아이콘에서 허용으로 바꾸고 다시 눌러 주세요.';

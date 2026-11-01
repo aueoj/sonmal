@@ -1,8 +1,8 @@
-/* 끼워진 프레임에서 카메라와 모델이 막혔을 때, 안내가 쓸모 있는지 확인한다. */
+/* 끼워진 프레임에서 카메라와 모델이 막혔을 때, 안내가 쓸모 있는지 확인한다.
+   Claude 아티팩트처럼 카메라를 허용하지 않는 자리에 놓였을 때의 모습이다. */
 import { launch } from './browser.mjs';
 const b = await launch();
 const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
-// 프레임 안에 넣고, 카메라와 모델을 둘 다 막는다
 await p.addInitScript(() => {
   if (window.self !== window.top) {
     navigator.mediaDevices.getUserMedia = () =>
@@ -17,20 +17,28 @@ await p.goto('http://localhost:8777/dev/embed.html', { waitUntil: 'networkidle' 
 const fr = p.frameLocator('iframe');
 await p.waitForTimeout(1200);
 await fr.locator('#btn-cam').click();
-await fr.locator('#diag .diag-list li').first().waitFor({ timeout: 20000 });
-await p.waitForTimeout(3000);
-console.log('판정:', await fr.locator('#diag-verdict').textContent());
-console.log('안내:', await fr.locator('#diag-advice').textContent());
-// 표가 '들은 말' 칩에 가려지지 않는지
-const clash = await p.evaluate(() => {
-  const f = document.querySelector('iframe').contentDocument;
-  const heard = f.getElementById('heard').getBoundingClientRect();
-  const last = [...f.querySelectorAll('.chart figure')].pop()?.getBoundingClientRect();
-  if (!last || heard.height === 0) return 'heard 숨김';
-  const overlap = !(last.right < heard.left || last.left > heard.right ||
-                    last.bottom < heard.top || last.top > heard.bottom);
-  return overlap ? '겹침' : '안 겹침';
+await fr.locator('#diag .diag-list li').first().waitFor({ timeout: 25000 });
+await p.waitForTimeout(1500);
+
+const verdict = (await fr.locator('#diag-verdict').textContent() || '').trim();
+const advice = (await fr.locator('#diag-advice').textContent() || '').trim();
+console.log('판정:', verdict);
+console.log('안내:', advice);
+
+const escape = await fr.locator('#diag-demo').isVisible();
+console.log('둘러보기 길:', escape ? '있음' : '없음  ← 막다른 길이다');
+
+// 진단 목록이 프레임 밖으로 밀려나 잘리지 않는지
+const fit = await p.evaluate(() => {
+  const f = document.querySelector('iframe');
+  const d = f.contentDocument.getElementById('diag');
+  if (!d) return '진단 없음';
+  const box = d.getBoundingClientRect();
+  const frame = f.contentWindow.innerHeight;
+  return box.bottom <= frame + 1 ? '안 잘림' : `잘림 (${Math.round(box.bottom - frame)}px 넘침)`;
 });
-console.log('표와 들은 말 칩:', clash);
-await p.screenshot({ path: '/tmp/claude-0/-home-user/1666e45b-ba5d-5fdf-99c9-cdf6defa90e5/scratchpad/embed.png' });
+console.log('진단 상자:', fit);
+
+await p.screenshot({ path: '/tmp/claude-0/-home-user-sonmal/1666e45b-ba5d-5fdf-99c9-cdf6defa90e5/scratchpad/embed.png' });
 await b.close();
+process.exit(verdict && advice && escape && fit === '안 잘림' ? 0 : 1);

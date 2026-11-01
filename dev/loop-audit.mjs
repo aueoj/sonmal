@@ -20,6 +20,12 @@ await p.addInitScript(() => {
 
 await p.goto(GOTO, { waitUntil: 'networkidle' });
 const PHRASE = process.argv[2] || '고맙습니다';
+// '고맙습니다'와 '감사합니다'는 같은 수어다. 앱은 대표말로 읽어 준다.
+// 들은 말 그대로가 아니라 '그 수어가 뜻하는 말'이 나와야 맞다.
+const EXPECT = await p.evaluate(async (ph) => {
+  const m = await import('/js/words.js');
+  return m.lookupWord(ph)?.word ?? ph;
+}, PHRASE).catch(() => PHRASE);
 await p.fill('#typed', PHRASE);
 await p.press('#typed', 'Enter');
 await p.click('#btn-cam');
@@ -42,21 +48,18 @@ const r = await p.evaluate(() => ({
   done: document.querySelectorAll('#seq .unit[data-state="done"]').length,
   total: document.querySelectorAll('#seq .unit[data-i]').length,
   locks: document.querySelectorAll('#seq .unit[data-lock="1"]').length,
-  count: '',
   result: document.getElementById('read').textContent,
-  meterPct: '', meterState: document.querySelector('.guide').dataset.state, replayDisabled: false,
+  guideState: document.querySelector('.guide').dataset.state,
   spoken: window.__spoken
 }));
 
 const outText = r.spoken.join('');
 console.log(`문장              ${PHRASE}`);
 console.log(`확정 자모          ${r.done} / ${r.total}${stuckAt !== null ? `  ← ${stuckAt}번째에서 멈춤` : ''}`);
-console.log(`확정 애니메이션 남음   ${r.locks}개  ${r.locks > 0 ? '(innerHTML이 지우지 않음)' : '← 지워짐'}`);
-console.log(`진행 표시          ${r.count}`);
-console.log(`재합성 결과        ${outText}  ${outText === PHRASE ? '일치' : '← 불일치'}`);
+console.log(`확정 표시 남음       ${r.locks}개 / ${r.total}칸${r.locks > r.total ? '  ← 쌓이고 있다' : ''}`);
+console.log(`읽어 준 말         ${outText}  ${outText === EXPECT ? '일치' : `← 기대한 것은 ${EXPECT}`}`);
 console.log(`음성 출력 시도      ${JSON.stringify(r.spoken)}`);
-console.log(`다시 읽어주기 버튼    ${r.replayDisabled ? '비활성 ← 켜져야 함' : '활성'}`);
-console.log(`미터              ${r.meterPct} / ${r.meterState}`);
+console.log(`가이드 상태        ${r.guideState || '(없음)'}`);
 console.log(`콘솔 오류          ${errs.length ? errs.slice(0,3).join(' | ') : '없음'}`);
 await b.close();
-process.exit(outText === PHRASE && r.done === r.total ? 0 : 1);
+process.exit(outText === EXPECT && r.done === r.total && r.total > 0 && r.locks <= r.total ? 0 : 1);
