@@ -23,6 +23,7 @@ const I = 'index', M = 'middle', R = 'ring', P = 'pinky';
 const mk = (jamo, kind, fingers, dir, view, opts = {}) => ({
   jamo, kind, fingers, dir, view,
   thumb: opts.thumb ?? 'in',
+  hands: opts.hands ?? 1,          // 도표가 손을 둘 그리는 자모는 2
   bent: opts.bent ?? false,
   spreadWide: opts.spreadWide ?? false,
   special: opts.special ?? null,
@@ -129,26 +130,26 @@ export const VOWELS = [
   mk('ㅡ', 'vowel', [I], 'right', 'palm', {
     note: 'ㅓ와 같은 수형에서 손바닥이 아래를 보도록 돌린다.',
     mnemonic: '옆으로 누운 한 획이 ㅡ다.', confidence: 'check' }),
-  mk('ㅣ', 'vowel', [I], 'up', 'side', {
-    note: '검지를 곧게 세운다. 손날이 보인다.',
-    mnemonic: '곧게 선 한 획이 ㅣ다.', confidence: 'check' }),
+  mk('ㅣ', 'vowel', [P], 'up', 'side', {
+    note: '새끼손가락을 곧게 세운다.',
+    mnemonic: 'ㅏ는 검지, ㅣ는 새끼손가락이다. 도표에서 둘은 반대쪽 손가락을 세운다.' }),
 
   /* 복합모음 — 도표에 단독 손모양이 있다. 다만 도표가 기본 모음과 같은 수형을
      다시 쓰는 곳이 있어, 손모양만으로는 기본 모음과 갈리지 않는 자모가 있다.
      연습은 '지금 만들 자모'와 견주어 판정하므로 진행에는 지장이 없다. */
-  mk('ㅘ', 'vowel', [I], 'up', 'back', { thumb: 'out',
+  mk('ㅘ', 'vowel', [I], 'up', 'back', { hands: 2, thumb: 'out',
     note: 'ㅗ와 ㅏ를 한 손에 담아 검지를 세우고 엄지를 옆으로 뻗는다.',
     mnemonic: 'ㅗ 다음에 ㅏ가 오는 것이 ㅘ다.', confidence: 'check' }),
   mk('ㅚ', 'vowel', [I], 'up', 'side', { thumb: 'out',
     note: 'ㅗ와 ㅣ를 한 손에 담아 검지를 세운다. 손날이 보인다.',
     mnemonic: 'ㅗ 다음에 ㅣ가 오는 것이 ㅚ다.', confidence: 'check' }),
-  mk('ㅙ', 'vowel', [I, M], 'up', 'back', { thumb: 'out',
+  mk('ㅙ', 'vowel', [I, M], 'up', 'back', { hands: 2, thumb: 'out',
     note: '검지와 중지를 세우고 엄지를 옆으로 뻗는다.',
     mnemonic: 'ㅗ 다음에 ㅐ가 오는 것이 ㅙ다.', confidence: 'check' }),
-  mk('ㅝ', 'vowel', [I], 'down', 'back', { thumb: 'out',
+  mk('ㅝ', 'vowel', [I], 'down', 'back', { hands: 2, thumb: 'out',
     note: 'ㅜ와 ㅓ를 한 손에 담아 검지를 아래로 내린다.',
     mnemonic: 'ㅜ 다음에 ㅓ가 오는 것이 ㅝ다.', confidence: 'check' }),
-  mk('ㅞ', 'vowel', [I, M], 'down', 'back', { thumb: 'out',
+  mk('ㅞ', 'vowel', [I, M], 'down', 'back', { hands: 2, thumb: 'out',
     note: '검지와 중지를 아래로 내린다. 손등이 보인다.',
     mnemonic: 'ㅜ 다음에 ㅔ가 오는 것이 ㅞ다.', confidence: 'check' }),
   mk('ㅟ', 'vowel', [I], 'right', 'side', { thumb: 'up',
@@ -166,12 +167,12 @@ const DOUBLES = [['ㄲ','ㄱ'], ['ㄸ','ㄷ'], ['ㅃ','ㅂ'], ['ㅆ','ㅅ'], ['�
 
 const byJamo = new Map([...CONSONANTS, ...VOWELS].map(p => [p.jamo, p]));
 
+/* 도표는 쌍자음을 손 두 개로 그린다. 같은 손모양을 양손으로 만든다.
+   앞서 '한 손을 옆으로 옮긴다'로 두었던 것은 그림과 달랐다. */
 export const MOTION_LETTERS = DOUBLES.map(([jamo, base]) => ({
-  ...byJamo.get(base), jamo, base,
-  motion: { axis: 'x', dir: 1, label: '옆으로 한 번 이동' },
-  note: `${base}의 손모양을 그대로 둔 채 손 전체를 옆으로 한 번 옮긴다.`,
-  mnemonic: `같은 손모양을 옆으로 밀어 ${jamo}을 만든다.`,
-  confidence: 'check'
+  ...byJamo.get(base), jamo, base, hands: 2, motion: null,
+  note: `${base}의 손모양을 양손으로 함께 만든다.`,
+  mnemonic: `${base}을 두 손으로 하면 ${jamo}이 된다.`
 }));
 
 export const ALL_POSES = [...CONSONANTS, ...VOWELS, ...MOTION_LETTERS];

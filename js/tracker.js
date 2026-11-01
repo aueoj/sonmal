@@ -7,7 +7,7 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611011538';
+import { landmarksFor } from './mockHand.js?v=202611011549';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -44,7 +44,7 @@ export class Tracker {
       const opts = delegate => ({
         baseOptions: { modelAssetPath: MODEL, delegate },
         runningMode: 'VIDEO',
-        numHands: 1,
+        numHands: 2,
         minHandDetectionConfidence: 0.3,
         minTrackingConfidence: 0.3
       });
@@ -78,9 +78,11 @@ export class Tracker {
     const now = performance.now();
     if (this.video.readyState >= 2) {
       const res = this.landmarker.detectForVideo(this.video, now);
-      const lm = res.landmarks?.[0] ?? null;
-      const hand = res.handednesses?.[0]?.[0]?.categoryName ?? 'Right';
-      this.onFrame(lm, hand);
+      // 쌍자음과 일부 복합모음은 손이 둘이다. 보이는 대로 전부 넘긴다.
+      const hands = (res.landmarks ?? []).map((lm, i) => ({
+        lm, handedness: res.handednesses?.[i]?.[0]?.categoryName ?? 'Right'
+      }));
+      this.onFrame(hands);
     }
     requestAnimationFrame(() => this._loop());
   }
@@ -97,7 +99,12 @@ export class Tracker {
       const dx = (phase < 0.5 ? phase * 2 : 2 - phase * 2) * 0.22;
       for (const p of lm) p.x += dx;
     }
-    this.onFrame(lm, 'Right');
+    const hands = lm ? [{ lm, handedness: 'Right' }] : [];
+    // 양손이 필요한 자모는 모의 입력도 손을 둘 띄운다
+    if (lm && this.mockTwoHands) {
+      hands.push({ lm: lm.map(p => ({ ...p, x: p.x + 0.18 })), handedness: 'Left' });
+    }
+    this.onFrame(hands);
     setTimeout(() => this._mockLoop(), 60);
   }
 }

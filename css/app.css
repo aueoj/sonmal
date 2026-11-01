@@ -54,7 +54,7 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 
 .cam-empty {
   position: absolute; inset: 0; z-index: 2; overflow-y: auto;
-  padding: var(--s6) var(--s6) 112px; display: flex; flex-direction: column; gap: var(--s5);
+  padding: var(--s6) var(--s6) calc(clamp(104px, 22vh, 188px) + 96px); display: flex; flex-direction: column; gap: var(--s5);
 }
 .camera.live .cam-empty { display: none; }
 .cam-prompt { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s5); flex-wrap: wrap; }
@@ -80,7 +80,7 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 
 /* 중하단 말하기 — 화면에서 제일 눈에 띄어야 한다 */
 .say {
-  position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); z-index: 4;
+  position: absolute; left: 50%; bottom: calc(clamp(104px, 22vh, 188px) + var(--s5)); transform: translateX(-50%); z-index: 4;
   display: flex; align-items: center; gap: var(--s2);
   background: var(--paper); border: 1px solid var(--line-strong); border-radius: 999px;
   padding: var(--s2); box-shadow: 0 2px 10px rgba(13,14,17,.06);
@@ -103,13 +103,20 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 .say:focus-within { border-color: var(--indigo); }
 
 /* ── 아래: 가이드. 카메라의 1/3을 넘지 않는다 ───── */
+/* 가이드는 영상 위에 겹친다. 바탕을 반투명하게 어둡게 두어
+   아래 영상이 비치면서도 글씨와 그림이 또렷하게 읽히도록 한다. */
 .guide {
-  flex: none; height: clamp(104px, 22vh, 188px); border-top: 1px solid var(--line);
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+  height: clamp(104px, 22vh, 188px);
   display: flex; align-items: center; gap: var(--s5); padding: var(--s3) var(--s5);
+  background: linear-gradient(to top, rgba(10,11,14,.72), rgba(10,11,14,.52));
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  color: #fff;
 }
 .guide-art {
   flex: none; margin: 0; height: 100%; aspect-ratio: 1; display: grid; place-items: center;
-  background: var(--panel); border-radius: var(--r-md); overflow: hidden; padding: var(--s2);
+  background: rgba(255,255,255,.92); border-radius: var(--r-md); overflow: hidden; padding: var(--s2);
 }
 .guide-art img, .guide-art .sheet-art { max-width: 100%; max-height: 100%; object-fit: contain; }
 /* 동작 여러 장을 겹쳐 두고 한 장만 보인다. 넘어갈 때 다시 불러오지 않아 끊기지 않는다. */
@@ -123,9 +130,13 @@ body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art { 
 
 .guide-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--s2); }
 .guide-name { font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
-  letter-spacing: var(--track-tight); margin: 0; }
-.guide-step { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); margin: 0; min-height: 1.5em; }
-.track { height: 4px; background: var(--panel-deep); border-radius: 2px; overflow: hidden; max-width: 320px; }
+  letter-spacing: var(--track-tight); margin: 0; color: #fff; }
+.guide-step { font-family: var(--kr); font-size: var(--t-body); color: rgba(255,255,255,.82); margin: 0; min-height: 1.5em; }
+/* 지금 무엇이 보이는지. 안 될 때 어디가 다른지 직접 견줘 볼 수 있어야 한다. */
+.seen { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.55); margin: 0; min-height: 1.4em; }
+.seen b { font-weight: 600; color: rgba(255,255,255,.9); }
+.seen .off { color: var(--amber); font-weight: 600; }
+.track { height: 4px; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; max-width: 320px; }
 .fill { height: 100%; width: 0; background: var(--indigo); transition: width .1s linear, background-color .2s var(--ease); }
 .guide[data-state="hit"] .fill { background: var(--jade); }
 .guide[data-state="near"] .fill { background: var(--amber); }
@@ -135,13 +146,13 @@ body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art { 
 .unit {
   flex: none; min-width: 28px; height: 32px; padding: 0 var(--s2); border-radius: var(--r-sm);
   display: grid; place-items: center; font-family: var(--kr); font-weight: 600; font-size: 15px;
-  white-space: nowrap; color: var(--faint); background: var(--panel);
+  white-space: nowrap; color: rgba(255,255,255,.55); background: rgba(255,255,255,.12);
   transition: color .16s var(--ease), background-color .16s var(--ease);
 }
-.unit[data-state="done"] { color: var(--jade); background: var(--jade-soft); }
-.unit[data-state="now"] { color: var(--ink); background: var(--indigo-soft); }
+.unit[data-state="done"] { color: #8ee0b4; background: rgba(60,158,107,.3); }
+.unit[data-state="now"] { color: #fff; background: var(--indigo); }
 .unit.gap { min-width: 7px; padding: 0; background: none; }
-.guide-read { flex: none; margin: 0; font-family: var(--kr); font-size: var(--t-label); color: var(--jade); max-width: 18ch; }
+.guide-read { flex: none; margin: 0; font-family: var(--kr); font-size: var(--t-label); color: #8ee0b4; max-width: 18ch; }
 
 /* 맞아떨어지는 순간 — 이 화면의 유일한 비조작 모션 */
 @keyframes lockin { from { box-shadow: 0 0 0 0 rgba(60,158,107,.45); } to { box-shadow: 0 0 0 10px rgba(60,158,107,0); } }

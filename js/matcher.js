@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611011538';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611011549';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -68,7 +68,7 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
   // 벌림 — 검지와 중지를 둘 다 펴는 자모에서만 본다
   const bothUp = want.has('index') && want.has('middle');
   const spreadTarget = pose.spreadWide ? 26 : 4;      // 도
-  const spreadScore = bothUp ? Math.max(0, 1 - Math.abs(feat.spread - spreadTarget) / 20) : 1;
+  const spreadScore = bothUp ? Math.max(0, 1 - Math.abs(feat.spread - spreadTarget) / 32) : 1;
 
   // 고리 — 엄지와 검지 끝이 붙었는가. ㅇ·ㅎ에서만 본다.
   const wantRing = ringed;
@@ -95,7 +95,20 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
   return {
     score,
     parts: { shape, thumb: thumbScore, view: viewScore, dir: dirScore, spread: spreadScore, pinch: pinchScore },
-    hint, hintKind
+    hint, hintKind,
+    /* 지금 무엇이 보이는지. 안 될 때 사람이 직접 견줘 볼 수 있어야 한다. */
+    seen: {
+      fingers: FINGERS.filter(f => feat.extension[f] > 0.6)
+        .map(f => ({ index: '검', middle: '중', ring: '약', pinky: '새' }[f])).join('') || '없음',
+      dir: DIR_KO[angleToDir(feat.angle)] ?? '—',
+      spread: bothUp ? Math.round(feat.spread) : null
+    },
+    want: {
+      fingers: FINGERS.filter(f => want.has(f))
+        .map(f => ({ index: '검', middle: '중', ring: '약', pinky: '새' }[f])).join('') || '주먹',
+      dir: DIR_KO[wantDir] ?? '—',
+      spread: bothUp ? spreadTarget : null
+    }
   };
 }
 
