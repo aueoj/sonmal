@@ -56,7 +56,7 @@ export async function diagnose() {
     rows.push(bad('카메라 열기', '앞 단계에서 막혀 시도하지 못했습니다'));
   }
 
-  let modErr = null;
+  let modErr = null, modelBlocked = false;
   try {
     await import(/* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`);
     rows.push(ok('손 인식 모듈 내려받기'));
@@ -67,8 +67,11 @@ export async function diagnose() {
 
   try {
     const r = await fetch(MODEL, { method: 'GET', headers: { Range: 'bytes=0-0' } });
-    rows.push(r.ok || r.status === 206 ? ok('손 인식 모델 내려받기') : bad('손 인식 모델 내려받기', `서버가 ${r.status}로 답했습니다`));
+    const good = r.ok || r.status === 206;
+    modelBlocked = !good;
+    rows.push(good ? ok('손 인식 모델 내려받기') : bad('손 인식 모델 내려받기', `서버가 ${r.status}로 답했습니다`));
   } catch (e) {
+    modelBlocked = true;
     rows.push(bad('손 인식 모델 내려받기', e?.message?.slice(0, 90) ?? '막혔습니다'));
   }
 
@@ -79,9 +82,11 @@ export async function diagnose() {
   if (!window.isSecureContext) {
     verdict = '보안 연결이 아니라 카메라가 열리지 않습니다';
     advice = 'https 주소나 localhost에서 열어 주세요.';
-  } else if (camErr?.name === 'NotAllowedError' && embedded) {
-    verdict = '끼워진 프레임이 카메라를 막고 있습니다';
-    advice = '이 페이지를 새 탭에서 열어 보세요. 그래도 막히면 내려받아 내 컴퓨터에서 실행해야 합니다.';
+  } else if (embedded && (camErr?.name === 'NotAllowedError' || modelBlocked)) {
+    verdict = '여기서는 카메라를 쓸 수 없습니다';
+    advice = modelBlocked
+      ? '끼워진 프레임이 카메라와 손 인식 모델을 둘 다 막고 있습니다. 새 탭에서 열거나, 내려받아 내 컴퓨터에서 서버를 띄워 열어야 합니다.'
+      : '끼워진 프레임이 카메라를 막고 있습니다. 새 탭에서 열거나, 내려받아 내 컴퓨터에서 서버를 띄워 열어야 합니다.';
   } else if (camErr?.name === 'NotAllowedError') {
     verdict = '카메라 권한이 거부되었습니다';
     advice = '주소창의 카메라 아이콘에서 허용으로 바꾸고 다시 눌러 주세요.';
