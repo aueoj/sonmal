@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611011549';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611011556';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -72,8 +72,7 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
 
   // 고리 — 엄지와 검지 끝이 붙었는가. ㅇ·ㅎ에서만 본다.
   const wantRing = ringed;
-  const pinchScore = wantRing ? Math.max(0, 1 - Math.max(0, feat.pinch - 0.22) / 0.33)
-                              : Math.min(1, 0.45 + feat.pinch);
+  const pinchScore = wantRing ? Math.max(0, 1 - Math.max(0, feat.pinch - 0.22) / 0.33) : 1;
 
   const score = 0.46 * shape + 0.11 * thumbScore + 0.04 * viewScore + 0.26 * dirScore + 0.08 * spreadScore + 0.05 * pinchScore;
 
@@ -88,8 +87,8 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
     hintKind = '수형';
   } else if (bothUp && spreadScore < 0.55) {
     hint = pose.spreadWide ? '검지와 중지를 벌리세요' : '검지와 중지를 붙이세요'; hintKind = '수형';
-  } else if (thumbScore < 0.6) {
-    hint = thumbMatters ? '엄지를 옆으로 펴세요' : '엄지를 너무 벌리지 마세요'; hintKind = '수형';
+  } else if (thumbMatters && thumbScore < 0.6) {
+    hint = '엄지를 옆으로 펴세요'; hintKind = '수형';
   }
 
   return {

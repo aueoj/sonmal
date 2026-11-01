@@ -32,6 +32,16 @@ const PATTERNS = [
   /((?:href|src)=")((?:css|js)\/[\w./-]+\.(?:css|js))(\?v=\d+)?(")/g
 ];
 
+// 화면에서 어느 판인지 읽을 수 있도록 meta 에도 적는다
+if (!CHECK) {
+  const ip = join(ROOT, 'index.html');
+  let html = readFileSync(ip, 'utf8');
+  html = /<meta name="build"/.test(html)
+    ? html.replace(/<meta name="build" content="[^"]*">/, `<meta name="build" content="${VERSION}">`)
+    : html.replace('<title>', `<meta name="build" content="${VERSION}">\n<title>`);
+  writeFileSync(ip, html);
+}
+
 const found = [];
 for (const rel of files) {
   const p = join(ROOT, rel);

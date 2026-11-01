@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011549';
-import { getPose } from './jamoData.js?v=202611011549';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011549';
-import { describe } from './poseFeatures.js?v=202611011549';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011549';
-import { Tracker } from './tracker.js?v=202611011549';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011549';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011549';
-import { diagnose } from './diagnose.js?v=202611011549';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611011556';
+import { getPose } from './jamoData.js?v=202611011556';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611011556';
+import { describe } from './poseFeatures.js?v=202611011556';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611011556';
+import { Tracker } from './tracker.js?v=202611011556';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611011556';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611011556';
+import { diagnose } from './diagnose.js?v=202611011556';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -515,7 +515,10 @@ function init() {
        그 밖의 주소로는 접속하지 못하도록 페이지에 못을 박아 두었습니다.</p>
     <p>손모양과 단어 ${WORD_SIGNS.length}개는 제공받은 도표를 읽어 만든 것으로,
        국립국어원 한국수어사전과 대조해 확인해야 합니다.</p>
-    <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>`;
+    <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>
+    <p style="color:var(--faint);font-size:var(--t-micro)">판 ${
+      document.querySelector('meta[name="build"]')?.content ?? '알 수 없음'
+    } · 화면이 옛것 같으면 Cmd(Ctrl)+Shift+R 로 새로고침하세요.</p>`;
 
   el.chart.innerHTML = [...'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣㅘㅚㅙㅝㅞㅟㅢㄲㄸㅃㅆㅉ']
     .map(j => `<figure>${jamoArt(j)}<figcaption>${j}</figcaption></figure>`).join('');
