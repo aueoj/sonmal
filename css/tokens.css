@@ -2,6 +2,10 @@
    Linear-adjacent light surface. One accent, hairline borders, no shadows. */
 
 :root {
+  /* 브리프가 라이트 모드를 지정했다. 선언해 두지 않으면
+     OS가 다크일 때 input·dialog의 브라우저 기본 크롬이 어두워진다. */
+  color-scheme: light;
+
   /* Surface */
   --paper: #ffffff;
   --panel: #f7f7f8;

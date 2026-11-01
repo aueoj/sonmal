@@ -72,6 +72,15 @@ export class Tracker {
   _mockLoop() {
     if (!this.running) return;
     const lm = this.mockPose ? landmarksFor(this.mockPose, this.mockNoise) : null;
+    // 쌍자음은 손 전체가 옆으로 움직여야 한다. 모의 입력도 그 움직임을 만들어야
+    // 움직임 검출 경로가 실제로 시험된다.
+    if (lm && this.mockPose?.motion) {
+      // 사람이 쌍자음을 지을 때 손을 옮기는 폭은 손 길이의 절반 남짓이다.
+      // 정규화 좌표에서 손 길이가 약 0.44이므로 진폭 0.22를 쓴다.
+      const phase = (performance.now() % 1200) / 1200;
+      const dx = (phase < 0.5 ? phase * 2 : 2 - phase * 2) * 0.22;
+      for (const p of lm) p.x += dx;
+    }
     this.onFrame(lm, 'Right');
     setTimeout(() => this._mockLoop(), 60);
   }

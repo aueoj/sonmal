@@ -37,8 +37,11 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 }
 .camera video, .camera canvas {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; transform: scaleX(-1);
+  object-fit: cover;
 }
+/* 영상만 좌우로 뒤집는다. 캔버스는 화면 좌표 그대로 두고 JS가 좌표를 뒤집는다.
+   둘 다 뒤집으면 반전이 두 번 걸려 랜드마크가 영상과 어긋난다. */
+.camera video { transform: scaleX(-1); }
 .camera canvas { pointer-events: none; }
 
 .cam-empty {
@@ -134,7 +137,7 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   flex: none; height: var(--strip); border-top: 1px solid var(--line);
   display: flex; align-items: center; gap: var(--s4); padding: 0 var(--s4);
 }
-.strip-rail { flex: 1; display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: none; }
+.strip-rail { flex: 1; min-width: 0; display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: none; }
 .strip-rail::-webkit-scrollbar { display: none; }
 .strip-empty { font-size: var(--t-label); color: var(--faint); margin: 0; }
 

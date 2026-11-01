@@ -98,10 +98,17 @@ export function bestMatch(feat, poses) {
 /**
  * 쌍자음 판정. 기본 자음 수형을 유지한 채 손이 옆으로 옮겨졌는지 본다.
  * 지문자 인식 연구가 쓰는 손 무게중심 이동 검출과 같은 방식이다.
+ *
+ * 창은 프레임 수가 아니라 시간으로 잡는다. 프레임 수로 잡으면 60fps 카메라와
+ * 그보다 느린 환경에서 같은 코드가 서로 다른 길이의 움직임을 보게 된다.
+ * @param {Array<{x:number, t:number}>} trail 손 무게중심의 x와 시각(ms)
  */
-export function detectLateralShift(trail, scale) {
-  if (trail.length < 6) return 0;
-  const xs = trail.map(t => t.x);
+export const MOTION_WINDOW_MS = 700;
+
+export function detectLateralShift(trail, scale, now = trail.at(-1)?.t ?? 0) {
+  const win = trail.filter(p => now - p.t <= MOTION_WINDOW_MS);
+  if (win.length < 4) return 0;
+  const xs = win.map(p => p.x);
   return (Math.max(...xs) - Math.min(...xs)) / (scale || 1);
 }
 

@@ -54,7 +54,7 @@ export function planUtterance(text) {
     const bare = token.replace(/[.,!?·…"'()]/g, '');
     const sign = lookupWord(bare);
     if (sign) out.push({ kind: 'word', text: bare, sign });
-    else out.push({ kind: 'spell', text: token });
+    else if (bare) out.push({ kind: 'spell', text: bare });
   }
   return out;
 }
