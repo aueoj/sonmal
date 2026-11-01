@@ -54,7 +54,7 @@ python3 -m http.server 8000
 js/
   hangul.js        한글 ↔ 지문자 자모 (복합모음·겹받침 분해, 역합성)
   jamoData.js      28자 + 쌍자음 5자의 자세 데이터
-  handRenderer.js  자세 → SVG 손 일러스트
+  illustrations.js 도표에서 자모·단어 그림을 잘라 내놓는다
   mockHand.js      자세 → 합성 랜드마크 (카메라 없는 개발·시험용)
   poseFeatures.js  랜드마크 21개 → 특징
   matcher.js       특징 ↔ 자세, 그리고 수어의 말로 된 피드백

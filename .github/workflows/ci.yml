@@ -1,0 +1,53 @@
+# 푸시할 때마다 스스로 점검한다.
+#
+# 이 프로젝트는 카메라와 음성을 다루므로, 눈으로 봐서는 알 수 없는 것이 많다.
+# 손모양이 서로 구별되는지, 조작 없이 흐르는지, 그림이 늘어나지 않는지,
+# 그리고 무엇보다 허용한 곳 말고 다른 데로 접속하지 않는지를 기계가 본다.
+name: 점검
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 브라우저 준비
+        run: |
+          npm init -y >/dev/null
+          npm i -D playwright@1.49.1 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: 자모가 서로 구별되는가
+        run: node dev/selftest.mjs
+
+      - name: 서버 띄우기
+        run: |
+          python3 -m http.server 8777 --directory . &
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null http://localhost:8777/index.html && break
+            sleep 1
+          done
+
+      - name: 화면이 뜨고 빠진 파일이 없는가
+        run: node dev/boot-audit.mjs
+
+      - name: 조작 없이 흐르고 읽어 주는가
+        run: node dev/flow-audit.mjs
+
+      - name: 그림이 늘어나거나 눌리지 않는가
+        run: node dev/aspect-audit.mjs
+
+      # 허용한 곳 말고 다른 데로 접속하면 여기서 멈춘다
+      - name: 영상·소리가 새어 나가지 않는가
+        run: node dev/egress-audit.mjs
