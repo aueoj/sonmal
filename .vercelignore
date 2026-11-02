@@ -1,0 +1,7 @@
+# 사이트가 쓰지 않는 것은 올리지 않는다
+dev
+docs
+assets/incoming
+README.md
+RUN.md
+.github
