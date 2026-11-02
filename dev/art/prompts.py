@@ -25,10 +25,10 @@ FRAMES = {
   f"Same hands: the little-finger edge of {R} (held vertically, fingertips pointing forward) is touching the back of the flat palm-down left hand, like a gentle chop. Warm smile, head slightly bowed."],
  '미안합니다': [
   f"{R} makes a small circle by touching the tip of the index finger to the tip of the thumb, the other three fingers extended; the circle is placed against the middle of her forehead. {L} is flat, palm down, fingertips pointing to her right, in front of her chest. Apologetic expression.",
-  f"{R} is now fully open and flat, palm down, resting on top of the back of {L}, which is flat, palm down, fingertips pointing to her right, in front of her chest. Apologetic expression."],
+  f"{R} is now fully open, fingers and thumb spread, its little-finger edge lowered onto the back of {L}. The left hand is flat, palm down, fingertips pointing to her right (viewer left), wrist on viewer right. Follow the lower endpoint pose in the official dictionary illustration. Apologetic expression."],
  '괜찮아요': [
-  f"{R} is a fist with only the little finger (pinky) extended straight up, held just in front of her chin, palm facing her. Other hand relaxed down. Gentle smile.",
-  f"{R} is a fist with only the little finger extended; the pad of the little-finger tip is touching the middle of her chin. Gentle smile."],
+  f"{R} is a fist seen at a three-quarter angle with ONLY a SHORT, THIN little finger (pinky) extended, held 2 cm in front of her chin without touching. Index, middle and ring fingers are folded; the bent thumb lies visibly across those three curled fingers. The pinky is visibly slimmer and shorter than an index finger. Other hand relaxed down. Gentle smile.",
+  f"{R} is a fist seen at a three-quarter angle with ONLY a SHORT, THIN little finger extended; the fingertip PAD touches the middle of her chin. Index, middle and ring fingers are folded; the folded thumb is clearly visible lying across them. Gentle smile."],
  '네': [
   f"{R} has the index, middle and little fingers extended and spread, ring finger and thumb folded, back of the hand facing outward; the tips of the index and middle fingers touch the side of her right eye. Friendly expression."],
  '아니요': [
@@ -39,7 +39,7 @@ FRAMES = {
   f"Same hands: the palm of the upright flat {R} is pressed against the back of the raised left thumb. Earnest expression."],
  '다시': [
   f"{R} is raised in front of her right shoulder, back of the hand facing the viewer; the thumb presses on the fingernails of the curled index and middle fingers (as if ready to flick); ring and little fingers folded. Neutral expression.",
-  f"{R} has moved down and across to the front of her chest, now with the index and middle fingers flicked open and extended (a V shape), thumb, ring and little fingers folded, back of the hand facing the viewer. Neutral expression."],
+  "Her right arm has crossed her torso toward her left shoulder (viewer right), with the index and middle fingers flicked open and extended; thumb, ring and little fingers folded. BACK of right hand faces viewer, fingertips point diagonally to viewer right. Left arm relaxed down. Neutral expression."],
  '천천히': [
   f"{L} is flat, palm down, fingertips pointing to her right, in front of her lower chest. {R} is flat and held vertically on its edge (little-finger edge down), resting on the back of the left hand near the wrist, fingertips pointing forward. Calm expression.",
   f"{L} stays flat and palm down. The vertical flat {R} has slid slowly forward along the back of the left hand and is now past the left fingertips. Calm, unhurried expression."],
@@ -73,10 +73,10 @@ FRAMES = {
   "Both open palms are placed flat on either side of her chest. Tired expression with half-closed eyes.",
   "Both open hands have dropped limply down to the level of her stomach, palms facing her body, fingers hanging down. Exhausted expression with drooping shoulders."],
  '아파요': [
-  f"{R} is slightly cupped with the palm facing up, held in front of her chest, shaking side to side. Pained expression with furrowed brows."],
+  f"{R} is slightly cupped with the palm facing up, held in front of her lower chest. Left arm relaxed down. One still moment of the side-to-side movement, without motion marks. Pained expression with furrowed brows."],
  '놀랐어요': [
-  "Both hands have the index fingertip touching the thumb tip; the right hand is against her upper chest and the left hand is just below it. Neutral face about to react.",
-  "Both hands have sprung wide open with all fingers spread, still in front of her chest, one above the other. Surprised expression with wide eyes and open mouth."],
+  "Both hands have the index fingertip touching the thumb tip; the right hand is against her upper chest and the left hand is just below it. Palms face her torso, BACKS face viewer, fingertips point sideways across torso. Neutral face about to react.",
+  "Both hands have sprung wide open with all fingers spread, still in front of her chest, right above left. Palms face her torso, BACKS face viewer. Surprised expression with wide eyes and open mouth."],
  '행복해요': [
   f"{R} spans her lower face: the four fingers rest on her left cheek and the thumb rests on her right cheek, palm toward her face. Happy, glowing smile.",
   f"{R} has slid down below her chin and the fingertips and thumb are drawn together into a bunched point. Happy, glowing smile."],
@@ -88,7 +88,7 @@ FRAMES = {
   f"{R} is a fist with only the index finger extended, pointing straight toward the viewer, held in front of her chest. Neutral expression."],
  '우리': [
   f"{R} is open and flat with the palm placed on her chest. Neutral expression.",
-  f"{R} is open and flat, back of the hand facing up, sweeping in a wide horizontal circle in front of her stomach. Neutral, inclusive expression."],
+  f"{R} is open and flat, back of the hand facing up, held in front of her stomach during a wide horizontal circle. Left arm relaxed down. One still pose, no arrows or motion marks. Neutral, inclusive expression."],
  '여기': [
   f"{R} is a fist with only the index finger extended, pointing slightly downward in front of her body. Neutral expression."],
  '그': [
@@ -100,14 +100,14 @@ FRAMES = {
   f"{R} is half-bent with the palm facing down, held in front of her chest as if setting something down and stopping. Questioning expression with raised eyebrows."],
  '언제': [
   "Both hands are open and held vertically on their edges in front of her chest, fingers pointing forward; the right hand rests on top of the left hand. Questioning expression with raised eyebrows.",
-  "The left hand stays vertical on its edge; the right hand on top has started folding its fingers one by one into the palm, starting with the thumb (as if counting). Questioning expression with raised eyebrows."],
+  "The left hand stays vertical on its edge BELOW the right hand; the right hand on top is now folded into a fist after folding thumb, index, middle, ring and little finger in order. The hands remain touching, stacked vertically as in the official endpoint illustration. Questioning expression with raised eyebrows."],
  '누구': [
   f"{R} has its fingers bent; the backs of the bent fingers lightly rub her right cheek. Questioning expression with raised eyebrows."],
  '왜': [
   f"{R} is a fist with only the index finger extended, the fingertip touching her right temple. Puzzled, questioning expression with one eyebrow raised."],
  '어떻게': [
   f"{R} is a fist with only the index finger extended straight up, pad facing the viewer, in front of her chest, moving to her left. Questioning expression.",
-  "Both hands are fists with the index and middle fingers extended and hooked (bent), held upright in front of her chest; the little-finger sides of the two fists are knocking together. Questioning expression."],
+  "Both hands are fists with the index and middle fingers extended and hooked (bent), held upright in front of her chest, BACKS facing viewer. The LITTLE-FINGER sides touch at the centre, with thumbs on the outer sides. Only the contact pose, no ghost hands. Questioning expression."],
 }
 
 FRAMES.update({'학교': ['Both hands open flat, fingers straight together upward, held in front of face at shoulder width. BACKS of hands face viewer, palms toward her face. Show fingernails, no palm creases. Hands a little away from face.', 'Both open flat hands are now closer to the face, fingers straight upward, BACKS facing viewer and palms facing her cheeks. End of one inward pull, same configuration.'], '먹다': ['Her RIGHT hand, on viewer left, is fully open with straight fingers together and PALM UP like a flat tray, held below her mouth at upper chest. Left arm rests down.', 'Her RIGHT flat open hand is raised near lips, PALM UP, fingers straight together aimed toward her mouth, not pinched. Left arm relaxed. End pose of lifting open hand toward mouth.']})
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         n += 1
         tag = '' if w['status'] == 'ok' else '  (확인 필요: 그리지 말 것)'
         out += [f"## {n:02d} {w['word']}  ·  {w['category']}{tag}", '',
-                f"사전 {w['entryNo']}: {w['sourceUrl']}  ", f"원문: {w['원문']}", '']
+                f"사전 {w['entryNo']}: {w['sourceUrl']}", f"원문: {w['원문']}", '']
         for i, (step, f) in enumerate(zip(w['steps'], frames), 1):
             f = re.sub(r'(^|\. )her ', lambda m: m.group(1) + 'Her ', f)
             out += [f"**sl{w['entryNo']}-{i:02d}.png** {step}", '', '```', f"{STYLE}\n\nScene: {f}", '```', '']
