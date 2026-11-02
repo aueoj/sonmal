@@ -29,7 +29,7 @@ const EXPECT = await p.evaluate(async (ph) => {
 }, PHRASE).catch(() => PHRASE);
 await p.fill('#typed', PHRASE);
 await p.press('#typed', 'Enter');
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForTimeout(600);
 
 const total = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-i]').length);

@@ -16,7 +16,7 @@ await p.addInitScript(() => {
 await p.goto('http://localhost:8777/dev/embed.html', { waitUntil: 'networkidle' });
 const fr = p.frameLocator('iframe');
 await p.waitForTimeout(1200);
-await fr.locator('#btn-cam').click();
+// 카메라는 스스로 켜려 한다. 막히면 누르지 않아도 진단이 떠야 한다
 await fr.locator('#diag .diag-list li').first().waitFor({ timeout: 25000 });
 await p.waitForTimeout(1500);
 

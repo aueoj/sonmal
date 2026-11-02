@@ -74,22 +74,6 @@
       "entryNo": "9466"
     },
     {
-      "word": "네",
-      "slug": "05-01",
-      "frame": 1,
-      "total": 2,
-      "basis": "legacy",
-      "step": "주먹을 어깨 높이로 든다"
-    },
-    {
-      "word": "네",
-      "slug": "05-02",
-      "frame": 2,
-      "total": 2,
-      "basis": "legacy",
-      "step": "위아래로 한두 번 끄덕인다"
-    },
-    {
       "word": "아니요",
       "slug": "sl24036-01",
       "frame": 1,

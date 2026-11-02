@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021155';
-import { getPose } from './jamoData.js?v=202611021155';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021155';
-import { describe } from './poseFeatures.js?v=202611021155';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611021155';
-import { Tracker } from './tracker.js?v=202611021155';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021155';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021155';
-import { diagnose } from './diagnose.js?v=202611021155';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021222';
+import { getPose } from './jamoData.js?v=202611021222';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021222';
+import { describe } from './poseFeatures.js?v=202611021222';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611021222';
+import { Tracker } from './tracker.js?v=202611021222';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021222';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021222';
+import { diagnose } from './diagnose.js?v=202611021222';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -30,7 +30,8 @@ const el = {
   sayForm: $('say-form'), btnListen: $('btn-listen'), typed: $('typed'),
   guide: $('guide'), art: $('guide-art'), name: $('guide-name'), step: $('guide-step'),
   track: $('track'), fill: $('fill'), seq: $('seq'), read: $('read'), seen: $('seen'),
-  sources: $('sources'), sourcesBody: $('sources-body'), btnSources: $('btn-sources')
+  sources: $('sources'), sourcesBody: $('sources-body'), btnSources: $('btn-sources'),
+  ref: $('ref'), refToggle: $('ref-toggle'), refWords: $('ref-words'), camTitle: $('cam-title')
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
@@ -413,6 +414,7 @@ async function startCamera({ demo = false } = {}) {
   } catch {
     el.btnCam.disabled = false; el.btnDemo.disabled = false;
     el.btnCam.textContent = '카메라 켜기';
+    el.camTitle.textContent = '카메라를 켜면 손을 읽어 드립니다';
     await showDiagnosis();
   }
 }
@@ -535,17 +537,37 @@ function init() {
     <p>이 페이지가 접속하는 곳은 글꼴(fonts.googleapis.com), 손 인식 코드(cdn.jsdelivr.net),
        손 인식 모델 파일(storage.googleapis.com) 셋뿐이고, 모두 내려받기만 합니다.
        그 밖의 주소로는 접속하지 못하도록 페이지에 못을 박아 두었습니다.</p>
-    <p>손모양과 단어 ${WORD_SIGNS.length}개는 제공받은 도표를 읽어 만든 것으로,
-       국립국어원 한국수어사전과 대조해 확인해야 합니다.</p>
+    <p>지문자 손모양은 제공받은 도표를 기준으로 합니다. 낱말 ${WORD_SIGNS.length}개 중
+       ${WORD_SIGNS.filter(w => w.entryNo).length}개는 국립국어원 한국수어사전의 표제어와 수형 설명을 따라 그렸습니다.</p>
     <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>
     <p style="color:var(--faint);font-size:var(--t-micro)">판 ${
       document.querySelector('meta[name="build"]')?.content ?? '알 수 없음'
     } · 화면이 옛것 같으면 Cmd(Ctrl)+Shift+R 로 새로고침하세요.</p>`;
 
+  /* 표 보기: 스위치를 켰을 때만 지문자와 낱말 표를 영상 위에 덮는다.
+     하나를 고르면 표를 닫고 바로 그 말을 연습한다. */
   el.chart.innerHTML = [...'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣㅘㅚㅙㅝㅞㅟㅢㄲㄸㅃㅆㅉ']
-    .map(j => `<figure>${jamoArt(j)}<figcaption>${j}</figcaption></figure>`).join('');
+    .map(j => `<button type="button" data-say="${j}" aria-label="${j} 연습">${jamoArt(j)}<span>${j}</span></button>`).join('');
+  el.refWords.innerHTML = WORD_SIGNS
+    .map(w => `<button type="button" data-say="${w.word}">${wordArt(w.word, 0)}<span>${w.word}</span></button>`).join('');
+  const setRef = on => {
+    el.ref.hidden = !on;
+    el.refToggle.setAttribute('aria-checked', String(on));
+  };
+  el.refToggle.addEventListener('click', () => setRef(el.ref.hidden));
+  el.ref.addEventListener('click', e => {
+    const b = e.target.closest('[data-say]');
+    if (!b) return;
+    setRef(false);
+    setUtterance(b.dataset.say);
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !el.ref.hidden) setRef(false); });
 
   setUtterance(WORD_SIGNS[0]?.word ?? '안녕하세요');
+
+  // 첫 화면은 카메라가 켜진 상태다. 브라우저가 권한을 물으면 그 답을 따르고,
+  // 막히면 왜 막혔는지와 카메라 없이 둘러보는 길을 보여 준다.
+  startCamera();
 }
 
 init();

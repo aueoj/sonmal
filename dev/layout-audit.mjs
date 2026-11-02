@@ -9,7 +9,7 @@ for (const [w, h] of [[1440, 900], [1440, 760], [1280, 720], [820, 1180], [390, 
   await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
   await p.fill('#typed', '과자');
   await p.press('#typed', 'Enter');
-  await p.click('#btn-cam');
+  await p.waitForSelector('.camera.live', { timeout: 20000 });
   await p.waitForTimeout(1200);
   const r = await p.evaluate(() => {
     const box = sel => {

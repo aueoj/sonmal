@@ -10,7 +10,7 @@ await p.goto('http://localhost:8777/index.html', { waitUntil: 'domcontentloaded'
 await p.waitForTimeout(1500);
 
 const r = await p.evaluate(() => ({
-  chart: document.querySelectorAll('.chart figure').length,
+  chart: document.querySelectorAll('.chart button').length,
   chips: document.querySelectorAll('.chip').length,
   art: document.getElementById('guide-art').innerHTML.length,
   name: document.getElementById('guide-name').textContent,

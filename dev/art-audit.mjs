@@ -7,7 +7,7 @@ const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
 
 // 기본 문장은 단어로 시작한다. 그 상태에서 카메라를 켜면 타이머가 두 번 걸릴 수 있다.
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForTimeout(900);
 await p.fill('#typed', '과자');
 await p.press('#typed', 'Enter');

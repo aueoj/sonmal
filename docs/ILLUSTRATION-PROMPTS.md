@@ -96,7 +96,7 @@ Match docs/illustration-style-reference.png exactly for character proportions, f
 Scene: Her right hand (viewer's left) is a fist seen at a three-quarter angle with ONLY a SHORT, THIN little finger extended; the fingertip PAD touches the middle of her chin. Index, middle and ring fingers are folded; the folded thumb is clearly visible lying across them. Gentle smile.
 ```
 
-## 05 네  ·  기본  (확인 필요: 그리지 말 것)
+## 05 네  ·  기본
 
 사전 9474: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=9474
 원문: 오른 주먹의 1·2·4지를 펴서 등이 밖으로 향하게 벌려 1·2지 끝을 오른쪽 눈 옆에 댄다.

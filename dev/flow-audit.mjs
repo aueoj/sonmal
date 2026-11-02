@@ -33,7 +33,7 @@ console.log(`카메라 ${m.cam} · 가이드 ${m.guide} → 카메라의 ${(m.ra
 console.log(`말하기 위치 ${m.sayTop}px (창 ${m.win}) → 세로 ${Math.round(100*m.sayTop/m.win)}% 지점, 높이 ${m.sayH}px`);
 
 // 카메라 켜고 아무것도 안 누르고 기다린다
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForTimeout(600);
 const before = await p.evaluate(() => document.querySelector('#guide-name').textContent);
 await p.waitForTimeout(4200);

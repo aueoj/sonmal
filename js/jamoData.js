@@ -160,20 +160,33 @@ export const VOWELS = [
     mnemonic: 'ㅡ 다음에 ㅣ가 오는 것이 ㅢ다.', confidence: 'check' })
 ];
 
-/* 쌍자음 — 도표에 단독 항목이 없다. 기본 자음 손모양을 유지한 채 손 전체를
-   옆으로 한 번 옮겨 표현하는 방식을 따른다. 지문자 인식 연구도 정적 수형 외에
-   손 무게중심의 이동을 함께 보아 쌍자음을 가려낸다. */
-const DOUBLES = [['ㄲ','ㄱ'], ['ㄸ','ㄷ'], ['ㅃ','ㅂ'], ['ㅆ','ㅅ'], ['ㅉ','ㅈ']];
-
-const byJamo = new Map([...CONSONANTS, ...VOWELS].map(p => [p.jamo, p]));
-
-/* 도표는 쌍자음을 손 두 개로 그린다. 같은 손모양을 양손으로 만든다.
-   앞서 '한 손을 옆으로 옮긴다'로 두었던 것은 그림과 달랐다. */
-export const MOTION_LETTERS = DOUBLES.map(([jamo, base]) => ({
-  ...byJamo.get(base), jamo, base, hands: 2, motion: null,
-  note: `${base}의 손모양을 양손으로 함께 만든다.`,
-  mnemonic: `${base}을 두 손으로 하면 ${jamo}이 된다.`
-}));
+/* 쌍자음 — 도표는 쌍자음을 손 두 개로 그린다.
+   처음에는 '기본 자음 손모양을 두 손으로'라고 두었지만, 도표를 한 장씩 대 보니
+   그대로인 것은 ㄸ 하나뿐이었다. 일러스트가 기준이므로 도표에 그려진 손모양을 그대로 적는다.
+     ㄲ  검지를 아래로. ㄱ과 달리 엄지를 옆으로 뻗지 않는다
+     ㄸ  검지와 중지를 옆으로 (ㄷ과 같다)
+     ㅃ  검지와 중지를 붙여 세운다. ㅂ의 네 손가락이 아니다
+     ㅆ  엄지와 검지로 고리를 만들고 세 손가락을 세운다. ㅅ이 아니라 ㅇ의 손모양이다
+     ㅉ  검지, 중지, 약지를 옆으로 뻗는다. ㅈ과 다르다 */
+const TWO = { hands: 2 };
+export const MOTION_LETTERS = [
+  mk('ㄲ', 'consonant', [I], 'down', 'back', { ...TWO, base: 'ㄱ',
+    note: '두 손 모두 검지만 펴서 아래로 내린다. 엄지는 접는다.',
+    mnemonic: 'ㄱ을 두 손으로 하면 ㄲ이다. 도표의 ㄲ은 엄지를 뻗지 않는다.' }),
+  mk('ㄸ', 'consonant', [I, M], 'right', 'side', { ...TWO, base: 'ㄷ',
+    note: '두 손 모두 검지와 중지를 붙여 펴서 옆으로 뻗는다.',
+    mnemonic: 'ㄷ을 두 손으로 하면 ㄸ이다.' }),
+  mk('ㅃ', 'consonant', [I, M], 'up', 'palm', { ...TWO, base: 'ㅂ',
+    note: '두 손 모두 검지와 중지를 붙여 세우고, 엄지로 약지와 새끼손가락을 누른다.',
+    mnemonic: '도표의 ㅃ은 네 손가락이 아니라 두 손가락을 세운다.' }),
+  mk('ㅆ', 'consonant', [M, R, P], 'up', 'palm', { ...TWO, base: 'ㅅ',
+    special: 'circle', thumb: 'circle',
+    note: '두 손 모두 엄지와 검지 끝을 맞대 고리를 만들고 나머지 세 손가락을 세운다.',
+    mnemonic: '도표의 ㅆ은 ㅅ이 아니라 고리 손 두 개다.' }),
+  mk('ㅉ', 'consonant', [I, M, R], 'right', 'back', { ...TWO, base: 'ㅈ',
+    note: '두 손 모두 검지, 중지, 약지를 붙여 펴서 옆으로 뻗는다.',
+    mnemonic: '도표의 ㅉ은 세 손가락을 옆으로 뻗은 손 두 개다.' })
+];
 
 export const ALL_POSES = [...CONSONANTS, ...VOWELS, ...MOTION_LETTERS];
 export const POSE_BY_JAMO = new Map(ALL_POSES.map(p => [p.jamo, p]));

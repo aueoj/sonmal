@@ -26,8 +26,7 @@ const st = await p.evaluate(() => ({
 }));
 console.log(`카메라 API 없음 → 둘러보기 버튼 ${st.demo} | 칸 ${st.units}개`);
 
-// 눌러 보면 조용히 죽는 대신 왜 안 되는지 말해야 한다
-await p.click('#btn-cam');
+// 스스로 켜려다 막히면 조용히 죽는 대신 왜 안 되는지 말해야 한다
 let verdict = '';
 try {
   await p.locator('#diag .diag-list li').first().waitFor({ timeout: 20000 });

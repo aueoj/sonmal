@@ -7,7 +7,7 @@ for (const scheme of ['light', 'dark']) {
   await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
   await p.fill('#typed', '서울특별시');
   await p.click('.typed button[type=submit]');
-  await p.click('#btn-cam');
+  await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
   // 몇 글자 진행된 코칭 중간 상태를 잡는다
   await p.waitForFunction(() => document.querySelectorAll('#strip .unit[data-state="done"]').length >= 4, null, { timeout: 15000 });
   await p.screenshot({ path: `${OUT}/coach-${scheme}.png` });

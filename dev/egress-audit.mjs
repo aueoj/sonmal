@@ -10,7 +10,7 @@ p.on('request', r => {
   hits.set(k, (hits.get(k) ?? 0) + 1);
 });
 await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForTimeout(2500);
 await p.fill('#typed', '과자'); await p.press('#typed', 'Enter');
 await p.waitForTimeout(3500);

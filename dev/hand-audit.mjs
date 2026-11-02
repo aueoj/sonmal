@@ -25,7 +25,7 @@ await p.click('#hand-right');
 // 지문자: 조작 없이 끝까지 흐르는가
 await p.fill('#typed', '과자');
 await p.press('#typed', 'Enter');
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForFunction(() => document.querySelectorAll('#seq .unit[data-state="done"]').length >= 4,
   null, { timeout: 25000 }).catch(() => {});
 await p.waitForTimeout(600);

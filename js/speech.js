@@ -1,7 +1,9 @@
 /* speech.js — 음성을 글자로, 글자를 음성으로.
  *
- * 둘 다 브라우저 표준 기능만 쓴다. 서버로 나가는 음성이 없다.
- * SpeechRecognition은 크롬·엣지 계열에만 있으므로, 없으면 직접 입력으로 떨어진다.
+ * 둘 다 브라우저 표준 기능만 쓴다. 읽어 주기(SpeechSynthesis)는 기기 안에서 끝나지만,
+ * 듣기(SpeechRecognition)는 브라우저가 마이크 소리를 음성 인식 서버로 보낸다
+ * (크롬은 구글, 사파리는 애플). 화면에도 그렇게 적어 두었다.
+ * SpeechRecognition 이 없는 브라우저는 직접 입력으로 떨어진다.
  */
 
 const SR = globalThis.SpeechRecognition || globalThis.webkitSpeechRecognition || null;
@@ -17,8 +19,12 @@ export const support = {
  * continuous 를 끄면 말하다 잠깐 쉬는 순간 브라우저가 거기서 끝낸다.
  * 문장형으로 말하면 첫 마디만 잡히므로 계속 듣게 두고, 말이 멎은 뒤
  * 잠깐 기다렸다가 마무리한다. 중간에 브라우저가 멋대로 끝내면 다시 잇는다.
+ *
+ * 말하기를 누르고 첫 마디를 꺼내기까지는 시간이 걸린다. 그 사이를 침묵으로 보고
+ * 끊으면 아무 말도 못 하고 끝난다. 그래서 첫 마디 전에는 startMs(5초)를 기다리고,
+ * 말이 시작된 뒤부터 silenceMs 동안 말이 없으면 끝낸다.
  */
-export function createListener({ lang = 'ko-KR', silenceMs = 1800,
+export function createListener({ lang = 'ko-KR', silenceMs = 1800, startMs = 5000,
                                  onInterim, onResult, onEnd, onError } = {}) {
   if (!SR) return null;
   const rec = new SR();
@@ -31,9 +37,9 @@ export function createListener({ lang = 'ko-KR', silenceMs = 1800,
   let wanted = false;      // 사용자가 아직 듣기를 원하는가
   let idle = null;
 
-  const armIdle = () => {
+  const armIdle = (ms = silenceMs) => {
     clearTimeout(idle);
-    idle = setTimeout(() => { wanted = false; try { rec.stop(); } catch {} }, silenceMs);
+    idle = setTimeout(() => { wanted = false; try { rec.stop(); } catch {} }, ms);
   };
 
   rec.onresult = e => {
@@ -65,7 +71,7 @@ export function createListener({ lang = 'ko-KR', silenceMs = 1800,
   return {
     start() {
       settled = ''; wanted = true;
-      try { rec.start(); armIdle(); } catch { /* 이미 듣는 중 */ }
+      try { rec.start(); armIdle(startMs); } catch { /* 이미 듣는 중 */ }
     },
     stop() { wanted = false; clearTimeout(idle); try { rec.stop(); } catch {} },
     get listening() { return wanted; }

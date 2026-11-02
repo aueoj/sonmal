@@ -31,7 +31,8 @@ const STATIC = [
   ['판 번호', ['dev/stamp.mjs', '--check'], '파일 주소에 판 번호가 붙어 있는가'],
   ['자모 구별', ['dev/selftest.mjs'], '40개 손모양이 서로 구별되는가'],
   ['단어 출처', ['dev/words-check.mjs'], '새 단어가 사전 번호와 그림을 갖췄는가'],
-  ['그림 연결', ['dev/art/ingest.mjs', '--check'], '연결된 그림 파일이 다 있는가']
+  ['그림 연결', ['dev/art/ingest.mjs', '--check'], '연결된 그림 파일이 다 있는가'],
+  ['말 기다림', ['dev/listen-test.mjs'], '첫 마디 전 5초는 끊지 않는가']
 ];
 
 /* 브라우저로 봐야 하는 것 */

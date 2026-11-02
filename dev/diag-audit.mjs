@@ -10,7 +10,7 @@ await p.addInitScript(() => {
     Promise.reject(Object.assign(new Error('Permission denied'), { name: 'NotAllowedError' }));
 });
 await p.goto('http://localhost:8777/index.html', { waitUntil: 'networkidle' });
-await p.click('#btn-cam');
+// 카메라는 스스로 켜려 한다. 막히면 누르지 않아도 진단이 떠야 한다
 await p.waitForSelector('#diag:not([hidden]) .diag-list li', { timeout: 20000 });
 await p.waitForTimeout(2500);
 const r = await p.evaluate(() => ({

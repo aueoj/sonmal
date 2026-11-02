@@ -5,7 +5,7 @@ const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
 await p.fill('#typed', '병원 어디');
 await p.click('.typed button[type=submit]');
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForSelector('#btn-next:not([hidden])', { timeout: 10000 });
 await p.waitForTimeout(400);
 await p.screenshot({ path: '/tmp/claude-0/-home-user/1666e45b-ba5d-5fdf-99c9-cdf6defa90e5/scratchpad/word.png' });

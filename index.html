@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611021155">
+<meta name="build" content="202611021222">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611021155">
-<link rel="stylesheet" href="css/app.css?v=202611021155">
+<link rel="stylesheet" href="css/tokens.css?v=202611021222">
+<link rel="stylesheet" href="css/app.css?v=202611021222">
 </head>
 <body>
 <script>
@@ -42,6 +42,9 @@ if (location.protocol === 'file:') {
   <span class="mark">손말</span>
   <nav class="chips" id="chips" aria-label="연습할 말"></nav>
   <div class="bar-end">
+    <button type="button" class="refswitch" id="ref-toggle" role="switch" aria-checked="false" aria-controls="ref">
+      <span class="track" aria-hidden="true"><span class="knob"></span></span>표 보기
+    </button>
     <div class="handswitch" role="radiogroup" aria-label="쓰는 손">
       <button type="button" id="hand-right" role="radio" aria-checked="true">오른손</button>
       <button type="button" id="hand-left" role="radio" aria-checked="false">왼손</button>
@@ -58,7 +61,7 @@ if (location.protocol === 'file:') {
   <div class="cam-empty" id="cam-empty">
     <div class="cam-prompt">
       <div>
-        <p class="cam-title">카메라를 켜면 손을 읽어 드립니다</p>
+        <p class="cam-title" id="cam-title">카메라를 켜는 중입니다</p>
         <p class="cam-body">영상과 손 좌표는 이 브라우저 안에서만 처리됩니다. 녹화하지 않고 어디로도 보내지 않습니다.
           다만 <b>말하기</b>를 누르면 브라우저가 마이크 소리를 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플).
           소리를 보내고 싶지 않으면 옆 칸에 문장을 입력하세요.</p>
@@ -80,36 +83,46 @@ if (location.protocol === 'file:') {
       </div>
     </div>
 
-    <div class="chart" id="chart"></div>
   </div>
+
+  <!-- 표 보기 스위치를 켰을 때만 영상 위에 덮는다. 고르면 닫히고 바로 연습으로 간다 -->
+  <section class="ref" id="ref" hidden aria-label="지문자와 낱말 표">
+    <h2 class="ref-title">지문자</h2>
+    <div class="chart" id="chart"></div>
+    <h2 class="ref-title">낱말</h2>
+    <div class="ref-words" id="ref-words"></div>
+  </section>
 
   <!-- 읽어 준 말만 영상 위에 잠깐 띄운다 -->
   <p class="spoken" id="spoken" hidden aria-live="polite"></p>
 
-  <!-- 중하단: 말하기. 화면에서 제일 눈에 띄어야 한다 -->
-  <form class="say" id="say-form">
-    <button class="say-btn" id="btn-listen" type="button">
-      <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-        <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z"/>
-        <path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
-      </svg>
-      말하기 <kbd>Space</kbd>
-    </button>
-    <input id="typed" type="text" placeholder="또는 문장을 입력하고 엔터" autocomplete="off" lang="ko">
-  </form>
 </main>
 
-<!-- 아래: 가이드. 카메라의 1/3을 넘지 않는다 -->
+<!-- 아래 가운데: 지금 할 동작과 말하기를 카드 하나에 모은다. 영상은 최대한 비워 둔다 -->
 <section class="guide" id="guide" aria-label="지금 할 동작">
   <figure class="guide-art" id="guide-art" aria-hidden="true"></figure>
   <div class="guide-body">
-    <p class="guide-name" id="guide-name">연습할 말을 고르거나 말해 보세요</p>
+    <div class="guide-head">
+      <p class="guide-name" id="guide-name">연습할 말을 고르거나 말해 보세요</p>
+      <div class="guide-seq" id="seq"></div>
+    </div>
     <p class="guide-step" id="guide-step"></p>
-    <div class="track" id="track"><div class="fill" id="fill"></div></div>
+    <div class="guide-meter">
+      <div class="track" id="track"><div class="fill" id="fill"></div></div>
+      <p class="guide-read" id="read"></p>
+    </div>
     <p class="seen" id="seen" aria-live="off"></p>
+    <form class="say" id="say-form">
+      <button class="say-btn" id="btn-listen" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
+          <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z"/>
+          <path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
+        </svg>
+        말하기 <kbd>Space</kbd>
+      </button>
+      <input id="typed" type="text" placeholder="또는 문장을 입력하고 엔터" autocomplete="off" lang="ko">
+    </form>
   </div>
-  <div class="guide-seq" id="seq"></div>
-  <p class="guide-read" id="read"></p>
 </section>
 
 <dialog id="sources" aria-labelledby="sources-title">
@@ -118,6 +131,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js?v=202611021155"></script>
+<script type="module" src="js/app.js?v=202611021222"></script>
 </body>
 </html>

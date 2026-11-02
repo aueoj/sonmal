@@ -1,8 +1,10 @@
 /* app.css — 손말
-   화면은 셋뿐이다. 위에 고를 말, 가운데 카메라, 아래 가이드.
-   누를 수 있는 것은 단어 칩과 말하기뿐이고, 나머지는 손과 말이 입력이다. */
+   영상이 화면 전체다. 그 위에 두 가지만 띄운다.
+   위에는 고를 말(반투명 알약), 아래 가운데에는 지금 할 동작과 말하기를 모은 카드 하나.
+   막대나 띠로 영상을 가리지 않는다. 수어 그림만은 또렷하게 크게 둔다. */
 
-body { display: flex; flex-direction: column; overflow: hidden; }
+:root { --glass: rgba(14,15,19,.48); --glass-strong: rgba(14,15,19,.62); --glass-line: rgba(255,255,255,.14); }
+body { overflow: hidden; }
 
 .skip {
   position: absolute; left: var(--s4); top: -60px; z-index: 50;
@@ -11,46 +13,64 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 }
 .skip:focus { top: var(--s2); }
 
-/* ── 위: 고를 말 ─────────────────────────────── */
+/* ── 위: 고를 말. 영상 위에 떠 있다 ────────────── */
 .bar {
-  flex: none; height: 58px; display: flex; align-items: center; gap: var(--s4);
-  padding: 0 var(--s4); border-bottom: 1px solid var(--line);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 6;
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s3) var(--s4) var(--s5);
+  background: linear-gradient(to bottom, rgba(10,11,14,.42), rgba(10,11,14,0));
+  pointer-events: none;            /* 빈 곳은 영상 그대로, 버튼만 눌린다 */
 }
-.mark { flex: none; font-family: var(--kr); font-weight: 700; font-size: 16px; letter-spacing: -0.03em; }
+.bar > * { pointer-events: auto; }
+.mark { flex: none; font-family: var(--kr); font-weight: 700; font-size: 16px; letter-spacing: -0.03em; color: #fff;
+  text-shadow: 0 1px 6px rgba(0,0,0,.35); }
 
 .chips {
-  flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--s2);
-  overflow-x: auto; scrollbar-width: none; padding: var(--s2) 0;
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;
+  overflow-x: auto; scrollbar-width: none; padding: 2px 0;
 }
 .chips::-webkit-scrollbar { display: none; }
-.chip-group { flex: none; display: flex; align-items: center; gap: var(--s2); }
+.chip-group { flex: none; display: flex; align-items: center; gap: 6px; }
 .chip-group + .chip-group, .chip-group + .chip { margin-left: var(--s3); }
-.chip-cat { font-family: var(--kr); font-size: var(--t-micro); color: var(--faint); white-space: nowrap; padding-left: 2px; }
+.chip-cat { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.7); white-space: nowrap; padding-left: 2px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.4); }
 .chips[data-more="1"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
   mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
 .chip {
-  flex: none; background: var(--panel); border: 1px solid transparent;
-  border-radius: 999px; padding: 5px var(--s3);
-  font-family: var(--kr); font-size: var(--t-label); color: var(--ink-soft);
+  flex: none; background: var(--glass); border: 1px solid var(--glass-line);
+  border-radius: 999px; padding: 4px 11px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.9);
   transition: background-color .14s var(--ease), color .14s var(--ease), border-color .14s var(--ease);
 }
-.chip:hover { background: var(--panel-deep); }
+.chip:hover { background: var(--glass-strong); }
 .chip[aria-current="true"] { background: var(--indigo); border-color: var(--indigo); color: #fff; }
-.chip.spell { background: none; border-color: var(--line); color: var(--muted); }
+.chip.spell { background: rgba(14,15,19,.3); color: rgba(255,255,255,.75); }
 
-.bar-end { flex: none; display: flex; align-items: center; gap: var(--s3); }
+.bar-end { flex: none; display: flex; align-items: center; gap: 6px; }
+.bar-end > * { background: var(--glass); border: 1px solid var(--glass-line); border-radius: 999px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 
-/* 쓰는 손 — 왼손잡이는 그림을 뒤집어 보고, 판정도 같이 뒤집힌다 */
-.handswitch { display: flex; background: var(--panel); border-radius: 999px; padding: 2px; }
+/* 표 보기 스위치, 쓰는 손 — 왼손잡이는 그림을 뒤집어 보고, 판정도 같이 뒤집힌다 */
+.refswitch { display: inline-flex; align-items: center; gap: var(--s2); padding: 4px 11px 4px 6px;
+  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.85); white-space: nowrap; }
+.refswitch .track { width: 26px; height: 15px; border-radius: 999px; background: rgba(255,255,255,.28); position: relative; transition: background .15s; }
+.refswitch .knob { position: absolute; top: 2px; left: 2px; width: 11px; height: 11px; border-radius: 50%; background: #fff; transition: transform .15s; }
+.refswitch[aria-checked="true"] { color: #fff; font-weight: 600; }
+.refswitch[aria-checked="true"] .track { background: var(--indigo); }
+.refswitch[aria-checked="true"] .knob { transform: translateX(11px); }
+.handswitch { display: flex; padding: 2px; }
 .handswitch button {
-  background: none; border-radius: 999px; padding: 4px var(--s3);
-  font-family: var(--kr); font-size: var(--t-label); color: var(--muted);
+  background: none; border-radius: 999px; padding: 3px 10px;
+  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.75);
 }
 .handswitch button[aria-checked="true"] { background: var(--indigo); color: #fff; font-weight: 600; }
+.bar-end .ghost { background: var(--glass); border-color: var(--glass-line); color: rgba(255,255,255,.85); padding: 4px 11px; border-radius: 999px; }
+.bar-end .ghost:hover:not(:disabled) { background: var(--glass-strong); }
 
 /* ── 가운데: 카메라 ───────────────────────────── */
 .camera {
-  position: relative; flex: 1 1 auto; min-height: 0;
+  position: fixed; inset: 0;
   background: var(--panel); overflow: hidden;
 }
 .camera video, .camera canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -59,7 +79,7 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 
 .cam-empty {
   position: absolute; inset: 0; z-index: 2; overflow-y: auto;
-  padding: var(--s6) var(--s6) calc(clamp(104px, 22vh, 188px) + 96px); display: flex; flex-direction: column; gap: var(--s5);
+  padding: 76px var(--s6) 220px; display: flex; flex-direction: column; gap: var(--s5);
 }
 .camera.live .cam-empty { display: none; }
 .cam-prompt { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s5); flex-wrap: wrap; }
@@ -67,61 +87,48 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 .cam-body { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); margin: 0; max-width: 46ch; }
 .cam-actions { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
 
+.ref {
+  position: absolute; inset: 0; z-index: 4; overflow-y: auto;
+  padding: 76px var(--s6) 220px;
+  background: rgba(247,247,248,.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; flex-direction: column; gap: var(--s3);
+}
+.ref-title { font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--muted); margin: var(--s2) 0 0; }
+.ref button { cursor: pointer; }
+.ref-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: var(--s2); }
+.ref-words button { display: flex; flex-direction: column; gap: 4px; padding: 0 0 6px; background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--ink); }
+.ref-words img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 40%; background: #000; display: block; }
+.ref-words button:hover, .chart button:hover { border-color: var(--indigo-line); }
 .chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: var(--s2); align-content: start; }
-.chart figure {
+.chart figure, .chart button {
   margin: 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md);
   padding: var(--s1) 0 2px; display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
 .chart .sheet-art, .chart img { width: 100%; height: 54px; object-fit: contain; }
-.chart figcaption { font-family: var(--kr); font-weight: 600; font-size: var(--t-label); }
+.chart figcaption, .chart button span { font-family: var(--kr); font-weight: 600; font-size: var(--t-label); }
 
 /* 들은 말 · 읽어 준 말 */
 .spoken {
-  position: absolute; top: var(--s5); right: var(--s5); z-index: 3; margin: 0; max-width: 40ch;
+  position: absolute; top: 64px; right: var(--s4); z-index: 3; margin: 0; max-width: 40ch;
   background: var(--paper); border: 1px solid var(--jade); border-radius: var(--r-md);
   padding: var(--s2) var(--s4); font-family: var(--kr); font-size: var(--t-body);
   color: var(--jade); font-weight: 600;
 }
 
-/* 중하단 말하기 — 화면에서 제일 눈에 띄어야 한다 */
-.say {
-  position: absolute; left: 50%; bottom: calc(clamp(104px, 22vh, 188px) + var(--s5)); transform: translateX(-50%); z-index: 4;
-  display: flex; align-items: center; gap: var(--s2);
-  background: var(--paper); border: 1px solid var(--line-strong); border-radius: 999px;
-  padding: var(--s2); box-shadow: 0 2px 10px rgba(13,14,17,.06);
-}
-.say-btn {
-  display: inline-flex; align-items: center; gap: var(--s2);
-  background: var(--indigo); color: #fff; border-radius: 999px;
-  padding: 9px var(--s5); font-family: var(--kr); font-size: var(--t-lead); font-weight: 600;
-}
-.say-btn svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-.say-btn kbd { font: inherit; font-size: var(--t-micro); font-weight: 400; opacity: .7;
-  border: 1px solid rgba(255,255,255,.4); border-radius: 4px; padding: 0 5px; }
-.listening .say-btn { background: var(--jade); }
-.say input {
-  width: 230px; background: none; border: none; padding: 0 var(--s3);
-  font-family: var(--kr); font-size: var(--t-body);
-}
-.say input::placeholder { color: var(--faint); }
-.say input:focus { outline: none; }
-.say:focus-within { border-color: var(--indigo); }
-
-/* ── 아래: 가이드. 카메라의 1/3을 넘지 않는다 ───── */
-/* 가이드는 영상 위에 겹친다. 바탕을 반투명하게 어둡게 두어
-   아래 영상이 비치면서도 글씨와 그림이 또렷하게 읽히도록 한다. */
+/* ── 아래 가운데: 지금 할 동작 + 말하기를 카드 하나로 ─── */
+/* 영상 위에 뜬 반투명 카드. 폭을 줄여 양옆 영상을 비우고, 그림은 크게 둔다. */
 .guide {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
-  height: clamp(104px, 22vh, 188px);
-  display: flex; align-items: center; gap: var(--s5); padding: var(--s3) var(--s5);
-  background: linear-gradient(to top, rgba(10,11,14,.72), rgba(10,11,14,.52));
-  backdrop-filter: blur(10px) saturate(1.1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  position: fixed; left: 50%; bottom: var(--s4); transform: translateX(-50%); z-index: 5;
+  width: min(760px, calc(100% - 32px));
+  display: flex; align-items: stretch; gap: var(--s4); padding: 10px;
+  background: var(--glass-strong); border: 1px solid var(--glass-line); border-radius: 18px;
+  backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1);
   color: #fff;
 }
 .guide-art {
-  flex: none; margin: 0; height: 100%; aspect-ratio: 1; display: grid; place-items: center;
-  background: rgba(255,255,255,.92); border-radius: var(--r-md); overflow: hidden; padding: var(--s2);
+  flex: none; margin: 0; width: 148px; aspect-ratio: 1; display: grid; place-items: center; align-self: center;
+  background: rgba(255,255,255,.94); border-radius: 12px; overflow: hidden; padding: var(--s2);
 }
 .guide-art img, .guide-art .sheet-art { max-width: 100%; max-height: 100%; object-fit: contain; }
 /* 동작 여러 장을 겹쳐 두고 한 장만 보인다. 넘어갈 때 다시 불러오지 않아 끊기지 않는다. */
@@ -134,25 +141,49 @@ body { display: flex; flex-direction: column; overflow: hidden; }
 .guide-art:has(.word-pose) { background: #000; padding: 0; }
 .guide-art .word-pose { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 body[data-hand="right"] .guide-art img, body[data-hand="right"] .guide-art .sheet-art,
-body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art { transform: scaleX(-1); }
+body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art,
+body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 
-.guide-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--s2); }
-.guide-name { font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
+.guide-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.guide-head { display: flex; align-items: center; gap: var(--s3); min-width: 0; }
+.guide-name { flex: none; font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
   letter-spacing: var(--track-tight); margin: 0; color: #fff; }
 .guide-step { font-family: var(--kr); font-size: var(--t-body); color: rgba(255,255,255,.82); margin: 0; min-height: 1.5em; }
 /* 지금 무엇이 보이는지. 안 될 때 어디가 다른지 직접 견줘 볼 수 있어야 한다. */
-.seen { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.55); margin: 0; min-height: 1.4em; }
+.seen { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.55); margin: 0; }
+.seen:empty { display: none; }
 .seen b { font-weight: 600; color: rgba(255,255,255,.9); }
 .seen .off { color: var(--amber); font-weight: 600; }
-.track { height: 4px; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; max-width: 320px; }
+.guide-meter { display: flex; align-items: center; gap: var(--s3); }
+.track { flex: 1; height: 4px; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; max-width: 320px; }
 .fill { height: 100%; width: 0; background: var(--indigo); transition: width .1s linear, background-color .2s var(--ease); }
 .guide[data-state="hit"] .fill { background: var(--jade); }
 .guide[data-state="near"] .fill { background: var(--amber); }
 
-.guide-seq { flex: none; display: flex; align-items: center; gap: 3px; max-width: 42%; overflow-x: auto; scrollbar-width: none; }
+/* 말하기: 카드의 마지막 줄 */
+.say { display: flex; align-items: center; gap: var(--s2); margin-top: 2px;
+  background: rgba(255,255,255,.1); border: 1px solid var(--glass-line); border-radius: 999px; padding: 3px; }
+.say-btn {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--indigo); color: #fff; border-radius: 999px;
+  padding: 6px 14px; font-family: var(--kr); font-size: var(--t-body); font-weight: 600;
+}
+.say-btn svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.say-btn kbd { font: inherit; font-size: var(--t-micro); font-weight: 400; opacity: .7;
+  border: 1px solid rgba(255,255,255,.4); border-radius: 4px; padding: 0 5px; }
+.listening .say-btn { background: var(--jade); }
+.say input {
+  flex: 1; min-width: 0; background: none; border: none; padding: 0 var(--s2);
+  font-family: var(--kr); font-size: var(--t-body); color: #fff;
+}
+.say input::placeholder { color: rgba(255,255,255,.5); }
+.say input:focus { outline: none; }
+.say:focus-within { border-color: rgba(255,255,255,.4); }
+
+.guide-seq { flex: 1; min-width: 0; display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: none; }
 .guide-seq::-webkit-scrollbar { display: none; }
 .unit {
-  flex: none; min-width: 28px; height: 32px; padding: 0 var(--s2); border-radius: var(--r-sm);
+  flex: none; min-width: 24px; height: 26px; padding: 0 6px; border-radius: var(--r-sm);
   display: grid; place-items: center; font-family: var(--kr); font-weight: 600; font-size: 15px;
   white-space: nowrap; color: rgba(255,255,255,.55); background: rgba(255,255,255,.12);
   transition: color .16s var(--ease), background-color .16s var(--ease);
@@ -160,7 +191,8 @@ body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art { 
 .unit[data-state="done"] { color: #8ee0b4; background: rgba(60,158,107,.3); }
 .unit[data-state="now"] { color: #fff; background: var(--indigo); }
 .unit.gap { min-width: 7px; padding: 0; background: none; }
-.guide-read { flex: none; margin: 0; font-family: var(--kr); font-size: var(--t-label); color: #8ee0b4; max-width: 18ch; }
+.guide-read { flex: none; margin: 0; font-family: var(--kr); font-size: var(--t-label); color: #8ee0b4; max-width: 24ch;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* 맞아떨어지는 순간 — 이 화면의 유일한 비조작 모션 */
 @keyframes lockin { from { box-shadow: 0 0 0 0 rgba(60,158,107,.45); } to { box-shadow: 0 0 0 10px rgba(60,158,107,0); } }
@@ -198,13 +230,14 @@ dialog a { color: var(--indigo); }
 
 /* ── 좁은 화면 ──────────────────────────────── */
 @media (max-width: 760px) {
-  .bar { height: auto; flex-wrap: wrap; padding: var(--s2) var(--s3); gap: var(--s2); }
+  .bar { flex-wrap: wrap; padding: var(--s2) var(--s3) var(--s4); gap: var(--s2); }
   .chips { order: 3; flex-basis: 100%; }
   .bar-end { margin-left: auto; }
-  .say { width: calc(100% - var(--s6)); flex-direction: column; border-radius: var(--r-lg); bottom: var(--s4); }
-  .say input { width: 100%; text-align: center; }
-  .guide { height: auto; flex-wrap: wrap; gap: var(--s3); }
-  .guide-art { height: 68px; }
-  .guide-seq { max-width: 100%; }
-  .guide-read { flex-basis: 100%; max-width: none; }
+  .refswitch { font-size: 0; gap: 0; padding: 5px 6px; }      /* 좁으면 스위치만 */
+  .spoken { top: 100px; }
+  .guide { bottom: var(--s2); width: calc(100% - 16px); gap: var(--s3); padding: 8px; }
+  .guide-art { width: 104px; }
+  .guide-name { font-size: var(--t-lead); }
+  .say-btn kbd { display: none; }
+  .cam-empty, .ref { padding-top: 112px; }
 }

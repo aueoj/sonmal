@@ -14,7 +14,7 @@ await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidl
 
 // 지문자: 글자마다 한 번씩 읽어야 한다
 await p.fill('#typed', '과자나라'); await p.press('#typed', 'Enter');
-await p.click('#btn-cam');
+await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForFunction(() => window.__spoken.length >= 4, null, { timeout: 40000 }).catch(() => {});
 const spell = await p.evaluate(() => window.__spoken.slice());
 console.log('지문자 과자나라 →', JSON.stringify(spell));
