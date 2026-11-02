@@ -449,7 +449,8 @@ export const WORD_BANK = [
   "aliases": [
     "가요",
     "갑니다",
-    "가자"
+    "가자",
+    "갔어요"
   ],
   "status": "ok",
   "원문": "오른손을 펴서 손등이 밖으로 손끝이 아래로 향하게 하여 내밀며 손끝을 약간 들어 올린다.",
@@ -872,6 +873,182 @@ export const WORD_BANK = [
       "hands": 1,
       "zone": "face",
       "fingers": []
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(6442, {
+  "word": "내일",
+  "category": "생활",
+  "aliases": [
+    "명일"
+  ],
+  "status": "ok",
+  "원문": "오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 오른쪽 눈 옆에 댔다가 밖으로 내민다.",
+  "hands": 1,
+  "수형": "검지만 편 오른 주먹",
+  "수향": "검지 바닥이 밖을 향함",
+  "수위": "오른쪽 눈 옆에서 앞으로",
+  "수동": "오른쪽 눈 옆에서 밖으로 내민다",
+  "steps": [
+    "검지를 펴서 바닥이 밖을 향하게 오른쪽 눈 옆에 세운다",
+    "검지를 세운 채 손을 밖으로 내민다"
+  ],
+  "check": [
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "front",
+      "fingers": [
+        "index"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(8218, {
+  "word": "어제",
+  "category": "생활",
+  "aliases": [
+    "어저께",
+    "작일"
+  ],
+  "status": "ok",
+  "원문": "오른 주먹의 1지를 펴서 세워 오른쪽 어깨 너머로 넘긴다.",
+  "hands": 1,
+  "수형": "검지만 편 오른 주먹",
+  "수향": "검지를 세움",
+  "수위": "오른쪽 어깨 너머",
+  "수동": "검지를 세운 손을 오른쪽 어깨 너머로 넘긴다",
+  "steps": [
+    "오른 검지를 펴서 세운다",
+    "오른쪽 어깨 너머로 손을 넘긴다"
+  ],
+  "check": [
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(9694, {
+  "word": "우유",
+  "category": "생활",
+  "aliases": [],
+  "status": "ok",
+  "원문": "오른손을 펴서 오른쪽 가슴에 대고 두 번 구부렸다 편다.",
+  "hands": 1,
+  "수형": "오른손을 폈다 구부림",
+  "수향": "오른쪽 가슴을 향함",
+  "수위": "오른쪽 가슴",
+  "수동": "두 번 구부렸다 편다",
+  "steps": [
+    "오른손을 펴서 오른쪽 가슴에 댄다",
+    "손가락을 구부린다 (첫 번째)",
+    "손가락을 다시 편다",
+    "손가락을 구부린다 (두 번째)",
+    "손가락을 다시 편다"
+  ],
+  "check": [
+    {
+      "hands": 1,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "chest",
+      "fingers": []
+    },
+    {
+      "hands": 1,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "chest",
+      "fingers": []
+    },
+    {
+      "hands": 1,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(8198, {
+  "word": "커피",
+  "category": "생활",
+  "aliases": [],
+  "status": "ok",
+  "원문": "오른 주먹의 1지를 펴서 끝 바닥을 코에 댄 다음, 그 끝을 둥굴게 구부려 모로 세운 왼손 안에 넣어 돌린다.",
+  "hands": 2,
+  "수형": "오른 검지를 펴고 끝을 둥글게 구부림·왼손은 모로 세움",
+  "수향": "오른 검지 끝이 왼손 안을 향함",
+  "수위": "코에서 가슴 앞",
+  "수동": "검지 끝 바닥을 코에 댄 뒤 왼손 안에 넣어 돌린다",
+  "steps": [
+    "오른 검지 끝 바닥을 코에 댄다",
+    "검지 끝을 둥글게 구부려 모로 세운 왼손 안에 넣어 돌린다"
+  ],
+  "check": [
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index"
+      ],
+      "other": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
     }
   ],
   "sourceCheckedAt": "2026-11-03",

@@ -34,12 +34,12 @@ await p.waitForTimeout(600);
 
 const total = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-i]').length);
 // 멈춤은 '시간이 얼마 지났나'가 아니라 '진행이 멈춘 채 얼마나 있었나'로 본다.
-const STALL_MS = 10000, DEADLINE = Date.now() + 90000;   // 동작 한 장에 2.5초, 세 장이면 7.5초 동안 진행이 멈춰 보인다
+const STALL_MS = 20000, DEADLINE = Date.now() + 90000;   // 우유처럼 다섯 단계인 낱말은 확정까지 12.5초 이상 걸릴 수 있다
 let last = -1, lastChange = Date.now(), stuckAt = null;
 while (Date.now() < DEADLINE) {
   const done = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-state="done"]').length);
   if (done >= total) break;
-  // 단어 수어 구간은 인식하지 않는다. 사람이 누르듯 '다음'을 눌러 넘긴다.
+  // 낱말은 모든 단계의 모의 손모양이 통과할 때까지 기다린다.
   if (done !== last) { last = done; lastChange = Date.now(); }
   else if (Date.now() - lastChange > STALL_MS) { stuckAt = done; break; }
   await p.waitForTimeout(250);
