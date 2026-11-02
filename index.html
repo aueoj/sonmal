@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611021529">
+<meta name="build" content="202611022300">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611021529">
-<link rel="stylesheet" href="css/app.css?v=202611021529">
+<link rel="stylesheet" href="css/tokens.css?v=202611022300">
+<link rel="stylesheet" href="css/app.css?v=202611022300">
 </head>
 <body>
 <script>
@@ -144,12 +144,19 @@ if (location.protocol === 'file:') {
   </div>
 </section>
 
+<dialog id="phrases" aria-labelledby="phrases-title" aria-describedby="phrases-note">
+  <h2 id="phrases-title">문장으로 낱말 이어 연습하기</h2>
+  <p id="phrases-note">국립국어원 사전에서 확인한 낱말 그림을 한국어 순서로 이어 봅니다. 한국수어 문장 번역은 아닙니다.</p>
+  <div id="phrase-list"></div>
+  <form method="dialog"><button class="primary" type="submit">닫기</button></form>
+</dialog>
+
 <dialog id="sources" aria-labelledby="sources-title">
   <h2 id="sources-title">이 연습 도구가 선 자리</h2>
   <div id="sources-body"></div>
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js?v=202611021529"></script>
+<script type="module" src="js/app.js?v=202611022300"></script>
 </body>
 </html>

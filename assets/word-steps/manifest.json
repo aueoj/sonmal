@@ -5,16 +5,25 @@
       "word": "안녕하세요",
       "slug": "sl3331-01",
       "frame": 1,
-      "total": 2,
+      "total": 3,
       "basis": "sldict",
-      "step": "왼 주먹을 쥐고 오른 손바닥으로 왼팔을 쓸어내린다",
+      "step": "왼 주먹을 쥐고 오른 손바닥을 왼 팔꿈치 쪽 팔등에 댄다",
       "entryNo": "3331"
     },
     {
       "word": "안녕하세요",
       "slug": "sl3331-02",
       "frame": 2,
-      "total": 2,
+      "total": 3,
+      "basis": "sldict",
+      "step": "오른 손바닥으로 왼 팔등을 따라 손목 쪽까지 쓸어내린다",
+      "entryNo": "3331"
+    },
+    {
+      "word": "안녕하세요",
+      "slug": "sl3331-03",
+      "frame": 3,
+      "total": 3,
       "basis": "sldict",
       "step": "두 주먹을 가슴 앞에서 아래로 내린다",
       "entryNo": "3331"
@@ -72,6 +81,15 @@
       "basis": "sldict",
       "step": "새끼손가락 끝을 턱에 가볍게 두 번 댄다",
       "entryNo": "9466"
+    },
+    {
+      "word": "네",
+      "slug": "sl9474-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "검지와 중지, 새끼를 펴서 검지와 중지 끝을 오른쪽 눈 옆에 댄다",
+      "entryNo": "9474"
     },
     {
       "word": "아니요",
@@ -576,6 +594,186 @@
       "basis": "sldict",
       "step": "오른 주먹의 새끼손가락 쪽으로 왼 주먹 윗면을 두드린다 (두 번)",
       "entryNo": "12326"
+    },
+    {
+      "word": "이름",
+      "slug": "sl7059-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "검지와 엄지를 왼쪽으로 펴서 왼쪽 가슴에 옆면을 댄다",
+      "entryNo": "7059"
+    },
+    {
+      "word": "수어",
+      "slug": "sl11290-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지만 편 두 주먹을 가슴 앞 위아래에 놓는다",
+      "entryNo": "11290"
+    },
+    {
+      "word": "수어",
+      "slug": "sl11290-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 검지를 엇갈리게 돌려 위아래 위치를 바꾼다",
+      "entryNo": "11290"
+    },
+    {
+      "word": "배우다",
+      "slug": "sl9131-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지를 펴서 끝이 코를 향하도록 구부린다",
+      "entryNo": "9131"
+    },
+    {
+      "word": "배우다",
+      "slug": "sl9131-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "구부린 검지를 코 쪽으로 당긴다 (두 번 반복)",
+      "entryNo": "9131"
+    },
+    {
+      "word": "병원",
+      "slug": "sl10964-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지·중지 끝으로 편 왼 손등을 두 번 두드린다",
+      "entryNo": "10964"
+    },
+    {
+      "word": "병원",
+      "slug": "sl10964-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손의 손끝을 맞대어 좌우로 비스듬히 세운다",
+      "entryNo": "10964"
+    },
+    {
+      "word": "가다",
+      "slug": "sl11796-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 펴 손등이 밖으로, 손끝이 아래로 향하게 한다",
+      "entryNo": "11796"
+    },
+    {
+      "word": "가다",
+      "slug": "sl11796-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 앞으로 내밀며 손끝을 약간 들어 올린다",
+      "entryNo": "11796"
+    },
+    {
+      "word": "오다",
+      "slug": "sl7704-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 주먹의 검지를 펴 몸 앞에 든다",
+      "entryNo": "7704"
+    },
+    {
+      "word": "오다",
+      "slug": "sl7704-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손등이 밖을 향한 채 몸 가까이로 당긴다",
+      "entryNo": "7704"
+    },
+    {
+      "word": "가족",
+      "slug": "sl6770-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손끝을 맞대어 지붕처럼 비스듬히 세운다",
+      "entryNo": "6770"
+    },
+    {
+      "word": "가족",
+      "slug": "sl6770-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼손은 그대로 두고 오른 엄지·새끼를 펴 손목을 흔들며 오른쪽으로 조금 옮긴다",
+      "entryNo": "6770"
+    },
+    {
+      "word": "사랑",
+      "slug": "sl8240-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "모로 세운 왼 주먹 위에 오른 손바닥을 댄다",
+      "entryNo": "8240"
+    },
+    {
+      "word": "사랑",
+      "slug": "sl8240-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 주먹은 그대로 두고 오른손만 오른쪽으로 돌린다",
+      "entryNo": "8240"
+    },
+    {
+      "word": "잘하다",
+      "slug": "sl9543-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 왼 팔꿈치 쪽 팔등에 댄다",
+      "entryNo": "9543"
+    },
+    {
+      "word": "잘하다",
+      "slug": "sl9543-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 팔등을 따라 손목 쪽으로 스쳐 내린다",
+      "entryNo": "9543"
+    },
+    {
+      "word": "있다",
+      "slug": "sl8966-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "엄지와 새끼를 펴고 엄지 끝을 코끝에 댄다",
+      "entryNo": "8966"
+    },
+    {
+      "word": "없다",
+      "slug": "sl9846-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼손을 모로 세우고 오른 손끝이 왼 손바닥을 향하게 한다",
+      "entryNo": "9846"
+    },
+    {
+      "word": "없다",
+      "slug": "sl9846-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 손바닥 안에서 오른손을 좌우로 움직인다",
+      "entryNo": "9846"
     }
   ]
 }

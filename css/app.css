@@ -136,7 +136,7 @@ body[data-facing="environment"] .camera video { transform: none; }
 .ref-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: var(--s2); }
 .ref-words button { display: flex; flex-direction: column; gap: 4px; padding: 0 0 6px; background: var(--paper);
   border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--ink); }
-.ref-words img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 40%; background: #000; display: block; }
+.ref-words img { width: 100%; aspect-ratio: 1; object-fit: contain; object-position: center; background: #000; display: block; }
 .ref-words button:hover, .chart button:hover { border-color: var(--indigo-line); }
 .chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: var(--s2); align-content: start; }
 .chart figure, .chart button {
@@ -179,9 +179,9 @@ body[data-facing="environment"] .camera video { transform: none; }
 .recall-peek { position: absolute; inset: auto 8px 8px 8px; z-index: 2; background: rgba(255,255,255,.92); color: var(--ink);
   border-radius: 999px; padding: 5px 0; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; }
 /* 도표의 손은 왼손으로 그려져 있다. 오른손을 고르면 뒤집어 보여 준다. */
-/* 단어 그림은 검은 바탕에 인물이 가운데 있다. 정사각 칸을 꽉 채워 양옆 검은 여백만 잘라 손을 크게 보인다. */
+/* 단어 그림은 검은 바탕에 인물이 가운데 있다. 옆으로 뻗은 손끝도 잘리지 않도록 전체 가로 그림을 칸 안에 담는다. */
 .guide-art:has(.word-pose) { background: #000; padding: 0; }
-.guide-art .word-pose { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.guide-art .word-pose { inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
 body[data-hand="right"] .guide-art img, body[data-hand="right"] .guide-art .sheet-art,
 body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art,
 body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
@@ -304,3 +304,19 @@ dialog a { color: var(--indigo); }
   .talk { top: 100px; width: calc(100% - 16px); }
   .modeswitch button { padding: 3px 8px; }
 }
+
+/* 한 손을 옆으로 미는 쌍자음. 정지 화면에서도 화살표로 방향이 남는다. */
+.jamo-slide { display: inline-flex; position: relative; width: 100%; height: 100%; align-items: center; justify-content: center; }
+.jamo-slide-hand { display: block; width: 64%; height: 82%; animation: jamo-slide 2.2s ease-in-out infinite; }
+.jamo-slide-hand .sheet-art { width: 100%; height: 100%; }
+.jamo-slide-arrow { position: absolute; bottom: 0; left: 38%; color: #172846; font-size: clamp(20px, 4vw, 40px); line-height: 1; }
+@keyframes jamo-slide { 0%,20% { transform: translateX(-15%); } 65%,90% { transform: translateX(15%); } 100% { transform: translateX(-15%); } }
+@media (prefers-reduced-motion: reduce) { .jamo-slide-hand { animation: none; } }
+
+#phrases { width: min(680px, calc(100vw - 32px)); max-height: 85dvh; overflow-y: auto; box-sizing: border-box; }
+#phrase-list section { margin-bottom: 20px; }
+#phrase-list h3 { font-size: 15px; margin: 16px 0 8px; }
+.phrase-choice { display: block; text-align: left; width: 100%; border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 8px; padding: 10px 12px; margin: 6px 0; }
+.phrase-choice strong, .phrase-choice span { display: block; }
+.phrase-choice span { font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+.phrase-choice:hover { border-color: var(--indigo); }

@@ -47,7 +47,7 @@ export const CONSONANTS = [
     note: '검지와 중지를 붙여 펴고 옆으로 뻗는다.',
     mnemonic: '나란한 두 획이 ㄷ의 위아래 가로획이다.' }),
   mk('ㄹ', 'consonant', [I, M, R], 'right', 'side', {
-    note: '검지·중지·약지를 펴고 옆으로 뻗는다.',
+    note: '검지·중지·약지를 나란히 옆으로 뻗는다. 치읓처럼 아래로 내리지 않는다.',
     mnemonic: '세 획이 ㄹ의 가로획 셋이다.' }),
   mk('ㅁ', 'consonant', [], 'up', 'back', {
     note: '손가락을 모두 접어 주먹을 쥔다. 손등이 보인다.',
@@ -160,33 +160,14 @@ export const VOWELS = [
     mnemonic: 'ㅡ 다음에 ㅣ가 오는 것이 ㅢ다.', confidence: 'check' })
 ];
 
-/* 쌍자음 — 도표는 쌍자음을 손 두 개로 그린다.
-   처음에는 '기본 자음 손모양을 두 손으로'라고 두었지만, 도표를 한 장씩 대 보니
-   그대로인 것은 ㄸ 하나뿐이었다. 일러스트가 기준이므로 도표에 그려진 손모양을 그대로 적는다.
-     ㄲ  검지를 아래로. ㄱ과 달리 엄지를 옆으로 뻗지 않는다
-     ㄸ  검지와 중지를 옆으로 (ㄷ과 같다)
-     ㅃ  검지와 중지를 붙여 세운다. ㅂ의 네 손가락이 아니다
-     ㅆ  엄지와 검지로 고리를 만들고 세 손가락을 세운다. ㅅ이 아니라 ㅇ의 손모양이다
-     ㅉ  검지, 중지, 약지를 옆으로 뻗는다. ㅈ과 다르다 */
-const TWO = { hands: 2 };
-export const MOTION_LETTERS = [
-  mk('ㄲ', 'consonant', [I], 'down', 'back', { ...TWO, base: 'ㄱ',
-    note: '두 손 모두 검지만 펴서 아래로 내린다. 엄지는 접는다.',
-    mnemonic: 'ㄱ을 두 손으로 하면 ㄲ이다. 도표의 ㄲ은 엄지를 뻗지 않는다.' }),
-  mk('ㄸ', 'consonant', [I, M], 'right', 'side', { ...TWO, base: 'ㄷ',
-    note: '두 손 모두 검지와 중지를 붙여 펴서 옆으로 뻗는다.',
-    mnemonic: 'ㄷ을 두 손으로 하면 ㄸ이다.' }),
-  mk('ㅃ', 'consonant', [I, M], 'up', 'palm', { ...TWO, base: 'ㅂ',
-    note: '두 손 모두 검지와 중지를 붙여 세우고, 엄지로 약지와 새끼손가락을 누른다.',
-    mnemonic: '도표의 ㅃ은 네 손가락이 아니라 두 손가락을 세운다.' }),
-  mk('ㅆ', 'consonant', [M, R, P], 'up', 'palm', { ...TWO, base: 'ㅅ',
-    special: 'circle', thumb: 'circle',
-    note: '두 손 모두 엄지와 검지 끝을 맞대 고리를 만들고 나머지 세 손가락을 세운다.',
-    mnemonic: '도표의 ㅆ은 ㅅ이 아니라 고리 손 두 개다.' }),
-  mk('ㅉ', 'consonant', [I, M, R], 'right', 'back', { ...TWO, base: 'ㅈ',
-    note: '두 손 모두 검지, 중지, 약지를 붙여 펴서 옆으로 뻗는다.',
-    mnemonic: '도표의 ㅉ은 세 손가락을 옆으로 뻗은 손 두 개다.' })
-];
+/* 쌍자음: 기본 자음의 한 손 수형을 그대로 유지하고 옆으로 한 번 민다.
+   두 손이나 손가락 두 번 표현은 사용하지 않는다. */
+export const MOTION_LETTERS = Object.entries({ 'ㄲ': 'ㄱ', 'ㄸ': 'ㄷ', 'ㅃ': 'ㅂ', 'ㅆ': 'ㅅ', 'ㅉ': 'ㅈ' })
+  .map(([jamo, base]) => ({
+    ...CONSONANTS.find(p => p.jamo === base), jamo, base, hands: 1, motion: 'slide',
+    note: `${base} 손모양을 한 손으로 유지한 채 손 전체를 옆으로 한 번 미세요.`,
+    mnemonic: `${base}의 수형 + 옆으로 밀기 = ${jamo}`
+  }));
 
 export const ALL_POSES = [...CONSONANTS, ...VOWELS, ...MOTION_LETTERS];
 export const POSE_BY_JAMO = new Map(ALL_POSES.map(p => [p.jamo, p]));

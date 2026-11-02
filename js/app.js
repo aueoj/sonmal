@@ -8,19 +8,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021529';
-import { getPose } from './jamoData.js?v=202611021529';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021529';
-import { describe } from './poseFeatures.js?v=202611021529';
-import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021529';
-import { Tracker } from './tracker.js?v=202611021529';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021529';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021529';
-import { groupByIdea } from './lessons.js?v=202611021529';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021529';
-import { createReader } from './reader.js?v=202611021529';
-import { SITUATIONS } from './lessons.js?v=202611021529';
-import { diagnose } from './diagnose.js?v=202611021529';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611022300';
+import { getPose } from './jamoData.js?v=202611022300';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611022300';
+import { describe } from './poseFeatures.js?v=202611022300';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611022300';
+import { Tracker } from './tracker.js?v=202611022300';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611022300';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611022300';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611022300';
+import { groupByIdea } from './lessons.js?v=202611022300';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611022300';
+import { createReader } from './reader.js?v=202611022300';
+import { SITUATIONS } from './lessons.js?v=202611022300';
+import { diagnose } from './diagnose.js?v=202611022300';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -59,7 +60,7 @@ const state = {
   seq: [], at: -1, got: [],
   tracker: null, listener: null, live: false,
   hand: 'right',
-  holdSince: 0, trail: [], scores: [], lastStep: '',
+  holdSince: 0, trail: [], scores: [], motionSeen: false, lastStep: '',
   wordTimer: null, wordStep: 0, wordGot: 0, wordHold: 0, wordLost: 0,
   lostSince: 0, repeatTimer: null, spokenPart: -1,
   mode: 'practice', reading: false, reader: null, facing: 'user', recall: false, active: null,
@@ -147,7 +148,7 @@ function paintChips(active = state.active) {
 const STAGE_LABEL = ['', '그림 보고 해 봄', '다음엔 그림 없이', '그림 없이 해냄'];
 function renderChips() {
   const all = loadProgress();
-  el.chips.innerHTML = groupByIdea(WORD_SIGNS).map(g => {
+  el.chips.innerHTML = '<button class="chip" type="button" data-open-phrases="1">문장 연습</button>' + groupByIdea(WORD_SIGNS).map(g => {
     const done = g.signs.filter(w => stageOf(w.word, all) >= 1).length;
     return `<span class="chip-group" role="group" aria-label="${g.name}"><span class="chip-cat" aria-hidden="true">${g.name} <em>${done}/${g.signs.length}</em></span>`
       + g.signs.map(w => {
@@ -185,7 +186,7 @@ function advance() {
     i++;
   }
   state.at = i;
-  state.holdSince = 0; state.trail = []; state.scores = [];
+  state.holdSince = 0; state.trail = []; state.scores = []; state.motionSeen = false;
 
   if (i >= state.seq.length) return finish();
 
@@ -207,6 +208,7 @@ function advance() {
   el.name.textContent = u.jamo;
   el.step.textContent = pose.note;
   el.meta.replaceChildren();
+  el.seen.textContent = '';
   el.guide.dataset.state = '';
   el.fill.style.width = '0%';
   if (state.tracker?.mock && !state.mockLocked) state.tracker.setMockPose(pose);
@@ -451,7 +453,7 @@ function onFrame(hands, face = null) {
       el.seen.textContent = needTwo ? `지금 ${hands.length}손 / 필요 2손` : '';
       el.fill.style.width = '0%';
       el.guide.dataset.state = '';
-      state.holdSince = 0; state.scores = [];
+      state.holdSince = 0; state.scores = []; state.trail = []; state.motionSeen = false;
     }
     return;
   }
@@ -468,7 +470,8 @@ function onFrame(hands, face = null) {
     const alt = scorePose(feats[i], base0, { mirrored });
     if (alt.score > r.score) { feat = feats[i]; r = alt; }
   }
-  state.trail.push({ x: feat.centroid.x, t });
+  if (r.score < ACCEPT) { state.trail = []; state.motionSeen = false; }
+  else state.trail.push({ x: feat.centroid.x, t });
   while (state.trail.length && t - state.trail[0].t > MOTION_WINDOW_MS * 1.5) state.trail.shift();
 
   const score = r.score;
@@ -480,7 +483,11 @@ function onFrame(hands, face = null) {
 
   el.fill.style.width = `${Math.round(smooth * 100)}%`;
   el.guide.dataset.state = smooth >= ACCEPT ? 'hit' : smooth >= NEAR ? 'near' : '';
-  const line = smooth >= ACCEPT ? pose.note : (hint ?? pose.note);
+  if (pose.motion && detectLateralShift(state.trail, feat.scale, t) >= 0.35) state.motionSeen = true;
+  const motionReady = !pose.motion || state.motionSeen;
+  const line = smooth >= ACCEPT && !motionReady
+    ? '손모양은 맞아요. 그대로 손 전체를 옆으로 한 번 미세요.'
+    : smooth >= ACCEPT ? pose.note : (hint ?? pose.note);
   if (line !== state.lastStep) { el.step.textContent = line; state.lastStep = line; }
 
   // 무엇이 보이고 무엇이 필요한지 나란히 둔다
@@ -492,7 +499,7 @@ function onFrame(hands, face = null) {
 
   if (smooth >= ACCEPT) {
     if (!state.holdSince) state.holdSince = t;
-    if (t - state.holdSince >= HOLD_MS) {
+    if (t - state.holdSince >= HOLD_MS && motionReady) {
       const node = el.seq.querySelector(`[data-i="${state.at}"]`);
       if (node) node.dataset.lock = '1';
       state.got.push(current.jamo);
@@ -541,7 +548,8 @@ async function startCamera({ demo = false } = {}) {
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
     if (MOCK) window.__sonmalMock = (jamo, zone = null) => {
       state.mockLocked = true;          // 점검이 손을 쥐는 동안 앱이 모의 손을 바꾸지 않는다
-      state.tracker.mockZone = zone;    // 손을 둘 높이(얼굴, 가슴 들). 없으면 그 자리 그대로 state.tracker.mockMotion = false; state.tracker.mockPose2 = null;
+      state.tracker.mockZone = zone;    // 손을 둘 높이(얼굴, 가슴 들). 없으면 그 자리 그대로
+      state.tracker.mockMotion = false; state.tracker.mockPose2 = null;
       const p = jamo ? getPose(jamo) : null;
       state.tracker.mockTwoHands = p?.hands === 2;
       state.tracker.setMockPose(p);
@@ -650,9 +658,27 @@ function init() {
   setHand('right');
 
   renderChips();
+  const phraseList = $('phrase-list');
+  for (const group of PHRASE_GROUPS) {
+    const section = document.createElement('section');
+    const heading = document.createElement('h3'); heading.textContent = group.name; section.append(heading);
+    for (const text of group.texts) {
+      const plan = phrasePlan(text);
+      if (!plan.ready) continue; // 그림이 모두 연결된 문장만 제공한다.
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'phrase-choice';
+      const label = document.createElement('strong'); label.textContent = text;
+      const sequence = document.createElement('span'); sequence.textContent = plan.parts.map(p => p.sign.word).join(' → ');
+      button.append(label, sequence);
+      button.addEventListener('click', () => { $('phrases').close(); sayAndPractice(text); });
+      section.append(button);
+    }
+    phraseList.append(section);
+  }
   el.chips.addEventListener('click', e => {
     const b = e.target.closest('.chip');
-    if (b) sayAndPractice(b.dataset.word);
+    if (b?.dataset.openPhrases) $('phrases').showModal();
+    else if (b?.dataset.word) sayAndPractice(b.dataset.word);
   });
   /* 칩이 넘치면 오른쪽 끝을 흐리게 해 더 있다는 것을 보인다. 끝까지 밀면 흐림을 걷는다. */
   const markMore = () => {
