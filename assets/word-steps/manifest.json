@@ -774,6 +774,69 @@
       "basis": "sldict",
       "step": "왼 손바닥 안에서 오른손을 좌우로 움직인다",
       "entryNo": "9846"
+    },
+    {
+      "word": "엄마",
+      "slug": "sl8214-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지 끝 바닥을 코 오른쪽에 댄다",
+      "entryNo": "8214"
+    },
+    {
+      "word": "엄마",
+      "slug": "sl8214-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 떼며 검지를 접고 새끼손가락을 세운다",
+      "entryNo": "8214"
+    },
+    {
+      "word": "아빠",
+      "slug": "sl2570-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지 끝을 코 오른쪽에 댄다",
+      "entryNo": "2570"
+    },
+    {
+      "word": "아빠",
+      "slug": "sl2570-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 떼며 검지를 접고 손바닥이 밖을 향하도록 엄지를 세운다",
+      "entryNo": "2570"
+    },
+    {
+      "word": "오늘",
+      "slug": "sl7703-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 가슴 앞에 펴고 손등은 위로, 손끝은 밖으로 향한다",
+      "entryNo": "7703"
+    },
+    {
+      "word": "오늘",
+      "slug": "sl7703-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 함께 약간 아래로 내린다",
+      "entryNo": "7703"
+    },
+    {
+      "word": "자다",
+      "slug": "sl12264-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "오른 주먹을 베고 머리를 오른쪽으로 약간 기울인다",
+      "entryNo": "12264"
     }
   ]
 }
