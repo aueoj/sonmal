@@ -16,21 +16,30 @@ await p.evaluate(() => window.__sonmalMock(null));
 await p.waitForTimeout(3500);
 const stillFirst = await frame();
 
-// 2) 첫 동작을 하면 둘째 그림으로 넘어간다
-await p.evaluate(() => window.__sonmalMock('ㅂ'));
+// 2) 첫 동작을 하면 둘째 그림으로 넘어간다 ('아니요'는 가슴 앞에서 편 손)
+await p.evaluate(() => window.__sonmalMock('ㅂ', 'chest'));
 // waitForFunction 은 CI 의 Playwright 에서 페이지 CSP(unsafe-eval 금지)에 막힌다. 직접 되묻는다.
 for (let i = 0; i < 40 && (await frame()) !== '1'; i++) await p.waitForTimeout(200);
 const second = await frame();
 
 // 3) 같은 자세로 가만히 있으면 둘째 동작으로 치지 않는다
-await p.evaluate(() => window.__sonmalMock('ㅂ'));
+await p.evaluate(() => window.__sonmalMock('ㅂ', 'chest'));
 await p.waitForTimeout(3000);
 const frozen = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-state="done"]').length);
 const why = await seen();
 
+// 4) 얼굴 기준 높이: 같은 손모양이라도 얼굴 앞에 들면 가슴 동작으로 치지 않는다
+await p.fill('#typed', '아니요'); await p.press('#typed', 'Enter');
+await p.evaluate(() => window.__sonmalMock('ㅂ', 'face'));
+await p.waitForTimeout(2500);
+const highFrame = await frame();
+const highWhy = await seen();
+
 console.log(`손 없이 3.5초 뒤 그림  ${stillFirst} (0이어야 함)`);
 console.log(`첫 동작 뒤 그림       ${second} (1이어야 함)`);
 console.log(`가만히 3초 뒤 끝난 칸  ${frozen} (0이어야 함)  안내 "${why}"`);
+console.log(`얼굴 앞에서 2.5초 뒤 그림 ${highFrame} (0이어야 함)  안내 "${highWhy}"`);
 console.log('오류', errs.length ? errs : '없음');
 await b.close();
-process.exit(stillFirst === '0' && second === '1' && frozen === 0 && !errs.length ? 0 : 1);
+const highOk = highFrame === '0' && highWhy.includes('가슴');
+process.exit(stillFirst === '0' && second === '1' && frozen === 0 && highOk && !errs.length ? 0 : 1);

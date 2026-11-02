@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021424';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021458';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -149,14 +149,41 @@ export { angleToDir };
  *   other   두 손 낱말에서 다른 손의 펴진 손가락. 없으면 두 손이 같은 손모양이다(fingers 를 따른다)
  *   ring    엄지와 검지 끝을 맞대 고리를 만드는가
  *   thumb   'up' 이면 엄지를 세운다
- *   zone    손이 머무는 높이. 얼굴, 턱, 배만 본다. 가슴과 몸 앞은 보지 않는다
- * 손 높이는 얼굴을 찾지 않고 화면 속 손의 세로 위치로 어림한다. 그래서 너그럽게 잡았다.
+ *   zone    손이 머무는 높이(얼굴, 턱, 가슴, 배, 몸 앞)
+ *
+ * 손 높이는 얼굴을 기준으로 잰다. 손 중심이 코끝에서 얼굴 높이 몇 개만큼 아래에
+ * 있는지(u)로 본다. 카메라와 떨어진 거리, 카메라 각도가 달라도 몸에 대한 위치는
+ * 그대로라서 화면 비율로 어림하던 것보다 덜 빗나간다.
+ * 얼굴 상자(눈썹 언저리에서 턱까지) 높이를 1로 두고 코끝에서 잴 때 몸의 대략적인 자리:
+ *   턱 0.4, 목 아래 오목한 곳 1.1, 가슴 한가운데 2.1, 배꼽 3.3
+ * (얼굴 상자를 18cm 남짓으로 두고 성인 몸 치수로 어림한 값. 그림 속 인물로 얼굴 상자가
+ *  이마에서 턱까지 잡히고 턱이 0.4 언저리에 오는 것을 확인했다)
+ * 기준선은 이 자리들 사이에 너그럽게 두었다. 몸 앞은 보지 않는다.
+ * 얼굴이 안 보이면(손이 얼굴을 가린 채 오래 있거나 얼굴이 화면 밖) 예전처럼 화면 속
+ * 세로 위치로 어림하고, 가슴은 보지 않는다.
  */
 const ZONE = {
-  face:  { ok: y => y < 0.58, hint: '손을 얼굴 높이로 올리세요' },
-  chin:  { ok: y => y < 0.62, hint: '손을 턱 높이로 올리세요' },
-  belly: { ok: y => y > 0.42, hint: '손을 배 높이로 내리세요' }
+  face:  { inFace: u => u < 0.9, onScreen: y => y < 0.58, hint: () => '손을 얼굴 앞으로 올리세요' },
+  chin:  { inFace: u => u < 1.2, onScreen: y => y < 0.62, hint: () => '손을 턱 앞으로 올리세요' },
+  chest: { inFace: u => u > 0.6 && u < 3.4, onScreen: null,
+           hint: u => (u <= 0.6 ? '손을 가슴 앞으로 내리세요' : '손을 가슴 앞으로 올리세요') },
+  belly: { inFace: u => u > 2.0, onScreen: y => y > 0.42, hint: () => '손을 배 앞으로 내리세요' }
 };
+
+/* 높이마다 손 중심이 보통 머무는 자리(u). 모의 입력과 시험이 손을 이 자리에 둔다. */
+export const ZONE_AT = { face: 0, chin: 0.6, chest: 1.8, front: 1.6, belly: 3.0 };
+
+/** 손 중심 높이가 그 자리에 맞는가. 맞으면 null, 아니면 짚어 줄 말 */
+export function zoneHint(zoneName, y, face) {
+  const z = ZONE[zoneName];
+  if (!z) return null;
+  if (face?.h > 0) {
+    const u = (y - face.y) / face.h;
+    return z.inFace(u) ? null : z.hint(u);
+  }
+  if (!z.onScreen) return null;
+  return z.onScreen(y) ? null : z.hint();
+}
 
 function handShape(feat, check) {
   if (!check.fingers) return { score: 1, hint: null };
@@ -177,9 +204,10 @@ function handShape(feat, check) {
 /**
  * @param {Array<object>} feats 보이는 손마다 describe 결과
  * @param {object} check wordBank 의 단계 힌트
+ * @param {?{y:number,h:number}} face 코끝 높이와 얼굴 상자 높이(화면 비율). 없으면 화면으로 어림
  * @returns {{ok:boolean, score:number, hint:?string}}
  */
-export function scoreCheck(feats, check = {}) {
+export function scoreCheck(feats, check = {}, face = null) {
   const need = check.hands ?? 1;
   if (feats.length < need)
     return { ok: false, score: 0, hint: need === 2 ? '두 손이 다 보이게 하세요' : '손이 보이게 하세요' };
@@ -206,8 +234,7 @@ export function scoreCheck(feats, check = {}) {
 
   if (!hint && check.ring && f.pinch > 0.35) hint = '엄지와 검지 끝을 맞대세요';
   if (!hint && check.thumb === 'up' && f.thumbExtension < 0.7) hint = '엄지를 세우세요';
-  const zone = ZONE[check.zone];
-  if (!hint && zone && !zone.ok(f.centroid.y)) hint = zone.hint;
+  if (!hint) hint = zoneHint(check.zone, f.centroid.y, face);
 
   return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale };
 }

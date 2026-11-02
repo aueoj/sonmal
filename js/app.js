@@ -8,19 +8,19 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021424';
-import { getPose } from './jamoData.js?v=202611021424';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021424';
-import { describe } from './poseFeatures.js?v=202611021424';
-import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021424';
-import { Tracker } from './tracker.js?v=202611021424';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021424';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021424';
-import { groupByIdea } from './lessons.js?v=202611021424';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021424';
-import { createReader } from './reader.js?v=202611021424';
-import { SITUATIONS } from './lessons.js?v=202611021424';
-import { diagnose } from './diagnose.js?v=202611021424';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021458';
+import { getPose } from './jamoData.js?v=202611021458';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021458';
+import { describe } from './poseFeatures.js?v=202611021458';
+import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021458';
+import { Tracker } from './tracker.js?v=202611021458';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021458';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021458';
+import { groupByIdea } from './lessons.js?v=202611021458';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021458';
+import { createReader } from './reader.js?v=202611021458';
+import { SITUATIONS } from './lessons.js?v=202611021458';
+import { diagnose } from './diagnose.js?v=202611021458';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -193,7 +193,7 @@ function advance() {
   if (state.tracker?.mock && !state.mockLocked) {
     state.tracker.mockMotion = false;
     state.tracker.mockTwoHands = pose.hands === 2;
-    state.tracker.mockShiftY = 0;
+    state.tracker.mockZone = null;
   }
 
   setRecall(false);
@@ -243,7 +243,7 @@ function mockForCheck(check, moving = false) {
   state.tracker.mockPose2 = check.other ? shape(check.other) : null;
   state.tracker.mockTwoHands = (check.hands ?? 1) === 2;
   state.tracker.mockMotion = moving;      // 둘째 동작부터는 손을 옮겨야 넘어간다
-  state.tracker.mockShiftY = { belly: 0.35, chest: 0.15, front: 0.1 }[check.zone] ?? 0;
+  state.tracker.mockZone = check.zone ?? null;
 }
 
 /* 단어 수어는 동작이 여럿이라 그림은 저절로 흐른다. 누를 것이 없다.
@@ -361,7 +361,7 @@ function finish() {
 
 /* ── 카메라가 보는 것 ───────────────────────── */
 
-function onFrame(hands) {
+function onFrame(hands, face = null) {
   const ctx = el.overlay.getContext('2d');
   const w = el.camera.clientWidth, h = el.camera.clientHeight;
   if (el.overlay.width !== w) el.overlay.width = w;
@@ -396,7 +396,7 @@ function onFrame(hands) {
     }
     state.wordLost = 0;
     const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
-    const r = scoreCheck(feats, checks[k]);
+    const r = scoreCheck(feats, checks[k], face);
     /* 같은 자세 그대로 다음 단계까지 넘어가지 않게, 앞 동작을 끝낸 자리에서
        손이 실제로 옮겨 가야 다음 동작으로 친다. */
     if (state.wordGot > 0 && state.wordFrom && r.centroid) {
@@ -529,9 +529,9 @@ async function startCamera({ demo = false } = {}) {
   try {
     state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
-    if (MOCK) window.__sonmalMock = jamo => {
+    if (MOCK) window.__sonmalMock = (jamo, zone = null) => {
       state.mockLocked = true;          // 점검이 손을 쥐는 동안 앱이 모의 손을 바꾸지 않는다
-      state.tracker.mockShiftY = 0; state.tracker.mockMotion = false; state.tracker.mockPose2 = null;
+      state.tracker.mockZone = zone;    // 손을 둘 높이(얼굴, 가슴 들). 없으면 그 자리 그대로 state.tracker.mockMotion = false; state.tracker.mockPose2 = null;
       const p = jamo ? getPose(jamo) : null;
       state.tracker.mockTwoHands = p?.hands === 2;
       state.tracker.setMockPose(p);

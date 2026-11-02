@@ -7,10 +7,18 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611021424';
+import { landmarksFor } from './mockHand.js?v=202611021458';
+import { ZONE_AT } from './matcher.js?v=202611021458';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
+// 손 높이를 몸에 대어 재려고 얼굴 자리만 찾는다. 2m 안쪽 얼굴용의 작은 모델이다.
+// 얼굴이 누구인지는 알아내지 않고, 상자와 코끝 위치만 쓴다. 기기 밖으로 나가지 않는다.
+const FACE_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite';
+const FACE_EVERY = 3;        // 얼굴은 천천히 움직인다. 세 프레임에 한 번만 찾는다
+const FACE_KEEP_MS = 2000;   // 손이 얼굴을 가리는 동안에는 마지막 자리를 쓴다
+// 모의 입력의 얼굴 자리(화면 비율). dev/word-judge-test.mjs 와 같다
+const MOCK_FACE = { y: 0.2, h: 0.16 };
 
 export class Tracker {
   constructor({ video, onFrame, mock = false }) {
@@ -21,6 +29,9 @@ export class Tracker {
     this.landmarker = null;
     this.mockPose = null;
     this.mockNoise = 0.02;
+    this.faceDetector = null;
+    this.face = null;          // { y: 코끝 높이, h: 얼굴 상자 높이, at: 본 시각 }
+    this.frameNo = 0;
   }
 
   async start() {
@@ -30,6 +41,7 @@ export class Tracker {
     if (!navigator.mediaDevices?.getUserMedia) {
       throw new Error('카메라는 HTTPS 또는 localhost에서 사용할 수 있습니다.');
     }
+    let FaceDetector, fileset;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
@@ -37,10 +49,12 @@ export class Tracker {
       });
       this.video.srcObject = stream;
       await this.video.play();
-      const { HandLandmarker, FilesetResolver } = await import(
+      const vision = await import(
         /* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`
       );
-      const fileset = await FilesetResolver.forVisionTasks(`${TASKS_VISION}/wasm`);
+      const { HandLandmarker, FilesetResolver } = vision;
+      FaceDetector = vision.FaceDetector;
+      fileset = await FilesetResolver.forVisionTasks(`${TASKS_VISION}/wasm`);
       const opts = delegate => ({
         baseOptions: { modelAssetPath: MODEL, delegate },
         runningMode: 'VIDEO',
@@ -60,6 +74,8 @@ export class Tracker {
     }
     this.running = true;
     this._loop();
+    // 얼굴 모델은 손 인식을 막지 않게 뒤에서 받는다. 실패하면 화면 비율로 어림한다
+    this._loadFace(FaceDetector, fileset);
     return { mode: 'camera' };
   }
 
@@ -69,6 +85,45 @@ export class Tracker {
     if (s) { s.getTracks().forEach(t => t.stop()); this.video.srcObject = null; }
     this.landmarker?.close();
     this.landmarker = null;
+    this.faceDetector?.close();
+    this.faceDetector = null;
+    this.face = null;
+  }
+
+  async _loadFace(FaceDetector, fileset) {
+    if (!FaceDetector) return;
+    const opts = delegate => ({
+      baseOptions: { modelAssetPath: FACE_MODEL, delegate },
+      runningMode: 'VIDEO', minDetectionConfidence: 0.5
+    });
+    try {
+      try { this.faceDetector = await FaceDetector.createFromOptions(fileset, opts('GPU')); }
+      catch { this.faceDetector = await FaceDetector.createFromOptions(fileset, opts('CPU')); }
+      if (!this.running) { this.faceDetector.close(); this.faceDetector = null; }
+    } catch { this.faceDetector = null; }
+  }
+
+  /* 화면에서 가장 큰 얼굴(카메라 앞 사람)의 코끝 높이와 얼굴 높이. 흔들림은 눅인다 */
+  _findFace(now) {
+    const vh = this.video.videoHeight;
+    const dets = this.faceDetector.detectForVideo(this.video, now).detections ?? [];
+    const best = dets.reduce((a, d) => (!a || d.boundingBox.height > a.boundingBox.height ? d : a), null);
+    if (!best || !vh) return;
+    const nose = best.keypoints?.[2];
+    const box = best.boundingBox;
+    const y = nose ? nose.y : (box.originY + box.height / 2) / vh;
+    const h = box.height / vh;
+    const k = this.face && now - this.face.at < FACE_KEEP_MS ? 0.3 : 1;
+    this.face = this.face && k < 1
+      ? { y: this.face.y + (y - this.face.y) * k, h: this.face.h + (h - this.face.h) * k, at: now }
+      : { y, h, at: now };
+  }
+
+  /* 판정에 넘길 얼굴. 오래 못 봤으면 없다고 한다 */
+  currentFace(now = performance.now()) {
+    if (this.mock) return this.mockFace === false ? null : MOCK_FACE;
+    if (!this.face || now - this.face.at > FACE_KEEP_MS) return null;
+    return { y: this.face.y, h: this.face.h };
   }
 
   setMockPose(pose) { this.mockPose = pose; }
@@ -85,6 +140,7 @@ export class Tracker {
     this.video.srcObject?.getTracks().forEach(t => t.stop());
     this.video.srcObject = stream;
     await this.video.play();
+    this.facing = facing; this.face = null;
     return facing;
   }
 
@@ -97,7 +153,11 @@ export class Tracker {
       const hands = (res.landmarks ?? []).map((lm, i) => ({
         lm, handedness: res.handednesses?.[i]?.[0]?.categoryName ?? 'Right'
       }));
-      this.onFrame(hands);
+      // 앞 카메라일 때만 얼굴을 찾는다. 상대를 읽을 때(뒤 카메라)는 높이를 보지 않는다
+      if (this.faceDetector && this.facing !== 'environment' && this.frameNo++ % FACE_EVERY === 0) {
+        try { this._findFace(now); } catch { /* 한 프레임 놓쳐도 마지막 자리를 쓴다 */ }
+      }
+      this.onFrame(hands, this.currentFace(now));
     }
     requestAnimationFrame(() => this._loop());
   }
@@ -105,8 +165,15 @@ export class Tracker {
   _mockLoop() {
     if (!this.running) return;
     const lm = this.mockPose ? landmarksFor(this.mockPose, this.mockNoise) : null;
-    // 낱말 판정은 손 높이도 본다. 모의 손을 그 높이로 옮긴다.
-    if (lm && this.mockShiftY) for (const p of lm) p.y += this.mockShiftY;
+    // 낱말 판정은 손 높이를 얼굴에 대어 본다. 모의 손을 그 높이의 보통 자리로 옮긴다.
+    const toZone = pts => {
+      if (!this.mockZone) return pts;
+      const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+      const want = MOCK_FACE.y + (ZONE_AT[this.mockZone] ?? ZONE_AT.front) * MOCK_FACE.h;
+      for (const p of pts) p.y += want - cy;
+      return pts;
+    };
+    if (lm) toZone(lm);
     // 쌍자음은 손 전체가 옆으로 움직여야 한다. 모의 입력도 그 움직임을 만들어야
     // 움직임 검출 경로가 실제로 시험된다.
     if (lm && (this.mockPose?.motion || this.mockMotion)) {
@@ -120,11 +187,10 @@ export class Tracker {
     // 양손이 필요한 자모는 모의 입력도 손을 둘 띄운다
     if (lm && this.mockTwoHands) {
       // 두 번째 손: 따로 정한 손모양이 있으면 그것으로, 없으면 같은 손모양으로
-      const lm2 = this.mockPose2 ? landmarksFor(this.mockPose2, this.mockNoise) : lm;
-      const dy = this.mockPose2 ? (this.mockShiftY || 0) : 0;
-      hands.push({ lm: lm2.map(p => ({ ...p, x: p.x + 0.18, y: p.y + dy })), handedness: 'Left' });
+      const lm2 = this.mockPose2 ? toZone(landmarksFor(this.mockPose2, this.mockNoise)) : lm;
+      hands.push({ lm: lm2.map(p => ({ ...p, x: p.x + 0.18 })), handedness: 'Left' });
     }
-    this.onFrame(hands);
+    this.onFrame(hands, this.currentFace());
     setTimeout(() => this._mockLoop(), 60);
   }
 }
