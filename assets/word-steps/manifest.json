@@ -145,27 +145,21 @@
     },
     {
       "word": "천천히",
-      "slug": "09-01",
+      "slug": "sl9928-01",
       "frame": 1,
-      "total": 3,
-      "basis": "legacy",
-      "step": "두 손을 펴 가슴 앞에 든다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 손등 위에 오른손을 모로 세워 얹는다",
+      "entryNo": "9928"
     },
     {
       "word": "천천히",
-      "slug": "09-02",
+      "slug": "sl9928-02",
       "frame": 2,
-      "total": 3,
-      "basis": "legacy",
-      "step": "손바닥을 아래로 돌린다"
-    },
-    {
-      "word": "천천히",
-      "slug": "09-03",
-      "frame": 3,
-      "total": 3,
-      "basis": "legacy",
-      "step": "천천히 내린다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 천천히 앞으로 내민다",
+      "entryNo": "9928"
     },
     {
       "word": "이해했어요",
@@ -544,6 +538,42 @@
       "basis": "sldict",
       "step": "손바닥이 위인 채 입으로 올린다 (두 번 반복)",
       "entryNo": "10419"
+    },
+    {
+      "word": "친구",
+      "slug": "sl7028-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "가슴 앞에서 두 손을 마주 보게 벌린다",
+      "entryNo": "7028"
+    },
+    {
+      "word": "친구",
+      "slug": "sl7028-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 맞잡는다 (두 번 반복)",
+      "entryNo": "7028"
+    },
+    {
+      "word": "만나다",
+      "slug": "sl12165-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 주먹의 검지만 펴서 양옆에 마주 세운다",
+      "entryNo": "12165"
+    },
+    {
+      "word": "만나다",
+      "slug": "sl12165-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 중앙으로 모아 세운 검지를 마주 댄다",
+      "entryNo": "12165"
     }
   ]
 }
