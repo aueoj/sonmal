@@ -94,12 +94,14 @@ export function hasKoreanVoice() {
   return support.speak && Boolean(voice ?? pickVoice());
 }
 
-export function speak(text, { rate = 0.95 } = {}) {
+export function speak(text, { rate = 0.95, queue = false, onstart = null } = {}) {
   if (!support.speak || !text) return;
-  speechSynthesis.cancel();
+  // 보통은 앞 말을 끊고 읽는다. queue 면 앞 말이 끝난 뒤에 이어 읽는다
+  if (!queue) speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'ko-KR';
   u.rate = rate;
+  if (onstart) u.onstart = onstart;
   if (voice) u.voice = voice;
   speechSynthesis.speak(u);
 }

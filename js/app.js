@@ -8,19 +8,19 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021458';
-import { getPose } from './jamoData.js?v=202611021458';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021458';
-import { describe } from './poseFeatures.js?v=202611021458';
-import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021458';
-import { Tracker } from './tracker.js?v=202611021458';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021458';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021458';
-import { groupByIdea } from './lessons.js?v=202611021458';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021458';
-import { createReader } from './reader.js?v=202611021458';
-import { SITUATIONS } from './lessons.js?v=202611021458';
-import { diagnose } from './diagnose.js?v=202611021458';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021504';
+import { getPose } from './jamoData.js?v=202611021504';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021504';
+import { describe } from './poseFeatures.js?v=202611021504';
+import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021504';
+import { Tracker } from './tracker.js?v=202611021504';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021504';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021504';
+import { groupByIdea } from './lessons.js?v=202611021504';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021504';
+import { createReader } from './reader.js?v=202611021504';
+import { SITUATIONS } from './lessons.js?v=202611021504';
+import { diagnose } from './diagnose.js?v=202611021504';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -73,14 +73,18 @@ const median = xs => {
 
 /* ── 읽어 주기 ──────────────────────────────── */
 
-function say(text) {
+function say(text, { queue = false } = {}) {
   if (!text) return;
-  speak(text);
-  el.spoken.hidden = false;
-  el.spoken.textContent = text;
-  el.read.textContent = text;
-  clearTimeout(say._t);
-  say._t = setTimeout(() => { el.spoken.hidden = true; }, 2600);
+  const show = () => {
+    el.spoken.hidden = false;
+    el.spoken.textContent = text;
+    el.read.textContent = text;
+    clearTimeout(say._t);
+    say._t = setTimeout(() => { el.spoken.hidden = true; }, 2600);
+  };
+  // 이어 읽는 말은 실제로 읽기 시작할 때 자막을 바꾼다. 앞 어절 자막을 덮지 않게
+  if (queue) speak(text, { queue, onstart: show });
+  else { speak(text); show(); }
 }
 
 /* ── 연습할 말 정하기 ───────────────────────── */
@@ -89,6 +93,7 @@ function setUtterance(text) {
   stopWordTimer();
   clearTimeout(state.repeatTimer);
   state.seq = [];
+  state.sentence = (text ?? '').trim().replace(/\s+/g, ' ');
   /* 음절 번호는 어절마다 0부터 다시 매겨진다. 그대로 두면 '뒤 왼쪽'의
      뒤(0)와 왼(0)이 한 글자로 묶여 "뒤왼"으로 읽힌다. 이어서 매긴다. */
   let syllable = 0;
@@ -347,6 +352,11 @@ function speakFinishedPart() {
 /* 끝나도 멈추지 않는다. 잠깐 쉬었다가 처음으로 돌아가, 다시 하면 다시 읽어 준다. */
 function finish() {
   stopWordTimer();
+  /* 어절이 둘 이상이면 끝에 문장 전체를 한 번 더 이어 읽는다. 어절마다 끊어 들은 말을
+     한 문장으로 다시 들려주어야 '내가 이 문장을 말했다'가 된다. 마지막 어절을 읽은
+     뒤에 오도록 이 틱이 끝난 다음 줄을 세운다. 한 어절이면 방금 읽었으니 되풀이하지 않는다. */
+  const parts = new Set(state.seq.filter(u => u.partIndex !== undefined).map(u => u.partIndex));
+  if (parts.size > 1 && state.sentence) setTimeout(() => say(state.sentence, { queue: true }), 0);
   el.guide.dataset.state = 'hit';
   el.fill.style.width = '100%';
   el.step.textContent = '좋아요. 다시 해 볼까요';

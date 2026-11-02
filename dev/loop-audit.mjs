@@ -23,8 +23,9 @@ const PHRASE = process.argv[2] || '고맙습니다';
 // '고맙습니다'와 '감사합니다'는 같은 수어지만, 칸과 읽어 주는 말은 사용자가 한 말 그대로다.
 const EXPECT = await p.evaluate(async (ph) => {
   const m = await import('/js/words.js');
-  // 어절마다, 한 말 그대로 읽는다
-  void m; return ph.trim().split(/\s+/).join(' ');
+  // 어절마다, 한 말 그대로 읽고, 어절이 둘 이상이면 끝에 문장 전체를 한 번 더 읽는다
+  void m; const w = ph.trim().split(/\s+/);
+  return w.length > 1 ? [...w, w.join(' ')].join(' ') : w.join(' ');
 }, PHRASE).catch(() => PHRASE);
 await p.fill('#typed', PHRASE);
 await p.press('#typed', 'Enter');

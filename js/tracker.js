@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611021458';
-import { ZONE_AT } from './matcher.js?v=202611021458';
+import { landmarksFor } from './mockHand.js?v=202611021504';
+import { ZONE_AT } from './matcher.js?v=202611021504';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
