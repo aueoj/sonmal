@@ -26,8 +26,8 @@ await p.click('#hand-right');
 await p.fill('#typed', '과자');
 await p.press('#typed', 'Enter');
 await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
-await p.waitForFunction(() => document.querySelectorAll('#seq .unit[data-state="done"]').length >= 4,
-  null, { timeout: 25000 }).catch(() => {});
+// waitForFunction 은 CI 의 Playwright 에서 CSP 에 막힌다. 직접 되묻는다.
+for (let i = 0; i < 150 && (await p.evaluate(() => document.querySelectorAll('#seq .unit[data-state="done"]').length)) < 4; i++) await p.waitForTimeout(200);
 await p.waitForTimeout(600);
 const r = await p.evaluate(() => ({
   done: document.querySelectorAll('#seq .unit[data-state="done"]').length,

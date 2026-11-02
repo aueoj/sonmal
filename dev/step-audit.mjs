@@ -18,7 +18,8 @@ const stillFirst = await frame();
 
 // 2) 첫 동작을 하면 둘째 그림으로 넘어간다
 await p.evaluate(() => window.__sonmalMock('ㅂ'));
-await p.waitForFunction(() => document.querySelector('.guide-art .word-pose[data-on]')?.dataset.frame === '1', null, { timeout: 8000 }).catch(() => {});
+// waitForFunction 은 CI 의 Playwright 에서 페이지 CSP(unsafe-eval 금지)에 막힌다. 직접 되묻는다.
+for (let i = 0; i < 40 && (await frame()) !== '1'; i++) await p.waitForTimeout(200);
 const second = await frame();
 
 // 3) 같은 자세로 가만히 있으면 둘째 동작으로 치지 않는다
