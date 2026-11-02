@@ -148,6 +148,7 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 .guide-head { display: flex; align-items: center; gap: var(--s3); min-width: 0; }
 .guide-name { flex: none; font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
   letter-spacing: var(--track-tight); margin: 0; color: #fff; }
+.as-sign { margin-left: var(--s2); font-size: var(--t-micro); font-weight: 400; color: rgba(255,255,255,.6); }
 .guide-step { font-family: var(--kr); font-size: var(--t-body); color: rgba(255,255,255,.82); margin: 0; min-height: 1.5em; }
 /* 지금 무엇이 보이는지. 안 될 때 어디가 다른지 직접 견줘 볼 수 있어야 한다. */
 .seen { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.55); margin: 0; }

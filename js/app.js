@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021248';
-import { getPose } from './jamoData.js?v=202611021248';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021248';
-import { describe } from './poseFeatures.js?v=202611021248';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611021248';
-import { Tracker } from './tracker.js?v=202611021248';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021248';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021248';
-import { diagnose } from './diagnose.js?v=202611021248';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021254';
+import { getPose } from './jamoData.js?v=202611021254';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021254';
+import { describe } from './poseFeatures.js?v=202611021254';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611021254';
+import { Tracker } from './tracker.js?v=202611021254';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021254';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021254';
+import { diagnose } from './diagnose.js?v=202611021254';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -93,9 +93,10 @@ function setUtterance(text) {
   let partIndex = 0;
   for (const part of planUtterance(text)) {
     if (state.seq.length) state.seq.push({ role: 'space', jamo: ' ' });
-    // 별칭으로 말했어도 칸에는 그 수어의 이름을 보여 준다 ('반갑습니다' → 안녕하세요)
+    // 칸에는 사용자가 한 말을 그대로 쓴다. '이거'라고 했으면 '이거'다.
+    // 수어는 같은 표제어('여기')를 쓰고, 그 사실은 안내 카드에 작게 알린다.
     if (part.kind === 'word') {
-      state.seq.push({ role: 'word', sign: part.sign, jamo: part.sign.word, partIndex });
+      state.seq.push({ role: 'word', sign: part.sign, jamo: part.text, partIndex });
       syllable += 1; partIndex += 1;
       continue;
     }
@@ -179,7 +180,13 @@ function showWord(u) {
   const frames = WORD_POSE_FILES[w.word]?.length ?? 1;
   state.wordStep = 0; state.wordSeen = 0; state.wordSince = 0;
 
-  el.name.textContent = w.word;
+  el.name.textContent = u.jamo;
+  if (u.jamo !== w.word) {
+    const as = document.createElement('span');
+    as.className = 'as-sign';
+    as.textContent = `수어 표제어 '${w.word}'`;
+    el.name.append(as);
+  }
   el.guide.dataset.state = '';
   el.fill.style.width = '0%';
   el.art.innerHTML = wordFilm(w.word);   // 모든 동작을 한 번에 만들어 둔다

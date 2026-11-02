@@ -20,12 +20,11 @@ await p.addInitScript(() => {
 
 await p.goto(GOTO, { waitUntil: 'networkidle' });
 const PHRASE = process.argv[2] || '고맙습니다';
-// '고맙습니다'와 '감사합니다'는 같은 수어다. 앱은 대표말로 읽어 준다.
-// 들은 말 그대로가 아니라 '그 수어가 뜻하는 말'이 나와야 맞다.
+// '고맙습니다'와 '감사합니다'는 같은 수어지만, 칸과 읽어 주는 말은 사용자가 한 말 그대로다.
 const EXPECT = await p.evaluate(async (ph) => {
   const m = await import('/js/words.js');
-  // 어절마다 읽는다. 사전에 있는 말은 대표말로 바뀐다.
-  return ph.trim().split(/\s+/).map(t => m.lookupWord(t)?.word ?? t).join(' ');
+  // 어절마다, 한 말 그대로 읽는다
+  void m; return ph.trim().split(/\s+/).join(' ');
 }, PHRASE).catch(() => PHRASE);
 await p.fill('#typed', PHRASE);
 await p.press('#typed', 'Enter');
