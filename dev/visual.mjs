@@ -9,7 +9,8 @@ for (const scheme of ['light', 'dark']) {
   await p.click('.typed button[type=submit]');
   await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
   // 몇 글자 진행된 코칭 중간 상태를 잡는다
-  await p.waitForFunction(() => document.querySelectorAll('#strip .unit[data-state="done"]').length >= 4, null, { timeout: 15000 });
+  // waitForFunction 은 CI 의 Playwright 에서 CSP 에 막힌다. 직접 되묻는다.
+  for (let i = 0; i < 75 && (await p.locator('#strip .unit[data-state="done"]').count()) < 4; i++) await p.waitForTimeout(200);
   await p.screenshot({ path: `${OUT}/coach-${scheme}.png` });
 
   const probe = await p.evaluate(() => {
