@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611022320';
-import { ZONE_AT } from './matcher.js?v=202611022320';
+import { landmarksFor } from './mockHand.js?v=202611022333';
+import { ZONE_AT } from './matcher.js?v=202611022333';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -180,7 +180,10 @@ export class Tracker {
       // 사람이 쌍자음을 지을 때 손을 옮기는 폭은 손 길이의 절반 남짓이다.
       // 정규화 좌표에서 손 길이가 약 0.44이므로 진폭 0.22를 쓴다.
       const phase = (performance.now() % 1200) / 1200;
-      const dx = (phase < 0.5 ? phase * 2 : 2 - phase * 2) * 0.22;
+      // 같은 손모양이 반복되는 낱말은 중간 위치에서 다음 단계가 시작해도
+      // 양 끝 중 한 곳까지 WORD_TRAVEL을 넘게 이동할 수 있어야 한다.
+      const amplitude = this.mockMotion ? 0.36 : 0.22;
+      const dx = (phase < 0.5 ? phase * 2 : 2 - phase * 2) * amplitude;
       for (const p of lm) p.x += dx;
     }
     const hands = lm ? [{ lm, handedness: 'Right' }] : [];

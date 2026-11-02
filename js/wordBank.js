@@ -1054,6 +1054,243 @@ export const WORD_BANK = [
   "sourceCheckedAt": "2026-11-03",
   "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
 }),
+  e(6437, {
+  "word": "보다",
+  "category": "생활",
+  "aliases": [
+    "봐요",
+    "봅니다"
+  ],
+  "status": "ok",
+  "원문": "1지를 펴서 바닥이 안으로 향하게 세운 두 주먹을 상하로 엇갈리게 움직인다.",
+  "hands": 2,
+  "수형": "두 주먹의 검지를 폄",
+  "수향": "검지 바닥이 안쪽",
+  "수위": "가슴 앞",
+  "수동": "두 손을 상하로 엇갈리게 움직인다",
+  "steps": [
+    "두 검지를 세워 바닥이 안을 향하게 하고 오른손은 낮게, 왼손은 높게 둔다",
+    "오른손을 올리고 왼손을 내려 상하 위치를 바꾼다"
+  ],
+  "check": [
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(6417, {
+  "word": "듣다",
+  "category": "생활",
+  "aliases": [
+    "들어요",
+    "듣습니다"
+  ],
+  "status": "ok",
+  "원문": "오른 주먹의 1지를 펴서 반쯤 구부려 끝이 오른쪽 귀로 향하게 하여 좌우로 두 번 움직인다.",
+  "hands": 1,
+  "수형": "오른 검지를 반쯤 구부림",
+  "수향": "검지 끝이 오른쪽 귀를 향함",
+  "수위": "오른쪽 귀 옆",
+  "수동": "좌우로 두 번 움직인다",
+  "steps": [
+    "오른 검지를 반쯤 구부려 끝이 오른쪽 귀를 향하게 한다",
+    "손을 바깥쪽으로 조금 움직인다 (첫 번째)",
+    "손을 귀 쪽으로 되돌린다",
+    "손을 바깥쪽으로 조금 움직인다 (두 번째)",
+    "손을 귀 쪽으로 되돌린다"
+  ],
+  "check": [
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "face",
+      "fingers": [
+        "index"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(8304, {
+  "word": "읽다",
+  "category": "생활",
+  "aliases": [
+    "읽기",
+    "읽어요",
+    "읽습니다"
+  ],
+  "status": "ok",
+  "원문": "오른 주먹의 1·2지를 펴서 끝으로, 손바닥이 위로 손끝이 밖으로 향하게 펴서 비스듬히 세운 왼 손바닥을 두 번 오르내린다.",
+  "hands": 2,
+  "수형": "오른 검지·중지를 폄, 왼손은 편 손",
+  "수향": "왼 손바닥이 위로, 손끝이 밖으로 향함",
+  "수위": "가슴 앞",
+  "수동": "오른 검지·중지 끝으로 왼 손바닥을 두 번 오르내린다",
+  "steps": [
+    "왼 손바닥을 비스듬히 세우고 오른 검지·중지 끝을 위쪽에 댄다",
+    "두 손가락 끝을 왼 손바닥 아래쪽으로 내린다 (첫 번째)",
+    "두 손가락 끝을 다시 위로 올린다",
+    "두 손가락 끝을 다시 아래로 내린다 (두 번째)",
+    "두 손가락 끝을 다시 위로 올린다"
+  ],
+  "check": [
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle"
+      ],
+      "other": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle"
+      ],
+      "other": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle"
+      ],
+      "other": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle"
+      ],
+      "other": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 2,
+      "zone": "chest",
+      "fingers": [
+        "index",
+        "middle"
+      ],
+      "other": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
+  e(5947, {
+  "word": "물고기",
+  "category": "생활",
+  "aliases": [
+    "생선"
+  ],
+  "status": "ok",
+  "원문": "손끝이 밖으로 향하게 펴서 모로 세운 오른손을 좌우로 움직이며 밖으로 내민다.",
+  "hands": 1,
+  "수형": "오른손 편 손",
+  "수향": "손을 모로 세우고 손끝은 밖으로 향함",
+  "수위": "몸 앞",
+  "수동": "좌우로 움직이며 밖으로 내민다",
+  "steps": [
+    "오른손을 펴서 모로 세우고 손끝을 밖으로 향하게 한다",
+    "손을 좌우로 움직이며 밖으로 내민다"
+  ],
+  "check": [
+    {
+      "hands": 1,
+      "zone": "front",
+      "fingers": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    },
+    {
+      "hands": 1,
+      "zone": "front",
+      "fingers": [
+        "index",
+        "middle",
+        "ring",
+        "pinky"
+      ]
+    }
+  ],
+  "sourceCheckedAt": "2026-11-03",
+  "illustrationReview": "사전 원문·수형 사진 대조, 수어 전문가 검수 전"
+}),
 ];
 
 /* 사전에서 찾지 못한 것 — 따로 표제어가 없다. 가리키는 동작으로 대신 쓰인다. */
