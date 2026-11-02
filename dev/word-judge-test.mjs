@@ -8,7 +8,7 @@ import { scoreCheck, ZONE_AT } from '../js/matcher.js';
 const ALL = ['index', 'middle', 'ring', 'pinky'];
 /* 앱의 모의 입력과 같은 얼굴 자리. 손은 그 높이의 보통 자리(ZONE_AT)에 둔다. */
 const FACE = { y: 0.2, h: 0.16 };
-const at = zone => FACE.y + (zone === 'below' ? 3.8 : (ZONE_AT[zone] ?? ZONE_AT.front)) * FACE.h;
+const at = zone => FACE.y + (zone === 'below' ? 5.0 : (ZONE_AT[zone] ?? ZONE_AT.front)) * FACE.h;
 const hand = (fingers, { ring = false, thumb = 'in', zone } = {}) => {
   const lm = landmarksFor({ fingers, dir: 'up', view: 'palm', thumb, special: ring ? 'circle' : null }, 0);
   const cy = lm.reduce((s, p) => s + p.y, 0) / lm.length;
@@ -49,10 +49,20 @@ for (const w of WORD_BANK.filter(x => x.status === 'ok')) {
     // 가슴 높이는 얼굴이 보일 때만 본다
     if (face && c.zone === 'chest') {
       wrongs.push(['얼굴 높이', right({ ...c, zone: 'face' })]);
-      wrongs.push(['배 아래', right({ ...c, zone: 'below' })]);
+      wrongs.push(['무릎 높이', right({ ...c, zone: 'below' })]);
     }
     for (const [why, feats] of wrongs) if (scoreCheck(feats, c, face).ok) falsePass.push(`${tag} ← ${why} 틀렸는데 통과`);
   });
+}
+// 되풀이 막기: 주먹을 위아래로 포갠 '만들다'는 위 주먹이 목 가까이 와도 가슴 동작이다
+if (face) {
+  const fistAt = u => { const lm = landmarksFor({ fingers: [], dir: 'up', view: 'palm', thumb: 'in' }, 0);
+    const cy = lm.reduce((s, p) => s + p.y, 0) / lm.length;
+    for (const p of lm) p.y += FACE.y + u * FACE.h - cy; return describe(lm, 'Right', true); };
+  for (const [top, bot] of [[0.5, 1.0], [3.6, 4.1]]) {
+    const r = scoreCheck([fistAt(top), fistAt(bot)], { hands: 2, fingers: [], zone: 'chest' }, face);
+    if (r.ok) pass++; else missed.push(`만들다 포갠 주먹(${top}, ${bot}) ← 맞게 했는데 걸림: ${r.hint}`);
+  }
 }
 console.log(`맞게 한 단계 통과 ${pass}개`);
 for (const s of missed) console.log('  ✕ ' + s);

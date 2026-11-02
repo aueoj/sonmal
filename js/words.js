@@ -38,8 +38,8 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611021504';
-import { WORD_BASIS } from './wordArt.js?v=202611021504';
+import { WORD_BANK } from './wordBank.js?v=202611021529';
+import { WORD_BASIS } from './wordArt.js?v=202611021529';
 
 /* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
    사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
@@ -170,6 +170,70 @@ function strip(t, list) {
   return list.filter(x => t.endsWith(x) && t.length > x.length).map(x => t.slice(0, -x.length));
 }
 
+/* ── 용언 활용을 기본형으로 ─────────────────────
+ * '만들었어', '만든거야', '만드는', '만듭니다'는 모두 '만들다'다. 정해 둔 변형(aliases)만
+ * 찾으면 이런 말은 하나도 못 찾는다. 그래서 어미를 떼고, 줄어든 마지막 글자를 되돌린다.
+ *   받침이 붙은 것   만든, 만듭, 먹은, 먹을 → 받침을 떼거나 ㄹ로 (ㄹ 탈락 용언)
+ *   ㄹ 이 빠진 것     만드(는, 니까)         → ㄹ 을 붙인다
+ *   과거 ㅆ 이 붙은 것 만났, 갔, 했, 됐, 왔   → ㅆ 을 떼고 줄어든 모음을 되돌린다
+ *   ㅡ 가 빠진 것     슬퍼, 아파, 기뻐       → ㅡ 로 (슬프, 아프, 기쁘)
+ *   ㅂ 불규칙        무서워, 무서운, 도와   → 앞 글자에 ㅂ (무섭, 돕)
+ * 되돌린 말은 용언(기본형이 '다'나 '요'로 끝나는 낱말)으로 찾을 때만 받아들인다.
+ * '글', '날'이 받침을 떼여 '그', '나'가 되는 일을 막으려는 것이다. */
+const VERB_ENDINGS = [   // 길이가 긴 것부터 시도한다
+  '었습니다', '았습니다', '였습니다', '었는데', '았는데', '거예요', '거에요', '건가요',
+  '었어요', '았어요', '였어요', '었어', '았어', '였어', '었다', '았다', '였다', '었지', '았지',
+  '었네', '었고', '니까요', '니까', '으면', '는데', '은데', '거야', '건데', '거지', '거죠', '건가',
+  '습니다', '니다', '네요', '어줘', '아줘', '주세요', '게요', '래요', '려고', '나요', '을게', '을래',
+  '거', '것', '게', '네', '래', '자', '지', '니', '냐', '나', '고', '면', '줘', '는', '은', '을', '어', '아', '여'
+];
+const H0 = 0xac00;
+const split = ch => {
+  const n = ch.charCodeAt(0) - H0;
+  return n >= 0 && n < 11172 ? { L: Math.floor(n / 588), V: Math.floor((n % 588) / 28), T: n % 28 } : null;
+};
+const join = ({ L, V, T }) => String.fromCharCode(H0 + L * 588 + V * 28 + T);
+const T_N = 4, T_L = 8, T_M = 16, T_B = 17, T_SS = 20;
+const V_A = 0, V_AE = 1, V_EO = 4, V_YEO = 6, V_O = 8, V_WA = 9, V_WAE = 10, V_OE = 11, V_U = 13, V_WEO = 14, V_EU = 18, V_I = 20;
+const L_H = 18, L_IEUNG = 11;
+
+/** 마지막 글자를 되돌려 본 앞부분 후보들 */
+function unconjugate(t) {
+  const out = new Set();
+  const head = t.slice(0, -1), last = split(t.slice(-1));
+  if (!last) return [];
+  const add = x => { if (x && x !== t) out.add(x); };
+  const vowelBack = (j, base) => {          // 줄어든 모음을 되돌린다
+    const back = { [V_WA]: V_O, [V_WEO]: V_U, [V_YEO]: V_I, [V_WAE]: V_OE }[j.V];
+    if (back !== undefined) add(base + join({ ...j, V: back, T: 0 }));
+    if (j.V === V_AE && j.L === L_H) add(base + join({ ...j, V: V_A, T: 0 }));        // 해 → 하
+    if ((j.V === V_EO || j.V === V_A) && j.T === 0) add(base + join({ ...j, V: V_EU })); // 슬퍼 → 슬프
+    // ㅂ 불규칙: 무서워 → 무섭, 도와 → 돕
+    if ((j.V === V_WEO || j.V === V_WA || j.V === V_U) && j.L === L_IEUNG && base) {   // 무서운 → 무서우 → 무섭
+      const prev = split(base.slice(-1));
+      if (prev && prev.T === 0) add(base.slice(0, -1) + join({ ...prev, T: T_B }));
+    }
+  };
+  if ([T_N, T_L, T_M, T_B].includes(last.T)) {
+    add(head + join({ ...last, T: 0 }));
+    if (last.T !== T_L) add(head + join({ ...last, T: T_L }));
+  }
+  if (last.T === 0) { add(head + join({ ...last, T: T_L })); vowelBack(last, head); }
+  if (last.T === T_SS) {
+    const bare = { ...last, T: 0 };
+    add(head + join(bare));
+    vowelBack(bare, head);
+  }
+  return [...out];
+}
+
+const isPredicate = w => /[다요]$/.test(w.word);
+/** 용언으로 찾는다. 기본형('-다'), '-요' 꼴, 또는 그 말 자체가 용언인 낱말 */
+function lookupPredicate(c) {
+  const hit = lookupWord(c + '다') ?? lookupWord(c + '요') ?? lookupWord(c);
+  return hit && isPredicate(hit) ? hit : null;
+}
+
 /**
  * 한 어절을 사전 낱말에 맞춘다.
  * @returns {{sign?:object, stem:string}} sign 이 있으면 그 수어, 없으면 지문자로 풀 앞부분
@@ -188,6 +252,22 @@ export function matchToken(token) {
       if (hit) return { sign: hit, stem: c };
     }
     frontier = next;
+  }
+  // 용언 활용: 어미를 떼고(떼지 않은 것도), 줄어든 마지막 글자를 되돌린다
+  const bases = [token, ...strip(token, VERB_ENDINGS)];
+  for (const b of [...bases]) for (const c of strip(b, VERB_ENDINGS)) bases.push(c);   // '었' + '거야' 처럼 둘까지
+  for (const b of bases) {
+    if (!b) continue;
+    const hit = lookupPredicate(b);
+    if (hit) return { sign: hit, stem: b };
+    for (const v of unconjugate(b)) {
+      const h = lookupPredicate(v);
+      if (h) return { sign: h, stem: b };
+      for (const v2 of unconjugate(v)) {      // 만났 → 만나, 슬펐 → 슬퍼 → 슬프
+        const h2 = lookupPredicate(v2);
+        if (h2) return { sign: h2, stem: b };
+      }
+    }
   }
   /* 사전에 없을 때 지문자로 풀 부분. 한 글자짜리 조사는 세 음절 이상일 때만 뗀다.
      '아이'의 '이', '사과'의 '과'처럼 낱말의 일부를 떼어 버리지 않으려는 것이다. */

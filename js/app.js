@@ -8,19 +8,19 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021504';
-import { getPose } from './jamoData.js?v=202611021504';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021504';
-import { describe } from './poseFeatures.js?v=202611021504';
-import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021504';
-import { Tracker } from './tracker.js?v=202611021504';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021504';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021504';
-import { groupByIdea } from './lessons.js?v=202611021504';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021504';
-import { createReader } from './reader.js?v=202611021504';
-import { SITUATIONS } from './lessons.js?v=202611021504';
-import { diagnose } from './diagnose.js?v=202611021504';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021529';
+import { getPose } from './jamoData.js?v=202611021529';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021529';
+import { describe } from './poseFeatures.js?v=202611021529';
+import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021529';
+import { Tracker } from './tracker.js?v=202611021529';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021529';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021529';
+import { groupByIdea } from './lessons.js?v=202611021529';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021529';
+import { createReader } from './reader.js?v=202611021529';
+import { SITUATIONS } from './lessons.js?v=202611021529';
+import { diagnose } from './diagnose.js?v=202611021529';
 
 const $ = id => document.getElementById(id);
 const el = {

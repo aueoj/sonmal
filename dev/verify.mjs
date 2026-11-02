@@ -33,6 +33,7 @@ const STATIC = [
   ['단어 출처', ['dev/words-check.mjs'], '새 단어가 사전 번호와 그림을 갖췄는가'],
   ['그림 연결', ['dev/art/ingest.mjs', '--check'], '연결된 그림 파일이 다 있는가'],
   ['말 기다림', ['dev/listen-test.mjs'], '첫 마디 전 5초는 끊지 않는가'],
+  ['활용형', ['dev/morph-test.mjs'], '만들었어, 만든거야 같은 말도 기본형 수어로 찾는가'],
   ['낱말 판정', ['dev/word-judge-test.mjs'], '틀린 손모양은 낱말을 통과하지 못하는가'],
   ['읽기', ['dev/reader-test.mjs'], '지은 지문자를 글자로 합쳐 읽는가']
 ];

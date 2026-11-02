@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021504';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021529';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -154,20 +154,22 @@ export { angleToDir };
  * 손 높이는 얼굴을 기준으로 잰다. 손 중심이 코끝에서 얼굴 높이 몇 개만큼 아래에
  * 있는지(u)로 본다. 카메라와 떨어진 거리, 카메라 각도가 달라도 몸에 대한 위치는
  * 그대로라서 화면 비율로 어림하던 것보다 덜 빗나간다.
- * 얼굴 상자(눈썹 언저리에서 턱까지) 높이를 1로 두고 코끝에서 잴 때 몸의 대략적인 자리:
- *   턱 0.4, 목 아래 오목한 곳 1.1, 가슴 한가운데 2.1, 배꼽 3.3
- * (얼굴 상자를 18cm 남짓으로 두고 성인 몸 치수로 어림한 값. 그림 속 인물로 얼굴 상자가
- *  이마에서 턱까지 잡히고 턱이 0.4 언저리에 오는 것을 확인했다)
- * 기준선은 이 자리들 사이에 너그럽게 두었다. 몸 앞은 보지 않는다.
+ * 얼굴 상자(이마에서 턱까지, 얼굴 너비와 비슷한 15cm 남짓) 높이를 1로 두고 코끝에서 잴 때
+ * 성인 몸의 대략적인 자리: 턱 0.5, 목 아래 오목한 곳 1.3, 가슴 한가운데 2.5, 배꼽 3.8
+ * (그림 속 인물로 얼굴 상자가 이마에서 턱까지 잡히고 턱이 0.4 언저리에 오는 것을 확인했다)
+ * 기준선은 이 자리들 사이에 너그럽게 두었다. 몸 치수와 앉은 자세가 사람마다 달라서,
+ * 가슴은 '얼굴 앞이 아니고 배꼽보다 한참 아래가 아니면' 통과시킨다. 몸 앞은 보지 않는다.
+ * 두 손 낱말은 두 손의 가운데를 잰다. 두 손이 만나는 자리가 수어의 위치이고,
+ * 주먹을 위아래로 포개면('만들다') 위 주먹 하나만 재면 실제보다 높게 나온다.
  * 얼굴이 안 보이면(손이 얼굴을 가린 채 오래 있거나 얼굴이 화면 밖) 예전처럼 화면 속
  * 세로 위치로 어림하고, 가슴은 보지 않는다.
  */
 const ZONE = {
   face:  { inFace: u => u < 0.9, onScreen: y => y < 0.58, hint: () => '손을 얼굴 앞으로 올리세요' },
   chin:  { inFace: u => u < 1.2, onScreen: y => y < 0.62, hint: () => '손을 턱 앞으로 올리세요' },
-  chest: { inFace: u => u > 0.6 && u < 3.4, onScreen: null,
-           hint: u => (u <= 0.6 ? '손을 가슴 앞으로 내리세요' : '손을 가슴 앞으로 올리세요') },
-  belly: { inFace: u => u > 2.0, onScreen: y => y > 0.42, hint: () => '손을 배 앞으로 내리세요' }
+  chest: { inFace: u => u > 0.5 && u < 4.5, onScreen: null,
+           hint: u => (u <= 0.5 ? '손을 가슴 앞으로 내리세요' : '손을 가슴 앞으로 올리세요') },
+  belly: { inFace: u => u > 2.4, onScreen: y => y > 0.42, hint: () => '손을 배 앞으로 내리세요' }
 };
 
 /* 높이마다 손 중심이 보통 머무는 자리(u). 모의 입력과 시험이 손을 이 자리에 둔다. */
@@ -223,18 +225,25 @@ export function scoreCheck(feats, check = {}, face = null) {
 
   /* 두 손 낱말은 다른 손도 본다. 한 손만 맞고 다른 손은 아무렇게나 해도
      통과하던 것을 막는다('안녕하세요'의 두 주먹). */
+  let partner = null;
+  if (need === 2) {
+    // 다른 손: 남은 손 가운데 그 손모양에 가장 가까운 손
+    const otherFingers = check.other ?? check.fingers;
+    partner = feats.filter((_, i) => i !== best.i)
+      .map(x => ({ x, s: handShape(x, { fingers: otherFingers }) }))
+      .sort((a, b) => b.s.score - a.s.score)[0] ?? null;
+  }
   if (!hint && need === 2 && check.fingers) {
     const otherFingers = check.other ?? check.fingers;
-    const rest = feats.filter((_, i) => i !== best.i);
-    const o = rest.map(x => handShape(x, { fingers: otherFingers }))
-      .sort((a, b) => b.score - a.score)[0];
+    const o = partner?.s;
     if (!o || o.score < 0.72)
       hint = '다른 손도 그림처럼: ' + (o?.hint ?? (otherFingers.length ? '손가락을 펴세요' : '주먹을 쥐세요'));
   }
 
   if (!hint && check.ring && f.pinch > 0.35) hint = '엄지와 검지 끝을 맞대세요';
   if (!hint && check.thumb === 'up' && f.thumbExtension < 0.7) hint = '엄지를 세우세요';
-  if (!hint) hint = zoneHint(check.zone, f.centroid.y, face);
+  const zoneY = partner ? (f.centroid.y + partner.x.centroid.y) / 2 : f.centroid.y;
+  if (!hint) hint = zoneHint(check.zone, zoneY, face);
 
   return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale };
 }
