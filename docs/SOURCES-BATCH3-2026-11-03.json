@@ -1,0 +1,43 @@
+[
+  {
+    "word": "내일",
+    "id": "6442",
+    "title": "내일,명일",
+    "description": "오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 오른쪽 눈 옆에 댔다가 밖으로 내민다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151220/231070/IMG000224974_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=6442"
+  },
+  {
+    "word": "어제",
+    "id": "8218",
+    "title": "어제,어저께,작일",
+    "description": "오른 주먹의 1지를 펴서 세워 오른쪽 어깨 너머로 넘긴다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151225/234038/IMG000228731_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=8218"
+  },
+  {
+    "word": "우유",
+    "id": "9694",
+    "title": "젖,유방,우유",
+    "description": "오른손을 펴서 오른쪽 가슴에 대고 두 번 구부렸다 편다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20250327/1432890/PIC000361466_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=9694"
+  },
+  {
+    "word": "커피",
+    "id": "8198",
+    "title": "커피",
+    "description": "오른 주먹의 1지를 펴서 끝 바닥을 코에 댄 다음, 그 끝을 둥굴게 구부려 모로 세운 왼손 안에 넣어 돌린다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151229/236582/IMG000232112_700X466.jpg",
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151229/236583/IMG000232113_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=8198"
+  }
+]

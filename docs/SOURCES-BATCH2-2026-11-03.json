@@ -1,0 +1,42 @@
+[
+  {
+    "word": "엄마",
+    "id": "8214",
+    "title": "어머니,모친,어미,엄마",
+    "description": "오른 주먹의 1지를 펴서 끝 바닥을 코 오른쪽에 댔다가 떼며 1지를 접고 4지를 펴서 세운다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20230404/1133072/PIC000361272_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=8214"
+  },
+  {
+    "word": "아빠",
+    "id": "2570",
+    "title": "아빠,부,부친,아비,아버지",
+    "description": "오른 주먹의 1지를 펴서 끝을 코 오른쪽에 댔다가 떼며 1지를 접고 5지를 펴서 바닥이 밖으로 향하게 세운다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151125/216513/IMG000207689_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=2570"
+  },
+  {
+    "word": "오늘",
+    "id": "7703",
+    "title": "오늘,금일,이번,오늘날,현재",
+    "description": "두 손을 펴서 손등이 위로 손끝이 밖으로 향하게 하여 가슴 앞에서 약간 아래로 내린다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151227/235200/IMG000230344_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=7703"
+  },
+  {
+    "word": "자다",
+    "id": "12264",
+    "title": "수면,숙박,잠,기숙사,자다",
+    "description": "오른 주먹을 베고 오른쪽으로 약간 기운 자세를 취한다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20190725/604059/IMG000226277_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=12264"
+  }
+]

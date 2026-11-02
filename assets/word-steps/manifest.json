@@ -774,6 +774,213 @@
       "basis": "sldict",
       "step": "왼 손바닥 안에서 오른손을 좌우로 움직인다",
       "entryNo": "9846"
+    },
+    {
+      "word": "엄마",
+      "slug": "sl8214-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지 끝 바닥을 코 오른쪽에 댄다",
+      "entryNo": "8214"
+    },
+    {
+      "word": "엄마",
+      "slug": "sl8214-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 떼며 검지를 접고 새끼손가락을 세운다",
+      "entryNo": "8214"
+    },
+    {
+      "word": "아빠",
+      "slug": "sl2570-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지 끝을 코 오른쪽에 댄다",
+      "entryNo": "2570"
+    },
+    {
+      "word": "아빠",
+      "slug": "sl2570-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 떼며 검지를 접고 손바닥이 밖을 향하도록 엄지를 세운다",
+      "entryNo": "2570"
+    },
+    {
+      "word": "오늘",
+      "slug": "sl7703-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 가슴 앞에 펴고 손등은 위로, 손끝은 밖으로 향한다",
+      "entryNo": "7703"
+    },
+    {
+      "word": "오늘",
+      "slug": "sl7703-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 함께 약간 아래로 내린다",
+      "entryNo": "7703"
+    },
+    {
+      "word": "자다",
+      "slug": "sl12264-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "오른 주먹을 베고 머리를 오른쪽으로 약간 기울인다",
+      "entryNo": "12264"
+    },
+    {
+      "word": "내일",
+      "slug": "sl6442-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지를 펴서 바닥이 밖을 향하게 오른쪽 눈 옆에 세운다",
+      "entryNo": "6442"
+    },
+    {
+      "word": "내일",
+      "slug": "sl6442-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지를 세운 채 손을 밖으로 내민다",
+      "entryNo": "6442"
+    },
+    {
+      "word": "어제",
+      "slug": "sl8218-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 세운다",
+      "entryNo": "8218"
+    },
+    {
+      "word": "어제",
+      "slug": "sl8218-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른쪽 어깨 너머로 손을 넘긴다",
+      "entryNo": "8218"
+    },
+    {
+      "word": "우유",
+      "slug": "sl9694-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 펴서 오른쪽 가슴에 댄다",
+      "entryNo": "9694"
+    },
+    {
+      "word": "우유",
+      "slug": "sl9694-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손가락을 구부렸다 편다 (두 번)",
+      "entryNo": "9694"
+    },
+    {
+      "word": "커피",
+      "slug": "sl8198-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지 끝 바닥을 코에 댄다",
+      "entryNo": "8198"
+    },
+    {
+      "word": "커피",
+      "slug": "sl8198-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지 끝을 둥글게 구부려 모로 세운 왼손 안에 넣어 돌린다",
+      "entryNo": "8198"
+    },
+    {
+      "word": "보다",
+      "slug": "sl6437-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 검지를 세워 바닥이 안을 향하게 하고 오른손은 낮게, 왼손은 높게 둔다",
+      "entryNo": "6437"
+    },
+    {
+      "word": "보다",
+      "slug": "sl6437-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 올리고 왼손을 내려 상하 위치를 바꾼다",
+      "entryNo": "6437"
+    },
+    {
+      "word": "듣다",
+      "slug": "sl6417-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 반쯤 구부려 끝이 오른쪽 귀를 향하게 한다",
+      "entryNo": "6417"
+    },
+    {
+      "word": "듣다",
+      "slug": "sl6417-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 좌우로 움직인다 (두 번)",
+      "entryNo": "6417"
+    },
+    {
+      "word": "읽다",
+      "slug": "sl8304-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 손바닥을 비스듬히 세우고 오른 검지·중지 끝을 위쪽에 댄다",
+      "entryNo": "8304"
+    },
+    {
+      "word": "읽다",
+      "slug": "sl8304-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손가락 끝으로 왼 손바닥을 오르내린다 (두 번)",
+      "entryNo": "8304"
+    },
+    {
+      "word": "물고기",
+      "slug": "sl5947-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 펴서 모로 세우고 손끝을 밖으로 향하게 한다",
+      "entryNo": "5947"
+    },
+    {
+      "word": "물고기",
+      "slug": "sl5947-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 좌우로 움직이며 밖으로 내민다",
+      "entryNo": "5947"
     }
   ]
 }
