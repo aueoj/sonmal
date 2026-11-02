@@ -179,9 +179,11 @@ body[data-facing="environment"] .camera video { transform: none; }
 .recall-peek { position: absolute; inset: auto 8px 8px 8px; z-index: 2; background: rgba(255,255,255,.92); color: var(--ink);
   border-radius: 999px; padding: 5px 0; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; }
 /* 도표의 손은 왼손으로 그려져 있다. 오른손을 고르면 뒤집어 보여 준다. */
-/* 단어 그림은 검은 바탕에 인물이 가운데 있다. 옆으로 뻗은 손끝도 잘리지 않도록 전체 가로 그림을 칸 안에 담는다. */
-.guide-art:has(.word-pose) { background: #000; padding: 0; }
-.guide-art .word-pose { inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+/* 단어 그림은 3:2 가로 그림이다. 정사각 칸에 다 담으면 인물이 작아지고, 꽉 채우면 옆으로
+   뻗은 손끝('가다')이 잘린다. 높이는 그대로 두고 칸만 4:3 으로 넓혀 꽉 채운다.
+   양옆이 그림 너비의 6%씩만 잘려 뻗은 손끝(가장자리에서 10% 안쪽)까지 남는다. */
+.guide-art:has(.word-pose) { background: #000; padding: 0; width: 197px; aspect-ratio: 4 / 3; }
+.guide-art .word-pose { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 body[data-hand="right"] .guide-art img, body[data-hand="right"] .guide-art .sheet-art,
 body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art,
 body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
@@ -298,6 +300,7 @@ dialog a { color: var(--indigo); }
   .spoken { top: 100px; }
   .guide { bottom: var(--s2); width: calc(100% - 16px); gap: var(--s3); padding: 8px; }
   .guide-art { width: 104px; }
+  .guide-art:has(.word-pose) { width: 139px; }
   .guide-name { font-size: var(--t-lead); }
   .say-btn kbd { display: none; }
   .cam-empty, .ref { padding-top: 112px; }

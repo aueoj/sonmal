@@ -1,6 +1,6 @@
 /* 한국어 연습 문장. 각 구성 낱말의 출처는 wordBank의 국립국어원 사전 항목이다.
    한국수어 어순·문법 번역이나 사전의 문장 용례로 주장하지 않는다. */
-import { planUtterance } from './words.js?v=202611022300';
+import { planUtterance } from './words.js?v=202611022316';
 export const PHRASE_GROUPS = [
   { name: '만나서 인사하기', texts: [
     '안녕하세요 감사합니다', '만나서 반갑습니다', '이름이 무엇이에요', '너의 이름이 무엇이에요',

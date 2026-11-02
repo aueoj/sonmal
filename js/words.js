@@ -38,8 +38,8 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611022300';
-import { WORD_BASIS } from './wordArt.js?v=202611022300';
+import { WORD_BANK } from './wordBank.js?v=202611022316';
+import { WORD_BASIS } from './wordArt.js?v=202611022316';
 
 /* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
    사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
@@ -185,7 +185,7 @@ const VERB_ENDINGS = [   // 길이가 긴 것부터 시도한다
   '었어요', '았어요', '였어요', '었어', '았어', '였어', '었다', '았다', '였다', '었지', '았지',
   '었네', '었고', '니까요', '니까', '으면', '는데', '은데', '거야', '건데', '거지', '거죠', '건가',
   '습니다', '니다', '네요', '어줘', '아줘', '주세요', '게요', '래요', '려고', '나요', '을게', '을래',
-  '거', '것', '게', '네', '래', '자', '지', '니', '냐', '나', '고', '면', '줘', '는', '은', '을', '어', '아', '여'
+  '는다', '거', '것', '게', '네', '다', '래', '자', '지', '니', '냐', '나', '고', '면', '줘', '는', '은', '을', '어', '아', '여'
 ];
 const H0 = 0xac00;
 const split = ch => {
@@ -230,7 +230,9 @@ function unconjugate(t) {
 const isPredicate = w => /[다요]$/.test(w.word);
 /** 용언으로 찾는다. 기본형('-다'), '-요' 꼴, 또는 그 말 자체가 용언인 낱말 */
 function lookupPredicate(c) {
-  const hit = lookupWord(c + '다') ?? lookupWord(c + '요') ?? lookupWord(c);
+  // 그 말 자체로 찾는 것은 c 가 '-다', '-요'로 끝날 때만이다. '자다'에서 되돌린 '잘'이
+  // '잘하다'의 대응표현 '잘'(부사)로 잡히지 않게 한다
+  const hit = lookupWord(c + '다') ?? lookupWord(c + '요') ?? (/[다요]$/.test(c) ? lookupWord(c) : null);
   return hit && isPredicate(hit) ? hit : null;
 }
 
