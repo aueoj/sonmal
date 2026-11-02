@@ -8,19 +8,19 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021408';
-import { getPose } from './jamoData.js?v=202611021408';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021408';
-import { describe } from './poseFeatures.js?v=202611021408';
-import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021408';
-import { Tracker } from './tracker.js?v=202611021408';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021408';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021408';
-import { groupByIdea } from './lessons.js?v=202611021408';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021408';
-import { createReader } from './reader.js?v=202611021408';
-import { SITUATIONS } from './lessons.js?v=202611021408';
-import { diagnose } from './diagnose.js?v=202611021408';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021424';
+import { getPose } from './jamoData.js?v=202611021424';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021424';
+import { describe } from './poseFeatures.js?v=202611021424';
+import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021424';
+import { Tracker } from './tracker.js?v=202611021424';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021424';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021424';
+import { groupByIdea } from './lessons.js?v=202611021424';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021424';
+import { createReader } from './reader.js?v=202611021424';
+import { SITUATIONS } from './lessons.js?v=202611021424';
+import { diagnose } from './diagnose.js?v=202611021424';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -113,8 +113,12 @@ function setUtterance(text) {
     }
     if (max >= 0) syllable = max + 1;
     for (const u of units) u.partIndex = partIndex;
-    partIndex += 1;
     state.seq.push(...units);
+    /* 뗀 조사와 어미는 흐리게 보여 준다. 잘린 것이 아니라 일부러 손으로 하지 않는 것이다. */
+    const stem = part.stem ?? part.text;
+    if (stem !== part.text && part.text.startsWith(stem))
+      state.seq.push({ role: 'omit', jamo: part.text.slice(stem.length), partIndex });
+    partIndex += 1;
   }
   state.at = -1;
   state.got = [];
@@ -152,6 +156,7 @@ function renderChips() {
 function buildSeq() {
   el.seq.innerHTML = state.seq.map((u, i) =>
     u.role === 'space' ? '<span class="unit gap"></span>'
+    : u.role === 'omit' ? `<span class="unit omit" title="조사와 어미는 손으로 하지 않습니다">${u.jamo}</span>`
     : `<span class="unit" data-state="todo" data-i="${i}">${u.jamo}</span>`).join('');
   paintSeq();
 }
@@ -170,7 +175,10 @@ function advance() {
   stopWordTimer();
   state.settling = false;
   let i = state.at + 1;
-  while (i < state.seq.length && state.seq[i].role === 'space') { state.got.push(' '); i++; }
+  while (i < state.seq.length && (state.seq[i].role === 'space' || state.seq[i].role === 'omit')) {
+    if (state.seq[i].role === 'space') state.got.push(' ');
+    i++;
+  }
   state.at = i;
   state.holdSince = 0; state.trail = []; state.scores = [];
 

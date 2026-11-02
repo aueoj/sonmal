@@ -38,7 +38,7 @@ Scene: Both hands are closed fists held side by side in front of her lower chest
 사전 2372: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=2372
 원문: 손끝이 밖으로 향하게 펴서 모로 세운 오른손의 4지 옆면을 손바닥이 아래로 향하게 편 왼 손등에 두 번 댄다.
 
-**sl2372-01.png** 왼손을 손바닥이 아래로 펴고 오른손을 모로 세운다
+**sl2372-01.png** 왼손은 손바닥이 아래로 펴고, 오른손은 엄지가 위로 오게 세워 새끼손가락 쪽 옆면이 아래를 향하게 한다
 
 ```
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -177,7 +177,7 @@ Scene: Her right arm has crossed her torso toward her left shoulder (viewer righ
 사전 9928: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=9928
 원문: 손등이 위로 향하게 편 왼 손등에 오른손을 모로 세워 천천히 밖으로 내민다.
 
-**sl9928-01.png** 왼 손등 위에 오른손을 모로 세워 얹는다
+**sl9928-01.png** 오른손을 엄지가 위로 오게 옆으로 세워, 새끼손가락 쪽 옆면을 왼 손등 위에 얹는다
 
 ```
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -572,7 +572,7 @@ Scene: Her right hand (viewer's left) is half-bent with the palm facing down, he
 사전 8602: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=8602
 원문: 가슴 앞에서 모로 세운 왼손 위에 모로 세운 오른손을 올려놓고 5·1·2·3·4지 순으로 손가락을 접는다.
 
-**sl8602-01.png** 모로 세운 왼손 위에 오른손을 모로 세워 올린다
+**sl8602-01.png** 두 손을 엄지가 위로 오게 옆으로 세우고, 오른손을 왼손 위에 올린다
 
 ```
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
@@ -717,5 +717,26 @@ Scene: Both hands are fists with ONLY the index fingers extended straight up, fa
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: The same two upright index fingers have moved to the centre of the chest and their facing sides touch. Fists meet below them. Keep both index fingers straight up, not pointing horizontally. Only the endpoint pose.
+```
+
+## 40 만들다  ·  생활
+
+사전 12326: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=12326
+원문: 모로 세운 오른 주먹의 밑면으로 모로 세운 왼 주먹의 윗면을 두 번 두드린다.
+
+**sl12326-01.png** 두 주먹을 엄지 쪽이 위로 오게 옆으로 세우고, 오른 주먹을 왼 주먹 위로 든다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Both hands are closed fists held SIDEWAYS in front of her chest: thumb side on TOP, little-finger side at the BOTTOM, curled fingers facing her body. Her LEFT fist (viewer's right) is at mid-chest. Her RIGHT fist (viewer's left) is held about one fist-height ABOVE it, not touching. Neutral expression.
+```
+
+**sl12326-02.png** 오른 주먹의 새끼손가락 쪽으로 왼 주먹 윗면을 두드린다 (두 번)
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Same sideways fists. The little-finger side (bottom) of her RIGHT fist (viewer's left) is now pressing down on the thumb side (top) of her LEFT fist, the two fists stacked vertically and touching, as if hammering. Neutral expression.
 ```
 

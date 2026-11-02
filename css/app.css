@@ -243,6 +243,7 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 }
 .unit[data-state="done"] { color: #8ee0b4; background: rgba(60,158,107,.3); }
 .unit[data-state="now"] { color: #fff; background: var(--indigo); }
+.unit.omit { color: rgba(255,255,255,.45); background: none; border: 1px dashed rgba(255,255,255,.3); font-weight: 400; }
 .unit.gap { min-width: 7px; padding: 0; background: none; }
 .guide-read { flex: none; margin: 0; font-family: var(--kr); font-size: var(--t-label); color: #8ee0b4; max-width: 24ch;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

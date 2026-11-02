@@ -17,6 +17,11 @@ STYLE = (
 R, L = "her right hand (viewer's left)", "her left hand (viewer's right)"
 
 FRAMES = {
+ '만들다': [
+  "Both hands are closed fists held SIDEWAYS in front of her chest: thumb side on TOP, little-finger side at the BOTTOM, curled fingers facing her body. "
+  "Her LEFT fist (viewer's right) is at mid-chest. Her RIGHT fist (viewer's left) is held about one fist-height ABOVE it, not touching. Neutral expression.",
+  "Same sideways fists. The little-finger side (bottom) of her RIGHT fist (viewer's left) is now pressing down on the thumb side (top) of her LEFT fist, "
+  "the two fists stacked vertically and touching, as if hammering. Neutral expression."],
  '친구': [
   'Both hands are open and naturally curved in front of the chest, palms facing each other, separated by about 10 cm before clasping. One still pose, two hands only.',
   'Both hands clasp each other at the centre of the chest, fingers wrapping around the opposite hand, as in the central contact pose of dictionary entry 7028. Not prayer palms. Repeat clasping twice; draw only one contact pose.'],

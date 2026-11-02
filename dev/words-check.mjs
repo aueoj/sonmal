@@ -71,6 +71,9 @@ for (const s of SITUATIONS) for (const w of s.words) {
 }
 for (const w of WORD_SIGNS) if (!inSit.has(w.word)) warn.push(`「${w.word}」가 어느 상황 묶음에도 없다 ('그 밖'으로 간다)`);
 
+/* 임시 그림은 실패가 아니지만, 잊히지 않게 매번 알린다 */
+for (const w of WORD_BANK) if (w.임시그림) warn.push(`「${w.word}」 임시 그림: ${w.임시그림}`);
+
 console.log(`단어 ${WORD_SIGNS.length}개 · 사전 대조 끝 ${WORD_SIGNS.filter(w => w.entryNo).length}개 · 사전 창고 ${WORD_BANK.length}개`);
 for (const s of warn) console.log('  · ' + s);
 for (const s of bad) console.log('  ✕ ' + s);
