@@ -31,7 +31,7 @@ export const WORD_BANK = [
     결합: '잘+머무르다', hands: 2,
     수형: '왼손 주먹, 오른손 편 손 → 두 손 주먹', 수향: '주먹 바닥이 아래', 수위: '왼팔 위 → 가슴 앞', 수동: '왼팔을 쓸어내린 뒤 두 주먹을 아래로 내린다',
     steps: ['왼 주먹을 쥐고 오른 손바닥으로 왼팔을 쓸어내린다', '두 주먹을 가슴 앞에서 아래로 내린다'],
-    check: [{ hands: 2, zone: 'front' }, { hands: 2, fingers: [], zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'front' }, { hands: 2, fingers: [], zone: 'chest' }] }),
 
   e(2372, { word: '감사합니다', category: '기본', aliases: ['고맙습니다','감사','고마워요','고맙다'], status: 'ok',
     원문: '손끝이 밖으로 향하게 펴서 모로 세운 오른손의 4지 옆면을 손바닥이 아래로 향하게 편 왼 손등에 두 번 댄다.',
@@ -75,7 +75,7 @@ export const WORD_BANK = [
     hands: 2,
     수형: '왼손 엄지 세운 주먹, 오른손 편 손', 수향: '왼 엄지 바닥이 밖, 오른손 세움', 수위: '가슴 앞', 수동: '오른 손바닥으로 왼 엄지 등을 두 번 댄다',
     steps: ['왼손은 엄지를 세운 주먹, 오른손은 펴서 세운다', '오른 손바닥을 왼 엄지 등에 두 번 댄다'],
-    check: [{ hands: 2, zone: 'chest' }, { hands: 2, zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], thumb: null, zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest' }] }),
 
   e(7422, { word: '다시', category: '기본', aliases: ['또','다시요','한번더','그리고'], status: 'ok',
     원문: '오른 주먹의 5지 바닥을 1·2지의 손톱에 가볍게 대고 손등이 밖으로 향하게 하여 왼쪽 아래로 내리며 1·2지를 편다.',
@@ -89,14 +89,14 @@ export const WORD_BANK = [
     hands: 2,
     수형: '두 손 모두 편 손', 수향: '왼손은 손등이 위, 오른손은 모로 세움', 수위: '가슴 앞', 수동: '왼 손등 위에서 오른손을 천천히 앞으로 민다',
     steps: ['왼 손등 위에 오른손을 모로 세워 얹는다', '오른손을 천천히 앞으로 내민다'],
-    check: [{ hands: 2, zone: 'chest' }, { hands: 2, zone: 'front' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'front' }] }),
 
   e(5993, { word: '이해했어요', category: '기본', aliases: ['이해','알겠어요','알았어요','납득'], status: 'ok',
     원문: '왼 주먹의 1·2지를 펴서 끝이 오른쪽으로 등이 밖으로 향하게 벌린 다음, 그 사이로 오른 주먹의 1지를 펴서 끝을 안에서 밖으로 내밀었다가 다시 밖에서 안으로 밀어 넣는다.',
     hands: 2,
     수형: '왼손 검지와 중지 벌린 손, 오른손 검지 편 손', 수향: '왼손 등이 밖', 수위: '가슴 앞', 수동: '오른 검지를 왼손 두 손가락 사이로 내밀었다 넣는다',
     steps: ['왼손 검지와 중지를 옆으로 벌려 든다', '그 사이로 오른 검지를 내밀었다가 다시 넣는다'],
-    check: [{ hands: 2, fingers: ['index'], zone: 'chest' }, { hands: 2, fingers: ['index'], zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index'], other: ['index','middle'], zone: 'chest' }, { hands: 2, fingers: ['index'], other: ['index','middle'], zone: 'chest' }] }),
 
   e(10981, { word: '물', category: '기본', aliases: ['물좀','식수'], status: 'ok',
     원문: '오른 주먹의 1·5지를 펴서 구부려 입으로 약간 기울여 올린다.',
@@ -228,7 +228,7 @@ export const WORD_BANK = [
     메모: '사전 표제어는 관형사 \'그\'다. \'그것\'·\'거기\'로 써도 되는지는 확인이 필요하다.',
     hands: 2, 수형: '왼손 엄지 세운 주먹, 오른손 검지', 수향: '왼 엄지 바닥이 밖', 수위: '가슴 앞', 수동: '오른 검지로 왼 엄지 등을 가리킨다',
     steps: ['왼손 엄지를 세우고 오른 검지로 그 등을 가리킨다'],
-    check: [{ hands: 2, fingers: ['index'], zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index'], other: [], zone: 'chest' }] }),
 
   /* ── 묻는 말 ── */
   e(7224, { word: '무엇', category: '묻는 말', aliases: ['뭐','무슨','어느','어떤'], status: 'ok',
@@ -248,7 +248,7 @@ export const WORD_BANK = [
     원문: '가슴 앞에서 모로 세운 왼손 위에 모로 세운 오른손을 올려놓고 5·1·2·3·4지 순으로 손가락을 접는다.',
     hands: 2, 수형: '편 손 → 차례로 접는 손', 수향: '두 손 모로 세움', 수위: '가슴 앞', 수동: '엄지부터 새끼까지 차례로 접는다', 비수지: '묻는 표정',
     steps: ['모로 세운 왼손 위에 오른손을 모로 세워 올린다', '오른손을 엄지부터 차례로 접는다'],
-    check: [{ hands: 2, zone: 'chest' }, { hands: 2, zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: [], other: ['index','middle','ring','pinky'], zone: 'chest' }] }),
 
   e(5394, { word: '누구', category: '묻는 말', aliases: ['누가','누구예요'], status: 'ok',
     원문: '구부린 오른 손가락 등으로 오른뺨을 상하로 두 번 살짝 문지른다.',

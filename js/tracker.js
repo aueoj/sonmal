@@ -7,7 +7,7 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611021336';
+import { landmarksFor } from './mockHand.js?v=202611021408';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -119,7 +119,10 @@ export class Tracker {
     const hands = lm ? [{ lm, handedness: 'Right' }] : [];
     // 양손이 필요한 자모는 모의 입력도 손을 둘 띄운다
     if (lm && this.mockTwoHands) {
-      hands.push({ lm: lm.map(p => ({ ...p, x: p.x + 0.18 })), handedness: 'Left' });
+      // 두 번째 손: 따로 정한 손모양이 있으면 그것으로, 없으면 같은 손모양으로
+      const lm2 = this.mockPose2 ? landmarksFor(this.mockPose2, this.mockNoise) : lm;
+      const dy = this.mockPose2 ? (this.mockShiftY || 0) : 0;
+      hands.push({ lm: lm2.map(p => ({ ...p, x: p.x + 0.18, y: p.y + dy })), handedness: 'Left' });
     }
     this.onFrame(hands);
     setTimeout(() => this._mockLoop(), 60);

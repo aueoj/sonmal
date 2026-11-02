@@ -8,19 +8,19 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021336';
-import { getPose } from './jamoData.js?v=202611021336';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021336';
-import { describe } from './poseFeatures.js?v=202611021336';
-import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021336';
-import { Tracker } from './tracker.js?v=202611021336';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021336';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021336';
-import { groupByIdea } from './lessons.js?v=202611021336';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021336';
-import { createReader } from './reader.js?v=202611021336';
-import { SITUATIONS } from './lessons.js?v=202611021336';
-import { diagnose } from './diagnose.js?v=202611021336';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021408';
+import { getPose } from './jamoData.js?v=202611021408';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021408';
+import { describe } from './poseFeatures.js?v=202611021408';
+import { scorePose, scoreCheck, MOTION_WINDOW_MS } from './matcher.js?v=202611021408';
+import { Tracker } from './tracker.js?v=202611021408';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021408';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021408';
+import { groupByIdea } from './lessons.js?v=202611021408';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611021408';
+import { createReader } from './reader.js?v=202611021408';
+import { SITUATIONS } from './lessons.js?v=202611021408';
+import { diagnose } from './diagnose.js?v=202611021408';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -51,8 +51,8 @@ const ACCEPT = 0.88;        // 이 점수를 넘고
 const HOLD_MS = 500;        // 이만큼 버티면 맞은 것으로 본다
 const NEAR = 0.70;
 const SMOOTH_N = 7;
-const STEP_MS = 2500;       // 동작이 여러 개인 단어는 이 간격으로 흐른다 (1초는 따라 하기에 빨랐다)
 const WORD_HOLD_MS = 400;  // 낱말의 한 단계를 맞춘 채 이만큼 버티면 그 단계를 해낸 것으로 본다
+const WORD_TRAVEL = 0.3;   // 다음 동작으로 가려면 손이 이만큼은 옮겨 가야 한다 (손 길이 대비)
 const REPEAT_MS = 1400;     // 다 하고 나서 처음으로 돌아가기까지
 
 const state = {
@@ -182,20 +182,21 @@ function advance() {
 
   const pose = getPose(u.jamo);
   if (!pose) { state.got.push(u.jamo); return setTimeout(advance, 400); }
-  if (state.tracker?.mock) {
+  if (state.tracker?.mock && !state.mockLocked) {
     state.tracker.mockMotion = false;
     state.tracker.mockTwoHands = pose.hands === 2;
     state.tracker.mockShiftY = 0;
   }
 
   setRecall(false);
+  delete el.art.dataset.stepOk;
   el.art.innerHTML = jamoArt(u.jamo);
   el.name.textContent = u.jamo;
   el.step.textContent = pose.note;
   el.meta.replaceChildren();
   el.guide.dataset.state = '';
   el.fill.style.width = '0%';
-  if (state.tracker?.mock) state.tracker.setMockPose(pose);
+  if (state.tracker?.mock && !state.mockLocked) state.tracker.setMockPose(pose);
 }
 
 /* 표정과 사전 영상. 그림은 멈춘 장면이라 움직임과 표정을 다 담지 못한다.
@@ -224,14 +225,16 @@ function wordChecks(w) {
 }
 
 /* 모의 입력은 지금 맞춰야 할 단계의 손모양을 흉내 낸다. 판정 경로가 실제로 시험된다. */
-function mockForCheck(check) {
-  if (!state.tracker?.mock || !check) return;
-  state.tracker.setMockPose({
-    fingers: check.fingers ?? ['index', 'middle', 'ring', 'pinky'], dir: 'up', view: 'palm',
+function mockForCheck(check, moving = false) {
+  if (!state.tracker?.mock || !check || state.mockLocked) return;
+  const shape = fingers => ({
+    fingers: fingers ?? ['index', 'middle', 'ring', 'pinky'], dir: 'up', view: 'palm',
     thumb: check.thumb === 'up' ? 'up' : 'in', special: check.ring ? 'circle' : null, bent: false
   });
+  state.tracker.setMockPose(shape(check.fingers));
+  state.tracker.mockPose2 = check.other ? shape(check.other) : null;
   state.tracker.mockTwoHands = (check.hands ?? 1) === 2;
-  state.tracker.mockMotion = false;
+  state.tracker.mockMotion = moving;      // 둘째 동작부터는 손을 옮겨야 넘어간다
   state.tracker.mockShiftY = { belly: 0.35, chest: 0.15, front: 0.1 }[check.zone] ?? 0;
 }
 
@@ -242,6 +245,8 @@ function showWord(u) {
   const w = u.sign;
   const frames = WORD_POSE_FILES[w.word]?.length ?? 1;
   state.wordStep = 0; state.wordGot = 0; state.wordHold = 0; state.wordLost = 0;
+  state.wordFrom = null; state.wordTravel = 0;
+  delete el.art.dataset.stepOk;
 
   el.name.textContent = u.jamo;
   if (u.jamo !== w.word) {
@@ -257,19 +262,16 @@ function showWord(u) {
   el.seen.textContent = '';
   state.wordShown = performance.now();
   setRecall(stageOf(w.word) === 2);
-  paintWordStep(w, frames);
+  paintWordStep(w);
   mockForCheck(wordChecks(w)[0]);
 
-  // 동작은 멈추지 않고 돈다. 따라할 때까지 계속 보여 준다.
-  state.wordTimer = setInterval(() => {
-    state.wordStep = (state.wordStep + 1) % frames;
-    paintWordStep(w, frames);
-  }, STEP_MS);
+  /* 그림은 저절로 넘어가지 않는다. 지금 그림의 동작을 해내면 다음 그림으로 간다.
+     시간에 맞춰 넘기면 따라 하는 속도와 어긋나고, 무엇을 해냈는지도 알 수 없다. */
   if (!state.live) el.step.textContent = '카메라를 켜면 따라한 것을 알아봅니다';
 }
 
 /* 그림은 showWord 에서 한 번만 만든다. 여기서는 보여 줄 것만 바꾼다. */
-function paintWordStep(w, frames) {
+function paintWordStep(w) {
   // 지금 칸이 이 단어가 아니면 건드리지 않는다. 남은 타이머가 자모 그림을 덮지 않게.
   const cur = state.seq[state.at];
   if (!cur || cur.role !== 'word' || cur.sign !== w) return stopWordTimer();
@@ -387,19 +389,33 @@ function onFrame(hands) {
     state.wordLost = 0;
     const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
     const r = scoreCheck(feats, checks[k]);
+    /* 같은 자세 그대로 다음 단계까지 넘어가지 않게, 앞 동작을 끝낸 자리에서
+       손이 실제로 옮겨 가야 다음 동작으로 친다. */
+    if (state.wordGot > 0 && state.wordFrom && r.centroid) {
+      const d = Math.hypot(r.centroid.x - state.wordFrom.x, r.centroid.y - state.wordFrom.y) / (r.scale || 1);
+      state.wordTravel = Math.max(state.wordTravel ?? 0, d);
+      if (r.ok && state.wordTravel < WORD_TRAVEL) { r.ok = false; r.hint = '그림처럼 다음 동작으로 손을 옮기세요'; }
+    }
     if (r.ok) {
       if (!state.wordHold) state.wordHold = now;
       if (now - state.wordHold >= WORD_HOLD_MS) {
         state.wordGot += 1; state.wordHold = 0;
         if (state.wordGot >= n) { el.seen.textContent = ''; return completeWord(current); }
-        mockForCheck(checks[state.wordGot]);
+        // 해낸 동작의 다음 그림을 보여 준다
+        state.wordStep = Math.min(state.wordGot, (WORD_POSE_FILES[current.sign.word]?.length ?? 1) - 1);
+        paintWordStep(current.sign);
+        el.art.dataset.stepOk = state.wordGot % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
+        state.wordFrom = r.centroid; state.wordTravel = 0;
+        mockForCheck(checks[state.wordGot], true);
       }
     } else state.wordHold = 0;
 
     const part = state.wordHold ? Math.min(1, (now - state.wordHold) / WORD_HOLD_MS) : 0;
     el.fill.style.width = `${Math.round(((state.wordGot + part) / n) * 100)}%`;
     el.guide.dataset.state = r.ok ? 'near' : '';
-    el.seen.textContent = `${state.wordGot + 1}/${n}단계  ${r.ok ? '좋아요, 그대로' : r.hint}`;
+    el.seen.textContent = n > 1
+      ? `${state.wordGot + 1}/${n}번째 동작  ${r.ok ? '좋아요, 그대로' : r.hint}`
+      : (r.ok ? '좋아요, 그대로' : r.hint);
     return;
   }
 
@@ -506,7 +522,8 @@ async function startCamera({ demo = false } = {}) {
     state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
     if (MOCK) window.__sonmalMock = jamo => {
-      state.tracker.mockShiftY = 0; state.tracker.mockMotion = false;
+      state.mockLocked = true;          // 점검이 손을 쥐는 동안 앱이 모의 손을 바꾸지 않는다
+      state.tracker.mockShiftY = 0; state.tracker.mockMotion = false; state.tracker.mockPose2 = null;
       const p = jamo ? getPose(jamo) : null;
       state.tracker.mockTwoHands = p?.hands === 2;
       state.tracker.setMockPose(p);

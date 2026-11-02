@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021336';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021408';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -145,7 +145,8 @@ export { angleToDir };
  * 낱말은 지문자처럼 자세 하나로 끝나지 않는다. 그림 한 장마다 사전 수형 설명에서
  * 읽어 둔 판정 힌트(wordBank 의 check)가 있다.
  *   hands   보여야 하는 손 수
- *   fingers 펴진 손가락 (없으면 손가락은 보지 않는다. 구부린 손, C 모양처럼 숫자로 못 박기 어려운 수형)
+ *   fingers 주로 쓰는 손에서 펴진 손가락 (없으면 손가락은 보지 않는다. 구부린 손, C 모양처럼 숫자로 못 박기 어려운 수형)
+ *   other   두 손 낱말에서 다른 손의 펴진 손가락. 없으면 두 손이 같은 손모양이다(fingers 를 따른다)
  *   ring    엄지와 검지 끝을 맞대 고리를 만드는가
  *   thumb   'up' 이면 엄지를 세운다
  *   zone    손이 머무는 높이. 얼굴, 턱, 배만 본다. 가슴과 몸 앞은 보지 않는다
@@ -185,17 +186,28 @@ export function scoreCheck(feats, check = {}) {
 
   // 주로 쓰는 손: 수형이 가장 잘 맞는 손
   let best = null;
-  for (const f of feats) {
+  feats.forEach((f, i) => {
     const s = handShape(f, check);
-    if (!best || s.score > best.s.score) best = { f, s };
-  }
+    if (!best || s.score > best.s.score) best = { f, s, i };
+  });
   const { f, s } = best;
   let hint = s.score < 0.72 ? (s.hint ?? '그림의 손모양을 다시 보세요') : null;
+
+  /* 두 손 낱말은 다른 손도 본다. 한 손만 맞고 다른 손은 아무렇게나 해도
+     통과하던 것을 막는다('안녕하세요'의 두 주먹). */
+  if (!hint && need === 2 && check.fingers) {
+    const otherFingers = check.other ?? check.fingers;
+    const rest = feats.filter((_, i) => i !== best.i);
+    const o = rest.map(x => handShape(x, { fingers: otherFingers }))
+      .sort((a, b) => b.score - a.score)[0];
+    if (!o || o.score < 0.72)
+      hint = '다른 손도 그림처럼: ' + (o?.hint ?? (otherFingers.length ? '손가락을 펴세요' : '주먹을 쥐세요'));
+  }
 
   if (!hint && check.ring && f.pinch > 0.35) hint = '엄지와 검지 끝을 맞대세요';
   if (!hint && check.thumb === 'up' && f.thumbExtension < 0.7) hint = '엄지를 세우세요';
   const zone = ZONE[check.zone];
   if (!hint && zone && !zone.ok(f.centroid.y)) hint = zone.hint;
 
-  return { ok: !hint, score: s.score, hint };
+  return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale };
 }

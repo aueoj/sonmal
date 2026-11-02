@@ -13,8 +13,10 @@ const hand = (fingers, { ring = false, thumb = 'in', dy = 0 } = {}) => {
 };
 const DY = { belly: 0.35, chest: 0.15, front: 0.1 };
 const right = c => {
-  const h = hand(c.fingers ?? ALL, { ring: c.ring, thumb: c.thumb === 'up' ? 'up' : 'in', dy: DY[c.zone] ?? 0 });
-  return Array((c.hands ?? 1)).fill(h);
+  const opt = { ring: c.ring, thumb: c.thumb === 'up' ? 'up' : 'in', dy: DY[c.zone] ?? 0 };
+  const h = hand(c.fingers ?? ALL, opt);
+  if ((c.hands ?? 1) === 1) return [h];
+  return [h, c.other ? hand(c.other, { dy: DY[c.zone] ?? 0 }) : h];
 };
 
 let pass = 0, missed = [], falsePass = [];
@@ -29,6 +31,12 @@ for (const w of WORD_BANK.filter(x => x.status === 'ok')) {
       wrongs.push(['손가락', Array(c.hands ?? 1).fill(hand(other, { dy: DY[c.zone] ?? 0 }))]);
     }
     if ((c.hands ?? 1) === 2) wrongs.push(['손 하나', right(c).slice(0, 1)]);
+    // 두 손 낱말: 한 손만 맞고 다른 손은 엉뚱하면 걸려야 한다
+    if ((c.hands ?? 1) === 2 && c.fingers) {
+      const want2 = c.other ?? c.fingers;
+      const wrong2 = want2.length >= 3 ? [] : ALL;
+      wrongs.push(['다른 손', [right(c)[0], hand(wrong2, { dy: DY[c.zone] ?? 0 })]]);
+    }
     if (c.zone === 'face' || c.zone === 'chin') wrongs.push(['배 높이', right({ ...c, zone: 'belly' })]);
     if (c.zone === 'belly') wrongs.push(['얼굴 높이', right({ ...c, zone: 'face' })]);
     for (const [why, feats] of wrongs) if (scoreCheck(feats, c).ok) falsePass.push(`${tag} ← ${why} 틀렸는데 통과`);

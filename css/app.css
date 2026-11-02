@@ -250,6 +250,13 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 /* 맞아떨어지는 순간 — 이 화면의 유일한 비조작 모션 */
 @keyframes lockin { from { box-shadow: 0 0 0 0 rgba(60,158,107,.45); } to { box-shadow: 0 0 0 10px rgba(60,158,107,0); } }
 .unit[data-lock="1"] { animation: lockin .45s var(--ease); }
+/* 낱말의 한 동작을 해내 다음 그림으로 넘어가는 순간 */
+/* 이름이 다른 두 애니메이션을 번갈아 써야 연달아 넘어갈 때마다 다시 돈다 */
+@keyframes stepok-a { from { box-shadow: 0 0 0 0 rgba(60,158,107,.7); } to { box-shadow: 0 0 0 12px rgba(60,158,107,0); } }
+@keyframes stepok-b { from { box-shadow: 0 0 0 0 rgba(60,158,107,.7); } to { box-shadow: 0 0 0 12px rgba(60,158,107,0); } }
+.guide-art[data-step-ok="a"] { animation: stepok-a .5s var(--ease); }
+.guide-art[data-step-ok="b"] { animation: stepok-b .5s var(--ease); }
+@media (prefers-reduced-motion: reduce) { .guide-art[data-step-ok] { animation: none; } }
 
 /* ── 공통 ───────────────────────────────────── */
 button { cursor: pointer; white-space: nowrap; border-radius: var(--r-md); border: 1px solid transparent; }
