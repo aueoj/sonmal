@@ -182,7 +182,7 @@ Scene: Her right arm has crossed her torso toward her left shoulder (viewer righ
 ```
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
-Scene: Her left hand (viewer's right) is flat, palm down, fingertips pointing to her right, in front of her lower chest. Her right hand (viewer's left) is flat and held vertically on its edge (little-finger edge down), resting on the back of the left hand near the wrist, fingertips pointing forward. Calm expression.
+Scene: LEFT hand is flat PALM DOWN, BACK UP, fingers pointing to her RIGHT (viewer left), wrist at viewer right. RIGHT hand is an upright VERTICAL BLADE: four fingers fully extended straight together, thumb at TOP and little-finger EDGE at BOTTOM, palm vertical, not horizontal. Its little-finger edge rests on the left HAND BACK close to the left WRIST. Use a three-quarter view showing the two perpendicular hand planes. No closed thumbs-up fist.
 ```
 
 **sl9928-02.png** 오른손을 천천히 앞으로 내민다
@@ -190,7 +190,7 @@ Scene: Her left hand (viewer's right) is flat, palm down, fingertips pointing to
 ```
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
-Scene: Her left hand (viewer's right) stays flat and palm down. The vertical flat her right hand (viewer's left) has slid slowly forward along the back of the left hand and is now past the left fingertips. Calm, unhurried expression.
+Scene: Keep the LEFT hand exactly palm DOWN, back UP, fingers to her RIGHT. Keep the RIGHT hand in exactly the same vertical blade shape, all four fingers straight, thumb TOP, little-finger edge BOTTOM. Slide that whole upright hand FORWARD beyond the LEFT FINGERTIPS; do not roll it palm-down or bend the fingers. Same camera, body, scale and left-hand position as frame one.
 ```
 
 ## 10 이해했어요  ·  기본
@@ -675,5 +675,47 @@ Scene: Her RIGHT hand, on viewer left, is fully open with straight fingers toget
 Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
 
 Scene: Her RIGHT flat open hand is raised near lips, PALM UP, fingers straight together aimed toward her mouth, not pinched. Left arm relaxed. End pose of lifting open hand toward mouth.
+```
+
+## 38 친구  ·  생활
+
+사전 7028: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=7028
+원문: 두 손을 두 번 맞잡는다.
+
+**sl7028-01.png** 가슴 앞에서 두 손을 마주 보게 벌린다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Both hands are open and naturally curved in front of the chest, palms facing each other, separated by about 10 cm before clasping. One still pose, two hands only.
+```
+
+**sl7028-02.png** 두 손을 맞잡는다 (두 번 반복)
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Both hands clasp each other at the centre of the chest, fingers wrapping around the opposite hand, as in the central contact pose of dictionary entry 7028. Not prayer palms. Repeat clasping twice; draw only one contact pose.
+```
+
+## 39 만나다  ·  생활
+
+사전 12165: https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=12165
+원문: 두 주먹의 1지를 펴서 마주 세웠다가 중앙으로 모아 마주 댄다.
+
+**sl12165-01.png** 두 주먹의 검지만 펴서 양옆에 마주 세운다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: Both hands are fists with ONLY the index fingers extended straight up, facing each other at shoulder width. Thumbs folded across the other three curled fingers.
+```
+
+**sl12165-02.png** 두 손을 중앙으로 모아 세운 검지를 마주 댄다
+
+```
+Match docs/illustration-style-reference.png exactly for character proportions, face, hair silhouette, palette and line weight. Use its character style only, never its arrows, layout or hand poses. Flat vector illustration in exactly this style: a friendly young woman, upper body, centered and facing the viewer; dark navy side-parted hair with a low side bun; peach skin; simple dot eyes; plain white long-sleeve top; thick, even dark-navy outlines; solid pure black background with a soft white glow around the figure; landscape 3:2 (1536x1024). Hands are large, clear and anatomically correct with exactly five fingers each. No text, no letters, no arrows, no motion lines, no labels, no frames. Her RIGHT hand appears on the VIEWER'S LEFT side of the image.
+
+Scene: The same two upright index fingers have moved to the centre of the chest and their facing sides touch. Fists meet below them. Keep both index fingers straight up, not pointing horizontally. Only the endpoint pose.
 ```
 

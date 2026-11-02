@@ -17,6 +17,12 @@ STYLE = (
 R, L = "her right hand (viewer's left)", "her left hand (viewer's right)"
 
 FRAMES = {
+ '친구': [
+  'Both hands are open and naturally curved in front of the chest, palms facing each other, separated by about 10 cm before clasping. One still pose, two hands only.',
+  'Both hands clasp each other at the centre of the chest, fingers wrapping around the opposite hand, as in the central contact pose of dictionary entry 7028. Not prayer palms. Repeat clasping twice; draw only one contact pose.'],
+ '만나다': [
+  'Both hands are fists with ONLY the index fingers extended straight up, facing each other at shoulder width. Thumbs folded across the other three curled fingers.',
+  'The same two upright index fingers have moved to the centre of the chest and their facing sides touch. Fists meet below them. Keep both index fingers straight up, not pointing horizontally. Only the endpoint pose.'],
  '안녕하세요': [
   f"{L} is a closed fist with the forearm held horizontally in front of her waist. {R} is open and flat, palm down, stroking along the top of the left forearm from the elbow toward the wrist. Calm, polite smile.",
   "Both hands are closed fists held side by side in front of her lower chest, palms facing down, knuckles facing forward, as if pressing both fists slightly downward. Calm, polite smile."],
@@ -41,8 +47,8 @@ FRAMES = {
   f"{R} is raised in front of her right shoulder, back of the hand facing the viewer; the thumb presses on the fingernails of the curled index and middle fingers (as if ready to flick); ring and little fingers folded. Neutral expression.",
   "Her right arm has crossed her torso toward her left shoulder (viewer right), with the index and middle fingers flicked open and extended; thumb, ring and little fingers folded. BACK of right hand faces viewer, fingertips point diagonally to viewer right. Left arm relaxed down. Neutral expression."],
  '천천히': [
-  f"{L} is flat, palm down, fingertips pointing to her right, in front of her lower chest. {R} is flat and held vertically on its edge (little-finger edge down), resting on the back of the left hand near the wrist, fingertips pointing forward. Calm expression.",
-  f"{L} stays flat and palm down. The vertical flat {R} has slid slowly forward along the back of the left hand and is now past the left fingertips. Calm, unhurried expression."],
+  'LEFT hand is flat PALM DOWN, BACK UP, fingers pointing to her RIGHT (viewer left), wrist at viewer right. RIGHT hand is an upright VERTICAL BLADE: four fingers fully extended straight together, thumb at TOP and little-finger EDGE at BOTTOM, palm vertical, not horizontal. Its little-finger edge rests on the left HAND BACK close to the left WRIST. Use a three-quarter view showing the two perpendicular hand planes. No closed thumbs-up fist.',
+  'Keep the LEFT hand exactly palm DOWN, back UP, fingers to her RIGHT. Keep the RIGHT hand in exactly the same vertical blade shape, all four fingers straight, thumb TOP, little-finger edge BOTTOM. Slide that whole upright hand FORWARD beyond the LEFT FINGERTIPS; do not roll it palm-down or bend the fingers. Same camera, body, scale and left-hand position as frame one.'],
  '이해했어요': [
   f"{L} has the index and middle fingers extended and spread in a V, pointing to her right (sideways), back of the hand facing the viewer, in front of her chest; other fingers folded. {R} is a fist with only the index finger extended, its tip just behind the gap of the V. Thoughtful expression.",
   f"Same hands: the extended right index finger is pushed forward through the gap between the left index and middle fingers. Understanding nod."],
