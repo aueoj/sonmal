@@ -3,83 +3,75 @@
   "frames": [
     {
       "word": "안녕하세요",
-      "slug": "01-01",
+      "slug": "sl3331-01",
       "frame": 1,
       "total": 2,
-      "basis": "legacy",
-      "step": "편 손을 얼굴 옆으로 올린다"
+      "basis": "sldict",
+      "step": "왼 주먹을 쥐고 오른 손바닥으로 왼팔을 쓸어내린다",
+      "entryNo": "3331"
     },
     {
       "word": "안녕하세요",
-      "slug": "01-02",
+      "slug": "sl3331-02",
       "frame": 2,
       "total": 2,
-      "basis": "legacy",
-      "step": "좌우로 두어 번 흔든다"
+      "basis": "sldict",
+      "step": "두 주먹을 가슴 앞에서 아래로 내린다",
+      "entryNo": "3331"
     },
     {
       "word": "감사합니다",
-      "slug": "02-01",
+      "slug": "sl2372-01",
       "frame": 1,
-      "total": 3,
-      "basis": "legacy",
-      "step": "한 손을 턱 아래에 댄다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼손을 손바닥이 아래로 펴고 오른손을 모로 세운다",
+      "entryNo": "2372"
     },
     {
       "word": "감사합니다",
-      "slug": "02-02",
+      "slug": "sl2372-02",
       "frame": 2,
-      "total": 3,
-      "basis": "legacy",
-      "step": "아래에 편 손을 받친다"
-    },
-    {
-      "word": "감사합니다",
-      "slug": "02-03",
-      "frame": 3,
-      "total": 3,
-      "basis": "legacy",
-      "step": "위의 손을 손바닥으로 내린다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손 새끼 쪽 옆면을 왼 손등에 두 번 댄다",
+      "entryNo": "2372"
     },
     {
       "word": "미안합니다",
-      "slug": "03-01",
+      "slug": "sl9917-01",
       "frame": 1,
       "total": 2,
-      "basis": "legacy",
-      "step": "주먹을 가슴에 댄다"
+      "basis": "sldict",
+      "step": "검지와 엄지로 동그라미를 만들어 이마에 댄다",
+      "entryNo": "9917"
     },
     {
       "word": "미안합니다",
-      "slug": "03-02",
+      "slug": "sl9917-02",
       "frame": 2,
       "total": 2,
-      "basis": "legacy",
-      "step": "둥글게 두어 번 문지른다"
+      "basis": "sldict",
+      "step": "손을 펴며 내려 왼 손등 위에 얹는다",
+      "entryNo": "9917"
     },
     {
       "word": "괜찮아요",
-      "slug": "04-01",
+      "slug": "sl9466-01",
       "frame": 1,
-      "total": 3,
-      "basis": "legacy",
-      "step": "엄지와 검지 끝을 맞붙인다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "주먹에서 새끼손가락만 편다",
+      "entryNo": "9466"
     },
     {
       "word": "괜찮아요",
-      "slug": "04-02",
+      "slug": "sl9466-02",
       "frame": 2,
-      "total": 3,
-      "basis": "legacy",
-      "step": "나머지 세 손가락을 편다"
-    },
-    {
-      "word": "괜찮아요",
-      "slug": "04-03",
-      "frame": 3,
-      "total": 3,
-      "basis": "legacy",
-      "step": "어깨 높이에서 보인다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "새끼손가락 끝을 턱에 가볍게 두 번 댄다",
+      "entryNo": "9466"
     },
     {
       "word": "네",
@@ -99,67 +91,57 @@
     },
     {
       "word": "아니요",
-      "slug": "06-01",
+      "slug": "sl24036-01",
       "frame": 1,
       "total": 2,
-      "basis": "legacy",
-      "step": "편 손을 얼굴 옆에 든다"
+      "basis": "sldict",
+      "step": "손바닥이 앞을 보게 편 손을 세운다",
+      "entryNo": "24036"
     },
     {
       "word": "아니요",
-      "slug": "06-02",
+      "slug": "sl24036-02",
       "frame": 2,
       "total": 2,
-      "basis": "legacy",
-      "step": "좌우로 두세 번 젓는다"
+      "basis": "sldict",
+      "step": "좌우로 흔든다",
+      "entryNo": "24036"
     },
     {
       "word": "도와주세요",
-      "slug": "07-01",
+      "slug": "sl5447-01",
       "frame": 1,
-      "total": 3,
-      "basis": "legacy",
-      "step": "편 손을 손바닥이 위로 오게 둔다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼손은 엄지를 세운 주먹, 오른손은 펴서 세운다",
+      "entryNo": "5447"
     },
     {
       "word": "도와주세요",
-      "slug": "07-02",
+      "slug": "sl5447-02",
       "frame": 2,
-      "total": 3,
-      "basis": "legacy",
-      "step": "다른 손을 그 위에 편다"
-    },
-    {
-      "word": "도와주세요",
-      "slug": "07-03",
-      "frame": 3,
-      "total": 3,
-      "basis": "legacy",
-      "step": "위의 손을 내려 손바닥에 댄다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 왼 엄지 등에 두 번 댄다",
+      "entryNo": "5447"
     },
     {
       "word": "다시",
-      "slug": "08-01",
+      "slug": "sl7422-01",
       "frame": 1,
-      "total": 3,
-      "basis": "legacy",
-      "step": "두 손의 검지를 편다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "엄지로 검지와 중지 손톱을 누르고 어깨 앞에 든다",
+      "entryNo": "7422"
     },
     {
       "word": "다시",
-      "slug": "08-02",
+      "slug": "sl7422-02",
       "frame": 2,
-      "total": 3,
-      "basis": "legacy",
-      "step": "서로 마주 보게 둔다"
-    },
-    {
-      "word": "다시",
-      "slug": "08-03",
-      "frame": 3,
-      "total": 3,
-      "basis": "legacy",
-      "step": "둥글게 돌린다"
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼쪽 아래로 내리며 검지와 중지를 편다",
+      "entryNo": "7422"
     },
     {
       "word": "천천히",
@@ -205,35 +187,84 @@
     },
     {
       "word": "물",
-      "slug": "11-01",
+      "slug": "sl10981-01",
       "frame": 1,
       "total": 2,
-      "basis": "legacy",
-      "step": "손가락 끝을 모은다"
+      "basis": "sldict",
+      "step": "검지와 엄지를 구부려 컵을 쥔 모양을 만든다",
+      "entryNo": "10981"
     },
     {
       "word": "물",
-      "slug": "11-02",
+      "slug": "sl10981-02",
       "frame": 2,
       "total": 2,
-      "basis": "legacy",
-      "step": "입가로 가져간다"
+      "basis": "sldict",
+      "step": "입으로 기울여 올린다",
+      "entryNo": "10981"
     },
     {
       "word": "화장실",
-      "slug": "12-01",
+      "slug": "sl971-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "중지, 약지, 새끼를 벌려 펴고 검지와 엄지를 C자로 구부린다",
+      "entryNo": "971"
+    },
+    {
+      "word": "배고파요",
+      "slug": "sl9387-01",
       "frame": 1,
       "total": 2,
-      "basis": "legacy",
-      "step": "검지를 세운다"
+      "basis": "sldict",
+      "step": "두 손 엄지 등을 배에 댄다",
+      "entryNo": "9387"
     },
     {
-      "word": "화장실",
-      "slug": "12-02",
+      "word": "배고파요",
+      "slug": "sl9387-02",
       "frame": 2,
       "total": 2,
-      "basis": "legacy",
-      "step": "가리키려는 쪽으로 향한다"
+      "basis": "sldict",
+      "step": "네 손가락을 엄지로 모아 누르며 몸을 조금 숙인다",
+      "entryNo": "9387"
+    },
+    {
+      "word": "화나요",
+      "slug": "sl1086-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "엄지를 세운 주먹을 배 앞에 둔다",
+      "entryNo": "1086"
+    },
+    {
+      "word": "화나요",
+      "slug": "sl1086-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "힘주어 가슴 쪽으로 올린다",
+      "entryNo": "1086"
+    },
+    {
+      "word": "슬퍼요",
+      "slug": "sl7240-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지와 엄지 끝을 맞대어 오른쪽 눈 밑에 댔다가 내린다",
+      "entryNo": "7240"
+    },
+    {
+      "word": "슬퍼요",
+      "slug": "sl7240-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손가락을 펴서 구부려 가슴에 대고 돌린다",
+      "entryNo": "7240"
     },
     {
       "word": "기뻐요",
@@ -263,6 +294,186 @@
       "entryNo": "9078"
     },
     {
+      "word": "싫어요",
+      "slug": "sl23960-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "검지와 엄지를 약간 구부려 끝을 턱에 댄다",
+      "entryNo": "23960"
+    },
+    {
+      "word": "무서워요",
+      "slug": "sl10967-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "두 손 엄지 끝을 몸 가운데 위아래에 대고 손가락을 떤다",
+      "entryNo": "10967"
+    },
+    {
+      "word": "피곤해요",
+      "slug": "sl12438-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손바닥을 양쪽 가슴에 댄다",
+      "entryNo": "12438"
+    },
+    {
+      "word": "피곤해요",
+      "slug": "sl12438-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "힘없이 밑으로 내린다",
+      "entryNo": "12438"
+    },
+    {
+      "word": "아파요",
+      "slug": "sl5621-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "손바닥이 위로 오게 약간 오므린 손을 좌우로 흔든다",
+      "entryNo": "5621"
+    },
+    {
+      "word": "놀랐어요",
+      "slug": "sl2336-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지와 엄지 끝을 맞댄 두 손을 가슴 앞에 위아래로 둔다",
+      "entryNo": "2336"
+    },
+    {
+      "word": "놀랐어요",
+      "slug": "sl2336-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "놀란 표정으로 두 손을 동시에 편다",
+      "entryNo": "2336"
+    },
+    {
+      "word": "행복해요",
+      "slug": "sl10223-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "엄지는 오른쪽 볼, 네 손가락은 왼쪽 볼에 댄다",
+      "entryNo": "10223"
+    },
+    {
+      "word": "행복해요",
+      "slug": "sl10223-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "내리며 손가락을 모아 붙인다",
+      "entryNo": "10223"
+    },
+    {
+      "word": "걱정돼요",
+      "slug": "sl5127-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "약간 구부린 손끝을 가슴에 대고 천천히 두 바퀴 돌린다",
+      "entryNo": "5127"
+    },
+    {
+      "word": "나",
+      "slug": "sl11536-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "오른 손바닥을 가슴 가운데에 댄다",
+      "entryNo": "11536"
+    },
+    {
+      "word": "너",
+      "slug": "sl6450-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "검지로 상대를 가리키며 약간 내민다",
+      "entryNo": "6450"
+    },
+    {
+      "word": "우리",
+      "slug": "sl8265-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 가슴에 댄다",
+      "entryNo": "8265"
+    },
+    {
+      "word": "우리",
+      "slug": "sl8265-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손등이 위로 오게 몸 앞에서 크게 한 바퀴 돌린다",
+      "entryNo": "8265"
+    },
+    {
+      "word": "여기",
+      "slug": "sl8472-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "검지 끝이 약간 아래를 보게 하여 내린다",
+      "entryNo": "8472"
+    },
+    {
+      "word": "무엇",
+      "slug": "sl7224-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "검지를 세워 좌우로 두 번 흔든다",
+      "entryNo": "7224"
+    },
+    {
+      "word": "어디",
+      "slug": "sl8799-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지를 세워 왼쪽으로 흔든다",
+      "entryNo": "8799"
+    },
+    {
+      "word": "어디",
+      "slug": "sl8799-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "반쯤 구부린 손을 손바닥이 아래로 오게 내리다 멈춘다",
+      "entryNo": "8799"
+    },
+    {
+      "word": "언제",
+      "slug": "sl8602-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "모로 세운 왼손 위에 오른손을 모로 세워 올린다",
+      "entryNo": "8602"
+    },
+    {
+      "word": "언제",
+      "slug": "sl8602-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 엄지부터 차례로 접는다",
+      "entryNo": "8602"
+    },
+    {
       "word": "누구",
       "slug": "sl5394-01",
       "frame": 1,
@@ -279,6 +490,24 @@
       "basis": "sldict",
       "step": "검지 끝을 오른쪽 관자놀이에 대고 의문스러운 표정을 짓는다",
       "entryNo": "7713"
+    },
+    {
+      "word": "어떻게",
+      "slug": "sl7256-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지를 세워 왼쪽으로 흔든다",
+      "entryNo": "7256"
+    },
+    {
+      "word": "어떻게",
+      "slug": "sl7256-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지와 중지를 구부린 두 주먹의 새끼 쪽을 두 번 맞부딪친다",
+      "entryNo": "7256"
     },
     {
       "word": "학교",

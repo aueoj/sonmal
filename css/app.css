@@ -23,6 +23,9 @@ body { display: flex; flex-direction: column; overflow: hidden; }
   overflow-x: auto; scrollbar-width: none; padding: var(--s2) 0;
 }
 .chips::-webkit-scrollbar { display: none; }
+.chip-group { flex: none; display: flex; align-items: center; gap: var(--s2); }
+.chip-group + .chip-group, .chip-group + .chip { margin-left: var(--s3); }
+.chip-cat { font-family: var(--kr); font-size: var(--t-micro); color: var(--faint); white-space: nowrap; padding-left: 2px; }
 .chips[data-more="1"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
   mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
 .chip {

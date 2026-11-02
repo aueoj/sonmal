@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611012354';
-import { getPose } from './jamoData.js?v=202611012354';
-import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611012354';
-import { describe } from './poseFeatures.js?v=202611012354';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611012354';
-import { Tracker } from './tracker.js?v=202611012354';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611012354';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611012354';
-import { diagnose } from './diagnose.js?v=202611012354';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611020450';
+import { getPose } from './jamoData.js?v=202611020450';
+import { jamoArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611020450';
+import { describe } from './poseFeatures.js?v=202611020450';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611020450';
+import { Tracker } from './tracker.js?v=202611020450';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611020450';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611020450';
+import { diagnose } from './diagnose.js?v=202611020450';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -458,8 +458,17 @@ function setHand(hand) {
 function init() {
   setHand('right');
 
-  el.chips.innerHTML = WORD_SIGNS
-    .map(w => `<button class="chip" type="button" data-word="${w.word}">${w.word}</button>`).join('')
+  /* 단어가 많아져 갈래마다 작은 이름을 앞에 둔다. 칩 줄은 그대로 한 줄로 민다. */
+  const groups = new Map();
+  for (const w of WORD_SIGNS) {
+    const c = w.category ?? '기본';
+    if (!groups.has(c)) groups.set(c, []);
+    groups.get(c).push(w);
+  }
+  el.chips.innerHTML = [...groups].map(([c, ws]) =>
+    `<span class="chip-group" role="group" aria-label="${c}"><span class="chip-cat" aria-hidden="true">${c}</span>`
+    + ws.map(w => `<button class="chip" type="button" data-word="${w.word}">${w.word}</button>`).join('')
+    + '</span>').join('')
     + '<button class="chip spell" type="button" data-word="손말">손말 지문자</button>';
   el.chips.addEventListener('click', e => {
     const b = e.target.closest('.chip');
