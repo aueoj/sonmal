@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021254';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611021336';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -140,3 +140,62 @@ export function detectLateralShift(trail, scale, now = trail.at(-1)?.t ?? 0) {
 
 export const PARAM_NAMES = { 수형: '손 모양', 수향: '손바닥 방향', 수위: '손 위치', 수동: '손 움직임' };
 export { angleToDir };
+
+/* ── 낱말 단계 판정 ─────────────────────────────
+ * 낱말은 지문자처럼 자세 하나로 끝나지 않는다. 그림 한 장마다 사전 수형 설명에서
+ * 읽어 둔 판정 힌트(wordBank 의 check)가 있다.
+ *   hands   보여야 하는 손 수
+ *   fingers 펴진 손가락 (없으면 손가락은 보지 않는다. 구부린 손, C 모양처럼 숫자로 못 박기 어려운 수형)
+ *   ring    엄지와 검지 끝을 맞대 고리를 만드는가
+ *   thumb   'up' 이면 엄지를 세운다
+ *   zone    손이 머무는 높이. 얼굴, 턱, 배만 본다. 가슴과 몸 앞은 보지 않는다
+ * 손 높이는 얼굴을 찾지 않고 화면 속 손의 세로 위치로 어림한다. 그래서 너그럽게 잡았다.
+ */
+const ZONE = {
+  face:  { ok: y => y < 0.58, hint: '손을 얼굴 높이로 올리세요' },
+  chin:  { ok: y => y < 0.62, hint: '손을 턱 높이로 올리세요' },
+  belly: { ok: y => y > 0.42, hint: '손을 배 높이로 내리세요' }
+};
+
+function handShape(feat, check) {
+  if (!check.fingers) return { score: 1, hint: null };
+  const want = new Set(check.fingers);
+  let score = 0, worst = null, worstGap = 0;
+  for (const f of FINGERS) {
+    const gap = Math.abs((want.has(f) ? 1 : 0) - feat.extension[f]);
+    score += 1 - Math.min(1, gap / 0.75);
+    if (gap > worstGap) { worstGap = gap; worst = f; }
+  }
+  score /= FINGERS.length;
+  const hint = worstGap > 0.45
+    ? (want.has(worst) ? `${FINGER_KO[worst]}을 펴세요` : `${FINGER_KO[worst]}을 접으세요`)
+    : null;
+  return { score, hint };
+}
+
+/**
+ * @param {Array<object>} feats 보이는 손마다 describe 결과
+ * @param {object} check wordBank 의 단계 힌트
+ * @returns {{ok:boolean, score:number, hint:?string}}
+ */
+export function scoreCheck(feats, check = {}) {
+  const need = check.hands ?? 1;
+  if (feats.length < need)
+    return { ok: false, score: 0, hint: need === 2 ? '두 손이 다 보이게 하세요' : '손이 보이게 하세요' };
+
+  // 주로 쓰는 손: 수형이 가장 잘 맞는 손
+  let best = null;
+  for (const f of feats) {
+    const s = handShape(f, check);
+    if (!best || s.score > best.s.score) best = { f, s };
+  }
+  const { f, s } = best;
+  let hint = s.score < 0.72 ? (s.hint ?? '그림의 손모양을 다시 보세요') : null;
+
+  if (!hint && check.ring && f.pinch > 0.35) hint = '엄지와 검지 끝을 맞대세요';
+  if (!hint && check.thumb === 'up' && f.thumbExtension < 0.7) hint = '엄지를 세우세요';
+  const zone = ZONE[check.zone];
+  if (!hint && zone && !zone.ok(f.centroid.y)) hint = zone.hint;
+
+  return { ok: !hint, score: s.score, hint };
+}

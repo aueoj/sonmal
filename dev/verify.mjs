@@ -32,7 +32,9 @@ const STATIC = [
   ['자모 구별', ['dev/selftest.mjs'], '40개 손모양이 서로 구별되는가'],
   ['단어 출처', ['dev/words-check.mjs'], '새 단어가 사전 번호와 그림을 갖췄는가'],
   ['그림 연결', ['dev/art/ingest.mjs', '--check'], '연결된 그림 파일이 다 있는가'],
-  ['말 기다림', ['dev/listen-test.mjs'], '첫 마디 전 5초는 끊지 않는가']
+  ['말 기다림', ['dev/listen-test.mjs'], '첫 마디 전 5초는 끊지 않는가'],
+  ['낱말 판정', ['dev/word-judge-test.mjs'], '틀린 손모양은 낱말을 통과하지 못하는가'],
+  ['읽기', ['dev/reader-test.mjs'], '지은 지문자를 글자로 합쳐 읽는가']
 ];
 
 /* 브라우저로 봐야 하는 것 */
@@ -49,7 +51,8 @@ const BROWSER = [
   ['진단', ['dev/diag-audit.mjs'], '카메라가 막히면 이유를 말하는가'],
   ['카메라 없이', ['dev/nocam-audit.mjs'], '카메라 없이도 둘러볼 수 있는가'],
   ['숨김', ['dev/hidden-audit.mjs'], 'hidden 이 실제로 숨는가'],
-  ['프레임', ['dev/embed-audit.mjs'], '프레임 안에서 무엇이 막히는가']
+  ['프레임', ['dev/embed-audit.mjs'], '프레임 안에서 무엇이 막히는가'],
+  ['대화', ['dev/talk-audit.mjs'], '상대 지문자를 받아 적어 읽어 주는가']
 ];
 
 const pick = list => list.filter(([name, cmd]) =>

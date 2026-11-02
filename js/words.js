@@ -38,8 +38,8 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611021254';
-import { WORD_BASIS } from './wordArt.js?v=202611021254';
+import { WORD_BANK } from './wordBank.js?v=202611021336';
+import { WORD_BASIS } from './wordArt.js?v=202611021336';
 
 /* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
    사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
@@ -147,19 +147,75 @@ export function lookupWord(word) {
   return byWord.get(word) ?? null;
 }
 
+/* ── 말을 수어 낱말로 맞추기 ──────────────────────
+ * 한국어는 낱말 뒤에 조사와 어미가 붙는다('이름이', '뭐예요', '친구가').
+ * 수어에는 대개 그런 것이 없어서 그대로 찾으면 못 찾고, 못 찾으면 지문자로
+ * 한 자씩 풀게 된다. '이름이 뭐예요'가 지문자 13동작이 되던 까닭이다.
+ * 그래서 뒤에 붙은 것을 떼어 가며 사전 낱말을 찾고, 끝내 없으면 뗀 앞부분만
+ * 지문자로 푼다. 조사와 어미는 손으로 하지 않는다.
+ */
+const ENDINGS = [   // 길이가 긴 것부터 시도한다
+  '이었어요', '였어요', '했어요', '었어요', '았어요', '이에요', '입니다', '습니다', '합니다',
+  '예요', '에요', '네요', '어요', '아요', '해요', '세요', '이야', '이다', '하다', '군요', '지요', '지만',
+  '해서', '어서', '아서', '죠', '요', '다', '서', '고', '며', '면', '해'
+];
+const PARTICLES = [
+  '에서', '에게', '한테', '으로', '이랑', '부터', '까지', '처럼', '보다',
+  '은', '는', '이', '가', '을', '를', '에', '도', '만', '의', '와', '과', '로', '랑'
+];
+const syllables = t => [...t].filter(c => /[가-힣]/.test(c)).length;
+
+/** 뒤에 붙은 조사나 어미를 한 번 떼어 본 후보들 */
+function strip(t, list) {
+  return list.filter(x => t.endsWith(x) && t.length > x.length).map(x => t.slice(0, -x.length));
+}
+
+/**
+ * 한 어절을 사전 낱말에 맞춘다.
+ * @returns {{sign?:object, stem:string}} sign 이 있으면 그 수어, 없으면 지문자로 풀 앞부분
+ */
+export function matchToken(token) {
+  const direct = lookupWord(token);
+  if (direct) return { sign: direct, stem: token };
+  const seen = new Set([token]);
+  let frontier = [token];
+  for (let depth = 0; depth < 2; depth++) {           // 조사 하나, 어미 하나까지만 뗀다
+    const next = [];
+    for (const t of frontier) for (const c of [...strip(t, ENDINGS), ...strip(t, PARTICLES)]) {
+      if (seen.has(c) || !c) continue;
+      seen.add(c); next.push(c);
+      const hit = lookupWord(c) ?? lookupWord(c + '다') ?? lookupWord(c + '요');
+      if (hit) return { sign: hit, stem: c };
+    }
+    frontier = next;
+  }
+  /* 사전에 없을 때 지문자로 풀 부분. 한 글자짜리 조사는 세 음절 이상일 때만 뗀다.
+     '아이'의 '이', '사과'의 '과'처럼 낱말의 일부를 떼어 버리지 않으려는 것이다. */
+  let stem = token;
+  for (const e of ENDINGS) if (e.length >= 2 && stem.endsWith(e) && syllables(stem) > syllables(e)) { stem = stem.slice(0, -e.length); break; }
+  for (const p of PARTICLES) {
+    if (!stem.endsWith(p) || syllables(stem) <= syllables(p)) continue;
+    if (p.length === 1 && syllables(stem) < 3) continue;
+    stem = stem.slice(0, -p.length); break;
+  }
+  return { stem };
+}
+
 /**
  * 문장을 단어 수어 구간과 지문자 구간으로 나눈다.
- * 사전이 비어 있으면 전부 지문자 구간이 된다.
- * @returns {Array<{kind:'word'|'spell', text:string, sign?:WordSign}>}
+ * 순서는 한국어 순서 그대로다. 수어 문장 번역이 아니라 낱말을 이어 본 연습이다.
+ * @returns {Array<{kind:'word'|'spell', text:string, sign?:WordSign, stem?:string}>}
+ *   text 는 사용자가 한 말 그대로(칸에 보이고 읽어 주는 말), stem 은 손으로 하는 부분
  */
 export function planUtterance(text) {
   const out = [];
   for (const token of String(text ?? '').split(/(\s+)/)) {
     if (!token.trim()) continue;
-    const bare = token.replace(/[.,!?·…"'()]/g, '');
-    const sign = lookupWord(bare);
-    if (sign) out.push({ kind: 'word', text: bare, sign });
-    else if (bare) out.push({ kind: 'spell', text: bare });
+    const bare = token.replace(/[.,!?·…"'()~]/g, '');
+    if (!bare) continue;
+    const m = matchToken(bare);
+    if (m.sign) out.push({ kind: 'word', text: bare, sign: m.sign });
+    else out.push({ kind: 'spell', text: bare, stem: m.stem });
   }
   return out;
 }

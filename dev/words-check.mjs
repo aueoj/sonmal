@@ -8,6 +8,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { WORD_SIGNS } from '../js/words.js';
 import { WORD_POSE_FILES } from '../js/illustrations.js';
 import { WORD_BANK } from '../js/wordBank.js';
+import { SITUATIONS } from '../js/lessons.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const LEGACY = new Set(['안녕하세요', '감사합니다', '미안합니다', '괜찮아요', '네', '아니요',
@@ -60,6 +61,15 @@ for (const w of WORD_BANK) {
     bankOwner.set(k, w.word);
   }
 }
+
+/* 상황 묶음: 화면에 나오는 낱말은 한 묶음에만 속한다 */
+const inSit = new Map();
+for (const s of SITUATIONS) for (const w of s.words) {
+  if (inSit.has(w)) bad.push(`'${w}'가 「${inSit.get(w)}」와 「${s.name}」 두 묶음에 있다`);
+  inSit.set(w, s.name);
+  if (!WORD_BANK.some(b => b.word === w)) bad.push(`묶음 「${s.name}」의 '${w}'는 사전 창고에 없다`);
+}
+for (const w of WORD_SIGNS) if (!inSit.has(w.word)) warn.push(`「${w.word}」가 어느 상황 묶음에도 없다 ('그 밖'으로 간다)`);
 
 console.log(`단어 ${WORD_SIGNS.length}개 · 사전 대조 끝 ${WORD_SIGNS.filter(w => w.entryNo).length}개 · 사전 창고 ${WORD_BANK.length}개`);
 for (const s of warn) console.log('  · ' + s);

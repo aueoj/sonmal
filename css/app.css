@@ -3,7 +3,7 @@
    위에는 고를 말(반투명 알약), 아래 가운데에는 지금 할 동작과 말하기를 모은 카드 하나.
    막대나 띠로 영상을 가리지 않는다. 수어 그림만은 또렷하게 크게 둔다. */
 
-:root { --glass: rgba(14,15,19,.48); --glass-strong: rgba(14,15,19,.62); --glass-line: rgba(255,255,255,.14); }
+:root { --glass: rgba(14,15,19,.48); --glass-strong: rgba(14,15,19,.74); --glass-line: rgba(255,255,255,.14); }
 body { overflow: hidden; }
 
 .skip {
@@ -45,11 +45,22 @@ body { overflow: hidden; }
 }
 .chip:hover { background: var(--glass-strong); }
 .chip[aria-current="true"] { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+.chip[data-stage="1"]::after, .chip[data-stage="2"]::after { content: ""; display: inline-block; width: 5px; height: 5px;
+  border-radius: 50%; background: #8ee0b4; margin-left: 5px; vertical-align: 2px; }
+.chip[data-stage="3"]::after { content: "✓"; margin-left: 4px; color: #8ee0b4; font-weight: 700; }
+.chip-cat em { font-style: normal; opacity: .8; margin-left: 2px; font-variant-numeric: tabular-nums; }
 .chip.spell { background: rgba(14,15,19,.3); color: rgba(255,255,255,.75); }
 
 .bar-end { flex: none; display: flex; align-items: center; gap: 6px; }
 .bar-end > * { background: var(--glass); border: 1px solid var(--glass-line); border-radius: 999px;
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+
+/* 연습 / 대화 */
+.modeswitch { display: flex; padding: 2px; }
+.modeswitch button { background: none; border-radius: 999px; padding: 3px 10px;
+  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.75); }
+.modeswitch button[aria-checked="true"] { background: #fff; color: var(--ink); font-weight: 600; }
+body[data-mode="talk"] .chips, body[data-mode="talk"] .refswitch { visibility: hidden; }
 
 /* 표 보기 스위치, 쓰는 손 — 왼손잡이는 그림을 뒤집어 보고, 판정도 같이 뒤집힌다 */
 .refswitch { display: inline-flex; align-items: center; gap: var(--s2); padding: 4px 11px 4px 6px;
@@ -87,6 +98,31 @@ body { overflow: hidden; }
 .cam-body { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); margin: 0; max-width: 46ch; }
 .cam-actions { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
 
+.talk {
+  position: absolute; top: 62px; left: 50%; transform: translateX(-50%); z-index: 4;
+  width: min(760px, calc(100% - 32px)); display: flex; flex-direction: column; gap: var(--s2);
+}
+.talk-said { margin: 0; padding: var(--s3) var(--s4); border-radius: 16px; background: rgba(255,255,255,.94); color: var(--ink);
+  font-family: var(--kr); font-size: clamp(24px, 4vw, 40px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; text-align: center; }
+.talk-log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-height: 22vh; overflow-y: auto; }
+.talk-log li { align-self: flex-start; max-width: 80%; padding: 4px 10px; border-radius: 12px; background: var(--glass-strong); color: #fff;
+  font-family: var(--kr); font-size: var(--t-body); }
+.talk-log li[data-who="나"] { align-self: flex-end; background: rgba(94,106,210,.85); }
+.talk-log li b { font-weight: 600; margin-right: 6px; opacity: .75; font-size: var(--t-label); }
+.talk-read { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
+.read-toggle, .read-clear { background: var(--glass-strong); border: 1px solid var(--glass-line); color: #fff; border-radius: 999px;
+  padding: 5px 12px; font-family: var(--kr); font-size: var(--t-label); }
+.read-toggle[aria-pressed="true"] { background: var(--jade); border-color: var(--jade); font-weight: 600; }
+.read-live { font-family: var(--kr); font-size: var(--t-body); color: #fff; background: var(--glass-strong); border-radius: 999px; padding: 4px 12px; }
+.read-live:empty { display: none; }
+.read-live b { font-size: 20px; margin: 0 4px; }
+.read-live em { font-style: normal; opacity: .7; font-size: var(--t-label); }
+.talk-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+.talk-quick button { background: var(--glass); border: 1px solid var(--glass-line); color: #fff; border-radius: 999px;
+  padding: 4px 11px; font-family: var(--kr); font-size: var(--t-label); backdrop-filter: blur(8px); }
+.talk-quick span { font-family: var(--kr); font-size: var(--t-micro); color: #fff; align-self: center; background: var(--glass-strong); border-radius: 999px; padding: 3px 9px; }
+body[data-facing="environment"] .camera video { transform: none; }
+
 .ref {
   position: absolute; inset: 0; z-index: 4; overflow-y: auto;
   padding: 76px var(--s6) 220px;
@@ -95,6 +131,8 @@ body { overflow: hidden; }
 }
 .ref-title { font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--muted); margin: var(--s2) 0 0; }
 .ref button { cursor: pointer; }
+.ref-group { grid-column: 1 / -1; margin: var(--s3) 0 0; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--ink-soft); }
+.ref-group:first-child { margin-top: 0; }
 .ref-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: var(--s2); }
 .ref-words button { display: flex; flex-direction: column; gap: 4px; padding: 0 0 6px; background: var(--paper);
   border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--ink); }
@@ -136,6 +174,10 @@ body { overflow: hidden; }
 .guide-art .word-pose { position: absolute; inset: var(--s2); width: auto; height: auto;
   margin: auto; visibility: hidden; }
 .guide-art .word-pose[data-on] { visibility: visible; }
+/* 떠올리기: 그림을 가리고, 막히면 볼 수 있게 한다 */
+.guide-art[data-recall] .word-pose { filter: blur(22px) brightness(.6); }
+.recall-peek { position: absolute; inset: auto 8px 8px 8px; z-index: 2; background: rgba(255,255,255,.92); color: var(--ink);
+  border-radius: 999px; padding: 5px 0; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; }
 /* 도표의 손은 왼손으로 그려져 있다. 오른손을 고르면 뒤집어 보여 준다. */
 /* 단어 그림은 검은 바탕에 인물이 가운데 있다. 정사각 칸을 꽉 채워 양옆 검은 여백만 잘라 손을 크게 보인다. */
 .guide-art:has(.word-pose) { background: #000; padding: 0; }
@@ -149,7 +191,14 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 .guide-name { flex: none; font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
   letter-spacing: var(--track-tight); margin: 0; color: #fff; }
 .as-sign { margin-left: var(--s2); font-size: var(--t-micro); font-weight: 400; color: rgba(255,255,255,.6); }
-.guide-step { font-family: var(--kr); font-size: var(--t-body); color: rgba(255,255,255,.82); margin: 0; min-height: 1.5em; }
+.guide-step { font-family: var(--kr); font-size: var(--t-body); color: #fff; margin: 0; min-height: 1.5em; }
+/* 표정과 사전 영상. 수어는 표정이 문법이다 */
+.guide-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px var(--s3); margin: 0;
+  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.88); }
+.guide-meta:empty { display: none; }
+.guide-meta .face b { color: #ffd38a; font-weight: 600; }
+.guide-meta a { color: #c8cdf0; text-underline-offset: 2px; }
+.guide-meta a:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 3px; }
 /* 지금 무엇이 보이는지. 안 될 때 어디가 다른지 직접 견줘 볼 수 있어야 한다. */
 .seen { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.55); margin: 0; }
 .seen:empty { display: none; }
@@ -174,13 +223,16 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
   border: 1px solid rgba(255,255,255,.4); border-radius: 4px; padding: 0 5px; }
 .listening .say-btn { background: var(--jade); }
 .say input {
-  flex: 1; min-width: 0; background: none; border: none; padding: 0 var(--s2);
+  flex: 1; min-width: 0; height: 32px; background: none; border: none; padding: 0 var(--s2); border-radius: 999px;
   font-family: var(--kr); font-size: var(--t-body); color: #fff;
 }
 .say input::placeholder { color: rgba(255,255,255,.5); }
 .say input:focus { outline: none; }
+.say input:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 .say:focus-within { border-color: rgba(255,255,255,.4); }
 
+.seq-note { flex: none; font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 1px 7px; }
 .guide-seq { flex: 1; min-width: 0; display: flex; align-items: center; gap: 3px; overflow-x: auto; scrollbar-width: none; }
 .guide-seq::-webkit-scrollbar { display: none; }
 .unit {
@@ -241,4 +293,6 @@ dialog a { color: var(--indigo); }
   .guide-name { font-size: var(--t-lead); }
   .say-btn kbd { display: none; }
   .cam-empty, .ref { padding-top: 112px; }
+  .talk { top: 100px; width: calc(100% - 16px); }
+  .modeswitch button { padding: 3px 8px; }
 }
