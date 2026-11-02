@@ -34,7 +34,7 @@ await p.waitForTimeout(600);
 
 const total = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-i]').length);
 // 멈춤은 '시간이 얼마 지났나'가 아니라 '진행이 멈춘 채 얼마나 있었나'로 본다.
-const STALL_MS = 6000, DEADLINE = Date.now() + 60000;
+const STALL_MS = 10000, DEADLINE = Date.now() + 90000;   // 동작 한 장에 2.5초, 세 장이면 7.5초 동안 진행이 멈춰 보인다
 let last = -1, lastChange = Date.now(), stuckAt = null;
 while (Date.now() < DEADLINE) {
   const done = await p.evaluate(() => document.querySelectorAll('#seq .unit[data-state="done"]').length);

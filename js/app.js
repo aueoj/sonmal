@@ -8,15 +8,15 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021222';
-import { getPose } from './jamoData.js?v=202611021222';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021222';
-import { describe } from './poseFeatures.js?v=202611021222';
-import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611021222';
-import { Tracker } from './tracker.js?v=202611021222';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021222';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021222';
-import { diagnose } from './diagnose.js?v=202611021222';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611021248';
+import { getPose } from './jamoData.js?v=202611021248';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611021248';
+import { describe } from './poseFeatures.js?v=202611021248';
+import { scorePose, MOTION_WINDOW_MS } from './matcher.js?v=202611021248';
+import { Tracker } from './tracker.js?v=202611021248';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611021248';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611021248';
+import { diagnose } from './diagnose.js?v=202611021248';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -43,7 +43,7 @@ const ACCEPT = 0.88;        // 이 점수를 넘고
 const HOLD_MS = 500;        // 이만큼 버티면 맞은 것으로 본다
 const NEAR = 0.70;
 const SMOOTH_N = 7;
-const STEP_MS = 1000;       // 동작이 여러 개인 단어는 이 간격으로 흐른다
+const STEP_MS = 2500;       // 동작이 여러 개인 단어는 이 간격으로 흐른다 (1초는 따라 하기에 빨랐다)
 const WORD_MOVE = 0.34;     // 손이 이만큼 움직여야 '따라했다'로 본다 (손 길이 대비)
 const REPEAT_MS = 1400;     // 다 하고 나서 처음으로 돌아가기까지
 
