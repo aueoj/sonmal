@@ -8,20 +8,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611022350';
-import { getPose } from './jamoData.js?v=202611022350';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611022350';
-import { describe } from './poseFeatures.js?v=202611022350';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611022350';
-import { Tracker } from './tracker.js?v=202611022350';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611022350';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611022350';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611022350';
-import { groupByIdea } from './lessons.js?v=202611022350';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611022350';
-import { createReader } from './reader.js?v=202611022350';
-import { SITUATIONS } from './lessons.js?v=202611022350';
-import { diagnose } from './diagnose.js?v=202611022350';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611030345';
+import { getPose } from './jamoData.js?v=202611030345';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611030345';
+import { describe } from './poseFeatures.js?v=202611030345';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611030345';
+import { Tracker } from './tracker.js?v=202611030345';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611030345';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611030345';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611030345';
+import { groupByIdea } from './lessons.js?v=202611030345';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611030345';
+import { createReader } from './reader.js?v=202611030345';
+import { SITUATIONS } from './lessons.js?v=202611030345';
+import { diagnose } from './diagnose.js?v=202611030345';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -290,9 +290,23 @@ function paintWordStep(w) {
   // 지금 칸이 이 단어가 아니면 건드리지 않는다. 남은 타이머가 자모 그림을 덮지 않게.
   const cur = state.seq[state.at];
   if (!cur || cur.role !== 'word' || cur.sign !== w) return stopWordTimer();
-  for (const img of el.art.querySelectorAll('.word-pose')) {
-    if (Number(img.dataset.frame) === state.wordStep) img.dataset.on = '1';
-    else delete img.dataset.on;
+  /* 한 단계에 그림이 여러 장이면(stepFrames) 번갈아 보여 움직임을 보인다.
+     움직임 줄이기를 켠 사람에게는 첫 장만 보인다. */
+  stopWordTimer();
+  const list = w.stepFrames?.[state.wordStep] ?? [state.wordStep];
+  let k = 0;
+  const show = () => {
+    for (const img of el.art.querySelectorAll('.word-pose')) {
+      if (Number(img.dataset.frame) === list[k % list.length]) img.dataset.on = '1';
+      else delete img.dataset.on;
+    }
+  };
+  show();
+  if (list.length > 1 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    state.wordTimer = setInterval(() => {
+      if (state.seq[state.at]?.sign !== w) return stopWordTimer();
+      k += 1; show();
+    }, 900);
   }
   el.step.textContent = state.recall ? '그림 없이 떠올려 해 보세요' : (w.steps?.[state.wordStep] ?? w.수형);
 }
@@ -422,7 +436,7 @@ function onFrame(hands, face = null) {
         state.wordGot += 1; state.wordHold = 0;
         if (state.wordGot >= n) { el.seen.textContent = ''; return completeWord(current); }
         // 해낸 동작의 다음 그림을 보여 준다
-        state.wordStep = Math.min(state.wordGot, (WORD_POSE_FILES[current.sign.word]?.length ?? 1) - 1);
+        state.wordStep = Math.min(state.wordGot, wordChecks(current.sign).length - 1);
         paintWordStep(current.sign);
         el.art.dataset.stepOk = state.wordGot % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
         state.wordFrom = r.centroid; state.wordTravel = 0;
