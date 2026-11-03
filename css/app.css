@@ -53,7 +53,7 @@ body { overflow: hidden; }
 
 .cam-empty {
   position: absolute; inset: 0; z-index: 2; overflow-y: auto;
-  padding: 76px var(--s6) 220px; display: flex; flex-direction: column; gap: var(--s5);
+  padding: 76px var(--s6) 36vh; display: flex; flex-direction: column; gap: var(--s5);
 }
 .camera.live .cam-empty { display: none; }
 .cam-prompt { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s5); flex-wrap: wrap; }
@@ -64,7 +64,7 @@ body { overflow: hidden; }
 
 .ref {
   position: absolute; inset: 0; z-index: 4; overflow-y: auto;
-  padding: 76px var(--s6) 220px;
+  padding: 76px var(--s6) 36vh;
   background: rgba(247,247,248,.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   display: flex; flex-direction: column; gap: var(--s3);
 }
@@ -97,7 +97,8 @@ body { overflow: hidden; }
 /* 들은 말 · 읽어 준 말 */
 .spoken {
   /* 눈은 아래 카드와 내 손에 있다. 읽어 준 말은 카드 바로 위 가운데에 띄운다 */
-  position: fixed; left: 50%; bottom: calc(var(--guide-h, 170px) + var(--s4) + var(--s2)); transform: translateX(-50%);
+  /* 아래 영역의 옅은 윗자락에 걸쳐 띄운다. 글 위로는 내려오지 않는다 */
+  position: fixed; left: 50%; bottom: calc(var(--guide-h, 280px) - 14px); transform: translateX(-50%);
   z-index: 5; margin: 0; max-width: min(40ch, calc(100% - 32px));
   background: var(--paper); border: 1px solid var(--jade); border-radius: 999px;
   padding: var(--s2) var(--s4); font-family: var(--kr); font-size: var(--t-lead);
@@ -107,19 +108,28 @@ body { overflow: hidden; }
 
 /* ── 아래 가운데: 지금 할 동작 + 말하기를 카드 하나로 ─── */
 /* 영상 위에 뜬 반투명 카드. 폭을 줄여 양옆 영상을 비우고, 그림은 크게 둔다. */
+/* 화면 아래 1/3 을 가로로 다 쓴다. 카드도 테두리도 없이, 아래에서 위로 옅어지는 검정 위에 둔다.
+   글은 덮개가 충분히 짙은 아래쪽 4/5 에만 앉힌다. 위 1/5 은 영상으로 녹아드는 자리다.
+   흰 벽 앞에서 계산한 대비: 글이 올라갈 수 있는 가장 높은 자리(아래에서 82%, 위 여백 바로 밑)도
+   덮개 .6 이상이라 흰 글 5.8:1, 사전 영상 링크(#dde1ff) 4.5:1. 그 아래 줄은 더 짙다 */
 .guide {
-  position: fixed; left: 50%; bottom: var(--s4); transform: translateX(-50%); z-index: 5;
-  width: min(760px, calc(100% - 32px));
-  display: flex; align-items: stretch; gap: var(--s4); padding: 10px;
-  background: var(--glass-strong); border: 1px solid var(--glass-line); border-radius: 18px;
-  backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1);
-  color: #fff;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+  min-height: 33.3vh; min-height: 33.3dvh;
+  display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "side body" "act act";
+  align-content: end; column-gap: var(--s5); row-gap: var(--s3);
+  padding: clamp(36px, 6vh, 60px) max(var(--s4), calc((100% - 1040px) / 2)) calc(var(--s5) + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.84) 45%, rgba(0,0,0,.74) 75%, rgba(0,0,0,.45) 90%, rgba(0,0,0,0) 100%);
+  color: #fff; pointer-events: none;      /* 옅은 윗자락은 영상 그대로. 글과 버튼만 눌린다 */
 }
-.guide-side { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+.guide > * { pointer-events: auto; }
+.guide-side { grid-area: side; align-self: end; }
+.guide-body { grid-area: body; align-self: end; }
+.guide > .say, .guide > .free-bar { grid-area: act; }
+.guide-side { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; }
 /* 쓰는 손. 카드 안 설정이라 조용하게, 고른 칸만 흰색 */
-.handswitch { display: flex; padding: 2px; background: rgba(255,255,255,.1); border: 1px solid var(--glass-line); border-radius: 999px; }
-.handswitch button { background: none; border-radius: 999px; padding: 2px 12px; min-height: 26px;
-  font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.85); }
+.handswitch { display: flex; padding: 2px; }
+.handswitch button { background: none; border-radius: 999px; padding: 3px 10px; min-height: 26px;
+  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.85); }
 .handswitch button:hover { color: #fff; }
 .handswitch button[aria-checked="true"] { background: #fff; color: var(--ink); font-weight: 600; }
 .guide-art {
@@ -147,7 +157,7 @@ body[data-hand="right"] .chart img, body[data-hand="right"] .chart .sheet-art,
 body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 
 .guide-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
-.guide-head { display: flex; align-items: center; gap: var(--s3); min-width: 0; }
+.guide-head { display: flex; align-items: center; flex-wrap: wrap; gap: 4px var(--s3); min-width: 0; }
 .guide-name { flex: none; font-family: var(--kr); font-size: var(--t-title); font-weight: 600;
   letter-spacing: var(--track-tight); margin: 0; color: #fff; }
 .as-sign { margin-left: var(--s2); font-size: var(--t-micro); font-weight: 400; color: rgba(255,255,255,.75); }
@@ -157,14 +167,15 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
   font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.88); }
 .guide-meta:empty { display: none; }
 .guide-meta .face b { color: #ffd38a; font-weight: 600; }
-.guide-meta a { color: #c8cdf0; text-underline-offset: 2px; display: inline-block; padding: 3px 0; }  /* 24px 누름 높이 */
+.guide-meta a { color: #dde1ff; text-underline-offset: 2px; display: inline-block; padding: 3px 0; }  /* 24px 누름 높이 */
 .guide-meta a:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 3px; }
 /* 지금 무엇이 보이는지. 안 될 때 어디가 다른지 직접 견줘 볼 수 있어야 한다. */
 .seen { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.78); margin: 0; }
 .seen:empty { display: none; }
 .seen b { font-weight: 600; color: rgba(255,255,255,.9); }
 .seen .off { color: var(--amber); font-weight: 600; }
-.guide-meter { display: flex; align-items: center; gap: var(--s3); }
+.guide-meter { display: flex; align-items: center; flex-wrap: wrap; gap: 4px var(--s3); }
+.guide-meter .seen { flex: 1 1 12em; min-width: 0; }
 .track { flex: 1; height: 4px; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; max-width: 320px; }
 .fill { height: 100%; width: 0; background: var(--indigo); transition: width .1s linear, background-color .2s var(--ease); }
 .guide[data-state="hit"] .fill { background: var(--jade); }
@@ -280,13 +291,25 @@ dialog a { color: var(--indigo); }
 @media (max-width: 760px) {
   .bar { padding: var(--s2) var(--s3) var(--s4); gap: var(--s2); }
   .bar-end { gap: 4px; }
-  .guide { bottom: var(--s2); width: calc(100% - 16px); gap: var(--s3); padding: 8px; }
+  .guide { column-gap: var(--s3); row-gap: var(--s2); }
   .guide-art { width: 104px; }
   .guide-art:has(.word-pose) { width: 139px; }
   .guide-name { font-size: var(--t-lead); }
   .say-btn kbd { display: none; }
   .cam-empty, .ref { padding-top: 64px; }
   .modeswitch button { padding: 3px 9px; }
+}
+/* 낮은 화면: 아래 영역이 1/3 을 넘지 않게 그림을 줄인다 */
+@media (max-height: 780px) {
+  .guide-art { width: 112px; }
+  .guide-art:has(.word-pose) { width: 150px; }
+}
+/* 폰 폭: 위 줄에 쓰는 손까지 들어가도록 모드 이름을 줄이고 이름표를 접는다 */
+@media (max-width: 480px) {
+  .mark { display: none; }
+  .modeswitch .wide { display: none; }
+  .modeswitch button { padding: 3px 10px; }
+  .bar-end .handswitch button { padding: 3px 8px; }
 }
 
 /* 한 손을 옆으로 미는 쌍자음. 정지 화면에서도 화살표로 방향이 남는다. */

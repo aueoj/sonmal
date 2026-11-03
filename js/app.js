@@ -9,20 +9,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611031500';
-import { getPose } from './jamoData.js?v=202611031500';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611031500';
-import { describe } from './poseFeatures.js?v=202611031500';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611031500';
-import { Tracker } from './tracker.js?v=202611031500';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611031500';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611031500';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611031500';
-import { groupByIdea } from './lessons.js?v=202611031500';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611031500';
-import { createReader } from './reader.js?v=202611031500';
-import { createSignReader, readableSigns } from './signReader.js?v=202611031500';
-import { diagnose } from './diagnose.js?v=202611031500';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611031512';
+import { getPose } from './jamoData.js?v=202611031512';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611031512';
+import { describe } from './poseFeatures.js?v=202611031512';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611031512';
+import { Tracker } from './tracker.js?v=202611031512';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611031512';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611031512';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611031512';
+import { groupByIdea } from './lessons.js?v=202611031512';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611031512';
+import { createReader } from './reader.js?v=202611031512';
+import { createSignReader, readableSigns } from './signReader.js?v=202611031512';
+import { diagnose } from './diagnose.js?v=202611031512';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -634,8 +634,10 @@ function stopListening() {
   el.typed.placeholder = '또는 문장 입력';
 }
 
+const HAND_KEY = 'sonmal.hand';
 function setHand(hand) {
   state.hand = hand;
+  try { localStorage.setItem(HAND_KEY, hand); } catch { /* 저장이 막힌 브라우저는 이번만 */ }
   document.body.dataset.hand = hand;
   el.handRight.setAttribute('aria-checked', String(hand === 'right'));
   el.handLeft.setAttribute('aria-checked', String(hand === 'left'));
@@ -720,7 +722,9 @@ function setMode(mode, { restart = true } = {}) {
 /* ── 시작 ──────────────────────────────────── */
 
 function init() {
-  setHand('right');
+  let savedHand = null;
+  try { savedHand = localStorage.getItem(HAND_KEY); } catch { /* 저장이 막힌 브라우저 */ }
+  setHand(savedHand === 'left' ? 'left' : 'right');
 
   const phraseList = $('phrase-list');
   for (const group of PHRASE_GROUPS) {

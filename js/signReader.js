@@ -16,7 +16,7 @@
  *   말하지 않는 것보다 나쁘다.
  *   손가락 조건이 없는 단계가 있는 낱말은 거의 아무 손이나 맞으므로 읽을 대상에서 뺀다.
  */
-import { scoreCheck } from './matcher.js?v=202611031500';
+import { scoreCheck } from './matcher.js?v=202611031512';
 
 const HOLD_MS = 400, GRACE_MS = 250, TRAVEL = 0.3, SETTLE_MS = 1000, MAX_WAIT_MS = 2600, LOST_MS = 500, STALE_MS = 3000;
 
