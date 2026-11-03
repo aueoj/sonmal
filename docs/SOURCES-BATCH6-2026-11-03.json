@@ -1,0 +1,52 @@
+[
+  {
+    "word": "빨강",
+    "id": "6211",
+    "title": "빨강,빨갛다,적자,적색",
+    "description": "오른 주먹의 1지를 펴서 옆면으로 입술 밑을 오른쪽으로 스쳐 낸다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151222/232565/IMG000226883_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=6211"
+  },
+  {
+    "word": "파랑",
+    "id": "103",
+    "title": "파랑,청,청색,파랗다,푸르다",
+    "description": "오른 손바닥으로 오른뺨을 스쳐 내린다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151115/210424/IMG000200510_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=103"
+  },
+  {
+    "word": "노랑",
+    "id": "12177",
+    "title": "노랑,노랗다,누렇다",
+    "description": "오른 주먹의 1지를 펴서 끝으로 치아를 스쳐 낸다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151220/231336/IMG000225328_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=12177"
+  },
+  {
+    "word": "검정",
+    "id": "6875",
+    "title": "검정,검다,까맣다,타다,흑",
+    "description": "오른 손바닥으로 머리 오른쪽을 스쳐 내린다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151215/228599/IMG000221761_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=6875"
+  },
+  {
+    "word": "하양",
+    "id": "3024",
+    "title": "백,하양,하얗다,허옇다,희다,백색,흰색,치아,이,이빨",
+    "description": "오른 주먹의 1지를 펴서 끝으로 치아를 가리킨다.",
+    "photos": [
+      "http://sldict.korean.go.kr/multimedia/multimedia_files/convert/20151205/222334/IMG000214417_700X466.jpg"
+    ],
+    "sourceUrl": "https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=3024"
+  }
+]

@@ -1188,6 +1188,87 @@
       "basis": "sldict",
       "step": "두 손을 내린다 (두 번째)",
       "entryNo": "6463"
+    },
+    {
+      "word": "빨강",
+      "slug": "sl6211-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 옆면을 입술 밑에 댄다",
+      "entryNo": "6211"
+    },
+    {
+      "word": "빨강",
+      "slug": "sl6211-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지 옆면으로 입술 밑을 오른쪽으로 스쳐 낸다",
+      "entryNo": "6211"
+    },
+    {
+      "word": "파랑",
+      "slug": "sl103-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 오른뺨에 댄다",
+      "entryNo": "103"
+    },
+    {
+      "word": "파랑",
+      "slug": "sl103-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른뺨을 손바닥으로 스쳐 내린다",
+      "entryNo": "103"
+    },
+    {
+      "word": "노랑",
+      "slug": "sl12177-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 끝을 치아에 댄다",
+      "entryNo": "12177"
+    },
+    {
+      "word": "노랑",
+      "slug": "sl12177-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지 끝으로 치아를 스쳐 낸다",
+      "entryNo": "12177"
+    },
+    {
+      "word": "검정",
+      "slug": "sl6875-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 머리 오른쪽에 댄다",
+      "entryNo": "6875"
+    },
+    {
+      "word": "검정",
+      "slug": "sl6875-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "머리 오른쪽을 손바닥으로 스쳐 내린다",
+      "entryNo": "6875"
+    },
+    {
+      "word": "하양",
+      "slug": "sl3024-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 끝으로 치아를 가리킨다",
+      "entryNo": "3024"
     }
   ]
 }
