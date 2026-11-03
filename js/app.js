@@ -8,20 +8,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611022333';
-import { getPose } from './jamoData.js?v=202611022333';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611022333';
-import { describe } from './poseFeatures.js?v=202611022333';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611022333';
-import { Tracker } from './tracker.js?v=202611022333';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611022333';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611022333';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611022333';
-import { groupByIdea } from './lessons.js?v=202611022333';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611022333';
-import { createReader } from './reader.js?v=202611022333';
-import { SITUATIONS } from './lessons.js?v=202611022333';
-import { diagnose } from './diagnose.js?v=202611022333';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611031227';
+import { getPose } from './jamoData.js?v=202611031227';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611031227';
+import { describe } from './poseFeatures.js?v=202611031227';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611031227';
+import { Tracker } from './tracker.js?v=202611031227';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611031227';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611031227';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611031227';
+import { groupByIdea } from './lessons.js?v=202611031227';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611031227';
+import { createReader } from './reader.js?v=202611031227';
+import { SITUATIONS } from './lessons.js?v=202611031227';
+import { diagnose } from './diagnose.js?v=202611031227';
 
 const $ = id => document.getElementById(id);
 const el = {
