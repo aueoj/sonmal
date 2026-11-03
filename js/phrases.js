@@ -1,6 +1,6 @@
 /* 한국어 연습 문장. 각 구성 낱말의 출처는 wordBank의 국립국어원 사전 항목이다.
    한국수어 어순·문법 번역이나 사전의 문장 용례로 주장하지 않는다. */
-import { planUtterance } from './words.js?v=202611031238';
+import { planUtterance } from './words.js?v=202611031316';
 export const PHRASE_GROUPS = [
   { name: '하루와 맛', texts: [
     '아침에 만나요', '저녁에 만나요', '아침에 학교에 가요', '저녁에 친구가 와요',

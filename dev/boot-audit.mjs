@@ -11,18 +11,18 @@ await p.waitForTimeout(1500);
 
 const r = await p.evaluate(() => ({
   chart: document.querySelectorAll('.chart button').length,
-  chips: document.querySelectorAll('.chip').length,
+  words: document.querySelectorAll('#ref-words [data-say]').length,
   art: document.getElementById('guide-art').innerHTML.length,
   name: document.getElementById('guide-name').textContent,
   seq: document.querySelectorAll('#seq .unit').length,
   missing: ['camera','guide','guide-art','guide-name','seq','say-form','btn-listen','typed',
-            'chips','hand-right','hand-left','diag','spoken','btn-cam','btn-demo']
+            'ref-toggle','ref-words','hand-right','hand-left','diag','spoken','btn-cam','btn-demo']
            .filter(id => !document.getElementById(id))
 }));
-console.log(`차트 ${r.chart}장 · 칩 ${r.chips}개 · 시퀀스 ${r.seq}칸 · 가이드 "${r.name}"`);
+console.log(`차트 ${r.chart}장 · 낱말 ${r.words}개 · 시퀀스 ${r.seq}칸 · 가이드 "${r.name}"`);
 console.log('없는 요소:', r.missing.length ? r.missing : '없음');
 console.log('오류:', errs.length ? errs.slice(0, 5).join('\n  ') : '없음');
 
-const bad = errs.length || r.missing.length || r.chart < 40 || r.chips < 12 || !r.art;
+const bad = errs.length || r.missing.length || r.chart < 40 || r.words < 12 || !r.art;
 await b.close();
 process.exit(bad ? 1 : 0);

@@ -8,20 +8,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611031238';
-import { getPose } from './jamoData.js?v=202611031238';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611031238';
-import { describe } from './poseFeatures.js?v=202611031238';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611031238';
-import { Tracker } from './tracker.js?v=202611031238';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611031238';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611031238';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611031238';
-import { groupByIdea } from './lessons.js?v=202611031238';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611031238';
-import { createReader } from './reader.js?v=202611031238';
-import { SITUATIONS } from './lessons.js?v=202611031238';
-import { diagnose } from './diagnose.js?v=202611031238';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611031316';
+import { getPose } from './jamoData.js?v=202611031316';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611031316';
+import { describe } from './poseFeatures.js?v=202611031316';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611031316';
+import { Tracker } from './tracker.js?v=202611031316';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611031316';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611031316';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611031316';
+import { groupByIdea } from './lessons.js?v=202611031316';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611031316';
+import { createReader } from './reader.js?v=202611031316';
+import { SITUATIONS } from './lessons.js?v=202611031316';
+import { diagnose } from './diagnose.js?v=202611031316';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -30,7 +30,7 @@ const el = {
   btnCam: $('btn-cam'), btnDemo: $('btn-demo'), chart: $('chart'),
   diag: $('diag'), diagVerdict: $('diag-verdict'), diagList: $('diag-list'),
   diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagDemo: $('diag-demo'), diagNewTab: $('diag-newtab'),
-  chips: $('chips'), handRight: $('hand-right'), handLeft: $('hand-left'),
+  handRight: $('hand-right'), handLeft: $('hand-left'),
   spoken: $('spoken'),
   sayForm: $('say-form'), btnListen: $('btn-listen'), typed: $('typed'),
   guide: $('guide'), art: $('guide-art'), name: $('guide-name'), step: $('guide-step'),
@@ -132,31 +132,30 @@ function setUtterance(text) {
   el.seqNote.hidden = partIndex < 2;     // 여러 어절이면 한국어 순서로 이은 연습이라고 밝힌다
   el.read.textContent = '';
   el.typed.value = '';
-  paintChips(text);
+  paintPicker(text);
   buildSeq();
   advance();
 }
 
-function paintChips(active = state.active) {
+function paintPicker(active = state.active) {
   state.active = active;
-  for (const b of el.chips.querySelectorAll('.chip'))
-    b.setAttribute('aria-current', String(b.dataset.word === active));
+  for (const b of el.ref.querySelectorAll('[data-say]'))
+    b.setAttribute('aria-current', String(b.dataset.say === active));
 }
 
-/* 칩 줄. 상황 묶음마다 이름과 '익힌 수/전체'를 붙이고, 익힌 낱말에는 표시를 단다.
+/* 말 고르기의 낱말. 상황 묶음마다 이름과 '익힌 수/전체'를 붙이고, 익힌 낱말에는 표시를 단다.
    1 그림 보고 해 봄, 2 그림 없이 해 볼 차례, 3 그림 없이 해냄 */
 const STAGE_LABEL = ['', '그림 보고 해 봄', '다음엔 그림 없이', '그림 없이 해냄'];
-function renderChips() {
+function renderPicker() {
   const all = loadProgress();
-  el.chips.innerHTML = '<button class="chip" type="button" data-open-phrases="1">문장 연습</button>' + groupByIdea(WORD_SIGNS).map(g => {
+  el.refWords.innerHTML = groupByIdea(WORD_SIGNS).map(g => {
     const done = g.signs.filter(w => stageOf(w.word, all) >= 1).length;
-    return `<span class="chip-group" role="group" aria-label="${g.name}"><span class="chip-cat" aria-hidden="true">${g.name} <em>${done}/${g.signs.length}</em></span>`
-      + g.signs.map(w => {
-        const st = stageOf(w.word, all);
-        return `<button class="chip" type="button" data-word="${w.word}" data-stage="${st}"${st ? ` title="${STAGE_LABEL[st]}"` : ''}>${w.word}</button>`;
-      }).join('') + '</span>';
-  }).join('') + '<button class="chip spell" type="button" data-word="손말">손말 지문자</button>';
-  paintChips();
+    return `<h3 class="ref-group">${g.name} <em>${done}/${g.signs.length}</em></h3>` + g.signs.map(w => {
+      const st = stageOf(w.word, all);
+      return `<button type="button" data-say="${w.word}" data-stage="${st}"${st ? ` title="${STAGE_LABEL[st]}"` : ''}>${wordArt(w.word, 0)}<span>${w.word}</span></button>`;
+    }).join('');
+  }).join('');
+  paintPicker();
 }
 
 function buildSeq() {
@@ -164,6 +163,8 @@ function buildSeq() {
     u.role === 'space' ? '<span class="unit gap"></span>'
     : u.role === 'omit' ? `<span class="unit omit" title="조사와 어미는 손으로 하지 않습니다">${u.jamo}</span>`
     : `<span class="unit" data-state="todo" data-i="${i}">${u.jamo}</span>`).join('');
+  // 낱말 하나만 할 때는 칸이 제목을 되풀이할 뿐이다. 지문자는 한 자라도 칸을 남긴다
+  el.seq.dataset.solo = state.seq.length === 1 && state.seq[0].role === 'word' ? '1' : '';
   paintSeq();
 }
 
@@ -195,7 +196,7 @@ function advance() {
   if (u.role === 'word') return showWord(u);
 
   const pose = getPose(u.jamo);
-  if (!pose) { state.got.push(u.jamo); return setTimeout(advance, 400); }
+  if (!pose) { state.got.push(u.jamo); const seq = state.seq; return setTimeout(() => { if (state.seq === seq) advance(); }, 400); }
   if (state.tracker?.mock && !state.mockLocked) {
     state.tracker.mockMotion = false;
     state.tracker.mockTwoHands = pose.hands === 2;
@@ -337,13 +338,16 @@ function completeWord(u) {
   if (u.sign) {
     markLearned(u.sign.word, { recalled: state.recall });
     if (state.recall) el.step.textContent = '그림 없이 해냈어요';
-    renderChips();
+    renderPicker();
   }
   el.guide.dataset.state = 'hit';
   el.fill.style.width = '100%';
   const node = el.seq.querySelector(`[data-i="${state.at}"]`);
   if (node) node.dataset.lock = '1';
-  setTimeout(() => { advance(); speakFinishedPart(); }, 420);
+  /* 넘어가기 전 잠깐 '해냈다'를 보인다. 그 사이 새 말을 골랐으면 새 말의 첫 칸을
+     건너뛰지 않게 아무것도 하지 않는다(그때 seq 는 새 배열이다). */
+  const seq = state.seq;
+  setTimeout(() => { if (state.seq !== seq) return; advance(); speakFinishedPart(); }, 420);
 }
 
 /* 한 어절을 다 하면 그 어절을 읽어 준다.
@@ -607,12 +611,12 @@ function startListening() {
   document.body.classList.add('listening');
   el.btnListen.querySelector('span')?.remove();
   el.typed.value = '';
-  el.typed.placeholder = '듣고 있습니다. 다 말하면 잠깐 기다리세요';
+  el.typed.placeholder = '듣고 있습니다';
   state.listener.start();
 }
 function stopListening() {
   document.body.classList.remove('listening');
-  el.typed.placeholder = '또는 문장을 입력하고 엔터';
+  el.typed.placeholder = '또는 문장 입력';
 }
 
 function setHand(hand) {
@@ -657,12 +661,18 @@ async function setReading(on) {
   document.body.dataset.facing = state.facing;
 }
 
+function setRef(on) {
+  el.ref.hidden = !on;
+  el.refToggle.setAttribute('aria-expanded', String(on));
+}
+
 function setMode(mode) {
   state.mode = mode;
   document.body.dataset.mode = mode;
   el.modePractice.setAttribute('aria-checked', String(mode === 'practice'));
   el.modeTalk.setAttribute('aria-checked', String(mode === 'talk'));
   el.talk.hidden = mode !== 'talk';
+  if (mode === 'talk') setRef(false);   // 대화 중에는 고를 것이 없다. 덮개가 상대 쪽 글자를 가리지 않게
   if (mode !== 'talk' && state.reading) setReading(false);
 }
 
@@ -671,7 +681,6 @@ function setMode(mode) {
 function init() {
   setHand('right');
 
-  renderChips();
   const phraseList = $('phrase-list');
   for (const group of PHRASE_GROUPS) {
     const section = document.createElement('section');
@@ -689,20 +698,6 @@ function init() {
     }
     phraseList.append(section);
   }
-  el.chips.addEventListener('click', e => {
-    const b = e.target.closest('.chip');
-    if (b?.dataset.openPhrases) $('phrases').showModal();
-    else if (b?.dataset.word) sayAndPractice(b.dataset.word);
-  });
-  /* 칩이 넘치면 오른쪽 끝을 흐리게 해 더 있다는 것을 보인다. 끝까지 밀면 흐림을 걷는다. */
-  const markMore = () => {
-    const c = el.chips;
-    c.dataset.more = c.scrollLeft + c.clientWidth < c.scrollWidth - 2 ? '1' : '';
-  };
-  el.chips.addEventListener('scroll', markMore, { passive: true });
-  addEventListener('resize', markMore);
-  markMore();
-
   state.reader = createReader({
     onChange: ({ jamos, text, live }) => {
       if (!state.reading) return;
@@ -738,7 +733,7 @@ function init() {
       onInterim: t => { el.typed.value = t; },      // 들은 말은 입력칸에 그대로 보여 준다
       onResult: t => sayAndPractice(t),
       onEnd: stopListening,
-      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '못 알아들었습니다. 다시 말하거나 입력해 주세요'; }
+      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '다시 말해 주세요'; }
     });
   } else {
     el.btnListen.disabled = true;
@@ -791,25 +786,20 @@ function init() {
       document.querySelector('meta[name="build"]')?.content ?? '알 수 없음'
     } · 화면이 옛것 같으면 Cmd(Ctrl)+Shift+R 로 새로고침하세요.</p>`;
 
-  /* 표 보기: 스위치를 켰을 때만 지문자와 낱말 표를 영상 위에 덮는다.
-     하나를 고르면 표를 닫고 바로 그 말을 연습한다. */
+  /* 말 고르기: 눌렀을 때만 낱말과 지문자를 영상 위에 덮는다.
+     하나를 고르면 닫고 바로 그 말을 연습한다. */
   el.chart.innerHTML = [...'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣㅘㅚㅙㅝㅞㅟㅢㄲㄸㅃㅆㅉ']
     .map(j => `<button type="button" data-say="${j}" aria-label="${j} 연습">${jamoArt(j)}<span>${j}</span></button>`).join('');
-  el.refWords.innerHTML = groupByIdea(WORD_SIGNS).map(g =>
-    `<h3 class="ref-group">${g.name}</h3>` + g.signs
-      .map(w => `<button type="button" data-say="${w.word}">${wordArt(w.word, 0)}<span>${w.word}</span></button>`).join('')).join('');
-  const setRef = on => {
-    el.ref.hidden = !on;
-    el.refToggle.setAttribute('aria-checked', String(on));
-  };
+  renderPicker();
   el.refToggle.addEventListener('click', () => setRef(el.ref.hidden));
   el.ref.addEventListener('click', e => {
     const b = e.target.closest('[data-say]');
     if (!b) return;
     setRef(false);
-    setUtterance(b.dataset.say);
+    sayAndPractice(b.dataset.say);
   });
-  addEventListener('keydown', e => { if (e.key === 'Escape' && !el.ref.hidden) setRef(false); });
+  $('open-phrases').addEventListener('click', () => { setRef(false); $('phrases').showModal(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !el.ref.hidden) { setRef(false); el.refToggle.focus(); } });
 
   setUtterance(WORD_SIGNS[0]?.word ?? '안녕하세요');
 
