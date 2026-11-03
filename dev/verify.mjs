@@ -58,7 +58,7 @@ const BROWSER = [
   ['카메라 없이', ['dev/nocam-audit.mjs'], '카메라 없이도 둘러볼 수 있는가'],
   ['숨김', ['dev/hidden-audit.mjs'], 'hidden 이 실제로 숨는가'],
   ['프레임', ['dev/embed-audit.mjs'], '프레임 안에서 무엇이 막히는가'],
-  ['대화', ['dev/talk-audit.mjs'], '상대 지문자를 받아 적어 읽어 주는가'],
+  ['자유 모드', ['dev/free-audit.mjs'], '고르지 않고 한 수어를 읽어 바로 들려주는가'],
   ['고른 직후', ['dev/race-audit.mjs'], '해낸 직후 새 말을 골라도 첫 칸을 건너뛰지 않는가'],
   ['동작 넘김', ['dev/step-audit.mjs'], '동작을 해내야 다음 그림으로 넘어가는가']
 ];
