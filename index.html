@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611030411">
+<meta name="build" content="202611031241">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611030411">
-<link rel="stylesheet" href="css/app.css?v=202611030411">
+<link rel="stylesheet" href="css/tokens.css?v=202611031241">
+<link rel="stylesheet" href="css/app.css?v=202611031241">
 </head>
 <body>
 <script>
@@ -37,22 +37,16 @@ if (location.protocol === 'file:') {
 </script>
 <a class="skip" href="#guide">가이드로 건너뛰기</a>
 
-<!-- 위: 연습할 말 고르기. 여기 칩을 누르는 것이 화면에서 유일하게 필요한 클릭이다. -->
+<!-- 위: 이름, 쓰는 방법, 말 고르기. 영상을 가리지 않게 가볍게 둔다 -->
 <header class="bar">
   <span class="mark">손말</span>
-  <nav class="chips" id="chips" aria-label="연습할 말"></nav>
+  <!-- 앞에 상대가 있느냐가 두 방법을 가른다. 이름도 그 상황으로 붙인다 -->
+  <div class="modeswitch" role="radiogroup" aria-label="쓰는 방법">
+    <button type="button" id="mode-practice" role="radio" aria-checked="true" title="그림을 보고 따라 하며 익힙니다">혼자 연습</button>
+    <button type="button" id="mode-talk" role="radio" aria-checked="false" title="내 말은 크게 보여 주고, 상대 지문자는 읽어 줍니다">상대와 대화</button>
+  </div>
   <div class="bar-end">
-    <div class="modeswitch" role="radiogroup" aria-label="화면">
-      <button type="button" id="mode-practice" role="radio" aria-checked="true">연습</button>
-      <button type="button" id="mode-talk" role="radio" aria-checked="false">대화</button>
-    </div>
-    <button type="button" class="refswitch" id="ref-toggle" role="switch" aria-checked="false" aria-controls="ref">
-      <span class="track" aria-hidden="true"><span class="knob"></span></span><span>표<span class="wide"> 보기</span></span>
-    </button>
-    <div class="handswitch" role="radiogroup" aria-label="쓰는 손">
-      <button type="button" id="hand-right" role="radio" aria-checked="true">오른손</button>
-      <button type="button" id="hand-left" role="radio" aria-checked="false">왼손</button>
-    </div>
+    <button type="button" class="ghost" id="ref-toggle" aria-expanded="false" aria-controls="ref">말 고르기</button>
     <button class="ghost" id="btn-sources" type="button">자료</button>
   </div>
 </header>
@@ -102,12 +96,15 @@ if (location.protocol === 'file:') {
     <div class="talk-quick" id="talk-quick" role="group" aria-label="대화가 막힐 때"></div>
   </section>
 
-  <!-- 표 보기 스위치를 켰을 때만 영상 위에 덮는다. 고르면 닫히고 바로 연습으로 간다 -->
-  <section class="ref" id="ref" hidden aria-label="지문자와 낱말 표">
+  <!-- 말 고르기를 눌렀을 때만 영상 위에 덮는다. 고르면 닫히고 바로 연습으로 간다 -->
+  <section class="ref" id="ref" hidden aria-label="연습할 말 고르기">
+    <div class="ref-head">
+      <h2 class="ref-title">낱말</h2>
+      <button type="button" class="ghost" id="open-phrases">문장으로 이어 연습하기</button>
+    </div>
+    <div class="ref-words" id="ref-words"></div>
     <h2 class="ref-title">지문자</h2>
     <div class="chart" id="chart"></div>
-    <h2 class="ref-title">낱말</h2>
-    <div class="ref-words" id="ref-words"></div>
   </section>
 
   <!-- 읽어 준 말만 영상 위에 잠깐 띄운다 -->
@@ -117,7 +114,14 @@ if (location.protocol === 'file:') {
 
 <!-- 아래 가운데: 지금 할 동작과 말하기를 카드 하나에 모은다. 영상은 최대한 비워 둔다 -->
 <section class="guide" id="guide" aria-label="지금 할 동작">
-  <figure class="guide-art" id="guide-art" aria-hidden="true"></figure>
+  <!-- 쓰는 손은 그림을 뒤집는다. 바꾸는 것 바로 아래에 둔다 -->
+  <div class="guide-side">
+    <figure class="guide-art" id="guide-art" aria-hidden="true"></figure>
+    <div class="handswitch" role="radiogroup" aria-label="쓰는 손">
+      <button type="button" id="hand-right" role="radio" aria-checked="true">오른손</button>
+      <button type="button" id="hand-left" role="radio" aria-checked="false">왼손</button>
+    </div>
+  </div>
   <div class="guide-body">
     <div class="guide-head">
       <p class="guide-name" id="guide-name">연습할 말을 고르거나 말해 보세요</p>
@@ -157,6 +161,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js?v=202611030411"></script>
+<script type="module" src="js/app.js?v=202611031241"></script>
 </body>
 </html>

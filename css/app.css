@@ -1,6 +1,6 @@
 /* app.css — 손말
    영상이 화면 전체다. 그 위에 두 가지만 띄운다.
-   위에는 고를 말(반투명 알약), 아래 가운데에는 지금 할 동작과 말하기를 모은 카드 하나.
+   위에는 이름과 쓰는 방법, 아래 가운데에는 지금 할 동작과 말하기를 모은 카드 하나.
    막대나 띠로 영상을 가리지 않는다. 수어 그림만은 또렷하게 크게 둔다. */
 
 :root { --glass: rgba(14,15,19,.62); --glass-strong: rgba(14,15,19,.74); --glass-line: rgba(255,255,255,.14); }
@@ -13,74 +13,35 @@ body { overflow: hidden; }
 }
 .skip:focus { top: var(--s2); }
 
-/* ── 위: 고를 말. 영상 위에 떠 있다 ────────────── */
+/* ── 위: 이름, 쓰는 방법, 말 고르기 ──────────── */
 .bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 6;
   display: flex; align-items: center; gap: var(--s3);
   padding: var(--s3) var(--s4) var(--s5);
-  /* 칩 줄 아래까지 .6 이상을 지켜야 흰 벽 앞에서도 묶음 이름이 4.5:1 을 넘는다 */
-  background: linear-gradient(to bottom, rgba(10,11,14,.7), rgba(10,11,14,.6) 72%, rgba(10,11,14,0));
+  /* 칩 줄이 없어 덮개는 이름 글자만 받쳐 주면 된다. 영상을 덜 가린다 */
+  background: linear-gradient(to bottom, rgba(10,11,14,.5), rgba(10,11,14,0));
   pointer-events: none;            /* 빈 곳은 영상 그대로, 버튼만 눌린다 */
 }
 .bar > * { pointer-events: auto; }
 .mark { flex: none; font-family: var(--kr); font-weight: 700; font-size: 16px; letter-spacing: -0.03em; color: #fff;
   text-shadow: 0 1px 6px rgba(0,0,0,.35); }
 
-.chips {
-  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;
-  overflow-x: auto; scrollbar-width: none; padding: 2px 0;
-}
-.chips::-webkit-scrollbar { display: none; }
-.chip-group { flex: none; display: flex; align-items: center; gap: 6px; }
-.chip-group + .chip-group, .chip-group + .chip { margin-left: var(--s3); }
-.chip-cat { font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.9); white-space: nowrap; padding-left: 2px;
-  text-shadow: 0 1px 4px rgba(0,0,0,.4); }
-.chips[data-more="1"] { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
-  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
-.chip {
-  flex: none; background: var(--glass); border: 1px solid var(--glass-line);
-  border-radius: 999px; padding: 4px 11px;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  font-family: var(--kr); font-size: var(--t-label); color: #fff;
-  transition: background-color .14s var(--ease), color .14s var(--ease), border-color .14s var(--ease);
-}
-.chip:hover { background: var(--glass-strong); }
-.chip[aria-current="true"] { background: var(--indigo); border-color: var(--indigo); color: #fff; }
-.chip[data-stage="1"]::after, .chip[data-stage="2"]::after { content: ""; display: inline-block; width: 5px; height: 5px;
-  border-radius: 50%; background: #8ee0b4; margin-left: 5px; vertical-align: 2px; }
-.chip[data-stage="3"]::after { content: "✓"; margin-left: 4px; color: #8ee0b4; font-weight: 700; }
-.chip-cat em { font-style: normal; opacity: .8; margin-left: 2px; font-variant-numeric: tabular-nums; }
-.chip.spell { border-style: dashed; border-color: rgba(255,255,255,.4); }
 
-.bar-end { flex: none; display: flex; align-items: center; gap: 6px; }
+.bar-end { flex: none; margin-left: auto; display: flex; align-items: center; gap: 6px; }
 .bar-end > * { background: var(--glass); border: 1px solid var(--glass-line); border-radius: 999px;
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 
-/* 연습 / 대화 */
-.modeswitch { display: flex; padding: 2px; }
+/* 혼자 연습 / 상대와 대화 */
+.modeswitch { flex: none; display: flex; padding: 2px; background: var(--glass); border: 1px solid var(--glass-line); border-radius: 999px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .modeswitch button { background: none; border-radius: 999px; padding: 3px 10px;
   font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.85); }
 .modeswitch button[aria-checked="true"] { background: #fff; color: var(--ink); font-weight: 600; }
-body[data-mode="talk"] .chips, body[data-mode="talk"] .refswitch { visibility: hidden; }
+body[data-mode="talk"] #ref-toggle { visibility: hidden; }
 
-/* 표 보기 스위치, 쓰는 손 — 왼손잡이는 그림을 뒤집어 보고, 판정도 같이 뒤집힌다 */
-.refswitch { display: inline-flex; align-items: center; gap: var(--s2); padding: 4px 11px 4px 6px;
-  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.85); white-space: nowrap; }
-.refswitch .track { width: 26px; height: 15px; border-radius: 999px; background: rgba(255,255,255,.28); position: relative; transition: background .15s; }
-.refswitch .knob { position: absolute; top: 2px; left: 2px; width: 11px; height: 11px; border-radius: 50%; background: #fff; transition: transform .15s; }
-.refswitch[aria-checked="true"] { color: #fff; font-weight: 600; }
-.refswitch[aria-checked="true"] .track { background: #fff; }
-.refswitch[aria-checked="true"] .knob { background: var(--ink); }
-.refswitch[aria-checked="true"] .knob { transform: translateX(11px); }
-.handswitch { display: flex; padding: 2px; }
-.handswitch button {
-  background: none; border-radius: 999px; padding: 3px 10px;
-  font-family: var(--kr); font-size: var(--t-label); color: rgba(255,255,255,.85);
-}
-/* 설정은 고른 칸을 흰색으로. 남색은 '지금 연습하는 말' 하나에만 쓴다 */
-.handswitch button[aria-checked="true"] { background: #fff; color: var(--ink); font-weight: 600; }
 .bar-end .ghost { background: var(--glass); border-color: var(--glass-line); color: rgba(255,255,255,.85); padding: 4px 11px; border-radius: 999px; }
 .bar-end .ghost:hover:not(:disabled) { background: var(--glass-strong); }
+.bar-end .ghost[aria-expanded="true"], .bar-end .ghost[aria-expanded="true"]:hover:not(:disabled) { background: #fff; border-color: #fff; color: var(--ink); font-weight: 600; }
 
 /* ── 가운데: 카메라 ───────────────────────────── */
 .camera {
@@ -137,9 +98,18 @@ body[data-facing="environment"] .camera video { transform: none; }
   display: flex; flex-direction: column; gap: var(--s3);
 }
 .ref-title { font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--muted); margin: var(--s2) 0 0; }
+.ref-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+.ref-head .ref-title { margin: 0; }
 .ref button { cursor: pointer; }
 .ref-group { grid-column: 1 / -1; margin: var(--s3) 0 0; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--ink-soft); }
 .ref-group:first-child { margin-top: 0; }
+.ref-group em { font-style: normal; font-weight: 400; color: var(--muted); margin-left: 4px; font-variant-numeric: tabular-nums; }
+/* 지금 연습하는 말. 남색은 화면 전체에서 이 말 하나에만 쓴다 */
+.ref [aria-current="true"] { border-color: var(--indigo); box-shadow: 0 0 0 1px var(--indigo); }
+/* 익힌 정도: 점은 해 봄, 체크는 그림 없이 해냄 */
+.ref-words button[data-stage="1"] span::after, .ref-words button[data-stage="2"] span::after { content: ""; display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--jade); margin-left: 5px; vertical-align: 2px; }
+.ref-words button[data-stage="3"] span::after { content: "✓"; margin-left: 4px; color: #23764d; font-weight: 700; }
 .ref-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: var(--s2); }
 .ref-words button { display: flex; flex-direction: column; gap: 4px; padding: 0 0 6px; background: var(--paper);
   border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; font-family: var(--kr); font-size: var(--t-label); font-weight: 600; color: var(--ink); }
@@ -162,7 +132,8 @@ body[data-facing="environment"] .camera video { transform: none; }
   padding: var(--s2) var(--s4); font-family: var(--kr); font-size: var(--t-lead);
   color: #23764d; font-weight: 600;
 }
-body[data-mode="talk"] .spoken { display: none; }   /* 대화에서는 위 큰 글자와 오간 말이 같은 일을 한다 */
+body[data-mode="talk"] .spoken { display: none; }
+.ref:not([hidden]) ~ .spoken { display: none; }   /* 고르는 동안 목록을 가리지 않게 */   /* 대화에서는 위 큰 글자와 오간 말이 같은 일을 한다 */
 
 /* ── 아래 가운데: 지금 할 동작 + 말하기를 카드 하나로 ─── */
 /* 영상 위에 뜬 반투명 카드. 폭을 줄여 양옆 영상을 비우고, 그림은 크게 둔다. */
@@ -174,6 +145,13 @@ body[data-mode="talk"] .spoken { display: none; }   /* 대화에서는 위 큰 �
   backdrop-filter: blur(14px) saturate(1.1); -webkit-backdrop-filter: blur(14px) saturate(1.1);
   color: #fff;
 }
+.guide-side { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+/* 쓰는 손. 카드 안 설정이라 조용하게, 고른 칸만 흰색 */
+.handswitch { display: flex; padding: 2px; background: rgba(255,255,255,.1); border: 1px solid var(--glass-line); border-radius: 999px; }
+.handswitch button { background: none; border-radius: 999px; padding: 2px 12px; min-height: 26px;
+  font-family: var(--kr); font-size: var(--t-micro); color: rgba(255,255,255,.85); }
+.handswitch button:hover { color: #fff; }
+.handswitch button[aria-checked="true"] { background: #fff; color: var(--ink); font-weight: 600; }
 .guide-art {
   flex: none; margin: 0; width: 148px; aspect-ratio: 1; display: grid; place-items: center; align-self: center;
   background: rgba(255,255,255,.94); border-radius: 12px; overflow: hidden; padding: var(--s2);
@@ -310,23 +288,16 @@ dialog a { color: var(--indigo); }
 
 /* ── 좁은 화면 ──────────────────────────────── */
 @media (max-width: 760px) {
-  .bar { flex-wrap: wrap; padding: var(--s2) var(--s3) var(--s4); gap: var(--s2); }
-  .chips { order: 3; flex-basis: 100%; }
-  .bar-end { margin-left: auto; }
-  /* 좁으면 손잡이 대신 '표' 한 글자를 남긴다. 이름 없는 스위치는 무엇을 켜는지 알 수 없다 */
-  .refswitch { padding: 4px 10px; }
-  .refswitch .track { display: none; }
-  .refswitch .wide { display: none; }
-  .refswitch[aria-checked="true"] { background: #fff; color: var(--ink); }
+  .bar { padding: var(--s2) var(--s3) var(--s4); gap: var(--s2); }
   .bar-end { gap: 4px; }
   .guide { bottom: var(--s2); width: calc(100% - 16px); gap: var(--s3); padding: 8px; }
   .guide-art { width: 104px; }
   .guide-art:has(.word-pose) { width: 139px; }
   .guide-name { font-size: var(--t-lead); }
   .say-btn kbd { display: none; }
-  .cam-empty, .ref { padding-top: 112px; }
-  .talk { top: 100px; width: calc(100% - 16px); }
-  .modeswitch button { padding: 3px 8px; }
+  .cam-empty, .ref { padding-top: 64px; }
+  .talk { top: 56px; width: calc(100% - 16px); }
+  .modeswitch button { padding: 3px 9px; }
 }
 
 /* 한 손을 옆으로 미는 쌍자음. 정지 화면에서도 화살표로 방향이 남는다. */

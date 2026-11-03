@@ -8,20 +8,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611030411';
-import { getPose } from './jamoData.js?v=202611030411';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611030411';
-import { describe } from './poseFeatures.js?v=202611030411';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611030411';
-import { Tracker } from './tracker.js?v=202611030411';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611030411';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611030411';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611030411';
-import { groupByIdea } from './lessons.js?v=202611030411';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611030411';
-import { createReader } from './reader.js?v=202611030411';
-import { SITUATIONS } from './lessons.js?v=202611030411';
-import { diagnose } from './diagnose.js?v=202611030411';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611031241';
+import { getPose } from './jamoData.js?v=202611031241';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611031241';
+import { describe } from './poseFeatures.js?v=202611031241';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611031241';
+import { Tracker } from './tracker.js?v=202611031241';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611031241';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611031241';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611031241';
+import { groupByIdea } from './lessons.js?v=202611031241';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611031241';
+import { createReader } from './reader.js?v=202611031241';
+import { SITUATIONS } from './lessons.js?v=202611031241';
+import { diagnose } from './diagnose.js?v=202611031241';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -30,7 +30,7 @@ const el = {
   btnCam: $('btn-cam'), btnDemo: $('btn-demo'), chart: $('chart'),
   diag: $('diag'), diagVerdict: $('diag-verdict'), diagList: $('diag-list'),
   diagAdvice: $('diag-advice'), diagRetry: $('diag-retry'), diagDemo: $('diag-demo'), diagNewTab: $('diag-newtab'),
-  chips: $('chips'), handRight: $('hand-right'), handLeft: $('hand-left'),
+  handRight: $('hand-right'), handLeft: $('hand-left'),
   spoken: $('spoken'),
   sayForm: $('say-form'), btnListen: $('btn-listen'), typed: $('typed'),
   guide: $('guide'), art: $('guide-art'), name: $('guide-name'), step: $('guide-step'),
@@ -132,31 +132,30 @@ function setUtterance(text) {
   el.seqNote.hidden = partIndex < 2;     // 여러 어절이면 한국어 순서로 이은 연습이라고 밝힌다
   el.read.textContent = '';
   el.typed.value = '';
-  paintChips(text);
+  paintPicker(text);
   buildSeq();
   advance();
 }
 
-function paintChips(active = state.active) {
+function paintPicker(active = state.active) {
   state.active = active;
-  for (const b of el.chips.querySelectorAll('.chip'))
-    b.setAttribute('aria-current', String(b.dataset.word === active));
+  for (const b of el.ref.querySelectorAll('[data-say]'))
+    b.setAttribute('aria-current', String(b.dataset.say === active));
 }
 
-/* 칩 줄. 상황 묶음마다 이름과 '익힌 수/전체'를 붙이고, 익힌 낱말에는 표시를 단다.
+/* 말 고르기의 낱말. 상황 묶음마다 이름과 '익힌 수/전체'를 붙이고, 익힌 낱말에는 표시를 단다.
    1 그림 보고 해 봄, 2 그림 없이 해 볼 차례, 3 그림 없이 해냄 */
 const STAGE_LABEL = ['', '그림 보고 해 봄', '다음엔 그림 없이', '그림 없이 해냄'];
-function renderChips() {
+function renderPicker() {
   const all = loadProgress();
-  el.chips.innerHTML = '<button class="chip" type="button" data-open-phrases="1">문장 연습</button>' + groupByIdea(WORD_SIGNS).map(g => {
+  el.refWords.innerHTML = groupByIdea(WORD_SIGNS).map(g => {
     const done = g.signs.filter(w => stageOf(w.word, all) >= 1).length;
-    return `<span class="chip-group" role="group" aria-label="${g.name}"><span class="chip-cat" aria-hidden="true">${g.name} <em>${done}/${g.signs.length}</em></span>`
-      + g.signs.map(w => {
-        const st = stageOf(w.word, all);
-        return `<button class="chip" type="button" data-word="${w.word}" data-stage="${st}"${st ? ` title="${STAGE_LABEL[st]}"` : ''}>${w.word}</button>`;
-      }).join('') + '</span>';
-  }).join('') + '<button class="chip spell" type="button" data-word="손말">손말 지문자</button>';
-  paintChips();
+    return `<h3 class="ref-group">${g.name} <em>${done}/${g.signs.length}</em></h3>` + g.signs.map(w => {
+      const st = stageOf(w.word, all);
+      return `<button type="button" data-say="${w.word}" data-stage="${st}"${st ? ` title="${STAGE_LABEL[st]}"` : ''}>${wordArt(w.word, 0)}<span>${w.word}</span></button>`;
+    }).join('');
+  }).join('');
+  paintPicker();
 }
 
 function buildSeq() {
@@ -339,7 +338,7 @@ function completeWord(u) {
   if (u.sign) {
     markLearned(u.sign.word, { recalled: state.recall });
     if (state.recall) el.step.textContent = '그림 없이 해냈어요';
-    renderChips();
+    renderPicker();
   }
   el.guide.dataset.state = 'hit';
   el.fill.style.width = '100%';
@@ -659,12 +658,18 @@ async function setReading(on) {
   document.body.dataset.facing = state.facing;
 }
 
+function setRef(on) {
+  el.ref.hidden = !on;
+  el.refToggle.setAttribute('aria-expanded', String(on));
+}
+
 function setMode(mode) {
   state.mode = mode;
   document.body.dataset.mode = mode;
   el.modePractice.setAttribute('aria-checked', String(mode === 'practice'));
   el.modeTalk.setAttribute('aria-checked', String(mode === 'talk'));
   el.talk.hidden = mode !== 'talk';
+  if (mode === 'talk') setRef(false);   // 대화 중에는 고를 것이 없다. 덮개가 상대 쪽 글자를 가리지 않게
   if (mode !== 'talk' && state.reading) setReading(false);
 }
 
@@ -673,7 +678,6 @@ function setMode(mode) {
 function init() {
   setHand('right');
 
-  renderChips();
   const phraseList = $('phrase-list');
   for (const group of PHRASE_GROUPS) {
     const section = document.createElement('section');
@@ -691,32 +695,6 @@ function init() {
     }
     phraseList.append(section);
   }
-  el.chips.addEventListener('click', e => {
-    const b = e.target.closest('.chip');
-    if (b?.dataset.openPhrases) $('phrases').showModal();
-    else if (b?.dataset.word) sayAndPractice(b.dataset.word);
-  });
-  /* 칩이 넘치면 오른쪽 끝을 흐리게 해 더 있다는 것을 보인다. 끝까지 밀면 흐림을 걷는다. */
-  const markMore = () => {
-    const c = el.chips;
-    c.dataset.more = c.scrollLeft + c.clientWidth < c.scrollWidth - 2 ? '1' : '';
-  };
-  el.chips.addEventListener('scroll', markMore, { passive: true });
-  /* 마우스 휠은 세로로만 돈다. 칩 줄은 가로로 넘치므로 휠을 가로로 옮겨 준다.
-     없으면 트랙패드가 없는 데스크톱에서 화면 밖 칩에 닿을 길이 없다 */
-  el.chips.addEventListener('wheel', e => {
-    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-    const c = el.chips;
-    if (c.scrollWidth <= c.clientWidth) return;
-    e.preventDefault();
-    c.scrollLeft += e.deltaY;
-  }, { passive: false });
-  /* 읽어 준 말은 카드 바로 위에 뜬다. 카드 높이는 그림과 줄 수에 따라 바뀐다 */
-  const guide = document.getElementById('guide');
-  new ResizeObserver(() => document.documentElement.style.setProperty('--guide-h', guide.offsetHeight + 'px')).observe(guide);
-  addEventListener('resize', markMore);
-  markMore();
-
   state.reader = createReader({
     onChange: ({ jamos, text, live }) => {
       if (!state.reading) return;
@@ -805,25 +783,20 @@ function init() {
       document.querySelector('meta[name="build"]')?.content ?? '알 수 없음'
     } · 화면이 옛것 같으면 Cmd(Ctrl)+Shift+R 로 새로고침하세요.</p>`;
 
-  /* 표 보기: 스위치를 켰을 때만 지문자와 낱말 표를 영상 위에 덮는다.
-     하나를 고르면 표를 닫고 바로 그 말을 연습한다. */
+  /* 말 고르기: 눌렀을 때만 낱말과 지문자를 영상 위에 덮는다.
+     하나를 고르면 닫고 바로 그 말을 연습한다. */
   el.chart.innerHTML = [...'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣㅘㅚㅙㅝㅞㅟㅢㄲㄸㅃㅆㅉ']
     .map(j => `<button type="button" data-say="${j}" aria-label="${j} 연습">${jamoArt(j)}<span>${j}</span></button>`).join('');
-  el.refWords.innerHTML = groupByIdea(WORD_SIGNS).map(g =>
-    `<h3 class="ref-group">${g.name}</h3>` + g.signs
-      .map(w => `<button type="button" data-say="${w.word}">${wordArt(w.word, 0)}<span>${w.word}</span></button>`).join('')).join('');
-  const setRef = on => {
-    el.ref.hidden = !on;
-    el.refToggle.setAttribute('aria-checked', String(on));
-  };
+  renderPicker();
   el.refToggle.addEventListener('click', () => setRef(el.ref.hidden));
   el.ref.addEventListener('click', e => {
     const b = e.target.closest('[data-say]');
     if (!b) return;
     setRef(false);
-    setUtterance(b.dataset.say);
+    sayAndPractice(b.dataset.say);
   });
-  addEventListener('keydown', e => { if (e.key === 'Escape' && !el.ref.hidden) setRef(false); });
+  $('open-phrases').addEventListener('click', () => { setRef(false); $('phrases').showModal(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !el.ref.hidden) { setRef(false); el.refToggle.focus(); } });
 
   setUtterance(WORD_SIGNS[0]?.word ?? '안녕하세요');
 

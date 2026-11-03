@@ -1,4 +1,4 @@
-/* 클릭 없이 흘러가는지 확인한다. 단어 칩 한 번 누르는 것 외에는
+/* 클릭 없이 흘러가는지 확인한다. 낱말 하나 고르는 것 외에는
    아무 조작 없이 읽어 주고 다음으로 넘어가야 한다. */
 import { launch } from './browser.mjs';
 const b = await launch();
@@ -17,7 +17,7 @@ await p.addInitScript(() => {
 await p.goto('http://localhost:8777/index.html?mock=1', { waitUntil: 'networkidle' });
 await p.waitForTimeout(500);
 
-console.log('칩 개수       ', await p.locator('.chip').count());
+console.log('고를 낱말 수   ', await p.locator('#ref-words [data-say]').count());
 console.log('다음 버튼 없음 ', await p.locator('#btn-next').count() === 0);
 console.log('검수 전 칩 없음', (await p.content()).includes('검수 전') === false);
 
