@@ -1089,6 +1089,132 @@
       "basis": "sldict",
       "step": "두 손을 위아래로 움직인다 (두 번)",
       "entryNo": "6463"
+    },
+    {
+      "word": "빨강",
+      "slug": "sl6211-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 옆면을 입술 밑에 댄다",
+      "entryNo": "6211"
+    },
+    {
+      "word": "빨강",
+      "slug": "sl6211-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지 옆면으로 입술 밑을 오른쪽으로 스쳐 낸다",
+      "entryNo": "6211"
+    },
+    {
+      "word": "파랑",
+      "slug": "sl103-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 오른뺨에 댄다",
+      "entryNo": "103"
+    },
+    {
+      "word": "파랑",
+      "slug": "sl103-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른뺨을 손바닥으로 스쳐 내린다",
+      "entryNo": "103"
+    },
+    {
+      "word": "노랑",
+      "slug": "sl12177-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 끝을 치아에 댄다",
+      "entryNo": "12177"
+    },
+    {
+      "word": "노랑",
+      "slug": "sl12177-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지 끝으로 치아를 스쳐 낸다",
+      "entryNo": "12177"
+    },
+    {
+      "word": "검정",
+      "slug": "sl6875-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥을 머리 오른쪽에 댄다",
+      "entryNo": "6875"
+    },
+    {
+      "word": "검정",
+      "slug": "sl6875-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "머리 오른쪽을 손바닥으로 스쳐 내린다",
+      "entryNo": "6875"
+    },
+    {
+      "word": "하양",
+      "slug": "sl3024-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 끝으로 치아를 가리킨다",
+      "entryNo": "3024"
+    },
+    {
+      "word": "덥다",
+      "slug": "sl6492-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손가락을 자연스럽게 벌리고 손바닥이 아래로 향하게 머리 양옆에 둔다",
+      "entryNo": "6492"
+    },
+    {
+      "word": "덥다",
+      "slug": "sl6492-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 동시에 상하로 흔든다 (두 번)",
+      "entryNo": "6492"
+    },
+    {
+      "word": "춥다",
+      "slug": "sl9670-01",
+      "frame": 1,
+      "total": 1,
+      "basis": "sldict",
+      "step": "두 주먹을 가슴 앞으로 올려 떠는 동작을 한다",
+      "entryNo": "9670"
+    },
+    {
+      "word": "포도",
+      "slug": "sl498-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손의 검지·엄지 끝을 맞대어 고리를 만들고 높이를 엇갈리게 둔다",
+      "entryNo": "498"
+    },
+    {
+      "word": "포도",
+      "slug": "sl498-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "고리를 유지하며 두 손을 상하로 엇갈리게 흔든다",
+      "entryNo": "498"
     }
   ]
 }
