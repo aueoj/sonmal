@@ -118,10 +118,12 @@ body { overflow: hidden; }
   display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "side body" "act act";
   align-content: end; column-gap: var(--s5); row-gap: var(--s3);
   padding: clamp(36px, 6vh, 60px) max(var(--s4), calc((100% - 1040px) / 2)) calc(var(--s5) + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.84) 45%, rgba(0,0,0,.74) 75%, rgba(0,0,0,.45) 90%, rgba(0,0,0,0) 100%);
+  /* 짙은 곳은 아래로 내리고, 옅어지는 구간을 길게 둔다. 위쪽 글은 그림자로 받친다 */
+  background: linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.72) 22%, rgba(0,0,0,.45) 52%, rgba(0,0,0,.18) 78%, rgba(0,0,0,0) 100%);
   color: #fff; pointer-events: none;      /* 옅은 윗자락은 영상 그대로. 글과 버튼만 눌린다 */
 }
 .guide > * { pointer-events: auto; }
+.guide-body { text-shadow: 0 1px 2px rgba(0,0,0,.7), 0 0 10px rgba(0,0,0,.45); }
 .guide-side { grid-area: side; align-self: end; }
 .guide-body { grid-area: body; align-self: end; }
 .guide > .say, .guide > .free-bar { grid-area: act; }
