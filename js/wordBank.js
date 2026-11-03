@@ -19,6 +19,7 @@
  *   hands  보여야 하는 손 수
  *   fingers 주로 쓰는 손에서 펴진 손가락 (index·middle·ring·pinky, thumb 은 따로)
  *   zone   손이 머무는 곳 face · chin · chest · belly · front
+ *   spot   얼굴 가로 자리 center(코 앞) · side(뺨 옆). 손모양과 높이가 같은 낱말을 가를 때만 쓴다
  */
 
 const SL = no => `https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=${no}`;
@@ -151,7 +152,7 @@ export const WORD_BANK = [
     hands: 1,
     수형: '주먹', 수향: '엄지와 검지 쪽이 코', 수위: '코', 수동: '코에 댄다',
     steps: ['주먹의 엄지와 검지 쪽 옆면을 코에 댄다'],
-    check: [{ hands: 1, fingers: [], zone: 'face' }] }),
+    check: [{ hands: 1, fingers: [], zone: 'face', spot: 'center' }] }),
 
   e(23960, { word: '싫어요', category: '감정', aliases: ['싫다','싫어','거절','거부'], status: 'ok',
     원문: '오른 주먹의 1·5지를 펴서 약간 구부려 끝을 턱에 댄다.',
@@ -875,6 +876,7 @@ export const WORD_BANK = [
     {
       "hands": 1,
       "zone": "face",
+      "spot": "side",
       "fingers": []
     }
   ],

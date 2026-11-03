@@ -70,3 +70,47 @@ for (const s of falsePass) console.log('  ✕ ' + s);
 if (!missed.length && !falsePass.length) console.log('틀린 손모양, 손 수, 높이는 모두 걸렸다');
 if (missed.length || falsePass.length) process.exit(1);
 }
+
+/* 손가락 허용 범위. 코에 댄 주먹('좋아요')은 옆에서 보여 MediaPipe 가 가려진 손가락을
+   반쯤 편 것으로 어림한다. 느슨한 주먹은 통과하고, 손가락 하나라도 분명히 틀리면 걸려야 한다.
+   예전 판정은 느슨한 주먹(0.60)을 검지 하나 편 틀린 손(0.70)보다 멀게 보았다. */
+{
+  const F = ['index', 'middle', 'ring', 'pinky'];
+  const feat = (e, zone) => ({ extension: Object.fromEntries(F.map((f, i) => [f, e[i]])), thumbExtension: 0.5, pinch: 1,
+    centroid: { x: 0.5, y: at(zone) }, scale: 0.1 });
+  const bad = [];
+  const good = WORD_BANK.find(w => w.word === '좋아요').check[0];
+  for (const e of [[0.3, 0.3, 0.3, 0.3], [0.4, 0.35, 0.35, 0.3]])
+    if (!scoreCheck([feat(e, good.zone)], good, FACE).ok) bad.push(`좋아요 느슨한 주먹 [${e}] ← 맞게 했는데 걸림`);
+  let n = 0;
+  for (const w of WORD_BANK) for (const c of w.check ?? []) {
+    if (!c.fingers || (c.hands ?? 1) !== 1) continue;
+    for (let i = 0; i < 4; i++) {
+      const e = F.map(f => (c.fingers.includes(f) ? 0.95 : 0.05)); e[i] = e[i] > 0.5 ? 0.05 : 0.95; n++;
+      if (scoreCheck([feat(e, c.zone)], c, FACE).ok) bad.push(`${w.word} ${F[i]} 하나 틀렸는데 통과`);
+    }
+  }
+  console.log(`── 손가락 허용 범위 ── 손가락 하나 틀린 경우 ${n}개`);
+  for (const s of bad) console.log('  ✕ ' + s);
+  if (bad.length) process.exit(1);
+  console.log('느슨한 주먹은 통과하고, 손가락 하나 틀린 것은 모두 걸렸다');
+}
+
+/* 얼굴 가로 자리. '좋아요'(코 앞 주먹)와 '자다'(뺨 옆 주먹)는 이것만 다르다 */
+{
+  const F = { y: 0.2, h: 0.16, x: 0.5, w: 0.14 };
+  const fist = dx => ({ extension: { index: 0.1, middle: 0.1, ring: 0.1, pinky: 0.1 }, thumbExtension: 0.5, pinch: 1,
+    centroid: { x: F.x + dx * F.w, y: F.y + ZONE_AT.face * F.h }, scale: 0.1 });
+  const good = WORD_BANK.find(w => w.word === '좋아요').check[0];
+  const sleep = WORD_BANK.find(w => w.word === '자다').check[0];
+  const rows = [
+    ['좋아요 코 앞', good, 0.1, true], ['좋아요 뺨 옆', good, 0.8, false],
+    ['자다 뺨 옆', sleep, 0.8, true], ['자다 왼뺨 옆', sleep, -0.8, true], ['자다 코 앞', sleep, 0.1, false],
+    ['얼굴 없으면 자리를 보지 않는다', good, 0.8, true, null]
+  ];
+  const bad = rows.filter(([, c, dx, want, face = F]) => scoreCheck([fist(dx)], c, face).ok !== want).map(r => r[0]);
+  console.log('── 얼굴 가로 자리 ──');
+  for (const s of bad) console.log('  ✕ ' + s);
+  if (bad.length) process.exit(1);
+  console.log('코 앞과 뺨 옆을 가른다');
+}

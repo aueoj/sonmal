@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611031241';
-import { ZONE_AT } from './matcher.js?v=202611031241';
+import { landmarksFor } from './mockHand.js?v=202611031437';
+import { ZONE_AT } from './matcher.js?v=202611031437';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -18,7 +18,7 @@ const FACE_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_detecto
 const FACE_EVERY = 3;        // 얼굴은 천천히 움직인다. 세 프레임에 한 번만 찾는다
 const FACE_KEEP_MS = 2000;   // 손이 얼굴을 가리는 동안에는 마지막 자리를 쓴다
 // 모의 입력의 얼굴 자리(화면 비율). dev/word-judge-test.mjs 와 같다
-const MOCK_FACE = { y: 0.2, h: 0.16 };
+const MOCK_FACE = { y: 0.2, h: 0.16, x: 0.5, w: 0.14 };
 
 export class Tracker {
   constructor({ video, onFrame, mock = false }) {
@@ -111,19 +111,24 @@ export class Tracker {
     if (!best || !vh) return;
     const nose = best.keypoints?.[2];
     const box = best.boundingBox;
+    const vw = this.video.videoWidth || 1;
     const y = nose ? nose.y : (box.originY + box.height / 2) / vh;
     const h = box.height / vh;
+    // 가로 자리는 손 특징과 같이 거울처럼 뒤집어 둔다(describe 가 손 좌표를 뒤집는다)
+    const x = 1 - (nose ? nose.x : (box.originX + box.width / 2) / vw);
+    const w = box.width / vw;
     const k = this.face && now - this.face.at < FACE_KEEP_MS ? 0.3 : 1;
+    const ease = (a, b) => a + (b - a) * k;
     this.face = this.face && k < 1
-      ? { y: this.face.y + (y - this.face.y) * k, h: this.face.h + (h - this.face.h) * k, at: now }
-      : { y, h, at: now };
+      ? { y: ease(this.face.y, y), h: ease(this.face.h, h), x: ease(this.face.x, x), w: ease(this.face.w, w), at: now }
+      : { y, h, x, w, at: now };
   }
 
   /* 판정에 넘길 얼굴. 오래 못 봤으면 없다고 한다 */
   currentFace(now = performance.now()) {
     if (this.mock) return this.mockFace === false ? null : MOCK_FACE;
     if (!this.face || now - this.face.at > FACE_KEEP_MS) return null;
-    return { y: this.face.y, h: this.face.h };
+    return { y: this.face.y, h: this.face.h, x: this.face.x, w: this.face.w };
   }
 
   setMockPose(pose) { this.mockPose = pose; }
@@ -171,6 +176,13 @@ export class Tracker {
       const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
       const want = MOCK_FACE.y + (ZONE_AT[this.mockZone] ?? ZONE_AT.front) * MOCK_FACE.h;
       for (const p of pts) p.y += want - cy;
+      // 얼굴 가로 자리를 보는 낱말(코 앞, 뺨 옆)은 손을 그 자리로 옮긴다. 손 좌표는 뒤집혀 읽힌다
+      if (this.mockSpot) {
+        const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+        const off = this.mockSpot === 'side' ? 0.8 * MOCK_FACE.w : 0;
+        const wantX = 1 - (MOCK_FACE.x + off);
+        for (const p of pts) p.x += wantX - cx;
+      }
       return pts;
     };
     if (lm) toZone(lm);

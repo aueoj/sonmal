@@ -1,6 +1,6 @@
 /* 한국어 연습 문장. 각 구성 낱말의 출처는 wordBank의 국립국어원 사전 항목이다.
    한국수어 어순·문법 번역이나 사전의 문장 용례로 주장하지 않는다. */
-import { planUtterance } from './words.js?v=202611031241';
+import { planUtterance } from './words.js?v=202611031437';
 export const PHRASE_GROUPS = [
   { name: '보고 듣고 배우기', texts: [
     '무엇을 봐요', '물고기를 봐요', '물고기가 있어요', '물고기가 없어요',

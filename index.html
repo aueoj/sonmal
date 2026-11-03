@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611031241">
+<meta name="build" content="202611031437">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611031241">
-<link rel="stylesheet" href="css/app.css?v=202611031241">
+<link rel="stylesheet" href="css/tokens.css?v=202611031437">
+<link rel="stylesheet" href="css/app.css?v=202611031437">
 </head>
 <body>
 <script>
@@ -40,10 +40,10 @@ if (location.protocol === 'file:') {
 <!-- 위: 이름, 쓰는 방법, 말 고르기. 영상을 가리지 않게 가볍게 둔다 -->
 <header class="bar">
   <span class="mark">손말</span>
-  <!-- 앞에 상대가 있느냐가 두 방법을 가른다. 이름도 그 상황으로 붙인다 -->
-  <div class="modeswitch" role="radiogroup" aria-label="쓰는 방법">
-    <button type="button" id="mode-practice" role="radio" aria-checked="true" title="그림을 보고 따라 하며 익힙니다">혼자 연습</button>
-    <button type="button" id="mode-talk" role="radio" aria-checked="false" title="내 말은 크게 보여 주고, 상대 지문자는 읽어 줍니다">상대와 대화</button>
+  <!-- 연습은 고른 말을 따라 하고, 자유는 내가 하는 수어를 읽어 소리로 들려준다 -->
+  <div class="modeswitch" role="radiogroup" aria-label="모드">
+    <button type="button" id="mode-practice" role="radio" aria-checked="true" title="고른 말의 그림을 보고 따라 합니다">연습 모드</button>
+    <button type="button" id="mode-free" role="radio" aria-checked="false" title="내가 하는 수어를 읽고 바로 소리로 들려줍니다">자유 모드</button>
   </div>
   <div class="bar-end">
     <button type="button" class="ghost" id="ref-toggle" aria-expanded="false" aria-controls="ref">말 고르기</button>
@@ -83,18 +83,6 @@ if (location.protocol === 'file:') {
 
   </div>
 
-  <!-- 대화 모드: 위에는 상대에게 보일 큰 글자와 오간 말, 그 아래 상대 지문자 읽기.
-       내가 한 말의 수어는 아래 카드에 그대로 나온다 -->
-  <section class="talk" id="talk" hidden aria-label="대화">
-    <p class="talk-said" id="talk-said" aria-live="polite">말하거나 입력하면 상대가 볼 수 있게 여기에 크게 보입니다</p>
-    <ol class="talk-log" id="talk-log" aria-label="오간 말"></ol>
-    <div class="talk-read">
-      <button type="button" class="read-toggle" id="read-toggle" aria-pressed="false">상대 지문자 읽기</button>
-      <span class="read-live" id="read-live" aria-live="polite"></span>
-      <button type="button" class="read-clear" id="read-clear" hidden>지우기</button>
-    </div>
-    <div class="talk-quick" id="talk-quick" role="group" aria-label="대화가 막힐 때"></div>
-  </section>
 
   <!-- 말 고르기를 눌렀을 때만 영상 위에 덮는다. 고르면 닫히고 바로 연습으로 간다 -->
   <section class="ref" id="ref" hidden aria-label="연습할 말 고르기">
@@ -135,6 +123,15 @@ if (location.protocol === 'file:') {
       <p class="guide-read" id="read"></p>
     </div>
     <p class="seen" id="seen" aria-live="off"></p>
+    <!-- 자유 모드: 읽은 말이 쌓이고, 무엇으로 읽을지 고른다 -->
+    <ol class="free-log" id="free-log" aria-label="읽은 말"></ol>
+    <div class="free-bar">
+      <div class="readkind" role="radiogroup" aria-label="읽을 것">
+        <button type="button" id="read-words" role="radio" aria-checked="true">낱말</button>
+        <button type="button" id="read-jamo" role="radio" aria-checked="false">지문자</button>
+      </div>
+      <button type="button" class="free-clear" id="free-clear">지우기</button>
+    </div>
     <form class="say" id="say-form">
       <button class="say-btn" id="btn-listen" type="button">
         <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
@@ -161,6 +158,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js?v=202611031241"></script>
+<script type="module" src="js/app.js?v=202611031437"></script>
 </body>
 </html>
