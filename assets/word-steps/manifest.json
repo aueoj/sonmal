@@ -981,6 +981,114 @@
       "basis": "sldict",
       "step": "손을 좌우로 움직이며 밖으로 내민다",
       "entryNo": "5947"
+    },
+    {
+      "word": "아침",
+      "slug": "sl2231-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼손을 가로로 펴고 아래에서 오른 검지·엄지 끝을 맞댄다",
+      "entryNo": "2231"
+    },
+    {
+      "word": "아침",
+      "slug": "sl2231-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "고리를 유지하며 오른손을 왼손 안에서 밖으로 약간 올린다",
+      "entryNo": "2231"
+    },
+    {
+      "word": "저녁",
+      "slug": "sl11849-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지와 엄지를 펴서 가슴 중앙에 둔다",
+      "entryNo": "11849"
+    },
+    {
+      "word": "저녁",
+      "slug": "sl11849-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손을 뒤집으며 오른쪽으로 살짝 내린다",
+      "entryNo": "11849"
+    },
+    {
+      "word": "맛있다",
+      "slug": "sl6456-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 주먹의 검지·엄지 옆면을 턱 왼쪽에 댄다",
+      "entryNo": "6456"
+    },
+    {
+      "word": "맛있다",
+      "slug": "sl6456-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "주먹을 턱 오른쪽으로 이동시킨다",
+      "entryNo": "6456"
+    },
+    {
+      "word": "맛없다",
+      "slug": "sl9460-01",
+      "frame": 1,
+      "total": 3,
+      "basis": "sldict",
+      "step": "오른 주먹의 검지·엄지 옆면을 턱 왼쪽에 댄다",
+      "entryNo": "9460"
+    },
+    {
+      "word": "맛없다",
+      "slug": "sl9460-02",
+      "frame": 2,
+      "total": 3,
+      "basis": "sldict",
+      "step": "주먹을 턱 오른쪽으로 이동시킨다",
+      "entryNo": "9460"
+    },
+    {
+      "word": "맛없다",
+      "slug": "sl9460-03",
+      "frame": 3,
+      "total": 3,
+      "basis": "sldict",
+      "step": "아래로 내리면서 손가락을 턴다",
+      "entryNo": "9460"
+    },
+    {
+      "word": "비",
+      "slug": "sl6463-01",
+      "frame": 1,
+      "total": 3,
+      "basis": "sldict",
+      "step": "오른 검지·엄지를 펴서 구부려 입으로 약간 기울여 올린다",
+      "entryNo": "6463"
+    },
+    {
+      "word": "비",
+      "slug": "sl6463-02",
+      "frame": 2,
+      "total": 3,
+      "basis": "sldict",
+      "step": "두 손을 펴서 손끝을 아래로, 손등을 밖으로 향하게 들어 올린다",
+      "entryNo": "6463"
+    },
+    {
+      "word": "비",
+      "slug": "sl6463-03",
+      "frame": 3,
+      "total": 3,
+      "basis": "sldict",
+      "step": "두 손을 위아래로 움직인다 (두 번)",
+      "entryNo": "6463"
     }
   ]
 }
