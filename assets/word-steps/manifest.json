@@ -277,7 +277,7 @@
       "frame": 2,
       "total": 2,
       "basis": "sldict",
-      "step": "두 손을 위아래로 엇갈리게 움직인다",
+      "step": "두 손을 위아래로 엇갈리게 움직인다 (두 번)",
       "entryNo": "3874"
     },
     {
@@ -1314,6 +1314,96 @@
       "basis": "sldict",
       "step": "고리를 유지하며 두 손을 상하로 엇갈리게 흔든다",
       "entryNo": "498"
+    },
+    {
+      "word": "칭찬하다",
+      "slug": "sl11829-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "엄지를 세운 왼 주먹 아래에 오른 손바닥을 위로 향하게 둔다",
+      "entryNo": "11829"
+    },
+    {
+      "word": "칭찬하다",
+      "slug": "sl11829-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손바닥으로 왼 주먹을 쳐 올린다 (두 번)",
+      "entryNo": "11829"
+    },
+    {
+      "word": "열심히",
+      "slug": "sl11501-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "엄지를 세운 두 주먹을 배 양쪽에 댄다",
+      "entryNo": "11501"
+    },
+    {
+      "word": "열심히",
+      "slug": "sl11501-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 주먹을 힘주어 앞으로 내민다",
+      "entryNo": "11501"
+    },
+    {
+      "word": "시끄럽다",
+      "slug": "sl10730-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지를 반쯤 구부려 귀 가까이에서 좌우로 움직인다 (두 번)",
+      "entryNo": "10730"
+    },
+    {
+      "word": "시끄럽다",
+      "slug": "sl10730-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "반쯤 구부린 두 손을 위아래로 마주 보게 하여 엇갈리게 돌린다",
+      "entryNo": "10730"
+    },
+    {
+      "word": "짜증",
+      "slug": "sl6043-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지만 펴서 손바닥이 밖을 향하게 머리 오른쪽에 세운다",
+      "entryNo": "6043"
+    },
+    {
+      "word": "짜증",
+      "slug": "sl6043-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손 모양을 유지하며 머리 오른쪽에서 오르내린다 (두 번)",
+      "entryNo": "6043"
+    },
+    {
+      "word": "그만",
+      "slug": "sl39-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼손을 손끝이 밖을 향하게 모로 세우고 오른 손끝을 가까이 둔다",
+      "entryNo": "39"
+    },
+    {
+      "word": "그만",
+      "slug": "sl39-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손끝을 왼 손바닥에 가져다 댄다 (두 번)",
+      "entryNo": "39"
     }
   ]
 }
