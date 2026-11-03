@@ -8,20 +8,20 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611030345';
-import { getPose } from './jamoData.js?v=202611030345';
-import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611030345';
-import { describe } from './poseFeatures.js?v=202611030345';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611030345';
-import { Tracker } from './tracker.js?v=202611030345';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611030345';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611030345';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611030345';
-import { groupByIdea } from './lessons.js?v=202611030345';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611030345';
-import { createReader } from './reader.js?v=202611030345';
-import { SITUATIONS } from './lessons.js?v=202611030345';
-import { diagnose } from './diagnose.js?v=202611030345';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611030411';
+import { getPose } from './jamoData.js?v=202611030411';
+import { jamoArt, wordArt, wordFilm, WORD_POSE_FILES } from './illustrations.js?v=202611030411';
+import { describe } from './poseFeatures.js?v=202611030411';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611030411';
+import { Tracker } from './tracker.js?v=202611030411';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611030411';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611030411';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611030411';
+import { groupByIdea } from './lessons.js?v=202611030411';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611030411';
+import { createReader } from './reader.js?v=202611030411';
+import { SITUATIONS } from './lessons.js?v=202611030411';
+import { diagnose } from './diagnose.js?v=202611030411';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -164,6 +164,8 @@ function buildSeq() {
     u.role === 'space' ? '<span class="unit gap"></span>'
     : u.role === 'omit' ? `<span class="unit omit" title="조사와 어미는 손으로 하지 않습니다">${u.jamo}</span>`
     : `<span class="unit" data-state="todo" data-i="${i}">${u.jamo}</span>`).join('');
+  // 낱말 하나만 할 때는 칸이 제목을 되풀이할 뿐이다. 지문자는 한 자라도 칸을 남긴다
+  el.seq.dataset.solo = state.seq.length === 1 && state.seq[0].role === 'word' ? '1' : '';
   paintSeq();
 }
 
@@ -607,12 +609,12 @@ function startListening() {
   document.body.classList.add('listening');
   el.btnListen.querySelector('span')?.remove();
   el.typed.value = '';
-  el.typed.placeholder = '듣고 있습니다. 다 말하면 잠깐 기다리세요';
+  el.typed.placeholder = '듣고 있습니다';
   state.listener.start();
 }
 function stopListening() {
   document.body.classList.remove('listening');
-  el.typed.placeholder = '또는 문장을 입력하고 엔터';
+  el.typed.placeholder = '또는 문장 입력';
 }
 
 function setHand(hand) {
@@ -700,6 +702,18 @@ function init() {
     c.dataset.more = c.scrollLeft + c.clientWidth < c.scrollWidth - 2 ? '1' : '';
   };
   el.chips.addEventListener('scroll', markMore, { passive: true });
+  /* 마우스 휠은 세로로만 돈다. 칩 줄은 가로로 넘치므로 휠을 가로로 옮겨 준다.
+     없으면 트랙패드가 없는 데스크톱에서 화면 밖 칩에 닿을 길이 없다 */
+  el.chips.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    const c = el.chips;
+    if (c.scrollWidth <= c.clientWidth) return;
+    e.preventDefault();
+    c.scrollLeft += e.deltaY;
+  }, { passive: false });
+  /* 읽어 준 말은 카드 바로 위에 뜬다. 카드 높이는 그림과 줄 수에 따라 바뀐다 */
+  const guide = document.getElementById('guide');
+  new ResizeObserver(() => document.documentElement.style.setProperty('--guide-h', guide.offsetHeight + 'px')).observe(guide);
   addEventListener('resize', markMore);
   markMore();
 
@@ -738,7 +752,7 @@ function init() {
       onInterim: t => { el.typed.value = t; },      // 들은 말은 입력칸에 그대로 보여 준다
       onResult: t => sayAndPractice(t),
       onEnd: stopListening,
-      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '못 알아들었습니다. 다시 말하거나 입력해 주세요'; }
+      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '다시 말해 주세요'; }
     });
   } else {
     el.btnListen.disabled = true;
