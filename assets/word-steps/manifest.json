@@ -1404,6 +1404,60 @@
       "basis": "sldict",
       "step": "오른 손끝을 왼 손바닥에 가져다 댄다 (두 번)",
       "entryNo": "39"
+    },
+    {
+      "word": "조용하다",
+      "slug": "sl9351-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 펴서 손바닥을 위로 향하게 하고 손끝을 마주 보게 둔다",
+      "entryNo": "9351"
+    },
+    {
+      "word": "조용하다",
+      "slug": "sl9351-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손바닥 방향을 유지하며 두 손을 천천히 아래로 내린다",
+      "entryNo": "9351"
+    },
+    {
+      "word": "귀찮다",
+      "slug": "sl4322-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 주먹을 쥐고 왼팔 등에 구부린 오른 손가락 끝을 댄다",
+      "entryNo": "4322"
+    },
+    {
+      "word": "귀찮다",
+      "slug": "sl4322-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손가락 끝을 왼 손목 등 쪽으로 스쳐낸다 (두 번)",
+      "entryNo": "4322"
+    },
+    {
+      "word": "부끄럽다",
+      "slug": "sl12013-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지·엄지 끝으로 고리를 만들어 세우고 손등을 오른쪽 볼에 댄다",
+      "entryNo": "12013"
+    },
+    {
+      "word": "부끄럽다",
+      "slug": "sl12013-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "고리 모양을 유지하며 오른쪽 볼에 댔다 뗀다 (두 번)",
+      "entryNo": "12013"
     }
   ]
 }
