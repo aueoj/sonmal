@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611031515">
+<meta name="build" content="202611041452">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611031515">
-<link rel="stylesheet" href="css/app.css?v=202611031515">
+<link rel="stylesheet" href="css/tokens.css?v=202611041452">
+<link rel="stylesheet" href="css/app.css?v=202611041452">
 </head>
 <body>
 <script>
@@ -151,6 +151,11 @@ if (location.protocol === 'file:') {
 <dialog id="phrases" aria-labelledby="phrases-title" aria-describedby="phrases-note">
   <h2 id="phrases-title">문장으로 낱말 이어 연습하기</h2>
   <p id="phrases-note">국립국어원 사전에서 확인한 낱말 그림을 한국어 순서로 이어 봅니다. 한국수어 문장 번역은 아닙니다.</p>
+  <details>
+    <summary>수어로도 질문할 수 있나요?</summary>
+    <p>네. 무엇·누구·어디·언제·왜·어떻게 같은 의문사가 있고, 표정·눈썹·고개 움직임과 맥락도 질문을 전달합니다. ‘잘하다’는 낱말이고 ‘잘했나요?’는 질문 문장입니다. 한국어의 ‘-했나요’를 손동작 하나로 바꾸는 방식으로 배우지는 않습니다.</p>
+    <p>여기서는 질문에 쓰이는 낱말을 연습합니다. 질문문의 표정과 문법은 이 그림·카메라 판정에 포함되지 않으므로 사전 영상과 한국수어 교육 자료를 함께 확인해 주세요.</p>
+  </details>
   <div id="phrase-list"></div>
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
@@ -161,6 +166,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js?v=202611031515"></script>
+<script type="module" src="js/app.js?v=202611041452"></script>
 </body>
 </html>
