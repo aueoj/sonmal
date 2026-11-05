@@ -29,6 +29,8 @@ const EXPECT = await p.evaluate(async (ph) => {
 }, PHRASE).catch(() => PHRASE);
 await p.fill('#typed', PHRASE);
 await p.press('#typed', 'Enter');
+// 첫 화면의 '안녕하세요'를 모의 손이 먼저 끝내 읽어 줄 수 있다. 이 문장에서 읽은 말만 센다
+await p.evaluate(() => { window.__spoken.length = 0; });
 await p.waitForSelector('.camera.live', { timeout: 20000 });  // 카메라는 스스로 켜진다
 await p.waitForTimeout(600);
 

@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611050509">
+<meta name="build" content="202611051632">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611050509">
-<link rel="stylesheet" href="css/app.css?v=202611050509">
+<link rel="stylesheet" href="css/tokens.css?v=202611051632">
+<link rel="stylesheet" href="css/app.css?v=202611051632">
 </head>
 <body>
 <script>
@@ -37,18 +37,17 @@ if (location.protocol === 'file:') {
 </script>
 <a class="skip" href="#guide">가이드로 건너뛰기</a>
 
-<!-- 위: 연습할 말 고르기. 여기 칩을 누르는 것이 화면에서 유일하게 필요한 클릭이다. -->
+<!-- 위: 이름, 쓰는 방법, 말 고르기. 영상을 가리지 않게 가볍게 둔다 -->
 <header class="bar">
   <span class="mark">손말</span>
-  <nav class="chips" id="chips" aria-label="연습할 말"></nav>
+  <!-- 연습은 고른 말을 따라 하고, 자유는 내가 하는 수어를 읽어 소리로 들려준다 -->
+  <div class="modeswitch" role="radiogroup" aria-label="모드">
+    <button type="button" id="mode-practice" role="radio" aria-checked="true" title="고른 말의 그림을 보고 따라 합니다">연습<span class="wide"> 모드</span></button>
+    <button type="button" id="mode-free" role="radio" aria-checked="false" title="내가 하는 수어를 읽고 바로 소리로 들려줍니다">자유<span class="wide"> 모드</span></button>
+  </div>
   <div class="bar-end">
-    <div class="modeswitch" role="radiogroup" aria-label="화면">
-      <button type="button" id="mode-practice" role="radio" aria-checked="true">연습</button>
-      <button type="button" id="mode-talk" role="radio" aria-checked="false">대화</button>
-    </div>
-    <button type="button" class="refswitch" id="ref-toggle" role="switch" aria-checked="false" aria-controls="ref">
-      <span class="track" aria-hidden="true"><span class="knob"></span></span>표 보기
-    </button>
+    <button type="button" class="ghost" id="ref-toggle" aria-expanded="false" aria-controls="ref">말 고르기</button>
+    <!-- 쓰는 손은 한 번 정하면 거의 바꾸지 않는다. 화면 설정 자리(오른쪽 위)에 두고 기억한다 -->
     <div class="handswitch" role="radiogroup" aria-label="쓰는 손">
       <button type="button" id="hand-right" role="radio" aria-checked="true">오른손</button>
       <button type="button" id="hand-left" role="radio" aria-checked="false">왼손</button>
@@ -89,25 +88,16 @@ if (location.protocol === 'file:') {
 
   </div>
 
-  <!-- 대화 모드: 위에는 상대에게 보일 큰 글자와 오간 말, 그 아래 상대 지문자 읽기.
-       내가 한 말의 수어는 아래 카드에 그대로 나온다 -->
-  <section class="talk" id="talk" hidden aria-label="대화">
-    <p class="talk-said" id="talk-said" aria-live="polite">말하거나 입력하면 상대가 볼 수 있게 여기에 크게 보입니다</p>
-    <ol class="talk-log" id="talk-log" aria-label="오간 말"></ol>
-    <div class="talk-read">
-      <button type="button" class="read-toggle" id="read-toggle" aria-pressed="false">상대 지문자 읽기</button>
-      <span class="read-live" id="read-live" aria-live="polite"></span>
-      <button type="button" class="read-clear" id="read-clear" hidden>지우기</button>
-    </div>
-    <div class="talk-quick" id="talk-quick" role="group" aria-label="대화가 막힐 때"></div>
-  </section>
 
-  <!-- 표 보기 스위치를 켰을 때만 영상 위에 덮는다. 고르면 닫히고 바로 연습으로 간다 -->
-  <section class="ref" id="ref" hidden aria-label="지문자와 낱말 표">
+  <!-- 말 고르기를 눌렀을 때만 영상 위에 덮는다. 고르면 닫히고 바로 연습으로 간다 -->
+  <section class="ref" id="ref" hidden aria-label="연습할 말 고르기">
+    <div class="ref-head">
+      <h2 class="ref-title">낱말</h2>
+      <button type="button" class="ghost" id="open-phrases">문장으로 이어 연습하기</button>
+    </div>
+    <div class="ref-words" id="ref-words"></div>
     <h2 class="ref-title">지문자</h2>
     <div class="chart" id="chart"></div>
-    <h2 class="ref-title">낱말</h2>
-    <div class="ref-words" id="ref-words"></div>
   </section>
 
   <!-- 읽어 준 말만 영상 위에 잠깐 띄운다 -->
@@ -115,33 +105,47 @@ if (location.protocol === 'file:') {
 
 </main>
 
-<!-- 아래 가운데: 지금 할 동작과 말하기를 카드 하나에 모은다. 영상은 최대한 비워 둔다 -->
+<!-- 아래 1/3: 지금 할 동작과 말하기. 카드 없이 옅어지는 검정 위에 둔다 -->
 <section class="guide" id="guide" aria-label="지금 할 동작">
-  <figure class="guide-art" id="guide-art" aria-hidden="true"></figure>
+  <div class="guide-side">
+    <figure class="guide-art" id="guide-art" aria-hidden="true"></figure>
+  </div>
   <div class="guide-body">
     <div class="guide-head">
       <p class="guide-name" id="guide-name">연습할 말을 고르거나 말해 보세요</p>
       <div class="guide-seq" id="seq"></div>
       <span class="seq-note" id="seq-note" hidden title="수어 문장으로 옮긴 것이 아니라, 낱말을 한국어 순서로 이어 본 연습입니다">한국어 순서</span>
+      <!-- 이 낱말에 대한 것(표정, 사전 영상)은 이름 옆에 -->
+      <p class="guide-meta" id="guide-meta"></p>
     </div>
     <p class="guide-step" id="guide-step"></p>
-    <p class="guide-meta" id="guide-meta"></p>
+    <!-- 내가 하고 있는 것(진행, 지금 보이는 것)은 한 줄에 -->
     <div class="guide-meter">
       <div class="track" id="track"><div class="fill" id="fill"></div></div>
       <p class="guide-read" id="read"></p>
+      <p class="seen" id="seen" aria-live="off"></p>
     </div>
-    <p class="seen" id="seen" aria-live="off"></p>
-    <form class="say" id="say-form">
-      <button class="say-btn" id="btn-listen" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-          <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z"/>
-          <path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
-        </svg>
-        말하기 <kbd>Space</kbd>
-      </button>
-      <input id="typed" type="text" aria-label="말할 문장" placeholder="또는 문장을 입력하고 엔터" autocomplete="off" lang="ko">
-    </form>
+    <!-- 자유 모드: 읽은 말이 쌓이고, 무엇으로 읽을지 고른다 -->
+    <ol class="free-log" id="free-log" aria-label="읽은 말"></ol>
   </div>
+  <!-- 아래 줄은 그림과 글 밑을 가로로 다 쓴다. 연습에서는 말하기, 자유에서는 읽을 것 고르기 -->
+  <div class="free-bar">
+    <div class="readkind" role="radiogroup" aria-label="읽을 것">
+      <button type="button" id="read-words" role="radio" aria-checked="true">낱말</button>
+      <button type="button" id="read-jamo" role="radio" aria-checked="false">지문자</button>
+    </div>
+    <button type="button" class="free-clear" id="free-clear">지우기</button>
+  </div>
+  <form class="say" id="say-form">
+    <button class="say-btn" id="btn-listen" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
+        <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z"/>
+        <path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
+      </svg>
+      말하기 <kbd>Space</kbd>
+    </button>
+    <input id="typed" type="text" aria-label="말할 문장" placeholder="또는 문장 입력" autocomplete="off" lang="ko">
+  </form>
 </section>
 
 <dialog id="phrases" aria-labelledby="phrases-title" aria-describedby="phrases-note">
@@ -162,6 +166,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="js/app.js?v=202611050509"></script>
+<script type="module" src="js/app.js?v=202611051632"></script>
 </body>
 </html>

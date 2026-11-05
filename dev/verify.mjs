@@ -30,6 +30,7 @@ const ONLY = (arg('--only', '') || '').split(',').filter(Boolean);
 const STATIC = [
   ['쌍자음 수형', ['dev/slide-test.mjs'], '한 손 기본 수형과 밀기 신호를 쓰는가'],
   ['문장 그림', ['dev/phrase-test.mjs'], '문장의 모든 낱말이 출처와 이미지를 갖췄는가'],
+  ['점검 규칙', ['dev/audit-lint.mjs'], '점검 스크립트가 CI 에서만 깨지는 방법을 쓰지 않는가'],
   ['판 번호', ['dev/stamp.mjs', '--check'], '파일 주소에 판 번호가 붙어 있는가'],
   ['자모 구별', ['dev/selftest.mjs'], '40개 손모양이 서로 구별되는가'],
   ['단어 출처', ['dev/words-check.mjs'], '새 단어가 사전 번호와 그림을 갖췄는가'],
@@ -57,7 +58,9 @@ const BROWSER = [
   ['카메라 없이', ['dev/nocam-audit.mjs'], '카메라 없이도 둘러볼 수 있는가'],
   ['숨김', ['dev/hidden-audit.mjs'], 'hidden 이 실제로 숨는가'],
   ['프레임', ['dev/embed-audit.mjs'], '프레임 안에서 무엇이 막히는가'],
-  ['대화', ['dev/talk-audit.mjs'], '상대 지문자를 받아 적어 읽어 주는가'],
+  ['자유 모드', ['dev/free-audit.mjs'], '고르지 않고 한 수어를 읽어 바로 들려주는가'],
+  ['낱말 가르기', ['dev/motion-test.mjs'], '자유 모드가 읽는 낱말을 저마다 하나로 읽는가(움직임 방향)'],
+  ['고른 직후', ['dev/race-audit.mjs'], '해낸 직후 새 말을 골라도 첫 칸을 건너뛰지 않는가'],
   ['동작 넘김', ['dev/step-audit.mjs'], '동작을 해내야 다음 그림으로 넘어가는가']
 ];
 

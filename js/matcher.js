@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611050509';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611051632';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -83,7 +83,7 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
     hint = `손끝을 ${DIR_KO[wantDir]}으로 향하게 하세요`; hintKind = '수동';
   } else if (worst && worstGap > 0.35) {
     hint = (pose.bent && worst === 'index') ? '검지 둘째 마디를 직각으로 꺾으세요'
-         : want.has(worst) ? `${FINGER_KO[worst]}를 끝까지 펴세요` : `${FINGER_KO[worst]}를 접으세요`;
+         : want.has(worst) ? `${OBJ[worst]} 끝까지 펴세요` : `${OBJ[worst]} 접으세요`;
     hintKind = '수형';
   } else if (bothUp && spreadScore < 0.55) {
     hint = pose.spreadWide ? '검지와 중지를 벌리세요' : '검지와 중지를 붙이세요'; hintKind = '수형';
@@ -166,6 +166,12 @@ export { angleToDir };
  */
 const ZONE = {
   face:  { inFace: u => u < 0.9, onScreen: y => y < 0.58, hint: () => '손을 얼굴 앞으로 올리세요' },
+  /* 얼굴을 위아래로 가를 때만 쓴다. '검정'(머리 옆)과 '파랑'(뺨)은 이것만 다르다.
+     코끝에서 얼굴 높이의 0.15 배 위를 경계로 어림했다. 실제 카메라로는 아직 맞춰 보지 못했다 */
+  head:  { inFace: u => u < -0.15, onScreen: y => y < 0.45,
+           hint: () => '손을 머리 옆으로 올리세요' },
+  cheek: { inFace: u => u >= -0.15 && u < 0.9, onScreen: y => y < 0.58,
+           hint: u => (u < -0.15 ? '손을 뺨 높이로 내리세요' : '손을 뺨으로 올리세요') },
   chin:  { inFace: u => u < 1.2, onScreen: y => y < 0.62, hint: () => '손을 턱 앞으로 올리세요' },
   chest: { inFace: u => u > 0.5 && u < 4.5, onScreen: null,
            hint: u => (u <= 0.5 ? '손을 가슴 앞으로 내리세요' : '손을 가슴 앞으로 올리세요') },
@@ -173,7 +179,7 @@ const ZONE = {
 };
 
 /* 높이마다 손 중심이 보통 머무는 자리(u). 모의 입력과 시험이 손을 이 자리에 둔다. */
-export const ZONE_AT = { face: 0, chin: 0.6, chest: 1.8, front: 1.6, belly: 3.0 };
+export const ZONE_AT = { face: 0, head: -0.9, cheek: 0.3, chin: 0.6, chest: 1.8, front: 1.6, belly: 3.0 };
 
 /** 손 중심 높이가 그 자리에 맞는가. 맞으면 null, 아니면 짚어 줄 말 */
 export function zoneHint(zoneName, y, face) {
@@ -187,19 +193,57 @@ export function zoneHint(zoneName, y, face) {
   return z.onScreen(y) ? null : z.hint();
 }
 
+/* 손가락마다 허용 범위로 본다.
+ * 예전에는 0과 1에서 벗어난 만큼을 평균해서, 손가락이 모두 조금씩 굽은 느슨한 주먹(폄 0.3)이 0.60,
+ * 검지 하나를 똑바로 편 틀린 손이 0.70 으로 틀린 손이 더 가깝게 나왔다. 코에 댄 주먹('좋아요')처럼
+ * 옆에서 보이는 주먹은 MediaPipe 가 가려진 손가락을 반쯤 편 것으로 어림하므로 늘 걸렸다.
+ *   접을 손가락: 폄 0.45 까지는 접은 것. 0.85 를 넘으면 분명히 편 것
+ *   펼 손가락:   폄 0.8 부터는 편 것. 0.25 아래면 분명히 접은 것
+ * 평균이 0.72 를 넘어도 분명히 틀린 손가락이 하나라도 있으면 통과시키지 않는다. */
+const FOLD_OK = 0.45, FOLD_BAD = 0.85, OPEN_OK = 0.8, OPEN_BAD = 0.25, CLEARLY_WRONG = 0.75;
+const OBJ = { index: '검지를', middle: '중지를', ring: '약지를', pinky: '새끼손가락을' };
+/* 얼굴 가로 자리. '좋아요'(주먹을 코에)와 '자다'(주먹을 뺨에 벤다)는 손모양도 높이도 같고
+ * 이것만 다르다. 손 중심이 코에서 얼굴 너비의 몇 배만큼 옆에 있는지로 본다.
+ * 0.45 는 주먹 너비(얼굴 너비의 0.6 남짓)와 손목이 옆에서 들어오는 것을 감안해 어림한 값이다.
+ * 실제 카메라로는 아직 맞춰 보지 못했다. 얼굴이 안 보이면 보지 않는다. */
+/* 손끝 방향. '너'(앞)와 '여기'(아래), '보다'(위)와 '수어'(옆)처럼 손모양이 같고 손끝만 다른 낱말을 가른다.
+ * 각도는 화면 기준(0 위, 90 옆). 앞(카메라 쪽)은 각도로 못 재므로 손가락이 화면에서 짧아 보이는 것으로 본다 */
+const POINT_REACH = 0.35;
+export function pointHint(point, f) {
+  if (!point || !f) return null;
+  const a = Math.abs(f.angle ?? 0);
+  // 위, 아래, 옆은 손가락이 화면에서 제 길이로 보여야 한다. 카메라를 향한 손가락은 각도가 아무렇게나 나온다
+  const long = (f.reach2d ?? 1) >= POINT_REACH;
+  const ok = { up: long && a < 45, down: long && a > 135, side: long && a >= 45 && a <= 135, out: !long }[point];
+  if (ok === undefined || ok) return null;
+  return { up: '손끝이 위를 향하게 세우세요', down: '손끝이 아래를 향하게 하세요',
+           side: '손끝이 옆을 향하게 눕히세요', out: '손끝이 앞(상대)을 향하게 하세요' }[point];
+}
+
+const SPOT_SPLIT = 0.45;
+export function spotHint(spot, x, face) {
+  if (!spot || !(face?.w > 0) || face.x === undefined) return null;
+  const d = Math.abs(x - face.x) / face.w;
+  if (spot === 'center') return d < SPOT_SPLIT ? null : '손을 얼굴 가운데, 코 앞으로 옮기세요';
+  if (spot === 'side') return d >= SPOT_SPLIT ? null : '손을 뺨 옆으로 옮기세요';
+  return null;
+}
+
 function handShape(feat, check) {
   if (!check.fingers) return { score: 1, hint: null };
   const want = new Set(check.fingers);
   let score = 0, worst = null, worstGap = 0;
   for (const f of FINGERS) {
-    const gap = Math.abs((want.has(f) ? 1 : 0) - feat.extension[f]);
-    score += 1 - Math.min(1, gap / 0.75);
+    const e = feat.extension[f];
+    const gap = want.has(f)
+      ? Math.min(1, Math.max(0, (OPEN_OK - e) / (OPEN_OK - OPEN_BAD)))
+      : Math.min(1, Math.max(0, (e - FOLD_OK) / (FOLD_BAD - FOLD_OK)));
+    score += 1 - gap;
     if (gap > worstGap) { worstGap = gap; worst = f; }
   }
   score /= FINGERS.length;
-  const hint = worstGap > 0.45
-    ? (want.has(worst) ? `${FINGER_KO[worst]}을 펴세요` : `${FINGER_KO[worst]}을 접으세요`)
-    : null;
+  if (worstGap >= CLEARLY_WRONG) score = Math.min(score, 0.7);
+  const hint = worstGap >= 0.5 ? `${OBJ[worst]} ${want.has(worst) ? '펴세요' : '접으세요'}` : null;
   return { score, hint };
 }
 
@@ -244,6 +288,10 @@ export function scoreCheck(feats, check = {}, face = null) {
   if (!hint && check.thumb === 'up' && f.thumbExtension < 0.7) hint = '엄지를 세우세요';
   const zoneY = partner ? (f.centroid.y + partner.x.centroid.y) / 2 : f.centroid.y;
   if (!hint) hint = zoneHint(check.zone, zoneY, face);
+  if (!hint) hint = spotHint(check.spot, partner ? (f.centroid.x + partner.x.centroid.x) / 2 : f.centroid.x, face);
+  if (!hint) hint = pointHint(check.point, f);
 
-  return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale };
+  // 얼굴에서 잰 손 높이(얼굴 높이 단위). 여러 낱말이 다 맞을 때 어느 쪽 자리에 더 가까운지 견준다
+  const u = face?.h > 0 ? (zoneY - face.y) / face.h : null;
+  return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale, u };
 }

@@ -8,7 +8,8 @@ for(const group of PHRASE_GROUPS) for(const text of group.texts) {
  const p=phrasePlan(text);assert.ok(p.ready,text);
  for(const part of p.parts) {
   assert.ok(part.sign.sourceUrl.includes('sldict.korean.go.kr'));
-  assert.equal(WORD_FRAMES[part.sign.word].length,part.sign.steps.length);
+  const want=part.sign.stepFrames?Math.max(...part.sign.stepFrames.flat())+1:part.sign.steps.length;
+  assert.equal(WORD_FRAMES[part.sign.word].length,want);
   for(const file of WORD_FRAMES[part.sign.word]) assert.ok(existsSync(new URL('../assets/word-steps/'+file,import.meta.url)));
  }
 }

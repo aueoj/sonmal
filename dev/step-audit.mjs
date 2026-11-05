@@ -35,11 +35,20 @@ await p.waitForTimeout(2500);
 const highFrame = await frame();
 const highWhy = await seen();
 
+// 5) '안녕하세요'는 두 단계다. 1단계 동안 1, 2장(팔꿈치 → 손목)을 번갈아 보이고, 손이 없으면 3장으로 가지 않는다
+await p.evaluate(() => window.__sonmalMock(null));
+await p.fill('#typed', '안녕하세요'); await p.press('#typed', 'Enter');
+const shown = new Set();
+for (let i = 0; i < 12; i++) { shown.add(await frame()); await p.waitForTimeout(250); }
+const helloStep = await p.evaluate(() => document.getElementById('seen').textContent);
+const helloOk = shown.has('0') && shown.has('1') && !shown.has('2');
+
 console.log(`손 없이 3.5초 뒤 그림  ${stillFirst} (0이어야 함)`);
+console.log(`안녕하세요 1단계 그림  ${[...shown].sort().join(', ')} (0, 1 번갈아야 함)  ${helloStep}`);
 console.log(`첫 동작 뒤 그림       ${second} (1이어야 함)`);
 console.log(`가만히 3초 뒤 끝난 칸  ${frozen} (0이어야 함)  안내 "${why}"`);
 console.log(`얼굴 앞에서 2.5초 뒤 그림 ${highFrame} (0이어야 함)  안내 "${highWhy}"`);
 console.log('오류', errs.length ? errs : '없음');
 await b.close();
 const highOk = highFrame === '0' && highWhy.includes('가슴');
-process.exit(stillFirst === '0' && second === '1' && frozen === 0 && highOk && !errs.length ? 0 : 1);
+process.exit(stillFirst === '0' && second === '1' && frozen === 0 && highOk && helloOk && !errs.length ? 0 : 1);

@@ -29,7 +29,10 @@ for (const w of WORD_SIGNS) {
   }
   const frames = WORD_POSE_FILES[w.word] ?? [];
   if (!frames.length) bad.push(`${tag} 그림이 없다`);
-  if (w.steps && frames.length && w.steps.length !== frames.length)
+  // 한 단계에 여러 장을 번갈아 보이는 낱말(stepFrames)은 그 장 수와 맞춘다
+  const wantFrames = w.stepFrames ? Math.max(...w.stepFrames.flat()) + 1 : w.steps?.length;
+  if (w.stepFrames && w.stepFrames.length !== w.steps.length) bad.push(`${tag} stepFrames 와 단계 수가 다르다`);
+  if (w.steps && frames.length && wantFrames !== frames.length)
     bad.push(`${tag} 동작 설명 ${w.steps.length}개, 그림 ${frames.length}장 — 수가 다르다`);
   for (const f of frames) {
     if (!existsSync(ROOT + 'assets/word-steps/' + f)) bad.push(`${tag} ${f} 파일이 없다`);

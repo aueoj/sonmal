@@ -7,7 +7,7 @@
       "frame": 1,
       "total": 3,
       "basis": "sldict",
-      "step": "왼 주먹을 쥐고 오른 손바닥을 왼 팔꿈치 쪽 팔등에 댄다",
+      "step": "왼 주먹을 쥐고, 오른 손바닥으로 왼 팔등을 팔꿈치에서 손목까지 쓸어내린다",
       "entryNo": "3331"
     },
     {
@@ -16,7 +16,7 @@
       "frame": 2,
       "total": 3,
       "basis": "sldict",
-      "step": "오른 손바닥으로 왼 팔등을 따라 손목 쪽까지 쓸어내린다",
+      "step": "왼 주먹을 쥐고, 오른 손바닥으로 왼 팔등을 팔꿈치에서 손목까지 쓸어내린다",
       "entryNo": "3331"
     },
     {
@@ -878,7 +878,7 @@
       "word": "우유",
       "slug": "sl9694-01",
       "frame": 1,
-      "total": 5,
+      "total": 2,
       "basis": "sldict",
       "step": "오른손을 펴서 오른쪽 가슴에 댄다",
       "entryNo": "9694"
@@ -887,36 +887,9 @@
       "word": "우유",
       "slug": "sl9694-02",
       "frame": 2,
-      "total": 5,
+      "total": 2,
       "basis": "sldict",
-      "step": "손가락을 구부린다 (첫 번째)",
-      "entryNo": "9694"
-    },
-    {
-      "word": "우유",
-      "slug": "sl9694-03",
-      "frame": 3,
-      "total": 5,
-      "basis": "sldict",
-      "step": "손가락을 다시 편다",
-      "entryNo": "9694"
-    },
-    {
-      "word": "우유",
-      "slug": "sl9694-04",
-      "frame": 4,
-      "total": 5,
-      "basis": "sldict",
-      "step": "손가락을 구부린다 (두 번째)",
-      "entryNo": "9694"
-    },
-    {
-      "word": "우유",
-      "slug": "sl9694-05",
-      "frame": 5,
-      "total": 5,
-      "basis": "sldict",
-      "step": "손가락을 다시 편다",
+      "step": "손가락을 구부렸다 편다 (두 번)",
       "entryNo": "9694"
     },
     {
@@ -959,7 +932,7 @@
       "word": "듣다",
       "slug": "sl6417-01",
       "frame": 1,
-      "total": 5,
+      "total": 2,
       "basis": "sldict",
       "step": "오른 검지를 반쯤 구부려 끝이 오른쪽 귀를 향하게 한다",
       "entryNo": "6417"
@@ -968,43 +941,16 @@
       "word": "듣다",
       "slug": "sl6417-02",
       "frame": 2,
-      "total": 5,
+      "total": 2,
       "basis": "sldict",
-      "step": "손을 바깥쪽으로 조금 움직인다 (첫 번째)",
-      "entryNo": "6417"
-    },
-    {
-      "word": "듣다",
-      "slug": "sl6417-03",
-      "frame": 3,
-      "total": 5,
-      "basis": "sldict",
-      "step": "손을 귀 쪽으로 되돌린다",
-      "entryNo": "6417"
-    },
-    {
-      "word": "듣다",
-      "slug": "sl6417-04",
-      "frame": 4,
-      "total": 5,
-      "basis": "sldict",
-      "step": "손을 바깥쪽으로 조금 움직인다 (두 번째)",
-      "entryNo": "6417"
-    },
-    {
-      "word": "듣다",
-      "slug": "sl6417-05",
-      "frame": 5,
-      "total": 5,
-      "basis": "sldict",
-      "step": "손을 귀 쪽으로 되돌린다",
+      "step": "손을 좌우로 움직인다 (두 번)",
       "entryNo": "6417"
     },
     {
       "word": "읽다",
       "slug": "sl8304-01",
       "frame": 1,
-      "total": 5,
+      "total": 2,
       "basis": "sldict",
       "step": "왼 손바닥을 비스듬히 세우고 오른 검지·중지 끝을 위쪽에 댄다",
       "entryNo": "8304"
@@ -1013,36 +959,9 @@
       "word": "읽다",
       "slug": "sl8304-02",
       "frame": 2,
-      "total": 5,
+      "total": 2,
       "basis": "sldict",
-      "step": "두 손가락 끝을 왼 손바닥 아래쪽으로 내린다 (첫 번째)",
-      "entryNo": "8304"
-    },
-    {
-      "word": "읽다",
-      "slug": "sl8304-03",
-      "frame": 3,
-      "total": 5,
-      "basis": "sldict",
-      "step": "두 손가락 끝을 다시 위로 올린다",
-      "entryNo": "8304"
-    },
-    {
-      "word": "읽다",
-      "slug": "sl8304-04",
-      "frame": 4,
-      "total": 5,
-      "basis": "sldict",
-      "step": "두 손가락 끝을 다시 아래로 내린다 (두 번째)",
-      "entryNo": "8304"
-    },
-    {
-      "word": "읽다",
-      "slug": "sl8304-05",
-      "frame": 5,
-      "total": 5,
-      "basis": "sldict",
-      "step": "두 손가락 끝을 다시 위로 올린다",
+      "step": "두 손가락 끝으로 왼 손바닥을 오르내린다 (두 번)",
       "entryNo": "8304"
     },
     {
@@ -1148,7 +1067,7 @@
       "word": "비",
       "slug": "sl6463-01",
       "frame": 1,
-      "total": 5,
+      "total": 3,
       "basis": "sldict",
       "step": "오른 검지·엄지를 펴서 구부려 입으로 약간 기울여 올린다",
       "entryNo": "6463"
@@ -1157,7 +1076,7 @@
       "word": "비",
       "slug": "sl6463-02",
       "frame": 2,
-      "total": 5,
+      "total": 3,
       "basis": "sldict",
       "step": "두 손을 펴서 손끝을 아래로, 손등을 밖으로 향하게 들어 올린다",
       "entryNo": "6463"
@@ -1166,27 +1085,9 @@
       "word": "비",
       "slug": "sl6463-03",
       "frame": 3,
-      "total": 5,
+      "total": 3,
       "basis": "sldict",
-      "step": "두 손을 내린다 (첫 번째)",
-      "entryNo": "6463"
-    },
-    {
-      "word": "비",
-      "slug": "sl6463-04",
-      "frame": 4,
-      "total": 5,
-      "basis": "sldict",
-      "step": "두 손을 다시 올린다",
-      "entryNo": "6463"
-    },
-    {
-      "word": "비",
-      "slug": "sl6463-05",
-      "frame": 5,
-      "total": 5,
-      "basis": "sldict",
-      "step": "두 손을 내린다 (두 번째)",
+      "step": "두 손을 위아래로 움직인다 (두 번)",
       "entryNo": "6463"
     },
     {

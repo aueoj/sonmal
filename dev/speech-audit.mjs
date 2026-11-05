@@ -23,7 +23,7 @@ console.log('  글자 단위인가:', JSON.stringify(spell.slice(0,4)) === JSON.
 
 // 단어: 움직이지 않으면 읽지 않아야 한다
 await p.evaluate(() => { window.__spoken.length = 0; });
-await p.click('.chip[data-word="물"]');
+await p.click('#ref-toggle'); await p.click('#ref-words [data-say="물"]');
 await p.evaluate(() => { if (window.__t) {} });
 await p.waitForTimeout(2800);
 const stillMoving = await p.evaluate(() => window.__spoken.slice());

@@ -106,6 +106,10 @@ export function describe(lms, handedness = 'Right', mirrored = true) {
     spread: fingerSpread(pts),
     // 엄지 끝과 검지 끝 사이 거리 — ㅇ·ㅎ의 고리를 가른다
     pinch: len2(sub(pts[LM.thumb[3]], pts[LM.index[3]])) / handScale(pts),
+    // 펴진 손가락이 화면에서 보이는 길이(손 크기 대비). 카메라를 향해 가리키면 짧아진다('너')
+    reach2d: extended.length
+      ? extended.reduce((s, f) => s + len2(sub(pts[LM[f][3]], pts[LM[f][0]])), 0) / extended.length / handScale(pts)
+      : 0,
     centroid: {
       x: pts.reduce((s, p) => s + p.x, 0) / pts.length,
       y: pts.reduce((s, p) => s + p.y, 0) / pts.length
