@@ -9,14 +9,19 @@ const ALL = ['index', 'middle', 'ring', 'pinky'];
 /* 앱의 모의 입력과 같은 얼굴 자리. 손은 그 높이의 보통 자리(ZONE_AT)에 둔다. */
 const FACE = { y: 0.2, h: 0.16 };
 const at = zone => FACE.y + (zone === 'below' ? 5.0 : (ZONE_AT[zone] ?? ZONE_AT.front)) * FACE.h;
-const hand = (fingers, { ring = false, thumb = 'in', zone } = {}) => {
-  const lm = landmarksFor({ fingers, dir: 'up', view: 'palm', thumb, special: ring ? 'circle' : null }, 0);
+const hand = (fingers, { ring = false, thumb = 'in', zone, point } = {}) => {
+  const dir = { down: 'down', side: 'right' }[point] ?? 'up';
+  const lm = landmarksFor({ fingers, dir, view: 'palm', thumb, special: ring ? 'circle' : null }, 0);
+  // 손끝이 앞(카메라)을 향하면 펴진 손가락이 화면에서 짧아진다
+  if (point === 'out') for (const [m, ...r] of [[5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16], [17, 18, 19, 20]])
+    if (fingers.includes(['index', 'middle', 'ring', 'pinky'][(m - 5) / 4]))
+      for (const i of r) { lm[i].x = lm[m].x + (lm[i].x - lm[m].x) * 0.3; lm[i].y = lm[m].y + (lm[i].y - lm[m].y) * 0.3; }
   const cy = lm.reduce((s, p) => s + p.y, 0) / lm.length;
   for (const p of lm) p.y += at(zone) - cy;
   return describe(lm, 'Right', true);
 };
 const right = c => {
-  const opt = { ring: c.ring, thumb: c.thumb === 'up' ? 'up' : 'in', zone: c.zone };
+  const opt = { ring: c.ring, thumb: c.thumb === 'up' ? 'up' : 'in', zone: c.zone, point: c.point };
   const h = hand(c.fingers ?? ALL, opt);
   if ((c.hands ?? 1) === 1) return [h];
   return [h, c.other ? hand(c.other, { zone: c.zone }) : h];

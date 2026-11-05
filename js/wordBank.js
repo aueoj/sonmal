@@ -20,6 +20,12 @@
  *   fingers 주로 쓰는 손에서 펴진 손가락 (index·middle·ring·pinky, thumb 은 따로)
  *   zone   손이 머무는 곳 face · chin · chest · belly · front
  *   spot   얼굴 가로 자리 center(코 앞) · side(뺨 옆). 손모양과 높이가 같은 낱말을 가를 때만 쓴다
+ *   zone 에 head(머리 옆) · cheek(뺨)를 더 쓴다. 얼굴 높이를 위아래로 가를 때만 쓴다
+ *   point  손끝 방향 up · down · side · out(상대 쪽, 화면에서 짧아 보임)
+ *   move   앞 동작에서 이 동작까지 손이 간 길 (둘째 동작부터). up · down · side · cross · out · back ·
+ *          together · swap · sway · turn. 뜻은 js/motion.js 머리말
+ *   moving 두 손 낱말에서 one(반대 손은 그대로) · both(두 손 함께)
+ *   셋 다 사전 원문의 움직임과 손끝 방향을 옮긴 것이다. 후보로만 읽히던 낱말 묶음을 가르려고 더했다
  */
 
 const SL = no => `https://sldict.korean.go.kr/front/sign/signContentsView.do?origin_no=${no}`;
@@ -43,7 +49,7 @@ export const WORD_BANK = [
     hands: 2,
     수형: '두 손 모두 편 손', 수향: '왼손은 손바닥이 아래, 오른손은 엄지가 위로 오게 옆으로 세움', 수위: '가슴 앞', 수동: '오른손 새끼 쪽 옆면으로 왼 손등을 두 번 친다',
     steps: ['왼손은 손바닥이 아래로 펴고, 오른손은 엄지가 위로 오게 세워 새끼손가락 쪽 옆면이 아래를 향하게 한다', '오른손 새끼 쪽 옆면을 왼 손등에 두 번 댄다'],
-    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest', move: 'down', moving: 'one' }] }),
 
   e(9917, { word: '미안합니다', category: '기본', aliases: ['미안','미안해요','죄송합니다','죄송해요','미안하다'], status: 'ok',
     원문: '오른손의 1·5지 끝을 맞대어 동그라미를 만들어 이마에 댔다가 1·5지를 펴며, 손등이 위로 손끝이 오른쪽으로 향하게 편 왼 손등에 내려놓는다.',
@@ -73,14 +79,14 @@ export const WORD_BANK = [
     hands: 1,
     수형: '편 손', 수향: '손바닥이 밖', 수위: '가슴 앞', 수동: '좌우로 흔든다',
     steps: ['손바닥이 앞을 보게 편 손을 세운다', '좌우로 흔든다'],
-    check: [{ hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest' }] }),
+    check: [{ hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest', move: 'sway' }] }),
 
   e(5447, { word: '도와주세요', category: '기본', aliases: ['도와줘','도움','돕다','도와주다'], status: 'ok',
     원문: '왼 주먹의 5지를 펴서 바닥이 밖으로 향하게 세우고, 그 등에 오른 손바닥을 세워 두 번 댄다.',
     hands: 2,
     수형: '왼손 엄지 세운 주먹, 오른손 편 손', 수향: '왼 엄지 바닥이 밖, 오른손 세움', 수위: '가슴 앞', 수동: '오른 손바닥으로 왼 엄지 등을 두 번 댄다',
     steps: ['왼손은 엄지를 세운 주먹, 오른손은 펴서 세운다', '오른 손바닥을 왼 엄지 등에 두 번 댄다'],
-    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], thumb: null, zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], thumb: null, zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest', move: 'cross' }] }),
 
   e(7422, { word: '다시', category: '기본', aliases: ['또','다시요','한번더','그리고'], status: 'ok',
     원문: '오른 주먹의 5지 바닥을 1·2지의 손톱에 가볍게 대고 손등이 밖으로 향하게 하여 왼쪽 아래로 내리며 1·2지를 편다.',
@@ -94,7 +100,7 @@ export const WORD_BANK = [
     hands: 2,
     수형: '두 손 모두 편 손', 수향: '왼손은 손등이 위, 오른손은 엄지가 위로 오게 옆으로 세움', 수위: '가슴 앞', 수동: '왼 손등 위에서 오른손을 천천히 앞으로 민다',
     steps: ['오른손을 엄지가 위로 오게 옆으로 세워, 새끼손가락 쪽 옆면을 왼 손등 위에 얹는다', '오른손을 천천히 앞으로 내민다'],
-    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'front' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'front', move: 'out', moving: 'one' }] }),
 
   e(5993, { word: '이해했어요', category: '기본', aliases: ['이해','알겠어요','알았어요','납득'], status: 'ok',
     원문: '왼 주먹의 1·2지를 펴서 끝이 오른쪽으로 등이 밖으로 향하게 벌린 다음, 그 사이로 오른 주먹의 1지를 펴서 끝을 안에서 밖으로 내밀었다가 다시 밖에서 안으로 밀어 넣는다.',
@@ -108,7 +114,7 @@ export const WORD_BANK = [
     hands: 1,
     수형: '검지와 엄지를 구부린 C 모양', 수향: '손바닥이 옆', 수위: '입', 수동: '컵을 기울이듯 입으로 올린다',
     steps: ['검지와 엄지를 구부려 컵을 쥔 모양을 만든다', '입으로 기울여 올린다'],
-    check: [{ hands: 1, fingers: ['index'], zone: 'chin' }, { hands: 1, fingers: ['index'], zone: 'face' }] }),
+    check: [{ hands: 1, fingers: ['index'], zone: 'chin' }, { hands: 1, fingers: ['index'], zone: 'face', move: 'up' }] }),
 
   e(971, { word: '화장실', category: '기본', aliases: ['화장실어디','변소'], status: 'ok',
     원문: '오른손을 펴서 손바닥이 밖으로 향하게 세워 2·3·4지를 벌리고 1·5지를 ‘C’자 모양으로 구부린다.',
@@ -214,7 +220,7 @@ export const WORD_BANK = [
     원문: '오른 주먹의 1지를 펴서 끝이 밖으로 향하게 하여 약간 내민다.',
     hands: 1, 수형: '검지만 편 주먹', 수향: '검지 끝이 상대', 수위: '가슴 앞', 수동: '상대 쪽으로 약간 내민다',
     steps: ['검지로 상대를 가리키며 약간 내민다'],
-    check: [{ hands: 1, fingers: ['index'], zone: 'front' }] }),
+    check: [{ hands: 1, fingers: ['index'], zone: 'front', point: 'out' }] }),
 
   e(8265, { word: '우리', category: '지시어', aliases: ['저희'], status: 'ok',
     원문: '오른 손바닥을 가슴에 댔다가 손등이 위로 향하게 하여 오른쪽으로 한 바퀴 크게 돌린다.',
@@ -226,7 +232,7 @@ export const WORD_BANK = [
     원문: '오른 주먹의 1지를 펴서 끝이 약간 아래로 향하게 하여 약간 내린다.',
     hands: 1, 수형: '검지만 편 주먹', 수향: '검지 끝이 약간 아래', 수위: '몸 앞', 수동: '약간 내린다',
     steps: ['검지 끝이 약간 아래를 보게 하여 내린다'],
-    check: [{ hands: 1, fingers: ['index'], zone: 'front' }] }),
+    check: [{ hands: 1, fingers: ['index'], zone: 'front', point: 'down' }] }),
 
   e(11234, { word: '그', category: '지시어', aliases: [], status: 'check',
     원문: '왼 주먹의 5지를 펴서 바닥이 밖으로 향하게 세우고, 그 등을 오른 주먹의 1지를 펴서 끝으로 가리킨다',
@@ -240,7 +246,7 @@ export const WORD_BANK = [
     원문: '오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 좌우로 두 번 흔든다.',
     hands: 1, 수형: '검지만 편 주먹', 수향: '검지 바닥이 밖', 수위: '가슴 앞', 수동: '좌우로 두 번 흔든다', 비수지: '묻는 표정',
     steps: ['검지를 세워 좌우로 두 번 흔든다'],
-    check: [{ hands: 1, fingers: ['index'], zone: 'chest' }] }),
+    check: [{ hands: 1, fingers: ['index'], zone: 'chest', point: 'up' }] }),
 
   e(8799, { word: '어디', category: '묻는 말', aliases: ['어디예요','어디에'], status: 'ok',
     원문: '오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 왼쪽으로 흔든 다음, 손바닥이 아래로 향하게 반쯤 구부린 오른손을 가슴 앞에서 약간 내리다가 멈춘다.',
@@ -265,7 +271,7 @@ export const WORD_BANK = [
     원문: '오른 주먹의 1지를 펴서 끝을 오른쪽 관자놀이에 댄 다음, 의문스러운 표정을 짓는다.',
     hands: 1, 수형: '검지만 편 주먹', 수향: '검지 끝이 관자놀이', 수위: '오른쪽 관자놀이', 수동: '댄다', 비수지: '의문스러운 표정',
     steps: ['검지 끝을 오른쪽 관자놀이에 대고 의문스러운 표정을 짓는다'],
-    check: [{ hands: 1, fingers: ['index'], zone: 'face' }] }),
+    check: [{ hands: 1, fingers: ['index'], zone: 'face', spot: 'side' }] }),
 
   e(7256, { word: '어떻게', category: '묻는 말', aliases: ['어찌'], status: 'ok',
     원문: '오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 왼쪽으로 흔든 다음, 1·2지를 펴서 구부려 세운 두 주먹의 4지 옆면을 두 번 맞부딪친다.',
@@ -292,7 +298,7 @@ export const WORD_BANK = [
     원문: '두 주먹의 1지를 펴서 마주 세웠다가 중앙으로 모아 마주 댄다.',
     hands: 2, 수형: '검지만 편 두 주먹', 수향: '두 검지가 마주 봄', 수위: '가슴 앞', 수동: '양옆의 두 검지를 중앙으로 모아 마주 댄다',
     steps: ['두 주먹의 검지만 펴서 양옆에 마주 세운다', '두 손을 중앙으로 모아 세운 검지를 마주 댄다'],
-    check: [{ hands: 2, fingers: ['index'], zone: 'chest' }, { hands: 2, fingers: ['index'], zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index'], zone: 'chest', point: 'up' }, { hands: 2, fingers: ['index'], zone: 'chest', point: 'up', move: 'together' }] }),
   e(12326, { word: '만들다', category: '생활', aliases: ['만들어','만들어요','만들었어요','짓다','제작','제조','만듦'], status: 'ok',
     원문: '모로 세운 오른 주먹의 밑면으로 모로 세운 왼 주먹의 윗면을 두 번 두드린다.',
     hands: 2, 수형: '두 손 모두 주먹', 수향: '두 주먹 모두 엄지 쪽이 위로 오게 옆으로 세움', 수위: '가슴 앞',
@@ -325,7 +331,9 @@ export const WORD_BANK = [
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "point": "side",
+      "thumb": "up"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -355,14 +363,17 @@ export const WORD_BANK = [
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "point": "side"
     },
     {
       "hands": 2,
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "point": "side",
+      "move": "swap"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -476,7 +487,8 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "point": "down"
     },
     {
       "hands": 1,
@@ -486,7 +498,8 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "out"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -518,14 +531,16 @@ export const WORD_BANK = [
       "zone": "front",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "center"
     },
     {
       "hands": 1,
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "move": "back"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -616,7 +631,9 @@ export const WORD_BANK = [
         "ring",
         "pinky"
       ],
-      "other": []
+      "other": [],
+      "move": "turn",
+      "moving": "one"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -734,7 +751,8 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "sway"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -849,7 +867,9 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "down",
+      "moving": "both"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -907,14 +927,16 @@ export const WORD_BANK = [
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "side"
     },
     {
       "hands": 1,
       "zone": "front",
       "fingers": [
         "index"
-      ]
+      ],
+      "move": "out"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -944,14 +966,17 @@ export const WORD_BANK = [
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "side",
+      "point": "up"
     },
     {
       "hands": 1,
       "zone": "front",
       "fingers": [
         "index"
-      ]
+      ],
+      "move": "back"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1057,14 +1082,17 @@ export const WORD_BANK = [
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "point": "up"
     },
     {
       "hands": 2,
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "point": "up",
+      "move": "swap"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1094,14 +1122,17 @@ export const WORD_BANK = [
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "side"
     },
     {
       "hands": 1,
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "side",
+      "move": "sway"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1187,7 +1218,8 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "point": "out"
     },
     {
       "hands": 1,
@@ -1197,7 +1229,8 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "out"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1249,7 +1282,9 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "up",
+      "moving": "one"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1276,14 +1311,17 @@ export const WORD_BANK = [
       "zone": "chest",
       "fingers": [
         "index"
-      ]
+      ],
+      "thumb": "up"
     },
     {
       "hands": 1,
       "zone": "front",
       "fingers": [
         "index"
-      ]
+      ],
+      "thumb": "up",
+      "move": "side"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1351,7 +1389,8 @@ export const WORD_BANK = [
     {
       "hands": 1,
       "zone": "chin",
-      "fingers": []
+      "fingers": [],
+      "move": "side"
     },
     {
       "hands": 1,
@@ -1361,7 +1400,8 @@ export const WORD_BANK = [
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "down"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1411,7 +1451,8 @@ export const WORD_BANK = [
         "ring",
         "pinky"
       ],
-      "zone": "chest"
+      "zone": "chest",
+      "move": "bob"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1444,14 +1485,16 @@ export const WORD_BANK = [
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "center"
     },
     {
       "hands": 1,
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "move": "side"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1480,7 +1523,7 @@ export const WORD_BANK = [
   "check": [
     {
       "hands": 1,
-      "zone": "face",
+      "zone": "cheek",
       "fingers": [
         "index",
         "middle",
@@ -1490,13 +1533,14 @@ export const WORD_BANK = [
     },
     {
       "hands": 1,
-      "zone": "face",
+      "zone": "cheek",
       "fingers": [
         "index",
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "down"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1527,7 +1571,8 @@ export const WORD_BANK = [
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "center"
     },
     {
       "hands": 1,
@@ -1563,7 +1608,7 @@ export const WORD_BANK = [
   "check": [
     {
       "hands": 1,
-      "zone": "face",
+      "zone": "head",
       "fingers": [
         "index",
         "middle",
@@ -1573,13 +1618,14 @@ export const WORD_BANK = [
     },
     {
       "hands": 1,
-      "zone": "face",
+      "zone": "head",
       "fingers": [
         "index",
         "middle",
         "ring",
         "pinky"
-      ]
+      ],
+      "move": "down"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1610,7 +1656,8 @@ export const WORD_BANK = [
       "zone": "face",
       "fingers": [
         "index"
-      ]
+      ],
+      "spot": "center"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1722,7 +1769,8 @@ export const WORD_BANK = [
         "ring",
         "pinky"
       ],
-      "ring": true
+      "ring": true,
+      "move": "swap"
     }
   ],
   "sourceCheckedAt": "2026-11-03",
@@ -1768,7 +1816,8 @@ export const WORD_BANK = [
         "pinky"
       ],
       "other": [],
-      "zone": "chest"
+      "zone": "chest",
+      "move": "up"
     }
   ],
   "sourceCheckedAt": "2026-11-04",
@@ -1921,7 +1970,8 @@ export const WORD_BANK = [
         "ring",
         "pinky"
       ],
-      "zone": "chest"
+      "zone": "chest",
+      "move": "cross"
     }
   ],
   "sourceCheckedAt": "2026-11-04",
@@ -1965,7 +2015,9 @@ export const WORD_BANK = [
         "ring",
         "pinky"
       ],
-      "zone": "belly"
+      "zone": "belly",
+      "move": "down",
+      "moving": "both"
     }
   ],
   "sourceCheckedAt": "2026-11-04",
@@ -2090,7 +2142,9 @@ export const WORD_BANK = [
         "pinky"
       ],
       "ring": true,
-      "zone": "face"
+      "zone": "face",
+      "move": "up",
+      "moving": "both"
     }
   ],
   "sourceCheckedAt": "2026-11-05",
@@ -2237,7 +2291,8 @@ export const WORD_BANK = [
         "ring",
         "pinky"
       ],
-      "zone": "chest"
+      "zone": "chest",
+      "move": "apart"
     }
   ],
   "sourceCheckedAt": "2026-11-05",
@@ -2266,14 +2321,16 @@ export const WORD_BANK = [
       "fingers": [
         "index"
       ],
-      "zone": "face"
+      "zone": "face",
+      "spot": "center"
     },
     {
       "hands": 1,
       "fingers": [
         "index"
       ],
-      "zone": "face"
+      "zone": "face",
+      "move": "side"
     },
     {
       "hands": 2,
@@ -2295,7 +2352,9 @@ export const WORD_BANK = [
         "pinky"
       ],
       "other": [],
-      "zone": "chest"
+      "zone": "chest",
+      "move": "down",
+      "moving": "one"
     }
   ],
   "sourceCheckedAt": "2026-11-05",

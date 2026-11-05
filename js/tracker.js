@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611050534';
-import { ZONE_AT } from './matcher.js?v=202611050534';
+import { landmarksFor } from './mockHand.js?v=202611050614';
+import { ZONE_AT } from './matcher.js?v=202611050614';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -19,6 +19,8 @@ const FACE_EVERY = 3;        // 얼굴은 천천히 움직인다. 세 프레임�
 const FACE_KEEP_MS = 2000;   // 손이 얼굴을 가리는 동안에는 마지막 자리를 쓴다
 // 모의 입력의 얼굴 자리(화면 비율). dev/word-judge-test.mjs 와 같다
 const MOCK_FACE = { y: 0.2, h: 0.16, x: 0.5, w: 0.14 };
+const MOCK_HAND = 0.4;                       // 합성 손 크기 배율
+const MOCK_HAND_SCALE = 0.44 * MOCK_HAND;     // 손목에서 중지 뿌리까지(화면 비율)
 
 export class Tracker {
   constructor({ video, onFrame, mock = false }) {
@@ -169,7 +171,14 @@ export class Tracker {
 
   _mockLoop() {
     if (!this.running) return;
-    const lm = this.mockPose ? landmarksFor(this.mockPose, this.mockNoise) : null;
+    /* 합성 손은 원래 얼굴 높이의 2.7 배쯤으로 컸다. 그러면 뺨, 머리 옆처럼 좁은 높이 안에서
+       손 길이만큼 움직일 수가 없다. 실제 몸 비례에 가깝게(손이 얼굴 높이 남짓) 줄인다 */
+    const shrink = pts => {
+      const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length, cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+      for (const p of pts) { p.x = cx + (p.x - cx) * MOCK_HAND; p.y = cy + (p.y - cy) * MOCK_HAND; p.z = (p.z ?? 0) * MOCK_HAND; }
+      return pts;
+    };
+    const lm = this.mockPose ? shrink(landmarksFor(this.mockPose, this.mockNoise)) : null;
     // 낱말 판정은 손 높이를 얼굴에 대어 본다. 모의 손을 그 높이의 보통 자리로 옮긴다.
     const toZone = pts => {
       if (!this.mockZone) return pts;
@@ -186,24 +195,78 @@ export class Tracker {
       return pts;
     };
     if (lm) toZone(lm);
+    // 움직이기 전 쓰는 손 자리. 반대 손은 '두 손 함께'가 아니면 여기에 남는다
+    const anchor = lm ? { x: lm.reduce((t, p) => t + p.x, 0) / lm.length, y: lm.reduce((t, p) => t + p.y, 0) / lm.length } : null;
+    // 손끝이 카메라를 향하는 낱말('너'): 펴진 손가락을 화면에서 짧게 줄인다. 3차원 폄 정도는 그대로다
+    const foreshorten = pts => {
+      if (!this.mockPointOut) return pts;
+      for (const [mcp, ...rest] of [[5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16], [17, 18, 19, 20]]) {
+        if (!(this.mockPose?.fingers ?? []).includes(['index', 'middle', 'ring', 'pinky'][(mcp - 5) / 4])) continue;
+        for (const i of rest) { pts[i].x = pts[mcp].x + (pts[i].x - pts[mcp].x) * 0.3; pts[i].y = pts[mcp].y + (pts[i].y - pts[mcp].y) * 0.3; }
+      }
+      return pts;
+    };
+    if (lm) foreshorten(lm);
     // 쌍자음은 손 전체가 옆으로 움직여야 한다. 모의 입력도 그 움직임을 만들어야
     // 움직임 검출 경로가 실제로 시험된다.
-    if (lm && (this.mockPose?.motion || this.mockMotion)) {
-      // 사람이 쌍자음을 지을 때 손을 옮기는 폭은 손 길이의 절반 남짓이다.
-      // 정규화 좌표에서 손 길이가 약 0.44이므로 진폭 0.22를 쓴다.
+    // 움직이지 않는 동작에서는 옆으로 옮겨 간 자리가 없다
+    if (lm && !this.mockMove && !(this.mockPose?.motion || this.mockMotion)) this.mockLastDx = 0;
+    if (lm && this.mockMove) {
+      // 사전 원문의 움직임을 흉내 낸다(motion.js). 다음 동작을 정한 때부터 0.5초 동안 옮겨 가고 그 자리에 머문다.
+      // 앞 동작 자리에서 반대쪽으로 조금(0.25) 물러났다가 원래 방향으로 크게(0.75) 가서 가장 멀리 간 방향이 그 방향이 된다
+      const t = Math.min(1, (performance.now() - (this.mockMoveAt ?? 0)) / 500);
+      const A = 0.6 * MOCK_HAND_SCALE, k = -0.25 + t;   // 손 길이의 0.6 배를 -0.25 → 0.75 로
+      const sd = this.mockSide ?? 1;             // 화면은 거울이라 쓰는 손 쪽은 원래 좌표에서 -x
+      // 앞 동작에서 옆으로 옮겨 가 있던 자리에서 이어서 움직인다. 순간이동하면 그 점프가 방향을 덮는다
+      if (this.mockCarryAt !== this.mockMoveAt) { this.mockCarry = this.mockLastDx ?? 0; this.mockCarryAt = this.mockMoveAt; }
+      for (const p of lm) p.x += this.mockCarry;
+      const mv = { up: [0, -1], down: [0, 1], side: [-sd, 0], cross: [sd, 0] }[this.mockMove];
+      if (mv) for (const p of lm) { p.x += mv[0] * A * k; p.y += mv[1] * A * k; }
+      if (this.mockMove === 'sway') { const dx = Math.sin(performance.now() / 600 * Math.PI * 2) * 0.5 * MOCK_HAND_SCALE; for (const p of lm) p.x += dx; }
+      if (this.mockMove === 'bob') { const dy = Math.sin(performance.now() / 600 * Math.PI * 2) * 0.5 * MOCK_HAND_SCALE; for (const p of lm) p.y += dy; }
+      const grow = { out: 1 + 0.3 * t, back: 1 - 0.22 * t }[this.mockMove];
+      const turn = this.mockMove === 'turn' ? 60 * t * Math.PI / 180 : 0;
+      if (grow || turn) {
+        const cx = lm.reduce((s, p) => s + p.x, 0) / lm.length, cy = lm.reduce((s, p) => s + p.y, 0) / lm.length;
+        for (const p of lm) {
+          let x = p.x - cx, y = p.y - cy;
+          if (turn) [x, y] = [x * Math.cos(turn) - y * Math.sin(turn), x * Math.sin(turn) + y * Math.cos(turn)];
+          p.x = cx + x * (grow ?? 1); p.y = cy + y * (grow ?? 1); p.z = (p.z ?? 0) * (grow ?? 1);
+        }
+      }
+    } else if (lm && (this.mockPose?.motion || this.mockMotion)) {
+      // 사람이 쌍자음을 지을 때 손을 옮기는 폭은 손 길이의 절반 남짓이다(손 길이 대비 0.5).
       const phase = (performance.now() % 1200) / 1200;
       // 같은 손모양이 반복되는 낱말은 중간 위치에서 다음 단계가 시작해도
       // 양 끝 중 한 곳까지 WORD_TRAVEL을 넘게 이동할 수 있어야 한다.
-      const amplitude = this.mockMotion ? 0.36 : 0.22;
-      const dx = (phase < 0.5 ? phase * 2 : 2 - phase * 2) * amplitude;
+      const amplitude = (this.mockMotion ? 0.82 : 0.5) * MOCK_HAND_SCALE;   // 손 크기를 줄여도 손 길이 대비 폭은 그대로
+      // 얼굴 옆에 머물러야 하는 동작은 바깥쪽으로 흔든다. 안쪽으로 흔들면 얼굴 앞으로 들어와 자리를 벗어난다
+      const outward = this.mockSpot === 'side' ? -(this.mockSide ?? 1) : 1;
+      const dx = (phase < 0.5 ? phase * 2 : 2 - phase * 2) * amplitude * outward;
       for (const p of lm) p.x += dx;
+      this.mockLastDx = dx;
     }
     const hands = lm ? [{ lm, handedness: 'Right' }] : [];
     // 양손이 필요한 자모는 모의 입력도 손을 둘 띄운다
     if (lm && this.mockTwoHands) {
       // 두 번째 손: 따로 정한 손모양이 있으면 그것으로, 없으면 같은 손모양으로
-      const lm2 = this.mockPose2 ? toZone(landmarksFor(this.mockPose2, this.mockNoise)) : lm;
-      hands.push({ lm: lm2.map(p => ({ ...p, x: p.x + 0.18 })), handedness: 'Left' });
+      const lm2 = foreshorten(shrink(this.mockPose2 ? landmarksFor(this.mockPose2, this.mockNoise) : landmarksFor(this.mockPose, this.mockNoise)));
+      const t = Math.min(1, (performance.now() - (this.mockMoveAt ?? 0)) / 500);
+      const sd = this.mockSide ?? 1;
+      // 반대 손은 쓰는 손에서 반대쪽으로 떨어져 있다(원래 좌표에서 +x 가 화면의 반대 손 쪽)
+      let gap = 1.4 * MOCK_HAND_SCALE * sd, dy2 = 0;
+      if (this.mockMove === 'together') gap = (2.6 - 1.9 * t) * MOCK_HAND_SCALE * sd;
+      if (this.mockMove === 'apart') gap = (1.0 + 1.6 * t) * MOCK_HAND_SCALE * sd;
+      if (this.mockMove === 'swap') {
+        // 쓰는 손은 위에서 아래로, 반대 손은 아래에서 위로 자리를 바꾼다
+        const h = 0.9 * MOCK_HAND_SCALE * (1 - 2 * t);
+        for (const p of lm) p.y -= h;
+        dy2 = h;
+      }
+      const both = this.mockMoving === 'both' || (!this.mockMove && !this.mockPose2);
+      const at = both ? { x: lm.reduce((u, p) => u + p.x, 0) / lm.length, y: lm.reduce((u, p) => u + p.y, 0) / lm.length } : anchor;
+      const c2 = { x: lm2.reduce((u, p) => u + p.x, 0) / lm2.length, y: lm2.reduce((u, p) => u + p.y, 0) / lm2.length };
+      hands.push({ lm: lm2.map(p => ({ ...p, x: p.x + at.x + gap - c2.x, y: p.y + at.y + dy2 - c2.y })), handedness: 'Left' });
     }
     this.onFrame(hands, this.currentFace());
     setTimeout(() => this._mockLoop(), 60);

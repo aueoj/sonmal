@@ -2,7 +2,7 @@
    - 들어가자마자 아무 말도 하지 않는다(둘러보기의 합성 손이 연습 자세를 들고 있지 않다)
    - 한 낱말을 마치고 손을 내리면 그 낱말을 읽는다
    - '좋아요'(코 앞 주먹)와 '자다'(뺨 옆 주먹)를 가른다
-   - 판정이 같은 낱말('내일'과 '어제')은 후보만 보이고 소리는 내지 않는다
+   - 손모양과 자리가 같고 움직임만 다른 낱말('내일'은 앞으로, '어제'는 어깨 너머로)을 가른다
    - 지문자로 바꾸면 자모를 받아 적어 글자로 읽는다
    - 말 고르기에서 고르면 연습 모드로 돌아가 그 말을 연습한다 */
 import { launch } from './browser.mjs';
@@ -43,13 +43,9 @@ async function sign(word) {
 const rows = [];
 const expect = (label, ok, got) => rows.push({ label, ok, got });
 expect('들어가자마자 말하지 않는다', idle.spoken.length === 0 && idle.name === '수어를 해 보세요', JSON.stringify(idle));
-for (const w of ['괜찮아요', '좋아요', '자다']) {
+for (const w of ['괜찮아요', '좋아요', '자다', '내일', '어제']) {
   const r = await sign(w);
   expect(`${w} 를 읽고 들려준다`, r.spoken.includes(w) && r.name === w, JSON.stringify(r));
-}
-{
-  const r = await sign('내일');
-  expect('내일/어제 는 후보만 보이고 말하지 않는다', r.spoken.length === 0 && /내일/.test(r.name) && /어제/.test(r.name), JSON.stringify(r));
 }
 // 지문자: ㅁ ㅜ ㄹ → 물
 await p.click('#read-jamo');

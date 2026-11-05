@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611050534';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611050614';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -166,6 +166,12 @@ export { angleToDir };
  */
 const ZONE = {
   face:  { inFace: u => u < 0.9, onScreen: y => y < 0.58, hint: () => '손을 얼굴 앞으로 올리세요' },
+  /* 얼굴을 위아래로 가를 때만 쓴다. '검정'(머리 옆)과 '파랑'(뺨)은 이것만 다르다.
+     코끝에서 얼굴 높이의 0.15 배 위를 경계로 어림했다. 실제 카메라로는 아직 맞춰 보지 못했다 */
+  head:  { inFace: u => u < -0.15, onScreen: y => y < 0.45,
+           hint: () => '손을 머리 옆으로 올리세요' },
+  cheek: { inFace: u => u >= -0.15 && u < 0.9, onScreen: y => y < 0.58,
+           hint: u => (u < -0.15 ? '손을 뺨 높이로 내리세요' : '손을 뺨으로 올리세요') },
   chin:  { inFace: u => u < 1.2, onScreen: y => y < 0.62, hint: () => '손을 턱 앞으로 올리세요' },
   chest: { inFace: u => u > 0.5 && u < 4.5, onScreen: null,
            hint: u => (u <= 0.5 ? '손을 가슴 앞으로 내리세요' : '손을 가슴 앞으로 올리세요') },
@@ -173,7 +179,7 @@ const ZONE = {
 };
 
 /* 높이마다 손 중심이 보통 머무는 자리(u). 모의 입력과 시험이 손을 이 자리에 둔다. */
-export const ZONE_AT = { face: 0, chin: 0.6, chest: 1.8, front: 1.6, belly: 3.0 };
+export const ZONE_AT = { face: 0, head: -0.9, cheek: 0.3, chin: 0.6, chest: 1.8, front: 1.6, belly: 3.0 };
 
 /** 손 중심 높이가 그 자리에 맞는가. 맞으면 null, 아니면 짚어 줄 말 */
 export function zoneHint(zoneName, y, face) {
@@ -200,6 +206,20 @@ const OBJ = { index: '검지를', middle: '중지를', ring: '약지를', pinky:
  * 이것만 다르다. 손 중심이 코에서 얼굴 너비의 몇 배만큼 옆에 있는지로 본다.
  * 0.45 는 주먹 너비(얼굴 너비의 0.6 남짓)와 손목이 옆에서 들어오는 것을 감안해 어림한 값이다.
  * 실제 카메라로는 아직 맞춰 보지 못했다. 얼굴이 안 보이면 보지 않는다. */
+/* 손끝 방향. '너'(앞)와 '여기'(아래), '보다'(위)와 '수어'(옆)처럼 손모양이 같고 손끝만 다른 낱말을 가른다.
+ * 각도는 화면 기준(0 위, 90 옆). 앞(카메라 쪽)은 각도로 못 재므로 손가락이 화면에서 짧아 보이는 것으로 본다 */
+const POINT_REACH = 0.35;
+export function pointHint(point, f) {
+  if (!point || !f) return null;
+  const a = Math.abs(f.angle ?? 0);
+  // 위, 아래, 옆은 손가락이 화면에서 제 길이로 보여야 한다. 카메라를 향한 손가락은 각도가 아무렇게나 나온다
+  const long = (f.reach2d ?? 1) >= POINT_REACH;
+  const ok = { up: long && a < 45, down: long && a > 135, side: long && a >= 45 && a <= 135, out: !long }[point];
+  if (ok === undefined || ok) return null;
+  return { up: '손끝이 위를 향하게 세우세요', down: '손끝이 아래를 향하게 하세요',
+           side: '손끝이 옆을 향하게 눕히세요', out: '손끝이 앞(상대)을 향하게 하세요' }[point];
+}
+
 const SPOT_SPLIT = 0.45;
 export function spotHint(spot, x, face) {
   if (!spot || !(face?.w > 0) || face.x === undefined) return null;
@@ -269,6 +289,9 @@ export function scoreCheck(feats, check = {}, face = null) {
   const zoneY = partner ? (f.centroid.y + partner.x.centroid.y) / 2 : f.centroid.y;
   if (!hint) hint = zoneHint(check.zone, zoneY, face);
   if (!hint) hint = spotHint(check.spot, partner ? (f.centroid.x + partner.x.centroid.x) / 2 : f.centroid.x, face);
+  if (!hint) hint = pointHint(check.point, f);
 
-  return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale };
+  // 얼굴에서 잰 손 높이(얼굴 높이 단위). 여러 낱말이 다 맞을 때 어느 쪽 자리에 더 가까운지 견준다
+  const u = face?.h > 0 ? (zoneY - face.y) / face.h : null;
+  return { ok: !hint, score: s.score, hint, centroid: f.centroid, scale: f.scale, u };
 }

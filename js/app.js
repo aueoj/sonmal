@@ -9,20 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611050534';
-import { getPose } from './jamoData.js?v=202611050534';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611050534';
-import { describe } from './poseFeatures.js?v=202611050534';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611050534';
-import { Tracker } from './tracker.js?v=202611050534';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611050534';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611050534';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611050534';
-import { groupByIdea } from './lessons.js?v=202611050534';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611050534';
-import { createReader } from './reader.js?v=202611050534';
-import { createSignReader, readableSigns } from './signReader.js?v=202611050534';
-import { diagnose } from './diagnose.js?v=202611050534';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611050614';
+import { getPose } from './jamoData.js?v=202611050614';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611050614';
+import { describe } from './poseFeatures.js?v=202611050614';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611050614';
+import { Tracker } from './tracker.js?v=202611050614';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611050614';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611050614';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611050614';
+import { groupByIdea } from './lessons.js?v=202611050614';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611050614';
+import { createReader } from './reader.js?v=202611050614';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611050614';
+import { createSignReader, readableSigns } from './signReader.js?v=202611050614';
+import { diagnose } from './diagnose.js?v=202611050614';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -247,8 +248,10 @@ function mockForCheck(check, moving = false) {
   applyMockCheck(check, moving);
 }
 function applyMockCheck(check, moving) {
+  // 손끝 방향: 앞은 손가락을 화면에서 줄여 흉내 내고(tracker), 그 밖은 자세의 방향으로 둔다
+  const dir = { down: 'down', side: 'right' }[check.point] ?? 'up';
   const shape = fingers => ({
-    fingers: fingers ?? ['index', 'middle', 'ring', 'pinky'], dir: 'up', view: 'palm',
+    fingers: fingers ?? ['index', 'middle', 'ring', 'pinky'], dir, view: 'palm',
     thumb: check.thumb === 'up' ? 'up' : 'in', special: check.ring ? 'circle' : null, bent: false
   });
   state.tracker.setMockPose(shape(check.fingers));
@@ -257,6 +260,12 @@ function applyMockCheck(check, moving) {
   state.tracker.mockMotion = moving;      // 둘째 동작부터는 손을 옮겨야 넘어간다
   state.tracker.mockZone = check.zone ?? null;
   state.tracker.mockSpot = check.spot ?? null;
+  state.tracker.mockPointOut = check.point === 'out';
+  // 사전 원문의 움직임(motion.js). 둘째 동작부터만 흉내 낸다
+  state.tracker.mockMove = moving ? (check.move ?? null) : null;
+  state.tracker.mockMoving = check.moving ?? null;
+  state.tracker.mockMoveAt = performance.now();
+  state.tracker.mockSide = handSide();
 }
 
 /* 단어 수어는 동작이 여럿이라 그림은 저절로 흐른다. 누를 것이 없다.
@@ -266,7 +275,7 @@ function showWord(u) {
   const w = u.sign;
   const frames = WORD_POSE_FILES[w.word]?.length ?? 1;
   state.wordStep = 0; state.wordGot = 0; state.wordHold = 0; state.wordLost = 0;
-  state.wordFrom = null; state.wordTravel = 0;
+  state.wordMotion = null;
   delete el.art.dataset.stepOk;
 
   el.name.textContent = u.jamo;
@@ -436,11 +445,14 @@ function onFrame(hands, face = null) {
     const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
     const r = scoreCheck(feats, checks[k], face);
     /* 같은 자세 그대로 다음 단계까지 넘어가지 않게, 앞 동작을 끝낸 자리에서
-       손이 실제로 옮겨 가야 다음 동작으로 친다. */
-    if (state.wordGot > 0 && state.wordFrom && r.centroid) {
-      const d = Math.hypot(r.centroid.x - state.wordFrom.x, r.centroid.y - state.wordFrom.y) / (r.scale || 1);
-      state.wordTravel = Math.max(state.wordTravel ?? 0, d);
-      if (r.ok && state.wordTravel < WORD_TRAVEL) { r.ok = false; r.hint = '그림처럼 다음 동작으로 손을 옮기세요'; }
+       손이 실제로 옮겨 가야 다음 동작으로 친다. 사전 원문에 방향이 있으면 그 방향으로 가야 한다(motion.js). */
+    const side = handSide();
+    if (state.wordGot > 0 && state.wordMotion) {
+      motionFeed(state.wordMotion, feats, side);
+      const c = checks[k];
+      const why = (c.move || c.moving) ? moveHint(c, state.wordMotion, side)
+        : (travelled(state.wordMotion, WORD_TRAVEL) ? null : '그림처럼 다음 동작으로 손을 옮기세요');
+      if (r.ok && why) { r.ok = false; r.hint = why; }
     }
     if (r.ok) {
       state.wordOkAt = now;
@@ -452,7 +464,7 @@ function onFrame(hands, face = null) {
         state.wordStep = Math.min(state.wordGot, wordChecks(current.sign).length - 1);
         paintWordStep(current.sign);
         el.art.dataset.stepOk = state.wordGot % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
-        state.wordFrom = r.centroid; state.wordTravel = 0;
+        state.wordMotion = motionStart(feats, side);
         mockForCheck(checks[state.wordGot], true);
       }
     } else if (now - (state.wordOkAt ?? 0) > WORD_GRACE_MS) state.wordHold = 0;
@@ -577,6 +589,7 @@ async function startCamera({ demo = false } = {}) {
       state.mockLocked = true;          // 점검이 손을 쥐는 동안 앱이 모의 손을 바꾸지 않는다
       state.tracker.mockZone = zone;    // 손을 둘 높이(얼굴, 가슴 들). 없으면 그 자리 그대로
       state.tracker.mockMotion = false; state.tracker.mockPose2 = null; state.tracker.mockSpot = null;
+      state.tracker.mockMove = null; state.tracker.mockPointOut = false;
       const p = jamo ? getPose(jamo) : null;
       state.tracker.mockTwoHands = p?.hands === 2;
       state.tracker.setMockPose(p);
@@ -633,6 +646,9 @@ function stopListening() {
   document.body.classList.remove('listening');
   el.typed.placeholder = '또는 문장 입력';
 }
+
+/** 쓰는 손 쪽. 화면 좌표(거울)에서 오른손잡이는 +x, 왼손잡이는 -x */
+const handSide = () => (state.hand === 'left' ? -1 : 1);
 
 const HAND_KEY = 'sonmal.hand';
 function setHand(hand) {
@@ -756,6 +772,7 @@ function init() {
   });
   state.signReader = createSignReader({
     signs: WORD_SIGNS,
+    side: handSide,
     onWord: word => {
       if (state.mode !== 'free') return;
       el.name.textContent = word;
