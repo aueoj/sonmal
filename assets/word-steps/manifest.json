@@ -16,7 +16,7 @@
       "frame": 2,
       "total": 3,
       "basis": "sldict",
-      "step": "왼 주먹을 쥐고, 오른 손바닥으로 왼 팔등을 팔꿈치에서 손목까지 쓸어내린다",
+      "step": "두 주먹을 가슴 앞에서 아래로 내린다",
       "entryNo": "3331"
     },
     {
@@ -25,7 +25,6 @@
       "frame": 3,
       "total": 3,
       "basis": "sldict",
-      "step": "두 주먹을 가슴 앞에서 아래로 내린다",
       "entryNo": "3331"
     },
     {
@@ -1584,6 +1583,42 @@
       "basis": "sldict",
       "step": "오른손을 위로 올리면서 손가락을 벌린다",
       "entryNo": "6480"
+    },
+    {
+      "word": "맥주",
+      "slug": "sl7308-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 손끝을 모아 붙여 동그라미를 만들고 새끼손가락 옆면을 밖으로 향한다",
+      "entryNo": "7308"
+    },
+    {
+      "word": "맥주",
+      "slug": "sl7308-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "엄지만 굽히고 나머지 네 손가락을 붙여 펴 손바닥이 밖으로 향하게 세운다",
+      "entryNo": "7308"
+    },
+    {
+      "word": "토끼",
+      "slug": "sl132-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "왼 주먹의 엄지를 세워 손바닥 쪽을 밖으로 향하고 그 등에 오른 검지와 중지를 편 손의 등을 댄다",
+      "entryNo": "132"
+    },
+    {
+      "word": "토끼",
+      "slug": "sl132-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지와 중지를 구부렸다 편다",
+      "entryNo": "132"
     }
   ]
 }
