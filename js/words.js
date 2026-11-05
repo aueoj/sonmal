@@ -38,8 +38,8 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611041452';
-import { WORD_BASIS } from './wordArt.js?v=202611041452';
+import { WORD_BANK } from './wordBank.js?v=202611050534';
+import { WORD_BASIS } from './wordArt.js?v=202611050534';
 
 /* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
    사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
@@ -257,7 +257,9 @@ export function matchToken(token) {
       if (seen.has(c) || !c) continue;
       seen.add(c); next.push(c);
       const hit = lookupWord(c) ?? lookupWord(c + '다') ?? lookupWord(c + '요');
-      if (hit) return { sign: hit, stem: c };
+      // 과일 '사과'를 '사과하다/사과해요'의 어간으로 잘못 연결하지 않는다.
+      const excluded = hit?.excludePredicateForms && /^(하|해|했|합)/.test(token.slice(c.length));
+      if (hit && !excluded) return { sign: hit, stem: c };
     }
     frontier = next;
   }
