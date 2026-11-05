@@ -1619,6 +1619,24 @@
       "basis": "sldict",
       "step": "오른 검지와 중지를 구부렸다 편다",
       "entryNo": "132"
+    },
+    {
+      "word": "달걀",
+      "slug": "sl10952-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른손을 반쯤 구부려 검지와 엄지 옆면을 오른쪽 눈앞에 댄다",
+      "entryNo": "10952"
+    },
+    {
+      "word": "달걀",
+      "slug": "sl10952-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "그 자리에서 손끝을 오므렸다 편다 (두 번)",
+      "entryNo": "10952"
     }
   ]
 }
