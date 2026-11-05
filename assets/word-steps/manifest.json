@@ -1458,6 +1458,60 @@
       "basis": "sldict",
       "step": "고리 모양을 유지하며 오른쪽 볼에 댔다 뗀다 (두 번)",
       "entryNo": "12013"
+    },
+    {
+      "word": "노력하다",
+      "slug": "sl5522-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손의 검지·엄지 끝을 맞대어 양 볼 밑에 둔다",
+      "entryNo": "5522"
+    },
+    {
+      "word": "노력하다",
+      "slug": "sl5522-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "검지·엄지 끝을 맞댄 채 두 손을 약간 흔들며 위로 올린다",
+      "entryNo": "5522"
+    },
+    {
+      "word": "즐겁다",
+      "slug": "sl12464-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손을 약간 구부려 손끝을 양쪽 가슴에 대고 높이를 엇갈리게 둔다",
+      "entryNo": "12464"
+    },
+    {
+      "word": "즐겁다",
+      "slug": "sl12464-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "손끝을 가슴에 댄 채 두 손을 위아래로 엇갈리게 움직인다 (두 번)",
+      "entryNo": "12464"
+    },
+    {
+      "word": "신나다",
+      "slug": "sl6046-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지와 엄지를 튕길 준비를 하여 코밑 왼쪽에 둔다",
+      "entryNo": "6046"
+    },
+    {
+      "word": "신나다",
+      "slug": "sl6046-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "오른 검지와 엄지를 튕기면서 코밑 왼쪽에서 오른쪽으로 이동한다",
+      "entryNo": "6046"
     }
   ]
 }
