@@ -1512,6 +1512,87 @@
       "basis": "sldict",
       "step": "오른 검지와 엄지를 튕기면서 코밑 왼쪽에서 오른쪽으로 이동한다",
       "entryNo": "6046"
+    },
+    {
+      "word": "감동",
+      "slug": "sl4564-01",
+      "frame": 1,
+      "total": 3,
+      "basis": "sldict",
+      "step": "입을 약간 벌리고 구부린 오른손을 가슴 앞에 두며 왼 손바닥을 위로 둔다",
+      "entryNo": "4564"
+    },
+    {
+      "word": "감동",
+      "slug": "sl4564-02",
+      "frame": 2,
+      "total": 3,
+      "basis": "sldict",
+      "step": "입을 약간 벌린 채 오른손을 가슴에서 턱까지 올린다",
+      "entryNo": "4564"
+    },
+    {
+      "word": "감동",
+      "slug": "sl4564-03",
+      "frame": 3,
+      "total": 3,
+      "basis": "sldict",
+      "step": "오른손을 밖으로 반원을 그리며 왼 손바닥에 닿게 천천히 내린다",
+      "entryNo": "4564"
+    },
+    {
+      "word": "상관없다",
+      "slug": "sl3810-01",
+      "frame": 1,
+      "total": 2,
+      "basis": "sldict",
+      "step": "두 손의 검지·엄지 끝으로 고리를 만들고 서로 끼운다",
+      "entryNo": "3810"
+    },
+    {
+      "word": "상관없다",
+      "slug": "sl3810-02",
+      "frame": 2,
+      "total": 2,
+      "basis": "sldict",
+      "step": "고리를 풀면서 두 손바닥을 밖으로 향하게 양옆으로 벌린다",
+      "entryNo": "3810"
+    },
+    {
+      "word": "사과",
+      "slug": "sl11864-01",
+      "frame": 1,
+      "total": 4,
+      "basis": "sldict",
+      "step": "오른 검지를 펴서 옆면을 입술 밑에 댄다",
+      "entryNo": "11864"
+    },
+    {
+      "word": "사과",
+      "slug": "sl11864-02",
+      "frame": 2,
+      "total": 4,
+      "basis": "sldict",
+      "step": "검지 옆면으로 입술 밑을 오른쪽으로 스쳐 낸다",
+      "entryNo": "11864"
+    },
+    {
+      "word": "사과",
+      "slug": "sl11864-03",
+      "frame": 3,
+      "total": 4,
+      "basis": "sldict",
+      "step": "왼 주먹을 모로 세우고 오른 손바닥을 왼 주먹 등에 댄다",
+      "entryNo": "11864"
+    },
+    {
+      "word": "사과",
+      "slug": "sl11864-04",
+      "frame": 4,
+      "total": 4,
+      "basis": "sldict",
+      "step": "오른 손바닥으로 왼 주먹 등을 닦아 내린다",
+      "entryNo": "11864"
     }
   ]
 }
