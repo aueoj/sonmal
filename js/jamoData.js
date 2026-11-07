@@ -177,6 +177,5 @@ export const MOTION_LETTERS = Object.entries({ 'ㄲ': 'ㄱ', 'ㄸ': 'ㄷ', 'ㅃ'
 
 export const ALL_POSES = [...CONSONANTS, ...VOWELS, ...MOTION_LETTERS];
 export const POSE_BY_JAMO = new Map(ALL_POSES.map(p => [p.jamo, p]));
-export const STATIC_COUNT = CONSONANTS.length + VOWELS.length;
 
 export function getPose(jamo) { return POSE_BY_JAMO.get(jamo) ?? null; }

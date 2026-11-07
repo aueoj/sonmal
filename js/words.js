@@ -16,7 +16,7 @@
  * 인식까지 하려면 어휘를 닫아야 한다
  *   단어 단위 한국수어 인식은 어휘 크기에 민감하다. 20단어 규모 자체 데이터셋에서 98.3%,
  *   KSL-77(77단어)에서 89.0%, 공개 벤치마크 기준선은 79.8% 수준이다.
- *   그래서 recognizable은 기본값이 false다. 키포인트로 직접 학습한 단어에만 true를 준다.
+ *   지금은 그림을 보고 따라 하는 연습만 하고, 낱말을 학습해 인식하지는 않는다.
  */
 
 /**
@@ -33,17 +33,15 @@
  * @property {string[]} [aliases] 같은 수어를 가리키는 다른 한국어 표현
  * @property {string[]} [steps] 동작을 순서대로 나눈 것
  * @property {1|2} [hands] 한 손인지 두 손인지
- * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611071622';
-import { WORD_BASIS } from './wordArt.js?v=202611071622';
+import { WORD_BANK } from './wordBank.js?v=202611071625';
+import { WORD_BASIS } from './wordArt.js?v=202611071625';
 
 /* 화면에 올리는 단어: 사전 기준 그림이 검수되어 들어온 단어(basis 'sldict')의 wordBank 기록.
    그림이 없는 단어는 올리지 않는다. 그림 없이 동작을 글로만 보여 주지 않는다. */
 /** @type {WordSign[]} */
-export const WORD_SIGNS = WORD_BANK.filter(w => WORD_BASIS[w.word] === 'sldict')
-  .map(w => ({ ...w, recognizable: false }));
+export const WORD_SIGNS = WORD_BANK.filter(w => WORD_BASIS[w.word] === 'sldict');
 
 const byWord = new Map();
 for (const w of WORD_SIGNS) {

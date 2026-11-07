@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071622';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071625';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -174,7 +174,6 @@ export function detectLateralShift(trail, scale, now = trail.at(-1)?.t ?? 0) {
   return (Math.max(...xs) - Math.min(...xs)) / (scale || 1);
 }
 
-export const PARAM_NAMES = { 수형: '손 모양', 수향: '손바닥 방향', 수위: '손 위치', 수동: '손 움직임' };
 export { angleToDir };
 
 /* ── 낱말 단계 판정 ─────────────────────────────

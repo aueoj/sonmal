@@ -134,5 +134,3 @@ export function composeFromJamo(jamos) {
   }
   return out.join('');
 }
-
-export const JAMO_LISTS = { L_LIST, V_LIST, T_LIST, SPLIT };
