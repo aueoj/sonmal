@@ -7,7 +7,7 @@
   --indigo-press: #4a55b5;
 }
 html, body { height: auto; }
-body { overflow-x: clip; }
+body { overflow-x: clip; word-break: keep-all; }   /* 한글이 낱말 가운데서 끊기지 않게 */
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 img { display: block; max-width: 100%; }
 
