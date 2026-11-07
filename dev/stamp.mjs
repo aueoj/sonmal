@@ -29,7 +29,8 @@ const files = [
 const PATTERNS = [
   /(from\s+['"])(\.{1,2}\/[\w./-]+\.js)(\?v=\d+)?(['"])/g,
   /(import\(\s*['"])(\.{1,2}\/[\w./-]+\.js)(\?v=\d+)?(['"])/g,
-  /((?:href|src)=")((?:css|js)\/[\w./-]+\.(?:css|js))(\?v=\d+)?(")/g
+  /((?:href|src)=")((?:css|js)\/[\w./-]+\.(?:css|js))(\?v=\d+)?(")/g,
+  /((?:href|src)=")(app\.min\.js)(\?v=\d+)?(")/g
 ];
 
 // 화면에서 어느 판인지 읽을 수 있도록 meta 에도 적는다

@@ -1,0 +1,82 @@
+손말(Sonmal) 이용 약관 / Sonmal License
+Copyright (c) 2026 손말(Sonmal) 제작자 — github.com/aueoj/sonmal
+All rights reserved. 모든 권리 보유.
+
+------------------------------------------------------------------------
+한국어 (아래 영문과 뜻이 다를 경우 이 한국어 본문을 따릅니다)
+------------------------------------------------------------------------
+
+이 저장소와 배포된 앱(https://aueoj.github.io/sonmal/, 이하 "손말")의
+소스 코드, 일러스트, 그 밖의 제작물(이하 "저작물")에 대한 저작권은
+제작자에게 있습니다.
+
+1. 허용 — 개인적·비상업적 사용
+   누구나 손말을 웹에서 열어 한국수어와 지문자를 배우는 목적으로
+   쓸 수 있습니다. 배우기 위해 소스를 읽어 보는 것도 허용합니다.
+
+2. 금지 — 복제·수정·재배포
+   제작자의 사전 서면 허락 없이는 다음을 할 수 없습니다.
+   - 저작물의 전부 또는 일부를 복제하거나 내려받아 보관하는 행위
+     (개인이 배우기 위해 브라우저가 자동으로 받는 임시 사본은 제외)
+   - 저작물을 수정하거나 이를 바탕으로 2차적 저작물을 만드는 행위
+   - 저작물을 다시 배포하거나, 자신의 서버·도메인에 올려 제공하는 행위
+   - 저작물의 전부 또는 일부를 상업적으로 이용하는 행위
+
+3. 제3자 자료
+   손말은 아래 자료를 인용하거나 함께 씁니다. 해당 부분에는 이 약관이
+   아니라 각 자료의 원래 조건이 적용됩니다.
+   - 국립국어원 한국수어사전의 표제어·수형 설명(원문) 인용
+     : 국립국어원, CC BY-NC-ND 2.0 KR
+   - MediaPipe Tasks 및 손/얼굴 모델 : Google, Apache License 2.0
+   - 글꼴(IBM Plex Sans KR, Inter) : 각 글꼴의 라이선스
+   손말의 일러스트는 위 사전의 사진·영상을 복제한 것이 아니라,
+   표제어와 수형 설명을 바탕으로 제작자가 새로 그린 것입니다.
+
+4. 보증 없음
+   저작물은 "있는 그대로" 제공됩니다. 손말은 한국수어 학습을 돕는
+   연습 도구이며, 수어 능력의 평가나 공식 번역을 제공하지 않습니다.
+   제작자는 어떠한 명시적·묵시적 보증도 하지 않으며, 저작물의 사용으로
+   생긴 어떠한 손해에 대해서도 책임지지 않습니다.
+
+5. 허락 문의
+   위에서 금지한 이용이 필요하면 github.com/aueoj/sonmal 를 통해
+   제작자에게 문의해 허락을 받으십시오.
+
+------------------------------------------------------------------------
+English (the Korean text above governs in case of any discrepancy)
+------------------------------------------------------------------------
+
+Copyright in the source code, illustrations, and other materials of this
+repository and the deployed app at https://aueoj.github.io/sonmal/
+("Sonmal", the "Work") belongs to the author.
+
+1. PERMITTED — Personal, non-commercial use.
+   Anyone may use Sonmal in a web browser to learn Korean Sign Language
+   and fingerspelling, and may read the source to learn from it.
+
+2. PROHIBITED without the author's prior written permission:
+   - copying, downloading, or storing the Work in whole or in part
+     (except the temporary copy a browser fetches automatically for one
+     person's own use);
+   - modifying the Work or creating derivative works from it;
+   - redistributing the Work, or hosting it on your own server/domain;
+   - any commercial use of the Work in whole or in part.
+
+3. THIRD-PARTY MATERIALS. Sonmal quotes or uses the materials below;
+   those parts are governed by their own terms, not this license:
+   - Korean Sign Language Dictionary headwords and handshape
+     descriptions quoted from the National Institute of Korean Language
+     (CC BY-NC-ND 2.0 KR);
+   - MediaPipe Tasks and hand/face models (Google, Apache License 2.0);
+   - Fonts IBM Plex Sans KR and Inter (their respective licenses).
+   Sonmal's illustrations are not reproductions of that dictionary's
+   photos or videos; they are drawn anew from headwords and handshape
+   descriptions.
+
+4. NO WARRANTY. The Work is provided "as is". Sonmal is a practice tool
+   to help learn Korean Sign Language; it does not assess signing skill
+   or provide official translation. The author gives no warranty of any
+   kind and is not liable for any damages arising from use of the Work.
+
+5. PERMISSIONS. For any use the sections above prohibit, contact the
+   author via github.com/aueoj/sonmal to request written permission.

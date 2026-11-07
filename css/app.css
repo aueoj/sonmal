@@ -60,6 +60,11 @@ body { overflow: hidden; }
 .cam-title { font-family: var(--kr); font-size: var(--t-title); font-weight: 600; letter-spacing: var(--track-tight); margin: 0 0 var(--s2); }
 .cam-body { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); margin: 0; max-width: 46ch; }
 .cam-actions { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
+.cam-empty { display: flex; flex-direction: column; }
+.cam-foot { margin-top: auto; padding-top: var(--s4); display: flex; flex-direction: column; gap: 2px;
+  font-family: var(--kr); font-size: var(--t-micro); color: var(--faint); }
+.cam-foot a { color: var(--muted); text-underline-offset: 2px; }
+.cam-foot-note { color: var(--faint); }
 
 
 .ref {

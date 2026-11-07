@@ -32,6 +32,7 @@ const STATIC = [
   ['문장 그림', ['dev/phrase-test.mjs'], '문장의 모든 낱말이 출처와 이미지를 갖췄는가'],
   ['점검 규칙', ['dev/audit-lint.mjs'], '점검 스크립트가 CI 에서만 깨지는 방법을 쓰지 않는가'],
   ['판 번호', ['dev/stamp.mjs', '--check'], '파일 주소에 판 번호가 붙어 있는가'],
+  ['빌드 최신', ['dev/build.mjs', '--check'], 'app.min.js 가 js/ 소스와 맞는가'],
   ['자모 구별', ['dev/selftest.mjs'], '40개 손모양이 서로 구별되는가'],
   ['단어 출처', ['dev/words-check.mjs'], '새 단어가 사전 번호와 그림을 갖췄는가'],
   ['그림 연결', ['dev/art/ingest.mjs', '--check'], '연결된 그림 파일이 다 있는가'],

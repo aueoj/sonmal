@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071201';
-import { getPose } from './jamoData.js?v=202611071201';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071201';
-import { describe } from './poseFeatures.js?v=202611071201';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611071201';
-import { Tracker } from './tracker.js?v=202611071201';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071201';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071201';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071201';
-import { groupByIdea } from './lessons.js?v=202611071201';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071201';
-import { createReader } from './reader.js?v=202611071201';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071201';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071201';
-import { diagnose } from './diagnose.js?v=202611071201';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071217';
+import { getPose } from './jamoData.js?v=202611071217';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071217';
+import { describe } from './poseFeatures.js?v=202611071217';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611071217';
+import { Tracker } from './tracker.js?v=202611071217';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071217';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071217';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071217';
+import { groupByIdea } from './lessons.js?v=202611071217';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071217';
+import { createReader } from './reader.js?v=202611071217';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071217';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071217';
+import { diagnose } from './diagnose.js?v=202611071217';
 
 const $ = id => document.getElementById(id);
 const el = {
@@ -858,6 +858,7 @@ function init() {
     <p>지문자 손모양은 제공받은 도표를 기준으로 합니다. 낱말 ${WORD_SIGNS.length}개 중
        ${WORD_SIGNS.filter(w => w.entryNo).length}개는 국립국어원 한국수어사전의 표제어와 수형 설명을 따라 그렸습니다.</p>
     <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>
+    <p style="color:var(--faint);font-size:var(--t-micro)">© 2026 손말(Sonmal) 제작자 · 개인 학습용으로만 쓸 수 있습니다. 복제·수정·재배포는 <a href="https://github.com/aueoj/sonmal/blob/main/LICENSE" target="_blank" rel="noopener">이용 약관</a>에 따라 금지합니다.</p>
     <p style="color:var(--faint);font-size:var(--t-micro)">판 ${
       document.querySelector('meta[name="build"]')?.content ?? '알 수 없음'
     } · 화면이 옛것 같으면 Cmd(Ctrl)+Shift+R 로 새로고침하세요.</p>`;
