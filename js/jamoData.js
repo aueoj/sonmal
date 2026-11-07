@@ -9,8 +9,8 @@
  *   thumb   'in' 접음 · 'out' 옆으로 폄 · 'up' 세움
  *   special 'circle' 엄지와 검지로 고리(ㅇ) · 'thumbup' 엄지만 세움(ㅎ)
  *
- * 복합모음 ㅘ ㅙ ㅚ ㅝ ㅞ ㅟ ㅢ 는 도표에서도 두 자모를 잇달아 표현하므로
- * 단독 손모양을 두지 않고 hangul.js가 두 자모로 풀어 넘긴다.
+ * 복합모음 ㅘ ㅙ ㅝ ㅞ 는 도표처럼 두 손으로 함께 보인다(앞 모음 손과 뒤 모음 손).
+ * ㅚ ㅟ ㅢ 는 한 손에 담는다.
  *
  * confidence
  *   'clear'  도표에서 분명하게 읽은 자모
@@ -89,7 +89,18 @@ export const CONSONANTS = [
     mnemonic: '세운 엄지가 ㅎ의 머리획이다.' })
 ];
 
-export const VOWELS = [
+/* 두 손 복합모음 ㅘ ㅙ ㅝ ㅞ: 도표는 두 손을 나란히 그린다. 한 손은 앞 모음(ㅗ ㅜ),
+   다른 손은 뒤 모음(ㅏ ㅐ ㅓ ㅔ)을 함께 보인다. 수치는 그 모음에서 그대로 가져온다.
+   parts[0] 은 앞 모음, parts[1] 은 뒤 모음이다. 손 하나만 보면 앞 모음과 같다. */
+const TWO_HAND = { 'ㅘ': ['ㅗ', 'ㅏ'], 'ㅙ': ['ㅗ', 'ㅐ'], 'ㅝ': ['ㅜ', 'ㅓ'], 'ㅞ': ['ㅜ', 'ㅔ'] };
+const two = jamo => {
+  const [a, b] = TWO_HAND[jamo].map(j => SIMPLE_VOWELS.find(p => p.jamo === j));
+  return { ...a, jamo, hands: 2, parts: [a, b],
+    note: `한 손은 ${a.jamo}, 다른 손은 ${b.jamo}를 지어 두 손을 나란히 함께 보인다.`,
+    mnemonic: `${a.jamo} 손과 ${b.jamo} 손을 같이 보이면 ${jamo}다.`, confidence: 'check' };
+};
+
+const SIMPLE_VOWELS = [
   mk('ㅏ', 'vowel', [I], 'up', 'back', {
     note: '주먹에서 검지만 곧게 세운다. 손등이 보인다.',
     mnemonic: '세운 검지가 ㅏ의 세로획이다.' }),
@@ -132,26 +143,21 @@ export const VOWELS = [
     mnemonic: '옆으로 누운 한 획이 ㅡ다.', confidence: 'check' }),
   mk('ㅣ', 'vowel', [P], 'up', 'side', {
     note: '새끼손가락을 곧게 세운다.',
-    mnemonic: 'ㅏ는 검지, ㅣ는 새끼손가락이다. 도표에서 둘은 반대쪽 손가락을 세운다.' }),
+    mnemonic: 'ㅏ는 검지, ㅣ는 새끼손가락이다. 도표에서 둘은 반대쪽 손가락을 세운다.' })
+];
 
-  /* 복합모음 — 도표에 단독 손모양이 있다. 다만 도표가 기본 모음과 같은 수형을
-     다시 쓰는 곳이 있어, 손모양만으로는 기본 모음과 갈리지 않는 자모가 있다.
-     연습은 '지금 만들 자모'와 견주어 판정하므로 진행에는 지장이 없다. */
-  mk('ㅘ', 'vowel', [I], 'up', 'back', { hands: 2, thumb: 'out',
-    note: 'ㅗ와 ㅏ를 한 손에 담아 검지를 세우고 엄지를 옆으로 뻗는다.',
-    mnemonic: 'ㅗ 다음에 ㅏ가 오는 것이 ㅘ다.', confidence: 'check' }),
+export const VOWELS = [
+  ...SIMPLE_VOWELS,
+
+  /* 복합모음 — ㅘ ㅙ ㅝ ㅞ 는 두 손(two), ㅚ ㅟ ㅢ 는 한 손이다. 한 손 복합모음은
+     도표가 기본 모음과 같은 수형을 다시 쓰는 곳이 있어 손모양만으로는 갈리지 않는 것이 있다. */
+  two('ㅘ'),
   mk('ㅚ', 'vowel', [I], 'up', 'side', { thumb: 'out',
     note: 'ㅗ와 ㅣ를 한 손에 담아 검지를 세운다. 손날이 보인다.',
     mnemonic: 'ㅗ 다음에 ㅣ가 오는 것이 ㅚ다.', confidence: 'check' }),
-  mk('ㅙ', 'vowel', [I, M], 'up', 'back', { hands: 2, thumb: 'out',
-    note: '검지와 중지를 세우고 엄지를 옆으로 뻗는다.',
-    mnemonic: 'ㅗ 다음에 ㅐ가 오는 것이 ㅙ다.', confidence: 'check' }),
-  mk('ㅝ', 'vowel', [I], 'down', 'back', { hands: 2, thumb: 'out',
-    note: 'ㅜ와 ㅓ를 한 손에 담아 검지를 아래로 내린다.',
-    mnemonic: 'ㅜ 다음에 ㅓ가 오는 것이 ㅝ다.', confidence: 'check' }),
-  mk('ㅞ', 'vowel', [I, M], 'down', 'back', { hands: 2, thumb: 'out',
-    note: '검지와 중지를 아래로 내린다. 손등이 보인다.',
-    mnemonic: 'ㅜ 다음에 ㅔ가 오는 것이 ㅞ다.', confidence: 'check' }),
+  two('ㅙ'),
+  two('ㅝ'),
+  two('ㅞ'),
   mk('ㅟ', 'vowel', [I], 'right', 'side', { thumb: 'up',
     note: 'ㅜ와 ㅣ를 한 손에 담아 검지를 옆으로 뻗고 엄지를 세운다.',
     mnemonic: 'ㅜ 다음에 ㅣ가 오는 것이 ㅟ다.', confidence: 'check' }),

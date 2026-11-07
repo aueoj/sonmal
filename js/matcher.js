@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071546';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071559';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -119,6 +119,31 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
       spread: bothUp ? spreadTarget : null
     }
   };
+}
+
+/**
+ * 보이는 손들과 자모 하나를 견준다. 한 손 자모는 가장 잘 맞는 손 하나로 본다(다른 손이 보여도 된다).
+ * 두 손 자모(parts)는 한 손이 앞 모음, 다른 손이 뒤 모음이어야 하고, 점수는 둘 중 낮은 쪽이다.
+ * 어느 손이 쓰는 손인지 모르니 두 짝지음 중 나은 쪽을 고른다. 손이 모자라면 null.
+ * @returns {null|ReturnType<typeof scorePose> & {feat:object}}
+ */
+export function scoreHands(feats, pose, opts) {
+  let best = null, lead = null;
+  for (const f of feats) {
+    const a = scorePose(f, pose.parts?.[0] ?? pose, opts);
+    if (!pose.parts) { if (!best || a.score > best.score) best = { ...a, feat: f }; continue; }
+    for (const g of feats) {
+      if (g === f) continue;
+      const b = scorePose(g, pose.parts[1], opts);
+      const score = Math.min(a.score, b.score);
+      if (!best || score > best.score) best = { ...a, score, feat: f };
+      // 힌트는 앞 모음에 가장 잘 맞는 손을 기준으로 삼아, 틀린 손을 '다른 손'으로 짚는다(ㅗ ㅏ 처럼 비슷하면 짝지음이 비긴다)
+      if (!lead || a.score > lead.a.score) lead = { a, b };
+    }
+  }
+  if (lead) best.hint = lead.a.score <= lead.b.score ? lead.a.hint
+    : `다른 손은 ${pose.parts[1].jamo}: ${lead.b.hint ?? pose.parts[1].note}`;
+  return best;
 }
 
 /** 모든 자모 중 가장 가까운 것 — 사용자가 다른 자모를 만들고 있을 때 알려준다. */

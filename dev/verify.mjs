@@ -44,7 +44,7 @@ const STATIC = [
 
 /* 브라우저로 봐야 하는 것 */
 const BROWSER = [
-  ['쌍자음 밀기', ['dev/slide-audit.mjs'], '정지 손은 기다리고 옆으로 밀어야 통과하는가'],
+  ['쌍자음 밀기', ['dev/slide-audit.mjs'], '정지 손은 기다리고 옆으로 밀어야 통과하는가, ㅘ는 두 손을 다 보는가'],
   ['화면', ['dev/boot-audit.mjs'], '뜨는가, 빠진 파일이 없는가'],
   ['흐름', ['dev/flow-audit.mjs'], '조작 없이 넘어가고 읽어 주는가'],
   ['비율', ['dev/aspect-audit.mjs'], '그림이 늘어나거나 눌리지 않는가'],

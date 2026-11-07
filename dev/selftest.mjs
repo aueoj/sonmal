@@ -8,7 +8,8 @@ import { describe } from '../js/poseFeatures.js';
 import { bestMatch } from '../js/matcher.js';
 import { ALL_POSES } from '../js/jamoData.js';
 
-const STATIC = ALL_POSES.filter(p => !p.motion);
+// 두 손 모음(ㅘ ㅙ ㅝ ㅞ)은 다른 손으로 갈린다. 한 손 시험에서는 빼고 reader-test 와 slide-audit 가 본다
+const STATIC = ALL_POSES.filter(p => !p.motion && !p.parts);
 let ok = 0; const clash = [];
 for (const p of STATIC) {
   const b = bestMatch(describe(landmarksFor(p), 'Right', false), STATIC);

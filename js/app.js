@@ -9,22 +9,22 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071546';
-import { getPose } from './jamoData.js?v=202611071546';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071546';
-import { describe } from './poseFeatures.js?v=202611071546';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071546';
-import { Tracker } from './tracker.js?v=202611071546';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071546';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071546';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071546';
-import { groupByIdea } from './lessons.js?v=202611071546';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071546';
-import { createReader } from './reader.js?v=202611071546';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071546';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071546';
-import { diagnose } from './diagnose.js?v=202611071546';
-import { animate, stagger } from './vendor/anime.js?v=202611071546';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071559';
+import { getPose } from './jamoData.js?v=202611071559';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071559';
+import { describe } from './poseFeatures.js?v=202611071559';
+import { scoreHands, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071559';
+import { Tracker } from './tracker.js?v=202611071559';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071559';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071559';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071559';
+import { groupByIdea } from './lessons.js?v=202611071559';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071559';
+import { createReader } from './reader.js?v=202611071559';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071559';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071559';
+import { diagnose } from './diagnose.js?v=202611071559';
+import { animate, stagger } from './vendor/anime.js?v=202611071559';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -212,6 +212,7 @@ function advance() {
   if (state.tracker?.mock && !state.mockLocked) {
     state.tracker.mockMotion = false;
     state.tracker.mockTwoHands = pose.hands === 2;
+    state.tracker.mockPose2 = pose.parts?.[1] ?? null;   // 두 손 모음의 다른 손은 뒤 모음 손모양이다
     state.tracker.mockZone = null;
   }
 
@@ -515,15 +516,11 @@ function onFrame(hands, face = null) {
 
   // 좌표는 늘 화면 기준으로 본다. 영상 위에 겹쳐 그리는 뼈대와 같은 기준이어야 한다.
   const t = performance.now();
-  // 양손 자모는 둘 중 더 잘 맞는 손으로 본다. 한 손 자모는 첫 손을 쓴다.
+  // 한 손 자모는 가장 잘 맞는 손으로, 두 손 자모는 두 손을 앞뒤 모음에 나눠 본다
   const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
   const mirrored = state.hand === 'right';
   const base0 = pose.motion ? getPose(pose.base) ?? pose : pose;
-  let feat = feats[0], r = scorePose(feat, base0, { mirrored });
-  for (let i = 1; i < feats.length; i++) {
-    const alt = scorePose(feats[i], base0, { mirrored });
-    if (alt.score > r.score) { feat = feats[i]; r = alt; }
-  }
+  const r = scoreHands(feats, base0, { mirrored }), feat = r.feat;
   if (r.score < ACCEPT) { state.trail = []; state.motionSeen = false; }
   else state.trail.push({ x: feat.centroid.x, t });
   while (state.trail.length && t - state.trail[0].t > MOTION_WINDOW_MS * 1.5) state.trail.shift();
@@ -600,13 +597,15 @@ async function startCamera({ demo = false } = {}) {
   try {
     state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
-    if (MOCK) window.__sonmalMock = (jamo, zone = null) => {
+    // other 를 주면 다른 손을 그 자모 손모양으로 띄운다(두 손 판정 점검용)
+    if (MOCK) window.__sonmalMock = (jamo, zone = null, other = null) => {
       state.mockLocked = true;          // 점검이 손을 쥐는 동안 앱이 모의 손을 바꾸지 않는다
       state.tracker.mockZone = zone;    // 손을 둘 높이(얼굴, 가슴 들). 없으면 그 자리 그대로
       state.tracker.mockMotion = false; state.tracker.mockPose2 = null; state.tracker.mockSpot = null;
       state.tracker.mockMove = null; state.tracker.mockPointOut = false;
       const p = jamo ? getPose(jamo) : null;
-      state.tracker.mockTwoHands = p?.hands === 2;
+      state.tracker.mockTwoHands = p?.hands === 2 || !!other;
+      state.tracker.mockPose2 = other ? getPose(other) : p?.parts?.[1] ?? null;
       state.tracker.setMockPose(p);
     };
     // 자유 모드 점검용: 낱말의 한 단계를 흉내 낸다. moving 이면 손을 옮기며 한다
@@ -624,6 +623,7 @@ async function startCamera({ demo = false } = {}) {
       const cp = getPose(cur.jamo);
       state.tracker.setMockPose(cp);
       state.tracker.mockTwoHands = cp?.hands === 2;   // 카메라를 켜기 전에 정해진 칸도 맞춘다
+      state.tracker.mockPose2 = cp?.parts?.[1] ?? null;
     }
   } catch (err) {
     el.btnCam.disabled = false; el.btnDemo.disabled = false;
