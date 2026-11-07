@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071430';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071452';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -258,27 +258,30 @@ export function scoreCheck(feats, check = {}, face = null) {
   if (feats.length < need)
     return { ok: false, score: 0, hint: need === 2 ? '두 손이 다 보이게 하세요' : '손이 보이게 하세요' };
 
-  // 주로 쓰는 손: 수형이 가장 잘 맞는 손
-  let best = null;
-  feats.forEach((f, i) => {
-    const s = handShape(f, check);
-    if (!best || s.score > best.s.score) best = { f, s, i };
-  });
+  const otherFingers = check.other ?? check.fingers;
+  const closest = (list, fingers) => list.map(x => ({ x, s: handShape(x, { fingers }) }))
+    .sort((a, b) => b.s.score - a.s.score)[0] ?? null;
+  let best = null, partner = null;
+  if (need === 2 && !check.fingers && check.other) {
+    /* 주로 쓰는 손에는 조건이 없고 다른 손에만 있다('귀찮다'의 주먹, '빵'의 편 손).
+       조건이 있는 다른 손부터 고르고, 남은 손을 주로 쓰는 손으로 둔다 */
+    partner = closest(feats, otherFingers);
+    const i = feats.indexOf(partner.x) === 0 ? 1 : 0;
+    best = { f: feats[i], s: handShape(feats[i], check), i };
+  } else {
+    // 주로 쓰는 손: 수형이 가장 잘 맞는 손
+    feats.forEach((f, i) => {
+      const s = handShape(f, check);
+      if (!best || s.score > best.s.score) best = { f, s, i };
+    });
+    /* 두 손 낱말은 다른 손도 본다. 한 손만 맞고 다른 손은 아무렇게나 해도
+       통과하던 것을 막는다('안녕하세요'의 두 주먹). 다른 손: 남은 손 가운데 그 손모양에 가장 가까운 손 */
+    if (need === 2) partner = closest(feats.filter((_, i) => i !== best.i), otherFingers);
+  }
   const { f, s } = best;
   let hint = s.score < 0.72 ? (s.hint ?? '그림의 손모양을 다시 보세요') : null;
 
-  /* 두 손 낱말은 다른 손도 본다. 한 손만 맞고 다른 손은 아무렇게나 해도
-     통과하던 것을 막는다('안녕하세요'의 두 주먹). */
-  let partner = null;
-  if (need === 2) {
-    // 다른 손: 남은 손 가운데 그 손모양에 가장 가까운 손
-    const otherFingers = check.other ?? check.fingers;
-    partner = feats.filter((_, i) => i !== best.i)
-      .map(x => ({ x, s: handShape(x, { fingers: otherFingers }) }))
-      .sort((a, b) => b.s.score - a.s.score)[0] ?? null;
-  }
-  if (!hint && need === 2 && check.fingers) {
-    const otherFingers = check.other ?? check.fingers;
+  if (!hint && need === 2 && otherFingers) {
     const o = partner?.s;
     if (!o || o.score < 0.72)
       hint = '다른 손도 그림처럼: ' + (o?.hint ?? (otherFingers.length ? '손가락을 펴세요' : '주먹을 쥐세요'));

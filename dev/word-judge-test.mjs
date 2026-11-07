@@ -44,10 +44,11 @@ for (const w of WORD_BANK.filter(x => x.status === 'ok')) {
     }
     if ((c.hands ?? 1) === 2) wrongs.push(['손 하나', right(c).slice(0, 1)]);
     // 두 손 낱말: 한 손만 맞고 다른 손은 엉뚱하면 걸려야 한다
-    if ((c.hands ?? 1) === 2 && c.fingers) {
+    // 주로 쓰는 손에 조건이 없으면('귀찮다', '빵') 어느 손이 다른 손이어도 되니, 두 손 다 틀리게 한다
+    if ((c.hands ?? 1) === 2 && (c.fingers || c.other)) {
       const want2 = c.other ?? c.fingers;
       const wrong2 = want2.length >= 3 ? [] : ALL;
-      wrongs.push(['다른 손', [right(c)[0], hand(wrong2, { zone: c.zone })]]);
+      wrongs.push(['다른 손', [c.fingers ? right(c)[0] : hand(wrong2, { zone: c.zone }), hand(wrong2, { zone: c.zone })]]);
     }
     if (c.zone === 'face' || c.zone === 'chin') wrongs.push(['배 높이', right({ ...c, zone: 'belly' })]);
     if (c.zone === 'belly') wrongs.push(['얼굴 높이', right({ ...c, zone: 'face' })]);
