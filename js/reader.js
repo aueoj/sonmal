@@ -13,9 +13,9 @@
  * 그때는 한국어 글자 짜임으로 고른다. 자음 다음에는 모음이, 모음 다음에는 자음이 오기
  * 쉽고, 같은 갈래끼리면 더 자주 쓰이는 쪽을 고른다. 그래도 틀릴 수 있어 화면에 후보를 같이 보인다.
  */
-import { ALL_POSES, MOTION_LETTERS } from './jamoData.js?v=202611071619';
-import { scoreHands, detectLateralShift, SHIFT_MIN } from './matcher.js?v=202611071619';
-import { composeFromJamo } from './hangul.js?v=202611071619';
+import { ALL_POSES, MOTION_LETTERS } from './jamoData.js?v=202611071622';
+import { scoreHands, detectLateralShift, SHIFT_MIN } from './matcher.js?v=202611071622';
+import { composeFromJamo } from './hangul.js?v=202611071622';
 
 const ACCEPT = 0.88, TIE = 0.02, HOLD_MS = 550, RELEASE = 0.7, PAUSE_MS = 2200;
 const FREQ = 'ㅇㄱㄴㄹㅏㅣㅅㄷㅓㅡㅈㅗㅁㅜㅎㅂㅕㅐㅔㅊㅌㅛㅠㅋㅍㅑㅘㅚㅝㅟㅢㅒㅖㅙㅞㄲㄸㅃㅆㅉ';

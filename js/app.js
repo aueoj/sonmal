@@ -9,22 +9,22 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071619';
-import { getPose } from './jamoData.js?v=202611071619';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071619';
-import { describe } from './poseFeatures.js?v=202611071619';
-import { scoreHands, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071619';
-import { Tracker } from './tracker.js?v=202611071619';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071619';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071619';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071619';
-import { groupByIdea } from './lessons.js?v=202611071619';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071619';
-import { createReader } from './reader.js?v=202611071619';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071619';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071619';
-import { diagnose } from './diagnose.js?v=202611071619';
-import { animate, stagger } from './vendor/anime.js?v=202611071619';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071622';
+import { getPose } from './jamoData.js?v=202611071622';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071622';
+import { describe } from './poseFeatures.js?v=202611071622';
+import { scoreHands, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071622';
+import { Tracker } from './tracker.js?v=202611071622';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071622';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071622';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071622';
+import { groupByIdea } from './lessons.js?v=202611071622';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071622';
+import { createReader } from './reader.js?v=202611071622';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071622';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071622';
+import { diagnose } from './diagnose.js?v=202611071622';
+import { animate, stagger } from './vendor/anime.js?v=202611071622';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -73,7 +73,7 @@ const state = {
   holdSince: 0, trail: [], scores: [], motionSeen: false, lastStep: '',
   wordTimer: null, wordStep: 0, wordGot: 0, wordHold: 0, wordLost: 0,
   lostSince: 0, repeatTimer: null, spokenPart: -1,
-  mode: 'practice', readKind: 'words', reader: null, signReader: null, facing: 'user', recall: false, active: null,
+  mode: 'practice', readKind: 'words', reader: null, signReader: null, recall: false, active: null,
   settling: false   // 한 칸을 끝내고 다음으로 넘어가는 사이. 이때 들어오는 프레임은 흘린다.
 };
 
@@ -574,8 +574,8 @@ function coverBox(video, w, h) {
 
 function drawLandmarks(ctx, lms, w, h) {
   const { dw, dh, ox, oy } = coverBox(el.video, w, h);
-  // 앞 카메라는 거울처럼 뒤집어 보여 주므로 점도 뒤집는다. 뒤 카메라는 그대로다.
-  const px = p => [ox + (state.facing === 'environment' ? p.x : 1 - p.x) * dw, oy + p.y * dh];
+  // 앞 카메라는 거울처럼 뒤집어 보여 주므로 점도 뒤집는다.
+  const px = p => [ox + (1 - p.x) * dw, oy + p.y * dh];
   ctx.lineWidth = 2;
   ctx.strokeStyle = 'rgba(94,106,210,.6)';
   ctx.beginPath();

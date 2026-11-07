@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611071619';
-import { ZONE_AT } from './matcher.js?v=202611071619';
+import { landmarksFor } from './mockHand.js?v=202611071622';
+import { ZONE_AT } from './matcher.js?v=202611071622';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -135,22 +135,6 @@ export class Tracker {
 
   setMockPose(pose) { this.mockPose = pose; }
 
-  /* 상대를 읽을 때는 뒤 카메라로 바꾼다(휴대폰). 카메라가 하나뿐이면 그대로 둔다.
-     인식 모델은 그대로 두고 영상만 갈아 끼운다. */
-  async switchFacing(facing) {
-    if (this.mock || !navigator.mediaDevices?.enumerateDevices) return 'user';
-    const cams = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'videoinput');
-    if (cams.length < 2 && facing === 'environment') return 'user';
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: { ideal: facing } }, audio: false
-    });
-    this.video.srcObject?.getTracks().forEach(t => t.stop());
-    this.video.srcObject = stream;
-    await this.video.play();
-    this.facing = facing; this.face = null;
-    return facing;
-  }
-
   _loop() {
     if (!this.running) return;
     const now = performance.now();
@@ -160,8 +144,7 @@ export class Tracker {
       const hands = (res.landmarks ?? []).map((lm, i) => ({
         lm, handedness: res.handednesses?.[i]?.[0]?.categoryName ?? 'Right'
       }));
-      // 앞 카메라일 때만 얼굴을 찾는다. 상대를 읽을 때(뒤 카메라)는 높이를 보지 않는다
-      if (this.faceDetector && this.facing !== 'environment' && this.frameNo++ % FACE_EVERY === 0) {
+      if (this.faceDetector && this.frameNo++ % FACE_EVERY === 0) {
         try { this._findFace(now); } catch { /* 한 프레임 놓쳐도 마지막 자리를 쓴다 */ }
       }
       this.onFrame(hands, this.currentFace(now));
