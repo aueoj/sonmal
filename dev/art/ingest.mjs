@@ -13,7 +13,7 @@
  *   - PNG 이고 가로가 세로보다 길다 (지금 그림과 같은 3:2 가로형)
  * 손 모양이 사전과 맞는지는 기계가 판단하지 못한다. 옮기기 전에 사람이 본다(docs/WORD-AUDIT.md).
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { WORD_BANK } from '../../js/wordBank.js';
 import { WORD_FRAMES, WORD_BASIS } from '../../js/wordArt.js';
 
@@ -32,17 +32,14 @@ function writeArt(frames, basis) {
   const head = readFileSync(ROOT + 'js/wordArt.js', 'utf8').split('\nexport const WORD_FRAMES')[0];
   writeFileSync(ROOT + 'js/wordArt.js',
     `${head}\nexport const WORD_FRAMES = ${JSON.stringify(frames)};\nexport const WORD_BASIS = ${JSON.stringify(basis)};\n`);
-  const old = JSON.parse(readFileSync(OUT + 'manifest.json', 'utf8'));
-  const oldStep = new Map(old.frames.map(f => [`${f.slug}.png`, f.step]));
   const bank = new Map(WORD_BANK.map(w => [w.word, w]));
   const list = [];
   for (const [word, files] of Object.entries(frames)) files.forEach((f, i) => list.push({
     word, slug: f.replace(/\.png$/, ''), frame: i + 1, total: files.length, basis: basis[word],
-    step: basis[word] === 'sldict' ? bank.get(word).steps[i] : (oldStep.get(f) ?? ''),
-    ...(basis[word] === 'sldict' ? { entryNo: bank.get(word).entryNo } : {})
+    step: bank.get(word).steps[i], entryNo: bank.get(word).entryNo
   }));
   writeFileSync(OUT + 'manifest.json', JSON.stringify({
-    source: 'sldict: 국립국어원 한국수어사전 기준으로 그려 검수함 · legacy: 처음 받은 도표 기반(사전 대조 전)',
+    source: 'sldict: 국립국어원 한국수어사전 기준으로 그려 검수함',
     frames: list }, null, 2) + '\n');
 }
 
@@ -52,8 +49,7 @@ if (CHECK) {
   const orphan = readdirSync(OUT).filter(f => f.endsWith('.png') && !used.has(f));
   for (const f of bad) console.log('  ✕ 연결됐는데 파일이 없다:', f);
   for (const f of orphan) console.log('  · 아무 데도 안 쓰는 파일:', f);
-  const n = Object.values(WORD_BASIS).filter(b => b === 'sldict').length;
-  console.log(`그림 연결 ${Object.keys(WORD_FRAMES).length}단어 · 사전 기준 ${n} · 옛 그림 ${Object.keys(WORD_FRAMES).length - n}`);
+  console.log(`그림 연결 ${Object.keys(WORD_FRAMES).length}단어`);
   process.exit(bad.length ? 1 : 0);
 }
 
@@ -91,8 +87,6 @@ for (const [no, got] of groups) {
   const names = got.sort((a, b) => a.i - b.i).map(g => g.f.toLowerCase());
   console.log(`  ✓ 「${w.word}」 ${names.length}장`);
   if (APPLY) {
-    // 옛 그림은 지운다. 같은 단어에 옛 그림과 새 그림이 섞여 보이지 않게 한다.
-    for (const f of frames[w.word] ?? []) if (WORD_BASIS[w.word] === 'legacy' && existsSync(OUT + f)) unlinkSync(OUT + f);
     for (const g of got) renameSync(IN + g.f, OUT + g.f.toLowerCase());
     frames[w.word] = names; basis[w.word] = 'sldict';
   }

@@ -9,22 +9,22 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071559';
-import { getPose } from './jamoData.js?v=202611071559';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071559';
-import { describe } from './poseFeatures.js?v=202611071559';
-import { scoreHands, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071559';
-import { Tracker } from './tracker.js?v=202611071559';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071559';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071559';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071559';
-import { groupByIdea } from './lessons.js?v=202611071559';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071559';
-import { createReader } from './reader.js?v=202611071559';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071559';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071559';
-import { diagnose } from './diagnose.js?v=202611071559';
-import { animate, stagger } from './vendor/anime.js?v=202611071559';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071619';
+import { getPose } from './jamoData.js?v=202611071619';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071619';
+import { describe } from './poseFeatures.js?v=202611071619';
+import { scoreHands, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071619';
+import { Tracker } from './tracker.js?v=202611071619';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071619';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071619';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071619';
+import { groupByIdea } from './lessons.js?v=202611071619';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071619';
+import { createReader } from './reader.js?v=202611071619';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071619';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071619';
+import { diagnose } from './diagnose.js?v=202611071619';
+import { animate, stagger } from './vendor/anime.js?v=202611071619';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */

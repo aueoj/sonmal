@@ -2,7 +2,6 @@
  *
  * 새 단어는 국립국어원 한국수어사전의 표제어 번호와 주소가 없으면 들어올 수 없다.
  * 누가 넣든(코덱스든 사람이든) 출처 없는 수어가 화면에 실리는 것을 여기서 막는다.
- * 처음 들어온 12개는 사용자 도표에서 읽은 것이라 아직 사전 대조 전이다. 경고만 한다.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { WORD_SIGNS } from '../js/words.js';
@@ -11,8 +10,6 @@ import { WORD_BANK } from '../js/wordBank.js';
 import { SITUATIONS } from '../js/lessons.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const LEGACY = new Set(['안녕하세요', '감사합니다', '미안합니다', '괜찮아요', '네', '아니요',
-  '도와주세요', '다시', '천천히', '이해했어요', '물', '화장실']);
 const SLDICT = /^https:\/\/sldict\.korean\.go\.kr\/front\/sign\/signContentsView\.do\?origin_no=(\d+)/;
 
 const manifest = JSON.parse(readFileSync(ROOT + 'assets/word-steps/manifest.json', 'utf8'));
@@ -37,10 +34,6 @@ for (const w of WORD_SIGNS) {
   for (const f of frames) {
     if (!existsSync(ROOT + 'assets/word-steps/' + f)) bad.push(`${tag} ${f} 파일이 없다`);
     else if (!inManifest.has(f)) warn.push(`${tag} ${f} 가 manifest 에 없다`);
-  }
-  if (LEGACY.has(w.word)) {
-    if (!w.entryNo) warn.push(`${tag} 사전 대조 전 (사용자 도표 기준)`);
-    continue;
   }
   const m = SLDICT.exec(w.sourceUrl ?? '');
   if (!w.entryNo || !m) bad.push(`${tag} 국립국어원 한국수어사전 표제어 번호와 주소가 없다`);
