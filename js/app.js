@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611051647';
-import { getPose } from './jamoData.js?v=202611051647';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611051647';
-import { describe } from './poseFeatures.js?v=202611051647';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611051647';
-import { Tracker } from './tracker.js?v=202611051647';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611051647';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611051647';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611051647';
-import { groupByIdea } from './lessons.js?v=202611051647';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611051647';
-import { createReader } from './reader.js?v=202611051647';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611051647';
-import { createSignReader, readableSigns } from './signReader.js?v=202611051647';
-import { diagnose } from './diagnose.js?v=202611051647';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071201';
+import { getPose } from './jamoData.js?v=202611071201';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071201';
+import { describe } from './poseFeatures.js?v=202611071201';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611071201';
+import { Tracker } from './tracker.js?v=202611071201';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071201';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071201';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071201';
+import { groupByIdea } from './lessons.js?v=202611071201';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071201';
+import { createReader } from './reader.js?v=202611071201';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071201';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071201';
+import { diagnose } from './diagnose.js?v=202611071201';
 
 const $ = id => document.getElementById(id);
 const el = {
