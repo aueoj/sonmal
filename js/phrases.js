@@ -1,6 +1,6 @@
 /* 한국어 연습 문장. 각 구성 낱말의 출처는 wordBank의 국립국어원 사전 항목이다.
    한국수어 어순·문법 번역이나 사전의 문장 용례로 주장하지 않는다. */
-import { planUtterance } from './words.js?v=202611071631';
+import { planUtterance } from './words.js?v=202611071634';
 export const PHRASE_GROUPS = [
   { name: '달걀과 계란', texts: ['달걀이 있어요', '달걀이 없어요', '달걀을 먹어요', '달걀이 맛있어요', '계란이 있어요', '계란을 먹어요'] },
   { name: '동물 이야기', texts: ['토끼가 있어요', '토끼가 없어요', '토끼가 좋아요', '토끼를 봐요'] },
