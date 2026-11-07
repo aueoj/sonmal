@@ -1,11 +1,11 @@
 /* 활용한 말도 기본형 수어로 찾는가, 엉뚱한 말을 수어로 바꾸지 않는가 */
-import { matchToken } from '../js/words.js';
+import { matchToken, planUtterance } from '../js/words.js';
 
 const SHOULD = {
   사과: ['사과', '사과가', '사과를', '사과는', '사과예요'],
   만들다: ['만들었어', '만든거야', '만든', '만들', '만드는', '만듭니다', '만들고', '만들자', '만들어줘', '만들었어요', '만들었는데', '만드니까', '만들래'],
   먹다: ['먹는다', '먹었어', '먹은', '먹을', '먹자', '먹고', '먹었습니다'],
-  만나다: ['만났어', '만난', '만나자', '만났습니다', '만날'],
+  만나다: ['만났어', '만난', '만나자', '만났습니다', '만날', '만났어요'],
   슬퍼요: ['슬펐어', '슬프다', '슬퍼서', '슬픈'],
   배고파요: ['배고팠어', '배고프다', '배고픈'],
   피곤해요: ['피곤했어', '피곤해서', '피곤한'],
@@ -48,6 +48,16 @@ for (const [want, forms] of Object.entries(SHOULD)) for (const f of forms) {
 for (const f of SHOULD_NOT) {
   const got = matchToken(f).sign?.word;
   if (got) bad.push(`${f} → ${got}  (수어로 바꾸면 안 됨)`); else ok++;
+}
+// 띄어 쓴 표현은 한 수어로, 띄어 쓴 낱말들은 따로
+const PHRASES = {
+  '화가 나요': ['화나요'], '화가 났어': ['화나요'], '배가 고파요': ['배고파요'], '배가 고팠어': ['배고파요'],
+  '한 번 더 천천히': ['다시', '천천히'], '안녕히 가세요': ['안녕하세요'], '도와 주세요': ['도와주세요'],
+  '나 화장실': ['나', '화장실'], '나는 너를 사랑해!': ['나', '너', '사랑'], '화장실은 어디야?': ['화장실', '어디'],
+};
+for (const [text, want] of Object.entries(PHRASES)) {
+  const got = planUtterance(text).map(x => x.sign?.word ?? `spell:${x.text}`);
+  if (got.join('|') === want.join('|')) ok++; else bad.push(`"${text}" → ${got.join(' + ')}  (${want.join(' + ')} 이어야 함)`);
 }
 console.log(`맞게 찾음 ${ok}개`);
 for (const b of bad) console.log('  ✕ ' + b);

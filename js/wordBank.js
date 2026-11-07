@@ -34,7 +34,7 @@ const e = (no, fields) => ({ entryNo: String(no), sourceUrl: SL(no), source: '�
 /** @type {Array<object>} */
 export const WORD_BANK = [
   /* ── 기본 ── 지금 화면의 12개를 사전 기준으로 다시 세운 것 */
-  e(3331, { word: '안녕하세요', category: '기본', aliases: ['안녕','안녕하십니까','반갑습니다'], status: 'ok',
+  e(3331, { word: '안녕하세요', category: '기본', aliases: ['안녕','안녕하십니까','반갑습니다','안녕히 가세요','안녕히 계세요'], status: 'ok',
     원문: '오른 손바닥으로 주먹을 쥔 왼 팔을 쓸어내린 다음, 두 주먹을 쥐고 바닥이 아래로 향하게하여 가슴 앞에서 아래로 내린다.',
     결합: '잘+머무르다', hands: 2,
     수형: '왼손 주먹, 오른손 편 손 → 두 손 주먹', 수향: '주먹 바닥이 아래', 수위: '왼팔 위 → 가슴 앞', 수동: '왼팔을 쓸어내린 뒤 두 주먹을 아래로 내린다',
@@ -65,7 +65,7 @@ export const WORD_BANK = [
     steps: ['주먹에서 새끼손가락만 편다', '새끼손가락 끝을 턱에 가볍게 두 번 댄다'],
     check: [{ hands: 1, fingers: ['pinky'], zone: 'chin' }, { hands: 1, fingers: ['pinky'], zone: 'chin' }] }),
 
-  e(9474, { word: '네', category: '기본', aliases: ['예'], status: 'ok',
+  e(9474, { word: '네', category: '기본', aliases: ['예','응'], status: 'ok',
     원문: '오른 주먹의 1·2·4지를 펴서 등이 밖으로 향하게 벌려 1·2지 끝을 오른쪽 눈 옆에 댄다.',
     메모: '대답하는 \'예\'로 판단한 근거 셋. 손모양이 지문자 ㅖ(검지, 중지, 새끼를 펴고 손등이 밖)와 같아 글자 \'예\'를 손모양으로 삼은 수어다. '
       + '사전 분류가 사회생활(인사, 예절 표현이 있는 갈래)이다. 같은 글자의 다른 뜻인 \'보기, 예시\'는 따로 표제어(18633 비유,보기)가 있다. 2026-11-02 확인.',
@@ -81,21 +81,21 @@ export const WORD_BANK = [
     steps: ['손바닥이 앞을 보게 편 손을 세운다', '좌우로 흔든다'],
     check: [{ hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest', move: 'sway' }] }),
 
-  e(5447, { word: '도와주세요', category: '기본', aliases: ['도와줘','도움','돕다','도와주다'], status: 'ok',
+  e(5447, { word: '도와주세요', category: '기본', aliases: ['도와줘','도움','돕다','도와주다','도와 주세요','도와 주 세요'], status: 'ok',
     원문: '왼 주먹의 5지를 펴서 바닥이 밖으로 향하게 세우고, 그 등에 오른 손바닥을 세워 두 번 댄다.',
     hands: 2,
     수형: '왼손 엄지 세운 주먹, 오른손 편 손', 수향: '왼 엄지 바닥이 밖, 오른손 세움', 수위: '가슴 앞', 수동: '오른 손바닥으로 왼 엄지 등을 두 번 댄다',
     steps: ['왼손은 엄지를 세운 주먹, 오른손은 펴서 세운다', '오른 손바닥을 왼 엄지 등에 두 번 댄다'],
     check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], thumb: null, zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest', move: 'cross' }] }),
 
-  e(7422, { word: '다시', category: '기본', aliases: ['또','다시요','한번더','그리고'], status: 'ok',
+  e(7422, { word: '다시', category: '기본', aliases: ['또','다시요','한번더','그리고','한 번 더'], status: 'ok',
     원문: '오른 주먹의 5지 바닥을 1·2지의 손톱에 가볍게 대고 손등이 밖으로 향하게 하여 왼쪽 아래로 내리며 1·2지를 편다.',
     hands: 1,
     수형: '엄지로 검지와 중지 손톱을 누른 주먹 → 검지와 중지 편 손', 수향: '손등이 밖', 수위: '오른쪽 어깨 앞 → 가슴 앞', 수동: '왼쪽 아래로 내리며 검지와 중지를 튕겨 편다',
     steps: ['엄지로 검지와 중지 손톱을 누르고 어깨 앞에 든다', '왼쪽 아래로 내리며 검지와 중지를 편다'],
     check: [{ hands: 1, fingers: [], zone: 'front' }, { hands: 1, fingers: ['index','middle'], zone: 'chest' }] }),
 
-  e(9928, { word: '천천히', category: '기본', aliases: ['느리게','천천','늦다','느리다'], status: 'ok',
+  e(9928, { word: '천천히', category: '기본', aliases: ['느리게','천천','늦다','느리다','서서히'], status: 'ok',
     원문: '손등이 위로 향하게 편 왼 손등에 오른손을 모로 세워 천천히 밖으로 내민다.',
     hands: 2,
     수형: '두 손 모두 편 손', 수향: '왼손은 손등이 위, 오른손은 엄지가 위로 오게 옆으로 세움', 수위: '가슴 앞', 수동: '왼 손등 위에서 오른손을 천천히 앞으로 민다',
@@ -124,7 +124,7 @@ export const WORD_BANK = [
     check: [{ hands: 1, fingers: ['middle','ring','pinky'], zone: 'chest' }] }),
 
   /* ── 감정 ── */
-  e(9387, { word: '배고파요', category: '감정', aliases: ['배고프다','배고파','배고픔','시장','굶다'], status: 'ok',
+  e(9387, { word: '배고파요', category: '감정', aliases: ['배고프다','배고파','배고픔','시장','굶다','배가 고파','배가 고파요'], status: 'ok',
     원문: '자연스럽게 편 두 손의 5지 등을 배에 대고 5지 바닥에 나머지 손가락을 모아대고 누르면서 몸을 약간 구부린다.',
     hands: 2,
     수형: '편 손 → 엄지에 네 손가락을 모은 손', 수향: '엄지 등이 배', 수위: '배', 수동: '네 손가락을 엄지 쪽으로 모아 누르며 몸을 숙인다',
@@ -132,7 +132,7 @@ export const WORD_BANK = [
     steps: ['두 손 엄지 등을 배에 댄다', '네 손가락을 엄지로 모아 누르며 몸을 조금 숙인다'],
     check: [{ hands: 2, zone: 'belly' }, { hands: 2, zone: 'belly' }] }),
 
-  e(1086, { word: '화나요', category: '감정', aliases: ['화나다','화나','화내다','성나다','노엽다'], status: 'ok',
+  e(1086, { word: '화나요', category: '감정', aliases: ['화나다','화나','화내다','성나다','노엽다','화가 나','화가 나요'], status: 'ok',
     원문: '오른 주먹의 5지를 펴서 세워 배에서 위로 약간 힘주어 올린다.',
     hands: 1,
     수형: '엄지를 세운 주먹', 수향: '손바닥이 안', 수위: '배 → 가슴', 수동: '힘주어 위로 올린다', 비수지: '화난 표정',
@@ -174,7 +174,7 @@ export const WORD_BANK = [
     steps: ['두 손 엄지 끝을 몸 가운데 위아래에 대고 손가락을 떤다'],
     check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }] }),
 
-  e(12438, { word: '피곤해요', category: '감정', aliases: ['피곤하다','피곤해','피로'], status: 'ok',
+  e(12438, { word: '피곤해요', category: '감정', aliases: ['피곤하다','피곤해','피로','피곤'], status: 'ok',
     원문: '두 손바닥을 양쪽 가슴에 댔다가 힘없이 밑으로 내린다.',
     hands: 2,
     수형: '편 손', 수향: '손바닥이 가슴', 수위: '양쪽 가슴 → 아래', 수동: '힘없이 내린다', 비수지: '지친 표정',
@@ -242,24 +242,32 @@ export const WORD_BANK = [
     check: [{ hands: 2, fingers: ['index'], other: [], zone: 'chest' }] }),
 
   /* ── 묻는 말 ── */
-  e(7224, { word: '무엇', category: '묻는 말', aliases: ['뭐','무슨','어느','어떤'], status: 'ok',
+  e(7224, { word: '무엇', category: '묻는 말', aliases: ['뭐','무슨','어느','어떤','뭐야'], status: 'ok',
     원문: '오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 좌우로 두 번 흔든다.',
     hands: 1, 수형: '검지만 편 주먹', 수향: '검지 바닥이 밖', 수위: '가슴 앞', 수동: '좌우로 두 번 흔든다', 비수지: '묻는 표정',
     steps: ['검지를 세워 좌우로 두 번 흔든다'],
     check: [{ hands: 1, fingers: ['index'], zone: 'chest', point: 'up' }] }),
 
-  e(8799, { word: '어디', category: '묻는 말', aliases: ['어디예요','어디에'], status: 'ok',
+  e(8799, { word: '어디', category: '묻는 말', aliases: ['어디예요','어디에','어디야','어딨어'], status: 'ok',
     원문: '오른 주먹의 1지를 펴서 바닥이 밖으로 향하게 세워 왼쪽으로 흔든 다음, 손바닥이 아래로 향하게 반쯤 구부린 오른손을 가슴 앞에서 약간 내리다가 멈춘다.',
     결합: '어느+곳', hands: 1,
     수형: '검지 → 반쯤 구부린 손', 수향: '검지 바닥이 밖 → 손바닥이 아래', 수위: '가슴 앞', 수동: '검지를 흔든 뒤 손을 내리다 멈춘다', 비수지: '묻는 표정',
     steps: ['검지를 세워 왼쪽으로 흔든다', '반쯤 구부린 손을 손바닥이 아래로 오게 내리다 멈춘다'],
     check: [{ hands: 1, fingers: ['index'], zone: 'chest' }, { hands: 1, zone: 'chest' }] }),
 
-  e(8602, { word: '언제', category: '묻는 말', aliases: ['언제예요','날짜'], status: 'ok',
+  e(8602, { word: '언제', category: '묻는 말', aliases: ['언제예요','날짜','언제야'], status: 'ok',
     원문: '가슴 앞에서 모로 세운 왼손 위에 모로 세운 오른손을 올려놓고 5·1·2·3·4지 순으로 손가락을 접는다.',
     hands: 2, 수형: '편 손 → 차례로 접는 손', 수향: '두 손 모두 엄지가 위로 오게 옆으로 세움', 수위: '가슴 앞', 수동: '엄지부터 새끼까지 차례로 접는다', 비수지: '묻는 표정',
     steps: ['두 손을 엄지가 위로 오게 옆으로 세우고, 오른손을 왼손 위에 올린다', '오른손을 엄지부터 차례로 접는다'],
     check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 2, fingers: [], other: ['index','middle','ring','pinky'], zone: 'chest' }] }),
+
+  /* 옛 브랜치(feat/basic-conversation-signs)에서 옮긴 낱말. 그림이 없어 아직 화면에 나오지 않는다.
+     원문은 사전 그대로이고, 수향과 수위는 사전 영상으로 다시 확인해야 해서 check 로 둔다 */
+  e(7806, { word: '얼마', category: '묻는 말', aliases: ['얼마야','얼마예요','몇'], status: 'check',
+    원문: '손바닥이 위로 향하게 편 오른손의 손가락을 5·1·2·3·4지 순으로 접는다.',
+    hands: 1, 수형: '편 손 → 차례로 접는 손', 수향: '손바닥이 위', 수위: '가슴 앞(사전 영상으로 확인 필요)', 수동: '엄지부터 새끼까지 차례로 접는다', 비수지: '묻는 표정',
+    steps: ['오른손을 손바닥이 위로 오게 편다', '엄지부터 새끼손가락까지 차례로 접는다'],
+    check: [{ hands: 1, fingers: ['index','middle','ring','pinky'], zone: 'chest' }, { hands: 1, fingers: [], zone: 'chest' }] }),
 
   e(5394, { word: '누구', category: '묻는 말', aliases: ['누가','누구예요'], status: 'ok',
     원문: '구부린 오른 손가락 등으로 오른뺨을 상하로 두 번 살짝 문지른다.',

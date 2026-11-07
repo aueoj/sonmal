@@ -38,8 +38,8 @@
  * @property {boolean} recognizable 따라한 것을 인식까지 할 수 있는 단어인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611071509';
-import { WORD_BASIS } from './wordArt.js?v=202611071509';
+import { WORD_BANK } from './wordBank.js?v=202611071517';
+import { WORD_BASIS } from './wordArt.js?v=202611071517';
 
 /* 처음 받은 도표로 만든 12개. 사전과 다른 것이 많다(docs/WORD-AUDIT.md).
    사전 기준 그림이 들어온 단어는 아래에서 wordBank 의 기록으로 갈아 끼운다. */
@@ -185,7 +185,7 @@ const VERB_ENDINGS = [   // 길이가 긴 것부터 시도한다
   '었습니다', '았습니다', '였습니다', '었는데', '았는데', '거예요', '거에요', '건가요',
   '었어요', '았어요', '였어요', '었어', '았어', '였어', '었다', '았다', '였다', '었지', '았지',
   '었네', '었고', '니까요', '니까', '으면', '는데', '은데', '거야', '건데', '거지', '거죠', '건가',
-  '습니다', '니다', '네요', '어줘', '아줘', '주세요', '게요', '래요', '려고', '나요', '을게', '을래',
+  '습니다', '니다', '네요', '어요', '아요', '어줘', '아줘', '주세요', '게요', '래요', '려고', '나요', '을게', '을래',
   '는다', '거', '것', '게', '네', '다', '래', '자', '지', '니', '냐', '나', '고', '면', '줘', '는', '은', '을', '어', '아', '여'
 ];
 const H0 = 0xac00;
@@ -299,11 +299,15 @@ export function matchToken(token) {
  */
 export function planUtterance(text) {
   const out = [];
-  for (const token of String(text ?? '').split(/(\s+)/)) {
-    if (!token.trim()) continue;
-    const bare = token.replace(/[.,!?·…"'()~]/g, '');
-    if (!bare) continue;
-    const m = matchToken(bare);
+  const tokens = String(text ?? '').split(/\s+/).map(t => t.replace(/[.,!?·…"'()~]/g, '')).filter(Boolean);
+  for (let i = 0; i < tokens.length; i++) {
+    /* '배가 고파요', '한 번 더'처럼 띄어 쓴 표현은 어절 셋, 둘을 붙여 먼저 찾는다.
+       띄어쓰기가 든 말은 띄어쓰기가 든 대응표현과만 맞으므로 '나 물'이 엉뚱하게 묶이지 않는다 */
+    let n = Math.min(3, tokens.length - i), m;
+    for (; n > 1; n--) if ((m = matchToken(tokens.slice(i, i + n).join(' '))).sign) break;
+    if (n === 1) m = matchToken(tokens[i]);
+    const bare = tokens.slice(i, i + n).join(' ');
+    i += n - 1;
     if (m.sign) out.push({ kind: 'word', text: bare, sign: m.sign });
     else out.push({ kind: 'spell', text: bare, stem: m.stem });
   }
