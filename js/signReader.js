@@ -1,7 +1,7 @@
 /* signReader.js — 자유 모드. 무엇을 할지 모르는 내 손을 낱말 전체와 견줘 읽는다.
  *
  * 연습 모드는 고른 낱말 하나와만 견준다. 여기서는 읽을 수 있는 낱말마다 진행을 따로 들고
- * 한 프레임에 모두 견준다. 판정 규칙은 연습과 같다.
+ * 한 프레임에 모두 견준다. 판정 규칙(stepWord)은 연습 모드와 같이 쓴다.
  *   - 한 단계: 그 단계의 판정 힌트(손 수, 펴진 손가락, 고리, 엄지, 높이)를 HOLD_MS 동안 지킨다
  *   - 다음 단계: 앞 단계를 끝낸 자리에서 손이 TRAVEL(손 길이 대비)만큼 옮겨 간 뒤에야 친다
  *
@@ -17,13 +17,41 @@
  *   말하지 않는 것보다 나쁘다.
  *   손가락 조건이 없는 단계가 있는 낱말은 거의 아무 손이나 맞으므로 읽을 대상에서 뺀다.
  */
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071625';
-import { scoreCheck, ZONE_AT } from './matcher.js?v=202611071625';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071631';
+import { scoreCheck, ZONE_AT } from './matcher.js?v=202611071631';
 
 const FIT_SLACK = 0.35;
-const HOLD_MS = 400, GRACE_MS = 250, TRAVEL = 0.3, SETTLE_MS = 1000, MAX_WAIT_MS = 8000, LOST_MS = 500, STALE_MS = 3000;
+export const HOLD_MS = 400;   // 한 단계를 맞춘 채 이만큼 버티면 그 단계를 해낸 것으로 본다
+const GRACE_MS = 250;         // 손이 한두 프레임 안 잡히거나 판정이 잠깐 흔들려도 버티던 것을 버리지 않는다
+const TRAVEL = 0.3;           // 다음 동작으로 가려면 손이 이만큼은 옮겨 가야 한다 (손 길이 대비)
+const SETTLE_MS = 1000, MAX_WAIT_MS = 8000, LOST_MS = 500, STALE_MS = 3000;
 
-const checksOf = w => w.check ?? (w.steps ?? ['']).map(() => ({ hands: w.hands ?? 1 }));
+/** 낱말의 단계마다 판정 힌트. 사전 기록에 없으면 손 수만 본다 */
+export const checksOf = w => w.check ?? (w.steps ?? ['']).map(() => ({ hands: w.hands ?? 1 }));
+
+/**
+ * 낱말 하나의 진행 p({k, hold, okAt, motion})에 한 프레임을 먹인다. 연습과 자유 모드가 같이 쓴다.
+ * 둘째 동작부터는 앞 동작을 끝낸 자리에서 손이 옮겨 가야(사전 원문에 방향이 있으면 그 방향으로) 친다.
+ * @returns {null|{r:object, why:string|null, stepped:boolean}} 손이 없으면 null.
+ *   r 은 scoreCheck 결과, why 는 손모양은 맞는데 아직 넘어가지 못하는 까닭, stepped 는 p.k 가 하나 올랐는가
+ */
+export function stepWord(p, checks, feats, face, side, now) {
+  if (!feats.length) { if (now - (p.okAt ?? 0) > GRACE_MS) p.hold = 0; return null; }
+  const c = checks[p.k];
+  const r = scoreCheck(feats, c, face);
+  let why = null;
+  if (p.k > 0) {
+    motionFeed(p.motion, feats, side);
+    why = (c.move || c.moving) ? moveHint(c, p.motion, side)
+      : (travelled(p.motion, TRAVEL) ? null : '그림처럼 다음 동작으로 손을 옮기세요');
+  }
+  if (!r.ok || why) { if (now - (p.okAt ?? 0) > GRACE_MS) p.hold = 0; return { r, why, stepped: false }; }
+  p.okAt = now;
+  if (!p.hold) p.hold = now;
+  if (now - p.hold < HOLD_MS) return { r, why, stepped: false };
+  p.k += 1; p.hold = 0; p.motion = motionStart(feats, side);
+  return { r, why, stepped: true };
+}
 const shaped = c => c.fingers !== undefined || c.ring || c.thumb;
 
 /** 판정 힌트가 얼마나 좁은가. 끝낸 낱말이 여럿이면 좁은 쪽을 고른다 */
@@ -76,34 +104,27 @@ export function createSignReader({ signs, side = () => 1, onWord, onAmbiguous, o
   }
 
   function feed(feats, face = null, now = performance.now()) {
+    const sd = side();
     if (!feats.length) {
-      for (const it of items) if (now - (it.okAt ?? 0) > GRACE_MS) it.hold = 0;
+      for (const it of items) stepWord(it, it.checks, feats, face, sd, now);
       if (!lostSince) lostSince = now;
       if (now - lostSince > LOST_MS) { decide(); resetAll(); for (const it of items) it.armed = true; }
       onTick?.({ hands: 0, busy: pending.length > 0 });
       return;
     }
     lostSince = 0;
-    const sd = side();
     for (const it of items) {
       if (it.k > 0 && now - it.at > STALE_MS) { it.k = 0; it.hold = 0; it.motion = null; }
-      const c = it.checks[it.k];
-      const r = scoreCheck(feats, c, face);
-      if (it.k > 0) motionFeed(it.motion, feats, sd);
-      if (it.k > 0 && r.ok) it.live = now;   // 다음 동작의 손모양을 하고 있다. 이 낱말이 아직 이어지는 중이다
+      const k = it.k, c = it.checks[k], m = it.motion;
       // 읽은 뒤에는 첫 자세를 한 번 벗어나야 이 낱말을 다시 시작한다
-      if (it.k === 0 && it.armed === false) { if (!r.ok) it.armed = true; continue; }
-      // 둘째 동작부터: 사전 원문에 방향이 있으면 그 방향으로, 없으면 옮겨 간 거리만 본다(motion.js)
-      const moved = it.k === 0 || ((c.move || c.moving) ? !moveHint(c, it.motion, sd) : travelled(it.motion, TRAVEL));
-      const pass = r.ok && moved;
-      debug?.(it.w.word, it.k, r.ok, moved, it.k > 0 ? moveHint(c, it.motion, sd) : null, it.motion);
-      if (!pass) { if (now - (it.okAt ?? 0) > GRACE_MS) it.hold = 0; continue; }
-      it.okAt = now;
-      if (!it.hold) it.hold = now;
-      if (now - it.hold < HOLD_MS) continue;
+      if (k === 0 && it.armed === false) { if (!scoreCheck(feats, c, face).ok) it.armed = true; continue; }
+      const { r, why, stepped } = stepWord(it, it.checks, feats, face, sd, now);
+      if (k > 0 && r.ok) it.live = now;   // 다음 동작의 손모양을 하고 있다. 이 낱말이 아직 이어지는 중이다
+      debug?.(it.w.word, k, r.ok, !why, why, m);
+      if (!stepped) continue;
       // 이 동작을 마친 높이가 그 자리의 보통 높이에서 얼마나 떨어졌나(얼굴이 보일 때만)
-      it.miss = (it.k === 0 ? 0 : it.miss) + (r.u != null && c.zone && ZONE_AT[c.zone] !== undefined && c.zone !== 'front' ? Math.abs(r.u - ZONE_AT[c.zone]) : 0);
-      it.k += 1; it.hold = 0; it.motion = motionStart(feats, sd); it.at = now;
+      it.miss = (k === 0 ? 0 : it.miss) + (r.u != null && c.zone && ZONE_AT[c.zone] !== undefined && c.zone !== 'front' ? Math.abs(r.u - ZONE_AT[c.zone]) : 0);
+      it.at = now;
       if (it.k < it.n) continue;
       it.k = 0; it.motion = null;
       it.armed = false;   // 같은 자세를 들고 있는 동안 이 낱말을 또 끝낸 것으로 세지 않는다

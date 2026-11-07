@@ -9,22 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071625';
-import { getPose } from './jamoData.js?v=202611071625';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071625';
-import { describe } from './poseFeatures.js?v=202611071625';
-import { scoreHands, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071625';
-import { Tracker } from './tracker.js?v=202611071625';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071625';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071625';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071625';
-import { groupByIdea } from './lessons.js?v=202611071625';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071625';
-import { createReader } from './reader.js?v=202611071625';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071625';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071625';
-import { diagnose } from './diagnose.js?v=202611071625';
-import { animate, stagger } from './vendor/anime.js?v=202611071625';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071631';
+import { getPose } from './jamoData.js?v=202611071631';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071631';
+import { describe } from './poseFeatures.js?v=202611071631';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071631';
+import { Tracker } from './tracker.js?v=202611071631';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071631';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071631';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071631';
+import { groupByIdea } from './lessons.js?v=202611071631';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071631';
+import { createReader } from './reader.js?v=202611071631';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611071631';
+import { diagnose } from './diagnose.js?v=202611071631';
+import { animate, stagger } from './vendor/anime.js?v=202611071631';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -61,9 +60,6 @@ const ACCEPT = 0.88;        // 이 점수를 넘고
 const HOLD_MS = 500;        // 이만큼 버티면 맞은 것으로 본다
 const NEAR = 0.70;
 const SMOOTH_N = 7;
-const WORD_HOLD_MS = 400;  // 낱말의 한 단계를 맞춘 채 이만큼 버티면 그 단계를 해낸 것으로 본다
-const WORD_GRACE_MS = 250; // 손이 한두 프레임 안 잡히거나 판정이 잠깐 흔들려도 버티던 것을 버리지 않는다
-const WORD_TRAVEL = 0.3;   // 다음 동작으로 가려면 손이 이만큼은 옮겨 가야 한다 (손 길이 대비)
 const REPEAT_MS = 1400;     // 다 하고 나서 처음으로 돌아가기까지
 
 const state = {
@@ -71,7 +67,7 @@ const state = {
   tracker: null, listener: null, live: false,
   hand: 'right',
   holdSince: 0, trail: [], scores: [], motionSeen: false, lastStep: '',
-  wordTimer: null, wordStep: 0, wordGot: 0, wordHold: 0, wordLost: 0,
+  wordTimer: null, wordStep: 0, wordProg: { k: 0, hold: 0, motion: null }, wordLost: 0,
   lostSince: 0, repeatTimer: null, spokenPart: -1,
   mode: 'practice', readKind: 'words', reader: null, signReader: null, recall: false, active: null,
   settling: false   // 한 칸을 끝내고 다음으로 넘어가는 사이. 이때 들어오는 프레임은 흘린다.
@@ -250,11 +246,6 @@ function paintWordMeta(w) {
   }
 }
 
-/* 낱말의 단계마다 판정 힌트. 사전 기록에 없으면 손 수만 본다. */
-function wordChecks(w) {
-  return w.check ?? (w.steps ?? ['']).map(() => ({ hands: w.hands ?? 1 }));
-}
-
 /* 모의 입력은 지금 맞춰야 할 단계의 손모양을 흉내 낸다. 판정 경로가 실제로 시험된다. */
 function mockForCheck(check, moving = false) {
   if (!state.tracker?.mock || !check || state.mockLocked) return;
@@ -287,8 +278,8 @@ function showWord(u) {
   stopWordTimer();            // 이미 돌던 타이머가 있으면 먼저 멈춘다.
   const w = u.sign;
   const frames = WORD_POSE_FILES[w.word]?.length ?? 1;
-  state.wordStep = 0; state.wordGot = 0; state.wordHold = 0; state.wordLost = 0;
-  state.wordMotion = null;
+  state.wordStep = 0; state.wordLost = 0;
+  state.wordProg = { k: 0, hold: 0, motion: null };
   delete el.art.dataset.stepOk;
 
   el.name.textContent = u.jamo;
@@ -307,7 +298,7 @@ function showWord(u) {
   state.wordShown = performance.now();
   setRecall(stageOf(w.word) === 2);
   paintWordStep(w);
-  mockForCheck(wordChecks(w)[0]);
+  mockForCheck(checksOf(w)[0]);
 
   /* 그림은 저절로 넘어가지 않는다. 지금 그림의 동작을 해내면 다음 그림으로 간다.
      시간에 맞춰 넘기면 따라 하는 속도와 어긋나고, 무엇을 해냈는지도 알 수 없다. */
@@ -446,50 +437,35 @@ function onFrame(hands, face = null) {
     /* 낱말 판정: 아무 동작이나 흔든다고 통과하지 않는다.
        그림의 단계마다 손 수, 펴진 손가락, 고리, 엄지, 손 높이를 차례로 맞춰야 한다. */
     const now = performance.now();
-    if (state.recall && state.wordGot === 0 && now - state.wordShown > 8000) setRecall(false);
-    const checks = wordChecks(current.sign);
+    if (state.recall && state.wordProg.k === 0 && now - state.wordShown > 8000) setRecall(false);
+    const checks = checksOf(current.sign);
     const n = checks.length;
-    const k = Math.min(state.wordGot, n - 1);
-    if (!hands.length) {
-      // 얼굴 앞에 든 손(코에 댄 주먹)은 잠깐씩 놓친다. 그 사이에 버티던 것을 버리지 않는다
-      if (now - (state.wordOkAt ?? 0) > WORD_GRACE_MS) state.wordHold = 0;
+    const p = state.wordProg;
+    const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
+    // 얼굴 앞에 든 손(코에 댄 주먹)은 잠깐씩 놓친다. 그 사이에 버티던 것을 버리지 않는다(stepWord)
+    const res = stepWord(p, checks, feats, face, handSide(), now);
+    if (!res) {
       if (!state.wordLost) state.wordLost = now;
-      if (now - state.wordLost > 700) el.seen.textContent = `${k + 1}/${n}단계  손이 보이지 않습니다`;
+      if (now - state.wordLost > 700) el.seen.textContent = `${p.k + 1}/${n}단계  손이 보이지 않습니다`;
       return;
     }
     state.wordLost = 0;
-    const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
-    const r = scoreCheck(feats, checks[k], face);
-    /* 같은 자세 그대로 다음 단계까지 넘어가지 않게, 앞 동작을 끝낸 자리에서
-       손이 실제로 옮겨 가야 다음 동작으로 친다. 사전 원문에 방향이 있으면 그 방향으로 가야 한다(motion.js). */
-    const side = handSide();
-    if (state.wordGot > 0 && state.wordMotion) {
-      motionFeed(state.wordMotion, feats, side);
-      const c = checks[k];
-      const why = (c.move || c.moving) ? moveHint(c, state.wordMotion, side)
-        : (travelled(state.wordMotion, WORD_TRAVEL) ? null : '그림처럼 다음 동작으로 손을 옮기세요');
-      if (r.ok && why) { r.ok = false; r.hint = why; }
+    const { r, why } = res;
+    if (r.ok && why) { r.ok = false; r.hint = why; }
+    if (res.stepped) {
+      if (p.k >= n) { el.seen.textContent = ''; return completeWord(current); }
+      // 해낸 동작의 다음 그림을 보여 준다
+      state.wordStep = p.k;
+      paintWordStep(current.sign);
+      el.art.dataset.stepOk = p.k % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
+      mockForCheck(checks[p.k], true);
     }
-    if (r.ok) {
-      state.wordOkAt = now;
-      if (!state.wordHold) state.wordHold = now;
-      if (now - state.wordHold >= WORD_HOLD_MS) {
-        state.wordGot += 1; state.wordHold = 0;
-        if (state.wordGot >= n) { el.seen.textContent = ''; return completeWord(current); }
-        // 해낸 동작의 다음 그림을 보여 준다
-        state.wordStep = Math.min(state.wordGot, wordChecks(current.sign).length - 1);
-        paintWordStep(current.sign);
-        el.art.dataset.stepOk = state.wordGot % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
-        state.wordMotion = motionStart(feats, side);
-        mockForCheck(checks[state.wordGot], true);
-      }
-    } else if (now - (state.wordOkAt ?? 0) > WORD_GRACE_MS) state.wordHold = 0;
 
-    const part = state.wordHold ? Math.min(1, (now - state.wordHold) / WORD_HOLD_MS) : 0;
-    setFill((state.wordGot + part) / n);
+    const part = p.hold ? Math.min(1, (now - p.hold) / WORD_HOLD_MS) : 0;
+    setFill((p.k + part) / n);
     el.guide.dataset.state = r.ok ? 'near' : '';
     el.seen.textContent = n > 1
-      ? `${state.wordGot + 1}/${n}번째 동작  ${r.ok ? '좋아요, 그대로' : r.hint}`
+      ? `${p.k + 1}/${n}번째 동작  ${r.ok ? '좋아요, 그대로' : r.hint}`
       : (r.ok ? '좋아요, 그대로' : r.hint);
     return;
   }
