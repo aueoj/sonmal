@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071452';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071509';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -14,6 +14,7 @@ const FINGER_KO = { index: '검지', middle: '중지', ring: '약지', pinky: '�
 const angleGap = (a, b) => Math.abs((((a - b) % 360) + 540) % 360 - 180);
 
 const FLIP_DIR = { right: 'left', left: 'right', up: 'up', down: 'down' };
+const SPREAD_WIDE_MIN = 18, SPREAD_WIDE_MAX = 50;  // 도
 
 /**
  * @param {object} feat poseFeatures.describe 결과 (화면 좌표 기준)
@@ -27,15 +28,19 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
   const want = new Set(pose.fingers ?? []);
 
   // 수형 — 펴야 할 손가락은 펴고, 접어야 할 손가락은 접었는가
+  /* 낱말 판정(handShape)처럼 허용 범위로 본다. 0과 1에서 벗어난 만큼 깎으면
+     손등이 보이게 아래로 내리는 ㅅ에서 손바닥 뒤로 가려진 약지·새끼를 MediaPipe 가
+     반쯤 편 것(0.35 언저리)으로 어림해, 그림대로 해도 0.84 에 묶여 통과하지 못했다. */
   let shape = 0, worst = null, worstGap = 0;
   for (const f of FINGERS) {
     // 꺾어 펴는 자모(ㄱ)와 고리를 만드는 자모(ㅇ·ㅎ)의 검지는
     // 곧게 편 것도 접은 것도 아닌 중간값이 정답이다
     const midIndex = f === 'index' && (pose.bent || pose.special === 'circle');
-    const target = midIndex ? 0.5 : (want.has(f) ? 1 : 0);
     const got = feat.extension[f];
-    const gap = Math.abs(target - got);
-    shape += 1 - Math.min(1, gap / (midIndex ? 0.4 : 0.7));
+    const gap = midIndex ? Math.abs(0.5 - got) : Math.abs((want.has(f) ? 1 : 0) - got);
+    shape += 1 - (midIndex ? Math.min(1, gap / 0.4)
+      : want.has(f) ? Math.min(1, Math.max(0, (OPEN_OK - got) / (OPEN_OK - OPEN_BAD)))
+      : Math.min(1, Math.max(0, (got - FOLD_OK) / (FOLD_BAD - FOLD_OK))));
     if (gap > worstGap) { worstGap = gap; worst = f; }
   }
   shape /= FINGERS.length;
@@ -68,7 +73,12 @@ export function scorePose(feat, pose, { mirrored = false } = {}) {
   // 벌림 — 검지와 중지를 둘 다 펴는 자모에서만 본다
   const bothUp = want.has('index') && want.has('middle');
   const spreadTarget = pose.spreadWide ? 26 : 4;      // 도
-  const spreadScore = bothUp ? Math.max(0, 1 - Math.abs(feat.spread - spreadTarget) / 32) : 1;
+  /* 벌리는 자모(ㅅ·ㅈ·ㅊ)는 한 값이 아니라 범위다. 사람마다 벌리는 폭이 달라
+     그림보다 더 벌린 40도를 틀렸다고 깎을 까닭이 없다. */
+  const spreadOff = pose.spreadWide
+    ? Math.max(0, SPREAD_WIDE_MIN - feat.spread, feat.spread - SPREAD_WIDE_MAX)
+    : Math.abs(feat.spread - spreadTarget);
+  const spreadScore = bothUp ? Math.max(0, 1 - spreadOff / 32) : 1;
 
   // 고리 — 엄지와 검지 끝이 붙었는가. ㅇ·ㅎ에서만 본다.
   const wantRing = ringed;
