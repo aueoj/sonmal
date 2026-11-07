@@ -35,8 +35,8 @@
  * @property {1|2} [hands] 한 손인지 두 손인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611071634';
-import { WORD_BASIS } from './wordArt.js?v=202611071634';
+import { WORD_BANK } from './wordBank.js?v=202611071638';
+import { WORD_BASIS } from './wordArt.js?v=202611071638';
 
 /* 화면에 올리는 단어: 사전 기준 그림이 검수되어 들어온 단어(basis 'sldict')의 wordBank 기록.
    그림이 없는 단어는 올리지 않는다. 그림 없이 동작을 글로만 보여 주지 않는다. */
@@ -221,7 +221,7 @@ export function planUtterance(text) {
 }
 
 export const SOURCES = [
-  { name: '서울시 수어사전', url: 'https://wis.seoul.go.kr/wfs/dhs/udr/signDictionary.do', note: '공식 동작 확인용 참고 링크 · 현재 연습 그림은 사용자 제공 자료 기반' },
+  { name: '서울시 수어사전', url: 'https://wis.seoul.go.kr/wfs/dhs/udr/signDictionary.do', note: '공식 동작 확인용 참고 링크' },
   { name: '국립국어원 한국수어사전', url: 'https://sldict.korean.go.kr/',
     note: '수어 동영상, 수형 사진, 수형 설명, 용례' },
   { name: '공공데이터포털 — 한국수어사전 표제어 및 용례', url: 'https://www.data.go.kr/data/15122687/fileData.do',
