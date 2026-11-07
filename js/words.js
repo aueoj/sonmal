@@ -35,8 +35,8 @@
  * @property {1|2} [hands] 한 손인지 두 손인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611071638';
-import { WORD_BASIS } from './wordArt.js?v=202611071638';
+import { WORD_BANK } from './wordBank.js?v=202611071644';
+import { WORD_BASIS } from './wordArt.js?v=202611071644';
 
 /* 화면에 올리는 단어: 사전 기준 그림이 검수되어 들어온 단어(basis 'sldict')의 wordBank 기록.
    그림이 없는 단어는 올리지 않는다. 그림 없이 동작을 글로만 보여 주지 않는다. */
@@ -205,7 +205,7 @@ export function matchToken(token) {
  */
 export function planUtterance(text) {
   const out = [];
-  const tokens = String(text ?? '').split(/\s+/).map(t => t.replace(/[.,!?·…"'()~]/g, '')).filter(Boolean);
+  const tokens = String(text ?? '').normalize('NFC').split(/\s+/).map(t => t.replace(/[.,!?·…"'()~]/g, '')).filter(Boolean);
   for (let i = 0; i < tokens.length; i++) {
     /* '배가 고파요', '한 번 더'처럼 띄어 쓴 표현은 어절 셋, 둘을 붙여 먼저 찾는다.
        띄어쓰기가 든 말은 띄어쓰기가 든 대응표현과만 맞으므로 '나 물'이 엉뚱하게 묶이지 않는다 */

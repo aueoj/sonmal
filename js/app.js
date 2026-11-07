@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071638';
-import { getPose } from './jamoData.js?v=202611071638';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071638';
-import { describe } from './poseFeatures.js?v=202611071638';
-import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071638';
-import { Tracker } from './tracker.js?v=202611071638';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071638';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071638';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071638';
-import { groupByIdea } from './lessons.js?v=202611071638';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071638';
-import { createReader } from './reader.js?v=202611071638';
-import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611071638';
-import { diagnose } from './diagnose.js?v=202611071638';
-import { animate, stagger } from './vendor/anime.js?v=202611071638';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071644';
+import { getPose } from './jamoData.js?v=202611071644';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071644';
+import { describe } from './poseFeatures.js?v=202611071644';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071644';
+import { Tracker } from './tracker.js?v=202611071644';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071644';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071644';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071644';
+import { groupByIdea } from './lessons.js?v=202611071644';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071644';
+import { createReader } from './reader.js?v=202611071644';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611071644';
+import { diagnose } from './diagnose.js?v=202611071644';
+import { animate, stagger } from './vendor/anime.js?v=202611071644';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -97,10 +97,11 @@ function say(text, { queue = false } = {}) {
 /* ── 연습할 말 정하기 ───────────────────────── */
 
 function setUtterance(text) {
+  text = (text ?? '').normalize('NFC');   // macOS 파일 이름에서 붙여 넣은 한글은 NFD 라 낱말을 못 찾는다
   stopWordTimer();
   clearTimeout(state.repeatTimer);
   state.seq = [];
-  state.sentence = (text ?? '').trim().replace(/\s+/g, ' ');
+  state.sentence = text.trim().replace(/\s+/g, ' ');
   /* 음절 번호는 어절마다 0부터 다시 매겨진다. 그대로 두면 '뒤 왼쪽'의
      뒤(0)와 왼(0)이 한 글자로 묶여 "뒤왼"으로 읽힌다. 이어서 매긴다. */
   let syllable = 0;
@@ -140,6 +141,15 @@ function setUtterance(text) {
   el.typed.value = '';
   paintPicker(text);
   buildSeq();
+  // 숫자나 라틴 글자뿐이면 저절로 건너뛰어 '좋아요'가 된다. 할 것이 없다고 알리고 멈춘다
+  if (!state.seq.some(u => u.role === 'word' || getPose(u.jamo))) {
+    setRecall(false);
+    el.art.replaceChildren(); el.meta.replaceChildren();
+    el.name.textContent = state.sentence;
+    el.step.textContent = '지문자나 수어로 할 수 있는 글자가 없습니다. 한글로 입력해 주세요';
+    el.seen.textContent = ''; el.guide.dataset.state = ''; setFill(0);
+    return;
+  }
   advance();
 }
 
