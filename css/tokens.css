@@ -27,6 +27,9 @@
   --jade-soft: #ebf6f0;
   --amber: #c08a2e;
   --amber-soft: #fbf3e4;
+  --danger: #c0392e;
+  --indigo-hover: #5460c6;
+  --scrim: rgba(13, 14, 17, .32);
 
   /* Type */
   --sans: "Inter", "IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;

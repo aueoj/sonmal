@@ -184,7 +184,8 @@ body[data-hand="right"] .ref-words img { transform: scaleX(-1); }
 .guide-meter { display: flex; align-items: center; flex-wrap: wrap; gap: 4px var(--s3); }
 .guide-meter .seen { flex: 1 1 12em; min-width: 0; }
 .track { flex: 1; height: 4px; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; max-width: 320px; }
-.fill { height: 100%; width: 0; background: var(--indigo); transition: width .1s linear, background-color .2s var(--ease); }
+/* 폭 대신 transform 으로 늘린다(js setFill). 매 프레임 바뀌어도 레이아웃을 다시 계산하지 않는다 */
+.fill { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left; background: var(--indigo); transition: transform .1s linear, background-color .2s var(--ease); }
 .guide[data-state="hit"] .fill { background: var(--jade); }
 .guide[data-state="near"] .fill { background: var(--amber); }
 
@@ -261,14 +262,17 @@ body:not([data-mode="free"]) :is(.free-log, .free-bar) { display: none; }
 
 /* ── 공통 ───────────────────────────────────── */
 button { cursor: pointer; white-space: nowrap; border-radius: var(--r-md); border: 1px solid transparent; }
-button:disabled { opacity: .45; cursor: default; }
+/* 비활성은 투명도 하나로 흐리지 않는다. 바탕, 글자, 커서를 같이 바꾼다 */
+button:disabled { background: var(--panel); border-color: var(--line); color: var(--faint); cursor: not-allowed; }
+.say-btn:disabled { background: rgba(255,255,255,.14); color: rgba(255,255,255,.6); }
+.say-btn:disabled kbd { border-color: rgba(255,255,255,.25); }
 /* 남색 테두리는 어두운 유리 위에서 1.8:1 로 묻힌다. 영상 위 표면에서는 흰 테두리(8.4:1) */
 .bar :focus-visible, .guide :focus-visible { outline-color: #fff; }
 /* 누르는 순간의 응답. 손이 카메라 앞에 있어 화면을 보는 시간이 짧다 */
 button:active:not(:disabled) { transform: scale(.97); }
 .guide button:active, .say-btn:active { transform: none; filter: brightness(.92); }
 .primary { background: var(--indigo); color: #fff; padding: 6px var(--s4); font-weight: 500; font-size: var(--t-body); }
-.primary:hover:not(:disabled) { background: #5460c6; }
+.primary:hover:not(:disabled) { background: var(--indigo-hover); }
 .ghost { background: var(--paper); border-color: var(--line); color: var(--ink-soft); padding: 5px var(--s3); font-size: var(--t-label); }
 .ghost:hover:not(:disabled) { background: var(--panel); }
 
@@ -281,14 +285,17 @@ button:active:not(:disabled) { transform: scale(.97); }
 .diag-list li { display: flex; align-items: baseline; gap: var(--s2); font-family: var(--kr); font-size: var(--t-label); }
 .diag-list b { flex: none; width: 1.1em; font-weight: 600; }
 .diag-list li[data-state="ok"] b { color: var(--jade); }
-.diag-list li[data-state="bad"] b { color: #c0392e; }
+.diag-list li[data-state="bad"] b { color: var(--danger); }
 .diag-list li[data-state="unknown"] b { color: var(--faint); }
 .diag-list span { color: var(--ink-soft); }
 .diag-list em { font-style: normal; color: var(--muted); }
 
 dialog { border: 1px solid var(--line); border-radius: var(--r-lg); padding: var(--s6); max-width: 60ch; color: var(--ink); background: var(--paper); }
-dialog::backdrop { background: rgba(13,14,17,.32); }
-dialog h2 { font-family: var(--kr); font-size: var(--t-title); margin: 0 0 var(--s4); letter-spacing: var(--track-tight); }
+dialog::backdrop { background: var(--scrim); }
+/* 창은 살짝 떠오르며 열린다 */
+dialog[open] { animation: dialog-in .22s var(--ease); }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+dialog h2 { font-family: var(--kr); font-size: var(--t-title); margin: 0 0 var(--s4); letter-spacing: var(--track-tight); text-wrap: balance; }
 dialog p { font-family: var(--kr); font-size: var(--t-body); color: var(--ink-soft); margin: 0 0 var(--s3); }
 dialog ul { margin: 0 0 var(--s5); padding-left: 1.1em; }
 dialog li { font-family: var(--kr); font-size: var(--t-body); color: var(--ink-soft); margin-bottom: var(--s2); }
@@ -317,6 +324,13 @@ dialog a { color: var(--indigo); }
   .modeswitch .wide { display: none; }
   .modeswitch button { padding: 3px 10px; }
   .bar-end .handswitch button { padding: 3px 8px; }
+}
+
+/* 손가락으로 누르는 기기에서는 위 줄 버튼도 44px 아래로 내려가지 않는다.
+   마우스로 쓰는 넓은 화면에서는 영상을 덜 가리게 작게 둔다 */
+@media (pointer: coarse) {
+  .bar-end .ghost, .modeswitch button, .handswitch button { min-height: 44px; }
+  .readkind button, .free-clear, .say-btn { min-height: 44px; }
 }
 
 /* 한 손을 옆으로 미는 쌍자음. 정지 화면에서도 화살표로 방향이 남는다. */

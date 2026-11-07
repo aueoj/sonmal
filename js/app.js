@@ -9,23 +9,31 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071217';
-import { getPose } from './jamoData.js?v=202611071217';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071217';
-import { describe } from './poseFeatures.js?v=202611071217';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611071217';
-import { Tracker } from './tracker.js?v=202611071217';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071217';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071217';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071217';
-import { groupByIdea } from './lessons.js?v=202611071217';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071217';
-import { createReader } from './reader.js?v=202611071217';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071217';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071217';
-import { diagnose } from './diagnose.js?v=202611071217';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071430';
+import { getPose } from './jamoData.js?v=202611071430';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071430';
+import { describe } from './poseFeatures.js?v=202611071430';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611071430';
+import { Tracker } from './tracker.js?v=202611071430';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071430';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071430';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071430';
+import { groupByIdea } from './lessons.js?v=202611071430';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071430';
+import { createReader } from './reader.js?v=202611071430';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071430';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071430';
+import { diagnose } from './diagnose.js?v=202611071430';
+import { animate, stagger } from './vendor/anime.js?v=202611071430';
 
 const $ = id => document.getElementById(id);
+/* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motion = (targets, params) => (REDUCED ? null : animate(targets, params));
+/* 진행 막대는 폭 대신 transform 으로 늘린다. 매 프레임 바뀌어도 레이아웃을 다시 계산하지 않는다 */
+const setFill = v => { el.fill.style.transform = `scaleX(${Math.max(0, Math.min(1, v))})`; };
+/* 칸을 해낸 순간 살짝 튀어 오른다. 둘레가 번지는 CSS lockin 과 같이 돈다 */
+const popUnit = node => motion(node, { scale: [1, 1.24, 1], duration: 440, ease: 'outBack(2)' });
 const el = {
   camera: $('camera'), video: $('cam'), overlay: $('overlay'),
   camEmpty: $('cam-empty'), camPrompt: document.querySelector('.cam-prompt'),
@@ -168,6 +176,8 @@ function buildSeq() {
   // 낱말 하나만 할 때는 칸이 제목을 되풀이할 뿐이다. 지문자는 한 자라도 칸을 남긴다
   el.seq.dataset.solo = state.seq.length === 1 && state.seq[0].role === 'word' ? '1' : '';
   paintSeq();
+  // 말이 바뀌면 칸이 왼쪽부터 차례로 내려앉는다
+  motion(el.seq.querySelectorAll('.unit'), { opacity: [0, 1], y: [8, 0], duration: 380, delay: stagger(24), ease: 'outCubic' });
 }
 
 function paintSeq() {
@@ -208,12 +218,14 @@ function advance() {
   setRecall(false);
   delete el.art.dataset.stepOk;
   el.art.innerHTML = jamoArt(u.jamo);
+  // 그림 자체엔 손 방향 뒤집기(scaleX)가 걸려 있어 덮어쓰지 않게, 바깥 칸을 움직인다
+  motion(el.art, { opacity: [0, 1], translateY: [8, 0], duration: 360, ease: 'outCubic' });
   el.name.textContent = u.jamo;
   el.step.textContent = pose.note;
   el.meta.replaceChildren();
   el.seen.textContent = '';
   el.guide.dataset.state = '';
-  el.fill.style.width = '0%';
+  setFill(0);
   if (state.tracker?.mock && !state.mockLocked) state.tracker.setMockPose(pose);
 }
 
@@ -287,8 +299,9 @@ function showWord(u) {
   }
   paintWordMeta(w);
   el.guide.dataset.state = '';
-  el.fill.style.width = '0%';
+  setFill(0);
   el.art.innerHTML = wordFilm(w.word);   // 모든 동작을 한 번에 만들어 둔다
+  motion(el.art, { opacity: [0, 1], duration: 320, ease: 'outCubic' });
   el.seen.textContent = '';
   state.wordShown = performance.now();
   setRecall(stageOf(w.word) === 2);
@@ -355,9 +368,9 @@ function completeWord(u) {
     renderPicker();
   }
   el.guide.dataset.state = 'hit';
-  el.fill.style.width = '100%';
+  setFill(1);
   const node = el.seq.querySelector(`[data-i="${state.at}"]`);
-  if (node) node.dataset.lock = '1';
+  if (node) { node.dataset.lock = '1'; popUnit(node); }
   /* 넘어가기 전 잠깐 '해냈다'를 보인다. 그 사이 새 말을 골랐으면 새 말의 첫 칸을
      건너뛰지 않게 아무것도 하지 않는다(그때 seq 는 새 배열이다). */
   const seq = state.seq;
@@ -392,9 +405,11 @@ function finish() {
   const parts = new Set(state.seq.filter(u => u.partIndex !== undefined).map(u => u.partIndex));
   if (parts.size > 1 && state.sentence) setTimeout(() => say(state.sentence, { queue: true }), 0);
   el.guide.dataset.state = 'hit';
-  el.fill.style.width = '100%';
+  setFill(1);
   el.step.textContent = '좋아요. 다시 해 볼까요';
   paintSeq();
+  // 끝까지 해내면 칸 줄에 물결이 한 번 지나간다
+  motion(el.seq.querySelectorAll('.unit[data-i]'), { y: [0, -6, 0], duration: 520, delay: stagger(36), ease: 'inOutSine' });
   clearTimeout(state.repeatTimer);
   state.repeatTimer = setTimeout(() => {
     state.at = -1; state.got = []; state.spokenPart = -1;
@@ -470,7 +485,7 @@ function onFrame(hands, face = null) {
     } else if (now - (state.wordOkAt ?? 0) > WORD_GRACE_MS) state.wordHold = 0;
 
     const part = state.wordHold ? Math.min(1, (now - state.wordHold) / WORD_HOLD_MS) : 0;
-    el.fill.style.width = `${Math.round(((state.wordGot + part) / n) * 100)}%`;
+    setFill((state.wordGot + part) / n);
     el.guide.dataset.state = r.ok ? 'near' : '';
     el.seen.textContent = n > 1
       ? `${state.wordGot + 1}/${n}번째 동작  ${r.ok ? '좋아요, 그대로' : r.hint}`
@@ -490,7 +505,7 @@ function onFrame(hands, face = null) {
         ? '두 손이 다 보이게 해 주세요'
         : '손이 보이지 않습니다';
       el.seen.textContent = needTwo ? `지금 ${hands.length}손 / 필요 2손` : '';
-      el.fill.style.width = '0%';
+      setFill(0);
       el.guide.dataset.state = '';
       state.holdSince = 0; state.scores = []; state.trail = []; state.motionSeen = false;
     }
@@ -520,7 +535,7 @@ function onFrame(hands, face = null) {
   if (state.scores.length > SMOOTH_N) state.scores.shift();
   const smooth = median(state.scores);
 
-  el.fill.style.width = `${Math.round(smooth * 100)}%`;
+  setFill(smooth);
   el.guide.dataset.state = smooth >= ACCEPT ? 'hit' : smooth >= NEAR ? 'near' : '';
   if (pose.motion && detectLateralShift(state.trail, feat.scale, t) >= 0.35) state.motionSeen = true;
   const motionReady = !pose.motion || state.motionSeen;
@@ -540,7 +555,7 @@ function onFrame(hands, face = null) {
     if (!state.holdSince) state.holdSince = t;
     if (t - state.holdSince >= HOLD_MS && motionReady) {
       const node = el.seq.querySelector(`[data-i="${state.at}"]`);
-      if (node) node.dataset.lock = '1';
+      if (node) { node.dataset.lock = '1'; popUnit(node); }
       state.got.push(current.jamo);
       advance();
       speakFinishedPart();
@@ -581,7 +596,7 @@ function drawLandmarks(ctx, lms, w, h) {
 async function startCamera({ demo = false } = {}) {
   if (demo) MOCK = true;
   el.btnCam.disabled = true; el.btnDemo.disabled = true;
-  el.btnCam.textContent = '여는 중…';
+  el.btnCam.textContent = '여는 중';
   try {
     state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
@@ -619,7 +634,7 @@ async function startCamera({ demo = false } = {}) {
 }
 
 async function showDiagnosis() {
-  el.diagVerdict.textContent = '어디서 막혔는지 확인하는 중…';
+  el.diagVerdict.textContent = '어디서 막혔는지 확인하는 중입니다';
   el.diagList.innerHTML = ''; el.diagAdvice.textContent = '';
   el.camPrompt.hidden = true; el.diag.hidden = false;
   el.btnCam.disabled = false; el.btnDemo.disabled = false;
@@ -628,7 +643,7 @@ async function showDiagnosis() {
   el.diagVerdict.textContent = verdict;
   el.diagList.innerHTML = rows.map(r =>
     `<li data-state="${r.state}"><b>${mark[r.state]}</b><span>${r.label}</span>`
-    + (r.detail ? `<em>— ${r.detail}</em>` : '') + '</li>').join('');
+    + (r.detail ? `<em>(${r.detail})</em>` : '') + '</li>').join('');
   el.diagAdvice.textContent = advice;
   el.diagNewTab.hidden = !embedded;
 }
@@ -721,7 +736,7 @@ function setMode(mode, { restart = true } = {}) {
     // 연습을 멈춘다. 돌던 그림과 되풀이를 끊는다
     stopWordTimer(); clearTimeout(state.repeatTimer);
     state.seq = []; state.at = -1; state.settling = false;
-    el.seq.innerHTML = ''; el.fill.style.width = '0%'; el.guide.dataset.state = '';
+    el.seq.innerHTML = ''; setFill(0); el.guide.dataset.state = '';
     el.seqNote.hidden = true; el.meta.textContent = ''; el.read.textContent = '';
     el.spoken.hidden = true; clearTimeout(say._t);   // 연습에서 읽어 준 말이 남아 있지 않게
     try { speechSynthesis.cancel(); } catch { /* 소리 없는 브라우저 */ }   // 읽던 소리도 끊는다
@@ -857,7 +872,7 @@ function init() {
        순서는 한국어 순서 그대로라, 수어 문장으로 옮긴 것이 아니라 낱말을 이어 본 연습입니다.</p>
     <p>지문자 손모양은 제공받은 도표를 기준으로 합니다. 낱말 ${WORD_SIGNS.length}개 중
        ${WORD_SIGNS.filter(w => w.entryNo).length}개는 국립국어원 한국수어사전의 표제어와 수형 설명을 따라 그렸습니다.</p>
-    <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a> — ${s.note}</li>`).join('')}</ul>
+    <ul>${SOURCES.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>: ${s.note}</li>`).join('')}</ul>
     <p style="color:var(--faint);font-size:var(--t-micro)">© 2026 손말(Sonmal) 제작자 · 개인 학습용으로만 쓸 수 있습니다. 복제·수정·재배포는 <a href="https://github.com/aueoj/sonmal/blob/main/LICENSE" target="_blank" rel="noopener">이용 약관</a>에 따라 금지합니다.</p>
     <p style="color:var(--faint);font-size:var(--t-micro)">판 ${
       document.querySelector('meta[name="build"]')?.content ?? '알 수 없음'

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- 앱과 같은 울타리. 글꼴, 그림 말고는 어디에도 접속하지 않는다 -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'none';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src https://fonts.gstatic.com;
+  img-src 'self' data:;
+  connect-src 'self';
+  form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>손말 | 말한 문장을 손으로 따라 하는 수어 연습</title>
+<meta name="description" content="문장을 말하거나 입력하면 수어 낱말과 지문자 손모양으로 보여 드려요. 카메라 앞에서 따라 하면 해낸 만큼 알려 드리고 소리 내어 읽어 드려요.">
+<meta property="og:title" content="손말 | 수어 낱말과 지문자 연습">
+<meta property="og:description" content="말한 문장을 손모양으로 보여 주고, 따라 한 것을 다시 말로 읽어 드려요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/landing.css">
+<script>
+  // 스크롤 등장 움직임을 쓸 때만 아래 섹션을 잠깐 숨긴다. 스크립트가 못 붙으면 2.5초 뒤 그냥 보이게 되돌린다
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('reveal');
+    setTimeout(() => { if (!window.__revealed) document.documentElement.classList.remove('reveal'); }, 2500);
+  }
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="landing"><span class="mark">손말</span><span class="sub">수어 낱말과 지문자 연습</span></a>
+    <nav class="top-nav" aria-label="바로가기">
+      <a href="#how">연습 방법</a>
+      <a href="#privacy">개인정보</a>
+      <a href="#sources">자료 출처</a>
+      <a class="btn btn-primary btn-sm" href="./">연습 시작하기</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 id="hero-title">말한 문장을<br>손으로 따라 해 보세요</h1>
+      <p class="lede">문장을 말하거나 입력하면 수어 낱말과 지문자 손모양으로 보여 드려요. 카메라 앞에서 따라 하면 해낸 만큼 막대가 차오르고 한 어절을 끝낼 때마다 소리 내어 읽어 드려요.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="./">연습 시작하기</a>
+        <a class="btn btn-ghost" href="./?mock=1">카메라 없이 둘러보기</a>
+      </div>
+      <p class="fine">설치하지 않아도 브라우저에서 바로 열려요. 크롬이나 엣지를 권해요.</p>
+    </div>
+
+    <!-- 앱 화면을 줄여 옮긴 데모. 영상 위 아래쪽 안내 패널에서 '손말'을 한 글자씩 따라 한다. 소리는 내지 않는다 -->
+    <figure class="demo" aria-label="‘손말’을 지문자로 따라 하는 화면 예시">
+      <div class="demo-video" aria-hidden="true">
+        <span class="demo-spoken" id="demo-spoken">손말</span>
+        <div class="demo-guide">
+          <div class="demo-art" id="demo-art"></div>
+          <div class="demo-body">
+            <div class="demo-head">
+              <span class="demo-name" id="demo-name">ㅅ</span>
+              <span class="demo-seq" id="demo-seq">
+                <span class="unit" data-j="ㅅ">ㅅ</span><span class="unit" data-j="ㅗ">ㅗ</span><span class="unit" data-j="ㄴ">ㄴ</span>
+                <span class="unit gap"></span>
+                <span class="unit" data-j="ㅁ">ㅁ</span><span class="unit" data-j="ㅏ">ㅏ</span><span class="unit" data-j="ㄹ">ㄹ</span>
+              </span>
+            </div>
+            <p class="demo-step" id="demo-step">따라 해 보세요</p>
+            <div class="demo-track"><div class="demo-fill" id="demo-fill"></div></div>
+          </div>
+        </div>
+      </div>
+    </figure>
+  </section>
+
+  <section id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <h2 id="how-title" data-reveal>네 단계로 연습해요</h2>
+      <ol class="steps">
+        <li data-reveal>
+          <span class="step-n">1</span>
+          <h3>말하거나 고르기</h3>
+          <p>‘말하기’를 누르고 문장을 말하거나 ‘말 고르기’에서 낱말과 문장을 골라 주세요. 직접 입력하셔도 돼요.</p>
+        </li>
+        <li data-reveal>
+          <span class="step-n">2</span>
+          <h3>그림 보기</h3>
+          <p>사전에 있는 낱말은 수어 동작 그림으로, 없는 말은 조사와 어미를 뗀 뒤 지문자로 풀어 보여 드려요.</p>
+        </li>
+        <li data-reveal>
+          <span class="step-n">3</span>
+          <h3>따라 하기</h3>
+          <p>카메라 앞에서 따라 하면 해낸 만큼 막대가 차올라요. 맞는 모양으로 잠깐 버티면 다음 칸으로 넘어가요.</p>
+        </li>
+        <li data-reveal>
+          <span class="step-n">4</span>
+          <h3>다시 듣기</h3>
+          <p>한 어절을 끝낼 때마다 소리 내어 읽어 드리고, 끝나면 문장 전체를 한 번 더 읽어 드려요.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap split" aria-labelledby="fb-title">
+    <div data-reveal>
+      <h2 id="fb-title">어디가 다른지<br>짚어 드려요</h2>
+      <p class="section-lede">‘다시 해 보세요’ 한마디로 끝내지 않아요. 손가락 모양과 손끝 방향 가운데 무엇이 어긋났는지 바로 알려 드려요.</p>
+    </div>
+    <dl class="terms">
+      <div class="term" data-reveal>
+        <dt><b>수형</b><span>손과 손가락의 모양</span></dt>
+        <dd>“엄지와 검지 끝을 맞붙여 고리를 만드세요”</dd>
+      </div>
+      <div class="term" data-reveal>
+        <dt><b>수형</b><span>손가락 사이</span></dt>
+        <dd>“검지와 중지를 벌리세요”</dd>
+      </div>
+      <div class="term" data-reveal>
+        <dt><b>수동</b><span>손끝의 방향과 움직임</span></dt>
+        <dd>“손끝을 아래로 향하게 하세요”</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="band" aria-labelledby="modes-title">
+    <div class="wrap">
+      <h2 id="modes-title" data-reveal>두 가지로 써 보세요</h2>
+      <div class="modes">
+        <article class="mode" data-reveal>
+          <h3>연습 모드</h3>
+          <p>고른 말을 그림을 보며 따라 해요. 그림을 보고 두 번 해낸 낱말은 다음부터 그림을 가리고 떠올려 보게 해요. 막히면 ‘그림 보기’를 눌러 주세요.</p>
+        </article>
+        <article class="mode" data-reveal>
+          <h3>자유 모드</h3>
+          <p>고르지 않고 내가 하는 수어를 읽어 바로 소리로 들려 드려요. 지문자로 바꾸면 자모를 받아 적어 글자로 합쳐 읽어요.</p>
+        </article>
+      </div>
+      <dl class="figures" data-reveal>
+        <div><dt>낱말</dt><dd>95<small>개</small></dd></div>
+        <div><dt>상황별 문장</dt><dd>154<small>개</small></dd></div>
+        <div><dt>지문자</dt><dd>40<small>자</small></dd></div>
+        <div><dt>자유 모드로 읽는 낱말</dt><dd>71<small>개</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="chart-title">
+    <div class="chart-head">
+      <h2 id="chart-title" data-reveal>지문자 40자</h2>
+      <p class="section-lede" data-reveal>자음 14자와 모음 14자에 복합모음 7자와 쌍자음 5자를 더했어요. 쌍자음은 같은 손모양으로 손을 옆으로 한 번 밀어서 나타내요.</p>
+    </div>
+    <div class="chart" id="chart" role="list" aria-label="지문자 40자"></div>
+  </section>
+
+  <section class="band" id="privacy" aria-labelledby="privacy-title">
+    <div class="wrap split">
+      <h2 id="privacy-title" data-reveal>영상은 기기 밖으로<br>나가지 않습니다</h2>
+      <div class="prose" data-reveal>
+        <p>카메라 영상과 손 좌표는 지금 쓰시는 브라우저 안에서만 처리합니다. 녹화하거나 저장하거나 전송하지 않으며 회원 가입도 필요하지 않습니다.</p>
+        <p>음성은 다릅니다. ‘말하기’를 누르면 브라우저가 마이크 소리를 제조사의 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플). 소리를 보내고 싶지 않으시면 문장을 직접 입력해 주세요.</p>
+        <p>페이지가 접속하는 곳은 글꼴, 손 인식 코드, 손 인식 모델 파일 세 곳뿐이며 모두 내려받기만 합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="limits-title">
+    <div class="wrap">
+      <h2 id="limits-title" data-reveal>아직 못 하는 것도 솔직하게 적어 둘게요</h2>
+      <ul class="limits">
+        <li data-reveal>문장은 수어 문장으로 옮긴 것이 아니에요. 낱말을 한국어 순서대로 이어 본 연습이에요.</li>
+        <li data-reveal>얼굴 표정과 고개 움직임은 보지 않아요. 표정이 문법인 낱말은 화면에 글로 알려 드려요.</li>
+        <li data-reveal>자유 모드는 낱말 95개 가운데 71개만 읽어요. 움직임 판정 기준은 실제 카메라로 더 맞춰 가는 중이에요.</li>
+        <li data-reveal>정확한 동작은 국립국어원 한국수어사전 영상으로 함께 확인해 주세요. 낱말마다 ‘사전 영상 보기’ 링크가 있어요.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap" id="sources" aria-labelledby="sources-title">
+    <h2 id="sources-title" data-reveal>참고한 자료</h2>
+    <ul class="sources">
+      <li data-reveal><a href="https://sldict.korean.go.kr/" target="_blank" rel="noopener">국립국어원 한국수어사전</a><span>수어 동영상, 수형 사진과 설명, 용례</span></li>
+      <li data-reveal><a href="https://www.data.go.kr/data/15122687/fileData.do" target="_blank" rel="noopener">공공데이터포털 한국수어사전 표제어 및 용례</a><span>표제어 번호와 한국어 대응 표현</span></li>
+      <li data-reveal><a href="https://www.aihub.or.kr/aihubdata/data/view.do?dataSetSn=103" target="_blank" rel="noopener">AI Hub 수어 영상 데이터셋</a><span>수어 영상과 손 키포인트</span></li>
+    </ul>
+  </section>
+
+  <section class="closing wrap" aria-labelledby="closing-title">
+    <h2 id="closing-title" data-reveal>첫 문장을 말해 보세요</h2>
+    <p class="section-lede" data-reveal>‘안녕하세요’처럼 짧은 인사부터 시작해 보시길 권해요.</p>
+    <div class="cta cta-center" data-reveal>
+      <a class="btn btn-primary" href="./">연습 시작하기</a>
+      <a class="btn btn-ghost" href="./?mock=1">카메라 없이 둘러보기</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-row">
+    <span>© 2026 손말(Sonmal) · <a href="https://github.com/aueoj/sonmal/blob/main/LICENSE" target="_blank" rel="noopener">이용 약관</a></span>
+    <span>개인 학습용으로만 쓸 수 있습니다. 복제·수정·재배포 금지.</span>
+  </div>
+</footer>
+
+<script type="module" src="js/landing.js"></script>
+</body>
+</html>

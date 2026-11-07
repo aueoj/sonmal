@@ -1,0 +1,216 @@
+/* landing.css — 손말 소개 페이지
+   앱과 같은 토큰을 쓴다. 강조색은 인디고 하나, 선은 가늘게, 그림자는 없다.
+   데모만은 앱처럼 영상 위 아래쪽에 옅어지는 검정을 깐다. */
+
+:root {
+  --on-accent: #ffffff;
+  --indigo-press: #4a55b5;
+}
+html, body { height: auto; }
+body { overflow-x: clip; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+img { display: block; max-width: 100%; }
+
+.wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+.skip {
+  position: absolute; left: var(--s4); top: -60px; z-index: 50;
+  background: var(--ink); color: var(--paper); padding: var(--s2) var(--s4);
+  border-radius: var(--r-md); text-decoration: none; font-size: var(--t-label);
+}
+.skip:focus { top: var(--s2); }
+:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; border-radius: var(--r-sm); }
+
+/* ── 버튼 ───────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 44px; padding: 0 var(--s5); border-radius: var(--r-md); border: 1px solid transparent;
+  font-family: var(--kr); font-size: var(--t-lead); font-weight: 600; text-decoration: none; white-space: nowrap;
+  transition: background-color .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease), transform .1s var(--ease);
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--indigo); color: var(--on-accent); }
+.btn-primary:hover { background: var(--indigo-hover); }
+.btn-primary:active { background: var(--indigo-press); }
+.btn-ghost { background: var(--paper); border-color: var(--line-strong); color: var(--ink-soft); }
+.btn-ghost:hover { border-color: var(--ink-soft); color: var(--ink); }
+.btn-ghost:active { background: var(--panel); }
+.btn-sm { min-height: 36px; padding: 0 var(--s4); font-size: var(--t-body); }
+
+/* ── 머리 ───────────────────────────────────────── */
+.top {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.top-row { height: 60px; display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
+.brand { display: flex; align-items: baseline; gap: var(--s3); text-decoration: none; color: inherit; }
+.mark { font-family: var(--kr); font-weight: 700; font-size: 18px; letter-spacing: -0.03em; }
+.sub { font-size: var(--t-label); color: var(--muted); white-space: nowrap; }
+.top-nav { display: flex; align-items: center; gap: var(--s5); }
+.top-nav a:not(.btn) {
+  font-family: var(--kr); font-size: var(--t-body); color: var(--muted); text-decoration: none;
+  padding: var(--s2) 0; transition: color .15s var(--ease);
+}
+.top-nav a:not(.btn):hover { color: var(--ink); }
+
+/* ── 첫 화면 ─────────────────────────────────────── */
+.hero {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 64px; align-items: center;
+  padding: 88px 0 112px;
+}
+.hero h1 {
+  margin: 0; font-family: var(--kr); font-weight: 700;
+  font-size: clamp(38px, 5.6vw, 64px); line-height: 1.18; letter-spacing: -0.035em; text-wrap: balance;
+}
+.lede { margin: var(--s6) 0 0; max-width: 33em; font-family: var(--kr); font-size: clamp(16px, 1.5vw, 18px); color: var(--ink-soft); }
+.cta { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s7); }
+.cta-center { justify-content: center; }
+.fine { margin: var(--s4) 0 0; font-family: var(--kr); font-size: var(--t-label); color: var(--muted); }
+
+/* 데모: 앱 화면을 줄였다. 영상 자리는 밝은 벽, 아래쪽은 옅어지는 검정 위 안내 */
+.demo { margin: 0; }
+.demo-video {
+  position: relative; aspect-ratio: 16 / 11; border-radius: var(--r-lg); overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 18%, #f3f2ef, #d9d7d2);
+  border: 1px solid var(--line);
+}
+.demo-spoken {
+  position: absolute; left: 50%; bottom: 47%; transform: translateX(-50%);
+  background: var(--paper); border: 1px solid var(--jade); border-radius: 999px;
+  padding: 4px 14px; font-family: var(--kr); font-size: var(--t-body); font-weight: 600; color: #23764d; opacity: 0;
+}
+.demo-guide {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: flex-end; gap: var(--s4); padding: 48px var(--s4) var(--s4);
+  background: linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.72) 30%, rgba(0,0,0,.4) 66%, rgba(0,0,0,0) 100%);
+  color: #fff;
+}
+.demo-art {
+  flex: none; width: 108px; aspect-ratio: 1; padding: 6px; border-radius: 10px;
+  background: rgba(255,255,255,.94); display: grid; place-items: center; overflow: hidden;
+}
+/* 도표의 손은 왼손이다. 앱 기본값인 오른손으로 뒤집어 보인다 */
+.demo-art .sheet-art { width: 100%; height: 100%; transform: scaleX(-1); }
+.demo-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+.demo-head { display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; }
+.demo-name { font-family: var(--kr); font-size: var(--t-title); font-weight: 600; }
+.demo-seq { display: flex; gap: 3px; }
+.demo-step { margin: 0; font-family: var(--kr); font-size: var(--t-body); }
+.demo-track { height: 4px; max-width: 220px; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; }
+.demo-fill { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left; background: var(--indigo); transition: background-color .2s var(--ease); }
+.demo-guide[data-state="near"] .demo-fill { background: var(--amber); }
+.demo-guide[data-state="hit"] .demo-fill { background: var(--jade); }
+/* 앱의 칸과 같은 모양 */
+.unit {
+  flex: none; min-width: 24px; height: 26px; padding: 0 6px; border-radius: var(--r-sm);
+  display: grid; place-items: center; font-family: var(--kr); font-weight: 600; font-size: 15px;
+  color: rgba(255,255,255,.82); background: rgba(255,255,255,.12); text-shadow: none;
+  transition: color .16s var(--ease), background-color .16s var(--ease);
+}
+.unit.gap { min-width: 7px; padding: 0; background: none; }
+.unit[data-state="now"] { color: #fff; background: var(--indigo); }
+.unit[data-state="done"] { color: #a8efc8; background: rgba(60,158,107,.2); }
+
+/* ── 섹션 ───────────────────────────────────────── */
+section { padding: 120px 0; }
+.band { background: var(--panel); border-block: 1px solid var(--line); }
+h2 {
+  margin: 0 0 var(--s7); font-family: var(--kr); font-weight: 700;
+  font-size: clamp(28px, 3.4vw, 40px); line-height: 1.25; letter-spacing: -0.03em; text-wrap: balance;
+}
+h3 { margin: 0 0 var(--s2); font-family: var(--kr); font-size: var(--t-title); font-weight: 600; letter-spacing: var(--track-tight); }
+.section-lede { margin: 0; max-width: 34em; font-family: var(--kr); font-size: var(--t-lead); color: var(--ink-soft); }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 72px; align-items: start; }
+.split h2 { margin-bottom: var(--s5); }
+
+/* 상자 대신 위에 굵은 선 하나. 말하기에서 다시 듣기까지 왼쪽에서 오른쪽으로 읽힌다 */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s6); }
+.steps li { border-top: 2px solid var(--ink); padding-top: var(--s5); }
+.steps li:last-child { border-top-color: var(--indigo); }
+.step-n { display: block; margin-bottom: var(--s3); font-family: var(--sans); font-weight: 500; font-size: var(--t-label); color: var(--muted); font-variant-numeric: tabular-nums; }
+.steps p { margin: 0; font-family: var(--kr); color: var(--ink-soft); }
+
+.terms { margin: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.term { display: grid; grid-template-columns: 180px 1fr; gap: var(--s5); padding: var(--s6) 0; border-bottom: 1px solid var(--line); }
+.term dt { display: flex; flex-direction: column; gap: 2px; font-family: var(--kr); }
+.term dt b { font-size: var(--t-title); font-weight: 600; }
+.term dt span { font-size: var(--t-label); color: var(--muted); }
+.term dd { margin: 0; align-self: center; font-family: var(--kr); font-size: var(--t-lead); color: var(--ink); }
+
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+.mode { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-lg); padding: var(--s6); }
+.mode p { margin: 0; font-family: var(--kr); color: var(--ink-soft); max-width: 36em; }
+.figures { margin: var(--s7) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); }
+.figures div { padding: var(--s5) var(--s4) 0 0; }
+.figures dt { font-family: var(--kr); font-size: var(--t-label); color: var(--muted); }
+.figures dd { margin: 2px 0 0; font-family: var(--sans); font-size: 34px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.figures small { margin-left: 2px; font-family: var(--kr); font-size: var(--t-body); font-weight: 500; color: var(--muted); }
+
+.chart-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 72px; align-items: end; margin-bottom: var(--s7); }
+.chart-head h2 { margin: 0; }
+.chart { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: var(--s2); }
+.chart figure {
+  margin: 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: var(--s1) var(--s1) 2px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.chart .sheet-art { width: 100%; height: 64px; transform: scaleX(-1); }
+.chart .jamo-slide { height: 64px; }
+.chart figcaption { font-family: var(--kr); font-weight: 600; font-size: var(--t-label); }
+/* 쌍자음은 같은 손모양을 옆으로 미는 그림이다. 앱과 같은 움직임 */
+.jamo-slide { display: inline-flex; position: relative; width: 100%; align-items: center; justify-content: center; }
+.jamo-slide-hand { display: block; width: 64%; height: 82%; animation: jamo-slide 2.2s ease-in-out infinite; }
+.jamo-slide-hand .sheet-art { width: 100%; height: 100%; }
+.jamo-slide-arrow { position: absolute; bottom: 0; left: 38%; color: #172846; font-size: 18px; line-height: 1; }
+@keyframes jamo-slide { 0%,20% { transform: translateX(-15%); } 65%,90% { transform: translateX(15%); } 100% { transform: translateX(-15%); } }
+
+.prose p { margin: 0 0 var(--s4); font-family: var(--kr); font-size: var(--t-lead); color: var(--ink-soft); max-width: 36em; }
+.limits { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; column-gap: 72px; }
+.limits li {
+  position: relative; padding: var(--s4) 0 var(--s4) var(--s6); border-bottom: 1px solid var(--line);
+  font-family: var(--kr); font-size: var(--t-lead); color: var(--ink-soft);
+}
+.limits li::before { content: ""; position: absolute; left: 4px; top: 1.45em; width: 6px; height: 6px; border-radius: 50%; background: var(--line-strong); }
+
+.sources { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.sources li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s1) var(--s5); padding: var(--s5) 0; border-bottom: 1px solid var(--line); }
+.sources a { padding-block: var(--s2); font-family: var(--kr); font-size: var(--t-lead); font-weight: 600; color: var(--ink); text-decoration-color: var(--line-strong); text-underline-offset: 4px; transition: text-decoration-color .15s var(--ease), color .15s var(--ease); }
+.sources a:hover { color: var(--indigo); text-decoration-color: currentColor; }
+.sources span { font-family: var(--kr); font-size: var(--t-body); color: var(--muted); }
+
+.closing { text-align: center; padding: 136px 0 144px; }
+.closing h2 { margin-bottom: var(--s4); }
+.closing .section-lede { margin: 0 auto; }
+
+.foot { border-top: 1px solid var(--line); padding: var(--s6) 0 var(--s7); }
+.foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s2) var(--s5); font-family: var(--kr); font-size: var(--t-label); color: var(--muted); }
+.foot a { color: inherit; text-underline-offset: 3px; }
+.foot a:hover { color: var(--ink); }
+
+/* 스크롤 등장. 스크립트가 붙기 전에만 숨긴다 */
+.reveal [data-reveal], .reveal .chart figure { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .jamo-slide-hand { animation: none; } html { scroll-behavior: auto; } }
+
+/* ── 좁은 화면 ───────────────────────────────────── */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 0 80px; }
+  .demo { max-width: 560px; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .split, .chart-head { grid-template-columns: 1fr; gap: var(--s5); }
+  .figures { grid-template-columns: 1fr 1fr; row-gap: var(--s4); }
+  .chart { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  section { padding: 88px 0; }
+}
+@media (max-width: 640px) {
+  .top-nav a:not(.btn) { display: none; }
+  .sub { display: none; }
+  .steps, .modes { grid-template-columns: 1fr; }
+  .term { grid-template-columns: 1fr; gap: var(--s2); }
+  .limits { grid-template-columns: 1fr; }
+  .chart { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .cta .btn { flex: 1 1 100%; }
+  .demo-art { width: 84px; }
+  .demo-guide { padding-top: 36px; }
+  .closing { padding: 96px 0 104px; }
+  .foot-row { flex-direction: column; }
+}
