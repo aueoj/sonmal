@@ -4,7 +4,7 @@
  * 무엇이 어긋났는지를 짚는다. 문화체육관광부 수어 안내가 설명하는 네 요소다.
  */
 
-import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071517';
+import { FINGERS, angleToDir } from './poseFeatures.js?v=202611071542';
 
 const DIR_DEG = { up: 0, right: 90, down: 180, left: 270 };
 const DIR_KO = { up: '위', right: '오른쪽', down: '아래', left: '왼쪽' };
@@ -140,6 +140,7 @@ export function bestMatch(feat, poses) {
  * @param {Array<{x:number, t:number}>} trail 손 무게중심의 x와 시각(ms)
  */
 export const MOTION_WINDOW_MS = 700;
+export const SHIFT_MIN = 0.35;   // 손 크기 대비 이만큼 옆으로 가야 민 것으로 친다(연습, 읽기 같은 잣대)
 
 export function detectLateralShift(trail, scale, now = trail.at(-1)?.t ?? 0) {
   const win = trail.filter(p => now - p.t <= MOTION_WINDOW_MS);

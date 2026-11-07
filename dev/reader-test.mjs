@@ -8,12 +8,20 @@ const { getPose } = await import('../js/jamoData.js');
 let said = '';
 const r = createReader({ onSentence: t => { said = t; } });
 let t = 0;
-const hold = (jamo, ms = 800) => { const f = describe(landmarksFor(getPose(jamo), 0), 'Right', true); for (let i = 0; i < ms; i += 50) r.feed([f], t += 50); };
+// slide 면 손모양은 그대로 두고 손 전체를 옆으로 민다(쌍자음)
+const hold = (jamo, ms = 800, slide = false) => {
+  const lm = landmarksFor(getPose(jamo), 0), scale = describe(lm, 'Right', true).scale;
+  for (let i = 0; i < ms; i += 50) {
+    const dx = slide ? Math.min(1, i / 500) * scale : 0;
+    r.feed([describe(lm.map(p => ({ ...p, x: p.x + dx })), 'Right', true)], t += 50);
+  }
+};
 const rest = ms => { for (let i = 0; i < ms; i += 50) r.feed([], t += 50); };
-const cases = [['ㄱㅏㄴㅏ', '가나'], ['ㅅㅏㄹㅏㅇ', '사랑'], ['ㅁㅜㄹ', '물']];
+// 'ㄱ>' 는 ㄱ 손모양을 옆으로 민다
+const cases = [['ㄱㅏㄴㅏ', '가나'], ['ㅅㅏㄹㅏㅇ', '사랑'], ['ㅁㅜㄹ', '물'], ['ㄱㅏ', '가'], ['ㄱ>ㅏ', '까'], ['ㅅ>ㅏ', '싸']];
 let bad = 0;
 for (const [seq, want] of cases) {
-  for (const j of seq) { hold(j); rest(200); }
+  for (const j of seq.match(/.>?/gu)) { hold(j[0], 800, j.length > 1); rest(200); }
   rest(2600);
   console.log(`지은 손 ${[...seq].join(' ')} → 읽은 말 "${said}"${said === want ? '' : `  ← 기대 "${want}"`}`);
   if (said !== want) bad++;

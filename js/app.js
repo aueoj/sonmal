@@ -9,22 +9,22 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071517';
-import { getPose } from './jamoData.js?v=202611071517';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071517';
-import { describe } from './poseFeatures.js?v=202611071517';
-import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS } from './matcher.js?v=202611071517';
-import { Tracker } from './tracker.js?v=202611071517';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071517';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071517';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071517';
-import { groupByIdea } from './lessons.js?v=202611071517';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071517';
-import { createReader } from './reader.js?v=202611071517';
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071517';
-import { createSignReader, readableSigns } from './signReader.js?v=202611071517';
-import { diagnose } from './diagnose.js?v=202611071517';
-import { animate, stagger } from './vendor/anime.js?v=202611071517';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071542';
+import { getPose } from './jamoData.js?v=202611071542';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071542';
+import { describe } from './poseFeatures.js?v=202611071542';
+import { scorePose, scoreCheck, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071542';
+import { Tracker } from './tracker.js?v=202611071542';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071542';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071542';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071542';
+import { groupByIdea } from './lessons.js?v=202611071542';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071542';
+import { createReader } from './reader.js?v=202611071542';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071542';
+import { createSignReader, readableSigns } from './signReader.js?v=202611071542';
+import { diagnose } from './diagnose.js?v=202611071542';
+import { animate, stagger } from './vendor/anime.js?v=202611071542';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -537,7 +537,7 @@ function onFrame(hands, face = null) {
 
   setFill(smooth);
   el.guide.dataset.state = smooth >= ACCEPT ? 'hit' : smooth >= NEAR ? 'near' : '';
-  if (pose.motion && detectLateralShift(state.trail, feat.scale, t) >= 0.35) state.motionSeen = true;
+  if (pose.motion && detectLateralShift(state.trail, feat.scale, t) >= SHIFT_MIN) state.motionSeen = true;
   const motionReady = !pose.motion || state.motionSeen;
   const line = smooth >= ACCEPT && !motionReady
     ? '손모양은 맞아요. 그대로 손 전체를 옆으로 한 번 미세요.'
@@ -625,20 +625,20 @@ async function startCamera({ demo = false } = {}) {
       state.tracker.setMockPose(cp);
       state.tracker.mockTwoHands = cp?.hands === 2;   // 카메라를 켜기 전에 정해진 칸도 맞춘다
     }
-  } catch {
+  } catch (err) {
     el.btnCam.disabled = false; el.btnDemo.disabled = false;
     el.btnCam.textContent = '카메라 켜기';
     el.camTitle.textContent = '카메라를 켜면 손을 읽어 드립니다';
-    await showDiagnosis();
+    await showDiagnosis(err);   // 진단이 처음부터 다시 재면 진짜 실패를 놓친다
   }
 }
 
-async function showDiagnosis() {
+async function showDiagnosis(err) {
   el.diagVerdict.textContent = '어디서 막혔는지 확인하는 중입니다';
   el.diagList.innerHTML = ''; el.diagAdvice.textContent = '';
   el.camPrompt.hidden = true; el.diag.hidden = false;
   el.btnCam.disabled = false; el.btnDemo.disabled = false;
-  const { rows, verdict, advice, embedded } = await diagnose();
+  const { rows, verdict, advice, embedded } = await diagnose(err);
   const mark = { ok: '○', bad: '✕', unknown: '–' };
   el.diagVerdict.textContent = verdict;
   el.diagList.innerHTML = rows.map(r =>
@@ -646,6 +646,7 @@ async function showDiagnosis() {
     + (r.detail ? `<em>(${r.detail})</em>` : '') + '</li>').join('');
   el.diagAdvice.textContent = advice;
   el.diagNewTab.hidden = !embedded;
+  el.diagRetry.focus();   // 키보드와 화면 낭독기 사용자가 바로 다음 행동으로 간다
 }
 
 function startListening() {

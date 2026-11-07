@@ -11,9 +11,12 @@ const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/h
 const ok = (label, detail = '') => ({ label, state: 'ok', detail });
 const bad = (label, detail = '') => ({ label, state: 'bad', detail });
 const unknown = (label, detail = '') => ({ label, state: 'unknown', detail });
+// 카메라를 여는 단계에서 나는 오류. 그 밖의 오류는 카메라가 열린 뒤 손 인식 준비에서 난 것이다
+const CAMERA_ERRORS = new Set(['NotAllowedError', 'NotFoundError', 'NotReadableError', 'OverconstrainedError', 'SecurityError', 'AbortError']);
 
-/** @returns {Promise<{rows:Array, verdict:string, advice:string}>} */
-export async function diagnose() {
+/** @param {Error} [err] 앱이 카메라를 켜다 받은 오류
+ *  @returns {Promise<{rows:Array, verdict:string, advice:string}>} */
+export async function diagnose(err) {
   const rows = [];
   const embedded = window.self !== window.top;
 
@@ -37,9 +40,13 @@ export async function diagnose() {
   const hasApi = Boolean(navigator.mediaDevices?.getUserMedia);
   rows.push(hasApi ? ok('카메라 API') : bad('카메라 API', 'navigator.mediaDevices가 없습니다'));
 
-  let camErr = null;
-  if (hasApi) {
+  let camErr = null, setupErr = null;
+  if (hasApi && err && !CAMERA_ERRORS.has(err.name)) {
+    setupErr = err;
+    rows.push(ok('카메라 열기'));
+  } else if (hasApi) {
     try {
+      if (err) throw err;   // 앱이 받은 카메라 오류를 그대로 쓴다. 다시 열면 권한 창이 또 뜬다
       const s = await navigator.mediaDevices.getUserMedia({ video: true });
       s.getTracks().forEach(t => t.stop());
       rows.push(ok('카메라 열기'));
@@ -76,8 +83,10 @@ export async function diagnose() {
   }
 
   const blocked = rows.find(r => r.state === 'bad');
-  let verdict = '카메라를 쓸 수 있습니다';
-  let advice = '';
+  let verdict = '손 인식을 시작하지 못했습니다';
+  let advice = '페이지를 새로 고친 뒤 다시 시도해 주세요. 그래도 안 되면 확장 프로그램이나 회사 네트워크가 cdn.jsdelivr.net을 막는지 확인하고, 크롬이나 엣지 최신판에서 열어 주세요.';
+  // 앞 단계가 다 열렸는데도 앱이 실패했다면, 그 실패를 감추지 않고 짚는다. wasm 이 막히면 message 없는 Event 가 온다
+  if (setupErr) rows.push(bad('손 인식 준비', `카메라는 열렸지만 손 인식을 띄우지 못했습니다: ${String(setupErr.message || setupErr.type || setupErr).slice(0, 90)}`));
 
   if (!window.isSecureContext) {
     verdict = '보안 연결이 아니라 카메라가 열리지 않습니다';
