@@ -29,8 +29,8 @@
     setTimeout(() => { if (!window.__revealed) document.documentElement.classList.remove('reveal'); }, 2500);
   }
 </script>
-<!-- Vercel Web Analytics: 쿠키 없이 방문 수만 센다. GitHub Pages 사본에서는 부르지 않는다 -->
-<script>if(!location.hostname.endsWith("github.io")){const s=document.createElement("script");s.defer=true;s.src="/_vercel/insights/script.js";document.head.appendChild(s)}</script>
+<!-- Vercel Web Analytics: 쿠키 없이 방문 수만 센다. vercel.app 에서만 부른다(로컬 점검·GitHub Pages 에선 404 라서) -->
+<script>if(location.hostname.endsWith(".vercel.app")){const s=document.createElement("script");s.defer=true;s.src="/_vercel/insights/script.js";document.head.appendChild(s)}</script>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
