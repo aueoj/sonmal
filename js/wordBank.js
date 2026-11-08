@@ -18,6 +18,9 @@
  * check (판정 힌트, 단계마다)
  *   hands  보여야 하는 손 수
  *   fingers 주로 쓰는 손에서 펴진 손가락 (index·middle·ring·pinky, thumb 은 따로)
+ *   other  두 손 낱말에서 다른 손의 펴진 손가락. fingers 와 같은 값이고 [] 는 주먹이다
+ *   thumb  'up' 이면 주로 쓰는 손의 엄지를 편다. 다른 손의 엄지는 보지 않는다
+ *   ring   true 면 엄지와 검지 끝을 맞댄 동그라미
  *   zone   손이 머무는 곳 face · chin · chest · belly · front
  *   spot   얼굴 가로 자리 center(코 앞) · side(뺨 옆). 손모양과 높이가 같은 낱말을 가를 때만 쓴다
  *   zone 에 head(머리 옆) · cheek(뺨)를 더 쓴다. 얼굴 높이를 위아래로 가를 때만 쓴다
@@ -86,7 +89,7 @@ export const WORD_BANK = [
     hands: 2,
     수형: '왼손 엄지 세운 주먹, 오른손 편 손', 수향: '왼 엄지 바닥이 밖, 오른손 세움', 수위: '가슴 앞', 수동: '오른 손바닥으로 왼 엄지 등을 두 번 댄다',
     steps: ['왼손은 엄지를 세운 주먹, 오른손은 펴서 세운다', '오른 손바닥을 왼 엄지 등에 두 번 댄다'],
-    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], thumb: null, zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest', move: 'cross' }] }),
+    check: [{ hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest' }, { hands: 2, fingers: ['index','middle','ring','pinky'], other: [], zone: 'chest', move: 'cross' }] }),
 
   e(7422, { word: '다시', category: '기본', aliases: ['또','다시요','한번더','그리고','한 번 더'], status: 'ok',
     원문: '오른 주먹의 5지 바닥을 1·2지의 손톱에 가볍게 대고 손등이 밖으로 향하게 하여 왼쪽 아래로 내리며 1·2지를 편다.',
@@ -151,7 +154,7 @@ export const WORD_BANK = [
     hands: 2,
     수형: '검지와 엄지를 편 손 (ㄱ 모양)', 수향: '손등이 밖', 수위: '양쪽 가슴', 수동: '두 손을 위아래로 엇갈리게 두 번', 비수지: '기쁜 표정',
     steps: ['두 손 검지와 엄지를 펴서 검지 끝을 양쪽 가슴에 댄다', '두 손을 위아래로 엇갈리게 움직인다 (두 번)'],
-    check: [{ hands: 2, fingers: ['index'], thumb: 'out', zone: 'chest' }, { hands: 2, fingers: ['index'], thumb: 'out', zone: 'chest' }] }),
+    check: [{ hands: 2, fingers: ['index'], zone: 'chest' }, { hands: 2, fingers: ['index'], zone: 'chest' }] }),
 
   e(9078, { word: '좋아요', category: '감정', aliases: ['좋다','좋아','선'], status: 'ok',
     원문: '오른 주먹을 코에 1·5지 옆면이 닿게 댄다.',
@@ -2553,16 +2556,12 @@ export const WORD_BANK = [
         "index",
         "middle"
       ],
-      "other": [
-        "thumb"
-      ],
+      "other": [],
       "zone": "chest"
     },
     {
       "hands": 2,
-      "other": [
-        "thumb"
-      ],
+      "other": [],
       "zone": "chest"
     }
   ],

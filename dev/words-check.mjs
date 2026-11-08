@@ -8,6 +8,7 @@ import { WORD_SIGNS } from '../js/words.js';
 import { WORD_POSE_FILES } from '../js/illustrations.js';
 import { WORD_BANK } from '../js/wordBank.js';
 import { SITUATIONS } from '../js/lessons.js';
+import { ZONE_AT } from '../js/matcher.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const SLDICT = /^https:\/\/sldict\.korean\.go\.kr\/front\/sign\/signContentsView\.do\?origin_no=(\d+)/;
@@ -57,6 +58,25 @@ for (const w of WORD_BANK) {
     bankOwner.set(k, w.word);
   }
 }
+
+/* 판정 힌트(check)는 판정이 실제로 보는 칸과 값만 쓴다. 모르는 값은 조용히 무시되어 판정이 헐거워진다.
+   값은 js/matcher.js(scoreCheck, zoneHint, spotHint, pointHint)와 js/motion.js(moveHint)가 읽는 것이다 */
+const FINGERS = ['index', 'middle', 'ring', 'pinky'];   // handShape 는 엄지를 보지 않는다. 엄지는 thumb 칸으로
+const CHECK_VALUES = {
+  hands: [1, 2], zone: Object.keys(ZONE_AT), spot: ['center', 'side'], point: ['up', 'down', 'side', 'out'],
+  move: ['up', 'down', 'side', 'cross', 'out', 'back', 'together', 'swap', 'sway', 'bob', 'apart', 'turn'],
+  moving: ['one', 'both'], ring: [true], thumb: ['up']   // thumb 는 주로 쓰는 손만 본다
+};
+for (const w of WORD_BANK) (w.check ?? []).forEach((c, i) => {
+  const tag = `창고「${w.word}」 ${i + 1}단계 check`;
+  for (const [k, v] of Object.entries(c)) {
+    if (k === 'fingers' || k === 'other') {
+      if (!Array.isArray(v) || v.some(f => !FINGERS.includes(f)) || new Set(v).size !== v.length)
+        bad.push(`${tag} ${k} ${JSON.stringify(v)} — ${FINGERS.join(', ')} 만 쓴다`);
+    } else if (!CHECK_VALUES[k]) bad.push(`${tag} 모르는 칸 ${k}`);
+    else if (!CHECK_VALUES[k].includes(v)) bad.push(`${tag} ${k}: ${JSON.stringify(v)} — ${CHECK_VALUES[k].join(', ')} 중 하나`);
+  }
+});
 
 /* 상황 묶음: 화면에 나오는 낱말은 한 묶음에만 속한다 */
 const inSit = new Map();
