@@ -8,7 +8,7 @@
 
 - 한국수어 낱말과 지문자를 카메라로 따라 하며 연습하는 정적 웹. 사이트는 `app.min.js` 하나만 받는다(`dev/build.mjs`, esbuild 0.24.2).
 - 방문자 수: Vercel Web Analytics(vercel.app 에서만 불러온다, 11/08).
-- 배포 두 곳: GitHub Pages https://aueoj.github.io/sonmal/ (main 루트), Vercel https://sonmal-chi.vercel.app (소개 페이지 `/landing`).
+- 배포 두 곳: GitHub Pages https://aueoj.github.io/sonmal/ (main 루트), Vercel https://getsonmal.vercel.app (소개 페이지 `/landing`, 예전 주소 sonmal-chi.vercel.app 도 열린다. 11/08).
 - 숫자(11/08 기준): 낱말 95개(전부 국립국어원 사전 표제어), 상황별 문장 154개, 지문자 40자. 연습 모드와 자유 모드.
 - 11/08: 음성 인식이 말하는 중에 끊기던 문제를 고침. 확정 안 된 말이 남아 있으면 4.5초까지 기다리고, 확정된 뒤에는 2.2초 침묵에 끝낸다(`js/speech.js`, 테스트 `dev/listen-test.mjs`). 실제 목소리로는 아직 확인 전.
 
