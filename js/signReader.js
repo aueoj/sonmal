@@ -17,8 +17,8 @@
  *   말하지 않는 것보다 나쁘다.
  *   손가락 조건이 없는 단계가 있는 낱말은 거의 아무 손이나 맞으므로 읽을 대상에서 뺀다.
  */
-import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071644';
-import { scoreCheck, ZONE_AT } from './matcher.js?v=202611071644';
+import { motionStart, motionFeed, moveHint, travelled } from './motion.js?v=202611071651';
+import { scoreCheck, ZONE_AT } from './matcher.js?v=202611071651';
 
 const FIT_SLACK = 0.35;
 export const HOLD_MS = 400;   // 한 단계를 맞춘 채 이만큼 버티면 그 단계를 해낸 것으로 본다

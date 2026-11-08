@@ -13,6 +13,11 @@ const bad = (label, detail = '') => ({ label, state: 'bad', detail });
 const unknown = (label, detail = '') => ({ label, state: 'unknown', detail });
 // 카메라를 여는 단계에서 나는 오류. 그 밖의 오류는 카메라가 열린 뒤 손 인식 준비에서 난 것이다
 const CAMERA_ERRORS = new Set(['NotAllowedError', 'NotFoundError', 'NotReadableError', 'OverconstrainedError', 'SecurityError', 'AbortError']);
+// 켜서 쓰던 중에 끊긴 것(tracker.js 가 이름을 붙인다). 켜는 단계의 실패와 달리 무엇이 끊겼는지 바로 안다
+const LOST = {
+  CameraEndedError: ['카메라가 끊어졌습니다', '카메라 연결을 확인해 주세요. 카메라를 뽑았거나, 다른 프로그램이 가져갔거나, 카메라 권한을 거두었을 수 있습니다. 확인한 뒤 다시 시도를 눌러 주세요.'],
+  DetectError: ['손 인식이 멈췄습니다', '페이지를 새로 고친 뒤 다시 시도해 주세요. 그래도 멈추면 크롬이나 엣지 최신판에서 열어 주세요.']
+};
 
 /** @param {Error} [err] 앱이 카메라를 켜다 받은 오류
  *  @returns {Promise<{rows:Array, verdict:string, advice:string}>} */
@@ -41,7 +46,11 @@ export async function diagnose(err) {
   rows.push(hasApi ? ok('카메라 API') : bad('카메라 API', 'navigator.mediaDevices가 없습니다'));
 
   let camErr = null, setupErr = null;
-  if (hasApi && err && !CAMERA_ERRORS.has(err.name)) {
+  const lost = LOST[err?.name];
+  if (hasApi && lost) {
+    rows.push(err.name === 'CameraEndedError' ? bad('카메라 열기', '쓰는 중에 영상이 끊어졌습니다') : ok('카메라 열기'));
+    if (err.name === 'DetectError') rows.push(bad('손 인식', err.message.slice(0, 90)));
+  } else if (hasApi && err && !CAMERA_ERRORS.has(err.name)) {
     setupErr = err;
     rows.push(ok('카메라 열기'));
   } else if (hasApi) {
@@ -97,6 +106,8 @@ export async function diagnose(err) {
   } else if (!hasApi) {
     verdict = '이 브라우저에서 카메라를 열 수 없습니다';
     advice = '브라우저가 카메라 API 자체를 내주지 않습니다. 시크릿 창이나 오래된 브라우저, 혹은 카메라를 막은 프레임 안일 수 있습니다. 크롬이나 엣지의 일반 창에서 열어 주세요.';
+  } else if (lost) {
+    [verdict, advice] = lost;
   } else if (camErr?.name === 'NotAllowedError' && embedded) {
     // 프레임 안에서는 주소창에서 허용해도 소용이 없다.
     // 브라우저가 featurePolicy 를 알려주지 않아도 끼워진 자리라는 것은 알 수 있다.

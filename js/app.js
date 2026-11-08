@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071644';
-import { getPose } from './jamoData.js?v=202611071644';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071644';
-import { describe } from './poseFeatures.js?v=202611071644';
-import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071644';
-import { Tracker } from './tracker.js?v=202611071644';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071644';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071644';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071644';
-import { groupByIdea } from './lessons.js?v=202611071644';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071644';
-import { createReader } from './reader.js?v=202611071644';
-import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611071644';
-import { diagnose } from './diagnose.js?v=202611071644';
-import { animate, stagger } from './vendor/anime.js?v=202611071644';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611071651';
+import { getPose } from './jamoData.js?v=202611071651';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611071651';
+import { describe } from './poseFeatures.js?v=202611071651';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611071651';
+import { Tracker } from './tracker.js?v=202611071651';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611071651';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611071651';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611071651';
+import { groupByIdea } from './lessons.js?v=202611071651';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611071651';
+import { createReader } from './reader.js?v=202611071651';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611071651';
+import { diagnose } from './diagnose.js?v=202611071651';
+import { animate, stagger } from './vendor/anime.js?v=202611071651';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -581,7 +581,7 @@ async function startCamera({ demo = false } = {}) {
   el.btnCam.disabled = true; el.btnDemo.disabled = true;
   el.btnCam.textContent = '여는 중';
   try {
-    state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK });
+    state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK, onLost: cameraFailed });
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
     // other 를 주면 다른 손을 그 자모 손모양으로 띄운다(두 손 판정 점검용)
     if (MOCK) window.__sonmalMock = (jamo, zone = null, other = null) => {
@@ -612,11 +612,19 @@ async function startCamera({ demo = false } = {}) {
       state.tracker.mockPose2 = cp?.parts?.[1] ?? null;
     }
   } catch (err) {
-    el.btnCam.disabled = false; el.btnDemo.disabled = false;
-    el.btnCam.textContent = '카메라 켜기';
-    el.camTitle.textContent = '카메라를 켜면 손을 읽어 드립니다';
-    await showDiagnosis(err);   // 진단이 처음부터 다시 재면 진짜 실패를 놓친다
+    await cameraFailed(err);
   }
+}
+
+/* 켜다 막혔을 때도, 쓰는 중에 끊겼을 때도(tracker 의 onLost) 같은 진단을 보인다 */
+async function cameraFailed(err) {
+  state.live = false;
+  el.camera.classList.remove('live');
+  el.overlay.getContext('2d').clearRect(0, 0, el.overlay.width, el.overlay.height);
+  el.btnCam.disabled = false; el.btnDemo.disabled = false;
+  el.btnCam.textContent = '카메라 켜기';
+  el.camTitle.textContent = '카메라를 켜면 손을 읽어 드립니다';
+  await showDiagnosis(err);   // 진단이 처음부터 다시 재면 진짜 실패를 놓친다
 }
 
 async function showDiagnosis(err) {

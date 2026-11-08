@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611071644';
-import { ZONE_AT } from './matcher.js?v=202611071644';
+import { landmarksFor } from './mockHand.js?v=202611071651';
+import { ZONE_AT } from './matcher.js?v=202611071651';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -21,11 +21,14 @@ const FACE_KEEP_MS = 2000;   // 손이 얼굴을 가리는 동안에는 마지�
 const MOCK_FACE = { y: 0.2, h: 0.16, x: 0.5, w: 0.14 };
 const MOCK_HAND = 0.4;                       // 합성 손 크기 배율
 const MOCK_HAND_SCALE = 0.44 * MOCK_HAND;     // 손목에서 중지 뿌리까지(화면 비율)
+const MAX_FAILS = 30;        // 손 인식이 이만큼(60fps 로 0.5초) 잇달아 실패하면 멈추고 알린다
 
 export class Tracker {
-  constructor({ video, onFrame, mock = false }) {
+  constructor({ video, onFrame, onLost, mock = false }) {
     this.video = video;
     this.onFrame = onFrame;
+    this.onLost = onLost;      // 켠 뒤에 카메라나 손 인식이 끊기면 오류를 받는다
+    this.fails = 0;
     this.mock = mock;
     this.running = false;
     this.landmarker = null;
@@ -50,6 +53,9 @@ export class Tracker {
         audio: false
       });
       this.video.srcObject = stream;
+      // 카메라를 뽑거나, 다른 프로그램이 가져가거나, 권한을 거두면 영상이 끝난다
+      stream.getVideoTracks()[0]?.addEventListener('ended', () =>
+        this._lose('CameraEndedError', '카메라 영상이 끊어졌습니다'));
       await this.video.play();
       const vision = await import(
         /* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`
@@ -90,6 +96,12 @@ export class Tracker {
     this.faceDetector?.close();
     this.faceDetector = null;
     this.face = null;
+  }
+
+  _lose(name, message) {
+    if (!this.running) return;
+    this.stop();
+    this.onLost?.(Object.assign(new Error(message), { name }));
   }
 
   async _loadFace(FaceDetector, fileset) {
@@ -138,8 +150,15 @@ export class Tracker {
   _loop() {
     if (!this.running) return;
     const now = performance.now();
+    let res = null;
     if (this.video.readyState >= 2) {
-      const res = this.landmarker.detectForVideo(this.video, now);
+      // 한 프레임 실패로 멈추지 않는다. 잇달아 실패하면 조용히 돌지 않고 알린다
+      try { res = this.landmarker.detectForVideo(this.video, now); this.fails = 0; }
+      catch (e) {
+        if (++this.fails >= MAX_FAILS) return this._lose('DetectError', `손 인식이 잇달아 실패했습니다: ${e?.message ?? e}`);
+      }
+    }
+    if (res) {
       // 쌍자음과 일부 복합모음은 손이 둘이다. 보이는 대로 전부 넘긴다.
       const hands = (res.landmarks ?? []).map((lm, i) => ({
         lm, handedness: res.handednesses?.[i]?.[0]?.categoryName ?? 'Right'
