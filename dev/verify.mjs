@@ -53,6 +53,7 @@ const BROWSER = [
   ['손', ['dev/hand-audit.mjs'], '왼손·오른손 전환이 맞는가'],
   ['되풀이', ['dev/loop-audit.mjs'], '끝나고 다시 처음으로 도는가'],
   ['문장 읽기', ['dev/loop-audit.mjs', '나 물'], '어절마다 읽고 끝에 문장 전체를 읽는가'],
+  ['다시 그리기', ['dev/redraw-audit.mjs'], '같은 손을 들고 있는 동안 안내 줄을 프레임마다 다시 쓰지 않는가'],
   ['말', ['dev/speech-audit.mjs'], '끊기지 않고 끝까지 듣는가'],
   ['배치', ['dev/layout-audit.mjs'], '가이드가 영상의 1/3을 넘지 않는가'],
   ['진단', ['dev/diag-audit.mjs'], '카메라가 막히면 이유를 말하는가'],

@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611080150';
-import { getPose } from './jamoData.js?v=202611080150';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611080150';
-import { describe } from './poseFeatures.js?v=202611080150';
-import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611080150';
-import { Tracker } from './tracker.js?v=202611080150';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611080150';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611080150';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611080150';
-import { groupByIdea } from './lessons.js?v=202611080150';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611080150';
-import { createReader } from './reader.js?v=202611080150';
-import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611080150';
-import { diagnose } from './diagnose.js?v=202611080150';
-import { animate, stagger } from './vendor/anime.js?v=202611080150';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611080216';
+import { getPose } from './jamoData.js?v=202611080216';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611080216';
+import { describe } from './poseFeatures.js?v=202611080216';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611080216';
+import { Tracker } from './tracker.js?v=202611080216';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611080216';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611080216';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611080216';
+import { groupByIdea } from './lessons.js?v=202611080216';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611080216';
+import { createReader } from './reader.js?v=202611080216';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611080216';
+import { diagnose } from './diagnose.js?v=202611080216';
+import { animate, stagger } from './vendor/anime.js?v=202611080216';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -422,6 +422,11 @@ function finish() {
 
 /* ── 카메라가 보는 것 ───────────────────────── */
 
+/* 손을 읽는 동안 초당 30~60번 불린다. 글자가 같으면 다시 쓰지 않는다. 지금 화면의 내용과 견주므로
+   다른 곳에서 바꾼 뒤에도 틀리지 않는다 */
+const setText = (node, text) => { if (node.textContent !== text) node.textContent = text; };
+const setHTML = (node, html) => { if (node.innerHTML !== html) node.innerHTML = html; };
+
 function onFrame(hands, face = null) {
   const ctx = el.overlay.getContext('2d');
   const w = el.camera.clientWidth, h = el.camera.clientHeight;
@@ -531,8 +536,8 @@ function onFrame(hands, face = null) {
   const cmp = (a, bv) => a === bv ? `<b>${a}</b>` : `<span class="off">${a}</span>`;
   const sp = r.seen.spread !== null
     ? ` · 벌림 ${cmp(r.seen.spread + '도', r.want.spread + '도')} / ${r.want.spread}도` : '';
-  el.seen.innerHTML = `지금 ${cmp(r.seen.fingers, r.want.fingers)} ${cmp(r.seen.dir, r.want.dir)}`
-    + ` / 필요 ${r.want.fingers} ${r.want.dir}${sp}`;
+  setHTML(el.seen, `지금 ${cmp(r.seen.fingers, r.want.fingers)} ${cmp(r.seen.dir, r.want.dir)}`
+    + ` / 필요 ${r.want.fingers} ${r.want.dir}${sp}`);
 
   if (smooth >= ACCEPT) {
     if (!state.holdSince) state.holdSince = t;
@@ -772,11 +777,11 @@ function init() {
   state.reader = createReader({
     onChange: ({ jamos, text, live }) => {
       if (state.mode !== 'free' || state.readKind !== 'jamo') return;
-      el.name.textContent = text || '수어를 해 보세요';
-      el.step.textContent = live
+      setText(el.name, text || '수어를 해 보세요');
+      setText(el.step, live
         ? `지금 ${live.jamo}${live.also?.length ? ` (${live.also.join(', ')}와 손모양이 같습니다)` : ''}`
-        : FREE_IDLE.jamo;
-      el.seen.textContent = jamos.length ? `받아 적음 ${jamos.join(' ')}` : '';
+        : FREE_IDLE.jamo);
+      setText(el.seen, jamos.length ? `받아 적음 ${jamos.join(' ')}` : '');
     },
     onSentence: text => { addFree(text); say(text); }
   });
