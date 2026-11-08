@@ -1,5 +1,5 @@
 // 각 파일에는 글자 없는 동작 한 장만 담는다. 도표 전체를 표시하지 않는다.
-import { WORD_FRAMES } from './wordArt.js?v=202611080216';
+import { WORD_FRAMES } from './wordArt.js?v=202611080638';
 const STEP_BASE = new URL('../assets/word-steps/', import.meta.url).href;
 const POSES = WORD_FRAMES;
 const SHEET_BASE = new URL('../assets/sheets/', import.meta.url).href;

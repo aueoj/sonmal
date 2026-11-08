@@ -1,0 +1,45 @@
+# 손말 (sonmal)
+
+새 세션은 이 파일부터 읽는다. 끝낼 때 고쳐서 같이 커밋한다. 공통 규칙은 `~/Desktop/CLAUDE.md`.
+이 저장소는 **공개**다. 키, 계정 정보, 개인 메모는 여기에 쓰지 않는다.
+마지막 갱신: 2026-11-08
+
+## 현재 상태
+
+- 한국수어 낱말과 지문자를 카메라로 따라 하며 연습하는 정적 웹. 사이트는 `app.min.js` 하나만 받는다(`dev/build.mjs`, esbuild 0.24.2).
+- 방문자 수: Vercel Web Analytics(vercel.app 에서만 불러온다, 11/08).
+- 배포 두 곳: GitHub Pages https://aueoj.github.io/sonmal/ (main 루트), Vercel https://sonmal-chi.vercel.app (소개 페이지 `/landing`).
+- 숫자(11/08 기준): 낱말 95개(전부 국립국어원 사전 표제어), 상황별 문장 154개, 지문자 40자. 연습 모드와 자유 모드.
+- 11/08: 음성 인식이 말하는 중에 끊기던 문제를 고침. 확정 안 된 말이 남아 있으면 4.5초까지 기다리고, 확정된 뒤에는 2.2초 침묵에 끝낸다(`js/speech.js`, 테스트 `dev/listen-test.mjs`). 실제 목소리로는 아직 확인 전.
+
+## 최근 결정
+
+| 날짜 | 결정 | 이유 |
+|---|---|---|
+| 11/08 | 음성 인식 침묵 판정: 확정 전 4.5초, 확정 후 2.2초 | 서버 응답이 늦으면 말하는 중에 끊김 |
+| 11/08 | `listen-test`는 가짜 시계로 잰다 | 바쁜 기계에서 진짜 시계 테스트가 깨짐 |
+| 11/07 | 연습 모드와 자유 모드 낱말 판정을 `stepWord` 하나로 합침 | 두 갈래가 따로 놀았음 |
+| 11/07 | 움직임은 anime.js(`js/vendor/anime.js`). 소개 페이지 `landing.html` 추가 | |
+| 11/07 | 문구: 앱은 합니다체, 소개 페이지는 존대 해요체, 개인정보는 합니다체 | 공개 서비스 문구 규칙 |
+
+## 진행 중인 작업
+
+| 작업 | 브랜치 | 상태 | 다음 할 일 |
+|---|---|---|---|
+| 음성 인식 끊김 수정 | main | 커밋함, 푸시 전 | 사용자 승인 후 푸시와 배포. 배포 뒤 Chrome에서 실제 목소리로 확인 |
+| 옛 브랜치 `feat/basic-conversation-signs` | 원격 | 일부 살림(`7150eae`) | 남은 게 없으면 지우기 |
+
+## 규칙
+
+- **이 저장소는 한 번에 한 세션만 고친다.** 클라우드 세션을 따로 열어 main에 직접 푸시하지 않는다(11/07~08 충돌 원인).
+- 시작할 때 `git fetch` 후 뒤처져 있으면 먼저 받는다. `~/Downloads/sonmal`은 낡은 사본이라 쓰지 않는다.
+- 판 번호(`?v=`)는 손으로 고치지 않는다. 항상 `node dev/stamp.mjs`로 붙인다. 합칠 때 판 번호만 충돌하면 원격 것을 받고 stamp를 다시 돌린다.
+- 최신 npm의 `npm init -y`가 넣는 `"type": "commonjs"`를 package.json에 두지 않는다. 번들이 CI와 달라진다.
+- anime.js v4는 SVG의 `y`를 속성으로 넣는다. `translateY`를 쓰고, 지문자 그림(`.sheet-art`, 오른손용 scaleX(-1)) 대신 바깥 칸(`#guide-art`)을 움직인다.
+- 앱을 브라우저 패널에서 열면 소리를 계속 읽는다. 앱 확인은 음소거 헤드리스(playwright, `--mute-audio`, `speechSynthesis.speak` 막기)로 한다.
+
+## 실행, 검증, 배포
+
+1. 고친 뒤: `node dev/stamp.mjs` → `node dev/build.mjs` → `node dev/verify.mjs --repeat 2`(31가지, 약 10분). 푸시하면 CI도 같은 것을 돈다.
+2. 로컬 미리보기: Desktop `.claude/launch.json`의 `sonmal`(5210).
+3. Vercel 배포: `.git`, `node_modules`, `dev`, `docs`를 뺀 사본에서 `npx vercel@latest deploy --prod --yes`. 배포 전에 원격 main을 새로 받고 CI 통과를 확인한다.

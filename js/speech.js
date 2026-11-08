@@ -23,8 +23,12 @@ export const support = {
  * 말하기를 누르고 첫 마디를 꺼내기까지는 시간이 걸린다. 그 사이를 침묵으로 보고
  * 끊으면 아무 말도 못 하고 끝난다. 그래서 첫 마디 전에는 startMs(5초)를 기다리고,
  * 말이 시작된 뒤부터 silenceMs 동안 말이 없으면 끝낸다.
+ *
+ * 침묵은 소리가 아니라 인식 결과가 마지막으로 온 때부터 잰다. 아직 확정되지 않은 말(interim)이
+ * 남아 있으면 사용자가 말하는 중이거나 서버 응답이 늦는 것이다. 이때 짧게 끊으면 문장 중간에서
+ * 잘리므로 pendingMs 까지 기다린다. 다 확정된 뒤에는 silenceMs 로 끝낸다.
  */
-export function createListener({ lang = 'ko-KR', silenceMs = 1800, startMs = 5000,
+export function createListener({ lang = 'ko-KR', silenceMs = 2200, pendingMs = 4500, startMs = 5000,
                                  onInterim, onResult, onEnd, onError } = {}) {
   if (!SR) return null;
   const rec = new SR();
@@ -50,7 +54,7 @@ export function createListener({ lang = 'ko-KR', silenceMs = 1800, startMs = 500
       else interim += t;
     }
     onInterim?.((settled + interim).trim());
-    armIdle();
+    armIdle(interim.trim() ? pendingMs : silenceMs);
   };
 
   rec.onerror = e => {
