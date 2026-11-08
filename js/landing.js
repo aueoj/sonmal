@@ -1,8 +1,8 @@
 /* landing.js — 소개 페이지의 움직임. 첫 화면 데모와 스크롤 등장, 둘 다 anime.js로 한다.
    데모는 앱과 같은 지문자 그림(jamoArt)을 쓴다. 소리는 내지 않는다. */
 
-import { animate, stagger } from './vendor/anime.js?v=202611080638';
-import { jamoArt } from './illustrations.js?v=202611080638';
+import { animate, stagger } from './vendor/anime.js?v=202611080735';
+import { jamoArt } from './illustrations.js?v=202611080735';
 
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = id => document.getElementById(id);

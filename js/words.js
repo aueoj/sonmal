@@ -35,8 +35,8 @@
  * @property {1|2} [hands] 한 손인지 두 손인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611080638';
-import { WORD_BASIS } from './wordArt.js?v=202611080638';
+import { WORD_BANK } from './wordBank.js?v=202611080735';
+import { WORD_BASIS } from './wordArt.js?v=202611080735';
 
 /* 화면에 올리는 단어: 사전 기준 그림이 검수되어 들어온 단어(basis 'sldict')의 wordBank 기록.
    그림이 없는 단어는 올리지 않는다. 그림 없이 동작을 글로만 보여 주지 않는다. */
