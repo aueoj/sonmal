@@ -29,6 +29,8 @@
     setTimeout(() => { if (!window.__revealed) document.documentElement.classList.remove('reveal'); }, 2500);
   }
 </script>
+<!-- Vercel Web Analytics: 쿠키 없이 방문 수만 센다. GitHub Pages 사본에서는 부르지 않는다 -->
+<script>if(!location.hostname.endsWith("github.io")){const s=document.createElement("script");s.defer=true;s.src="/_vercel/insights/script.js";document.head.appendChild(s)}</script>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
@@ -164,6 +166,7 @@
       <h2 id="privacy-title" data-reveal>영상은 기기 밖으로<br>나가지 않습니다</h2>
       <div class="prose" data-reveal>
         <p>카메라 영상과 손 좌표는 지금 쓰시는 브라우저 안에서만 처리합니다. 녹화하거나 저장하거나 전송하지 않으며 회원 가입도 필요하지 않습니다.</p>
+        <p>방문자 수를 세려고 Vercel Web Analytics를 씁니다. 쿠키를 쓰지 않고 이름이나 연락처처럼 누구인지 알 수 있는 정보는 모으지 않습니다.</p>
         <p>음성은 다릅니다. ‘말하기’를 누르면 브라우저가 마이크 소리를 제조사의 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플). 소리를 보내고 싶지 않으시면 문장을 직접 입력해 주세요.</p>
         <p>페이지가 접속하는 곳은 글꼴, 손 인식 코드, 손 인식 모델 파일 세 곳뿐이며 모두 내려받기만 합니다.</p>
       </div>
