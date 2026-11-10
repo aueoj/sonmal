@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- 소개 페이지와 같은 울타리. 스크립트는 하나도 없고 글꼴 말고는 어디에도 접속하지 않는다 -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'none';
+  style-src 'self' https://fonts.googleapis.com;
+  font-src https://fonts.gstatic.com;
+  img-src 'self' data:;
+  form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>개인정보 안내 | 손말</title>
+<meta name="description" content="손말이 처리하는 정보와 목적, 기기 안 처리, 보관 기간, 국외 업체, 권리 행사 방법을 안내합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="landing"><span class="mark">손말</span><span class="sub">수어 낱말과 지문자 연습</span></a>
+    <nav class="top-nav" aria-label="바로가기">
+      <a href="#info">처리하는 정보</a>
+      <a href="#abroad">국외 업체</a>
+      <a href="#rights">권리 행사</a>
+      <a class="btn btn-primary btn-sm" href="./">연습 시작하기</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero wrap" aria-labelledby="title">
+    <div class="hero-copy">
+      <h1 id="title">개인정보 안내</h1>
+      <p class="lede">손말은 가입이 없고 운영자 서버에 개인정보를 저장하지 않습니다. 카메라 영상은 기기 밖으로 나가지 않습니다. 다만 브라우저가 다른 업체에 접속하는 일이 있어 무엇이 어디로 가는지 적어 둡니다.</p>
+      <p class="fine">시행일 2026년 11월 10일 · 운영자 aueoj</p>
+    </div>
+  </section>
+
+  <section class="band" id="info" aria-labelledby="info-title">
+    <div class="wrap split">
+      <h2 id="info-title">처리하는 정보와 목적</h2>
+      <div class="prose">
+        <p>운영자는 서버에 개인정보를 모으거나 저장하지 않습니다. 회원 가입과 로그인이 없고 이름, 연락처, 영상, 음성을 받지 않습니다. 연습 기능이 돌아가도록 아래 정보를 처리합니다.</p>
+        <h3>카메라 영상</h3>
+        <p>손모양을 알아보는 데 씁니다. 지금 쓰시는 브라우저 안에서만 처리하고 녹화하거나 저장하거나 전송하지 않습니다.</p>
+        <h3>손과 얼굴 위치</h3>
+        <p>영상에서 손가락 마디 위치와 얼굴 위치를 찾아 손이 얼굴 어디쯤 있는지 봅니다. 기기 안에서만 계산하고 표정은 판정하지 않습니다.</p>
+        <h3>음성</h3>
+        <p>‘말하기’를 누를 때만 씁니다. 브라우저가 마이크 소리를 제조사의 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플). 손말이 받는 것은 글자로 바뀐 결과뿐입니다. 소리를 보내고 싶지 않으면 문장을 직접 입력하면 됩니다.</p>
+        <h3>읽어 주는 소리</h3>
+        <p>브라우저의 음성 합성 기능으로 만듭니다. 브라우저에 따라서는 읽을 글자를 제조사 서버로 보내 소리를 만드는 목소리도 있습니다.</p>
+        <h3>기기에 남기는 값</h3>
+        <p>어느 손으로 연습하는지(sonmal.hand)와 낱말마다 해낸 횟수와 마지막으로 해낸 시각(sonmal.learned.v1)을 브라우저 저장소(localStorage)에 남깁니다. 다음에 열 때 이어서 연습하기 위한 것이며 운영자에게 보내지 않습니다.</p>
+        <h3>방문 통계</h3>
+        <p>getsonmal.vercel.app처럼 vercel.app 주소로 앱과 소개 페이지를 열면 방문 수를 세려고 Vercel Web Analytics를 불러옵니다. GitHub Pages 주소(aueoj.github.io)에서는 불러오지 않습니다. 쿠키를 쓰지 않습니다.</p>
+        <p>Vercel 안내에 따르면 방문 시각, 연 페이지 주소와 주소 뒤에 붙은 값 일부, 들어온 경로, 국가와 지역, 기기 종류, 운영체제와 브라우저 판을 기록합니다. 방문자는 요청으로 만든 해시 값으로 구분하고 이 값은 24시간 뒤 버립니다. 운영자는 개인을 알아볼 수 없는 합계만 봅니다. 자세한 내용은 <a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener">Vercel 안내</a>에 있습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="keep-title">
+    <div class="wrap split">
+      <h2 id="keep-title">보관 기간</h2>
+      <div class="prose">
+        <p>운영자 서버에는 보관하는 개인정보가 없습니다.</p>
+        <p>기기에 남기는 값은 브라우저에서 지울 때까지 그 기기에만 남습니다.</p>
+        <p>방문 통계에서 방문자를 구분하는 값은 24시간 뒤 버려집니다. 합계 통계를 얼마나 보관하는지는 Vercel 요금제를 따릅니다.</p>
+        <p>아래 업체가 접속하면서 받은 기록은 각 업체의 방침에 따라 보관됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="abroad" aria-labelledby="abroad-title">
+    <div class="wrap split">
+      <h2 id="abroad-title">국외 업체</h2>
+      <div class="prose">
+        <p>페이지를 열면 브라우저가 아래 업체에서 사이트와 파일을 내려받습니다. 이때 접속 IP와 브라우저 정보가 그 업체에 전달될 수 있습니다. 음성은 ‘말하기’를 누를 때만 브라우저 제조사에 전달됩니다. 업체 이름을 누르면 각 업체의 개인정보 처리방침을 볼 수 있습니다.</p>
+        <ul class="sources">
+          <li><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel Inc. (미국)</a><span>getsonmal.vercel.app 사이트 전송, 방문 통계</span></li>
+          <li><a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub, Inc. (미국)</a><span>aueoj.github.io/sonmal 사이트 전송</span></li>
+          <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google LLC (미국)</a><span>글꼴(fonts.googleapis.com, fonts.gstatic.com), 손과 얼굴 모델 파일(storage.googleapis.com), 크롬 음성 인식</span></li>
+          <li><a href="https://www.jsdelivr.com/terms/privacy-policy" target="_blank" rel="noopener">Volentio JSD Limited (영국)</a><span>손 인식 코드(cdn.jsdelivr.net)</span></li>
+          <li><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple Inc. (미국)</a><span>사파리 음성 인식</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="rights" aria-labelledby="rights-title">
+    <div class="wrap split">
+      <h2 id="rights-title">권리 행사 방법</h2>
+      <div class="prose">
+        <p>개인정보에 관한 문의와 열람, 정정, 삭제, 처리 정지 요청은 <a href="mailto:yoonseul_ha@naver.com">yoonseul_ha@naver.com</a>으로 보내시면 됩니다.</p>
+        <p>기기에 남기는 값은 브라우저 설정에서 이 사이트의 데이터를 삭제하면 지워집니다. 카메라와 마이크 권한도 브라우저 설정에서 언제든 거둘 수 있습니다.</p>
+        <p>위 업체가 받은 정보는 각 업체의 방침에 따라 그 업체에 요청할 수 있습니다.</p>
+        <p>개인정보 침해로 도움이 필요하면 개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118)나 개인정보분쟁조정위원회(kopico.go.kr)에 문의할 수 있습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="owner-title">
+    <div class="wrap split">
+      <h2 id="owner-title">운영자와 시행일</h2>
+      <div class="prose">
+        <p>운영자와 개인정보 보호책임자는 aueoj입니다. 연락처는 <a href="mailto:yoonseul_ha@naver.com">yoonseul_ha@naver.com</a>입니다.</p>
+        <p>이 안내는 2026년 11월 10일부터 시행합니다. 내용이 바뀌면 이 페이지에 새 시행일과 함께 알립니다.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-row">
+    <span>© 2026 손말(Sonmal) · <a href="https://github.com/aueoj/sonmal/blob/main/LICENSE" target="_blank" rel="noopener">이용 약관</a> · <a href="privacy.html" aria-current="page">개인정보 안내</a></span>
+    <span>개인 학습용으로만 쓸 수 있습니다. 복제·수정·재배포 금지.</span>
+  </div>
+</footer>
+</body>
+</html>

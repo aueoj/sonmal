@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611080735';
-import { getPose } from './jamoData.js?v=202611080735';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611080735';
-import { describe } from './poseFeatures.js?v=202611080735';
-import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611080735';
-import { Tracker } from './tracker.js?v=202611080735';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611080735';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611080735';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611080735';
-import { groupByIdea } from './lessons.js?v=202611080735';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611080735';
-import { createReader } from './reader.js?v=202611080735';
-import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611080735';
-import { diagnose } from './diagnose.js?v=202611080735';
-import { animate, stagger } from './vendor/anime.js?v=202611080735';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611100954';
+import { getPose } from './jamoData.js?v=202611100954';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611100954';
+import { describe } from './poseFeatures.js?v=202611100954';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611100954';
+import { Tracker } from './tracker.js?v=202611100954';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611100954';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611100954';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611100954';
+import { groupByIdea } from './lessons.js?v=202611100954';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611100954';
+import { createReader } from './reader.js?v=202611100954';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611100954';
+import { diagnose } from './diagnose.js?v=202611100954';
+import { animate, stagger } from './vendor/anime.js?v=202611100954';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -859,15 +859,19 @@ function init() {
     el.sources.querySelector('button[type="submit"]')?.focus();
   });
   el.sourcesBody.innerHTML = `
-    <p><b>영상은 기기 밖으로 나가지 않습니다.</b> 카메라 영상과 손 좌표는 이 브라우저 안에서만
-       처리되고, 녹화하거나 저장하거나 전송하지 않습니다. 손을 알아보는 일도 기기 안에서 합니다.</p>
+    <p><b>영상은 기기 밖으로 나가지 않습니다.</b> 카메라 영상과 손, 얼굴 위치는 이 브라우저 안에서만
+       처리되고, 녹화하거나 저장하거나 전송하지 않습니다. 얼굴은 손이 얼굴 어디쯤 있는지 보는 데만 쓰고
+       표정은 판정하지 않습니다.</p>
     <p><b>음성은 다릅니다.</b> 말하기를 누르면 브라우저가 마이크 소리를 제조사의 음성 인식
        서버로 보냅니다(크롬은 구글, 사파리는 애플). 손말이 보내는 것이 아니라 브라우저가 보내는
        것이고, 저희가 막거나 들여다볼 수 없습니다. 소리를 보내고 싶지 않으면 문장을 입력해 주세요.
-       읽어 주는 소리는 기기 안에서 만들어집니다.</p>
-    <p>이 페이지가 접속하는 곳은 글꼴(fonts.googleapis.com), 손 인식 코드(cdn.jsdelivr.net),
-       손 인식 모델 파일(storage.googleapis.com) 셋뿐이고, 모두 내려받기만 합니다.
-       그 밖의 주소로는 접속하지 못하도록 페이지에 못을 박아 두었습니다.</p>
+       읽어 주는 소리는 브라우저의 음성 합성으로 만들며, 브라우저에 따라 읽을 글자를 제조사 서버로
+       보내는 목소리도 있습니다.</p>
+    <p>이 페이지가 접속하는 곳은 글꼴(fonts.googleapis.com, fonts.gstatic.com), 손 인식 코드(cdn.jsdelivr.net),
+       손과 얼굴 모델 파일(storage.googleapis.com)이고 모두 내려받기만 합니다. 이때 접속 IP가 그 업체에
+       전달될 수 있습니다. vercel.app 주소로 열었을 때는 방문 수를 세는 Vercel Web Analytics도 불러옵니다(쿠키 없음).
+       그 밖의 주소로는 접속하지 못하도록 페이지에 못을 박아 두었습니다.
+       자세한 내용은 <a href="privacy.html" target="_blank" rel="noopener">개인정보 안내</a>에 있습니다.</p>
     <p>문장을 말하면 낱말마다 사전 수어를 찾고, 없는 낱말은 조사와 어미를 뗀 뒤 지문자로 풉니다.
        순서는 한국어 순서 그대로라, 수어 문장으로 옮긴 것이 아니라 낱말을 이어 본 연습입니다.</p>
     <p>지문자 손모양은 제공받은 도표를 기준으로 합니다. 낱말 ${WORD_SIGNS.length}개 중

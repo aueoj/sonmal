@@ -6,9 +6,9 @@ All rights reserved. 모든 권리 보유.
 한국어 (아래 영문과 뜻이 다를 경우 이 한국어 본문을 따릅니다)
 ------------------------------------------------------------------------
 
-이 저장소와 배포된 앱(https://aueoj.github.io/sonmal/, 이하 "손말")의
-소스 코드, 일러스트, 그 밖의 제작물(이하 "저작물")에 대한 저작권은
-제작자에게 있습니다.
+이 저장소와 배포된 앱(https://aueoj.github.io/sonmal/,
+https://getsonmal.vercel.app, 이하 "손말")의 소스 코드, 일러스트,
+그 밖의 제작물(이하 "저작물")에 대한 저작권은 제작자에게 있습니다.
 
 1. 허용 — 개인적·비상업적 사용
    누구나 손말을 웹에서 열어 한국수어와 지문자를 배우는 목적으로
@@ -47,8 +47,8 @@ English (the Korean text above governs in case of any discrepancy)
 ------------------------------------------------------------------------
 
 Copyright in the source code, illustrations, and other materials of this
-repository and the deployed app at https://aueoj.github.io/sonmal/
-("Sonmal", the "Work") belongs to the author.
+repository and the deployed apps at https://aueoj.github.io/sonmal/ and
+https://getsonmal.vercel.app ("Sonmal", the "Work") belongs to the author.
 
 1. PERMITTED — Personal, non-commercial use.
    Anyone may use Sonmal in a web browser to learn Korean Sign Language
