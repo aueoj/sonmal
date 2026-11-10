@@ -11,7 +11,7 @@
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>개인정보 안내 | 손말</title>
-<meta name="description" content="손말이 처리하는 정보와 목적, 기기 안 처리, 보관 기간, 국외 업체, 권리 행사 방법을 안내합니다.">
+<meta name="description" content="손말이 처리하는 정보와 목적, 보관 기간과 파기, 처리 위탁과 국외 이전, 권리 행사 방법을 안내합니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
     <a class="brand" href="landing"><span class="mark">손말</span><span class="sub">수어 낱말과 지문자 연습</span></a>
     <nav class="top-nav" aria-label="바로가기">
       <a href="#info">처리하는 정보</a>
-      <a href="#abroad">국외 업체</a>
+      <a href="#abroad">국외 이전</a>
       <a href="#rights">권리 행사</a>
       <a class="btn btn-primary btn-sm" href="./">연습 시작하기</a>
     </nav>
@@ -37,7 +37,7 @@
   <section class="hero wrap" aria-labelledby="title">
     <div class="hero-copy">
       <h1 id="title">개인정보 안내</h1>
-      <p class="lede">손말은 가입이 없고 운영자 서버에 개인정보를 저장하지 않습니다. 카메라 영상은 기기 밖으로 나가지 않습니다. 다만 브라우저가 다른 업체에 접속하는 일이 있어 무엇이 어디로 가는지 적어 둡니다.</p>
+      <p class="lede">손말은 가입이 없습니다. 방문 통계를 맡긴 Vercel 말고는 운영자가 개인정보를 받거나 저장하지 않습니다. 카메라 영상은 기기 밖으로 나가지 않습니다. 다만 브라우저가 다른 업체에 접속하는 일이 있어 무엇이 어디로 가는지 적어 둡니다.</p>
       <p class="fine">시행일 2026년 11월 10일 · 운영자 aueoj</p>
     </div>
   </section>
@@ -46,48 +46,115 @@
     <div class="wrap split">
       <h2 id="info-title">처리하는 정보와 목적</h2>
       <div class="prose">
-        <p>운영자는 서버에 개인정보를 모으거나 저장하지 않습니다. 회원 가입과 로그인이 없고 이름, 연락처, 영상, 음성을 받지 않습니다. 연습 기능이 돌아가도록 아래 정보를 처리합니다.</p>
+        <p>회원 가입과 로그인이 없고 이름, 연락처, 영상, 음성을 운영자 서버로 받지 않습니다. 방문 통계 위탁 말고는 운영자 서버에 개인정보를 저장하지 않습니다. 연습 기능이 돌아가도록 아래 정보를 처리합니다.</p>
         <h3>카메라 영상</h3>
         <p>손모양을 알아보는 데 씁니다. 지금 쓰시는 브라우저 안에서만 처리하고 녹화하거나 저장하거나 전송하지 않습니다.</p>
         <h3>손과 얼굴 위치</h3>
         <p>영상에서 손가락 마디 위치와 얼굴 위치를 찾아 손이 얼굴 어디쯤 있는지 봅니다. 기기 안에서만 계산하고 표정은 판정하지 않습니다.</p>
         <h3>음성</h3>
-        <p>‘말하기’를 누를 때만 씁니다. 브라우저가 마이크 소리를 제조사의 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플). 손말이 받는 것은 글자로 바뀐 결과뿐입니다. 소리를 보내고 싶지 않으면 문장을 직접 입력하면 됩니다.</p>
+        <p>‘말하기’를 누를 때만 씁니다. 브라우저가 마이크 소리를 제조사의 음성 인식 서버로 보냅니다(크롬은 구글, 사파리는 애플). 이 페이지가 받는 것은 글자로 바뀐 결과뿐입니다. 소리를 보내고 싶지 않으면 문장을 직접 입력하면 됩니다.</p>
         <h3>읽어 주는 소리</h3>
-        <p>브라우저의 음성 합성 기능으로 만듭니다. 브라우저에 따라서는 읽을 글자를 제조사 서버로 보내 소리를 만드는 목소리도 있습니다.</p>
+        <p>브라우저의 음성 합성 기능으로 만듭니다. 크롬의 Google 목소리처럼 읽을 글자를 제조사 서버로 보내 소리를 만드는 목소리도 있습니다.</p>
         <h3>기기에 남기는 값</h3>
         <p>어느 손으로 연습하는지(sonmal.hand)와 낱말마다 해낸 횟수와 마지막으로 해낸 시각(sonmal.learned.v1)을 브라우저 저장소(localStorage)에 남깁니다. 다음에 열 때 이어서 연습하기 위한 것이며 운영자에게 보내지 않습니다.</p>
         <h3>방문 통계</h3>
-        <p>getsonmal.vercel.app처럼 vercel.app 주소로 앱과 소개 페이지를 열면 방문 수를 세려고 Vercel Web Analytics를 불러옵니다. GitHub Pages 주소(aueoj.github.io)에서는 불러오지 않습니다. 쿠키를 쓰지 않습니다.</p>
-        <p>Vercel 안내에 따르면 방문 시각, 연 페이지 주소와 주소 뒤에 붙은 값 일부, 들어온 경로, 국가와 지역, 기기 종류, 운영체제와 브라우저 판을 기록합니다. 방문자는 요청으로 만든 해시 값으로 구분하고 이 값은 24시간 뒤 버립니다. 운영자는 개인을 알아볼 수 없는 합계만 봅니다. 자세한 내용은 <a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener">Vercel 안내</a>에 있습니다.</p>
+        <p>vercel.app 주소(getsonmal.vercel.app, 예전 주소 sonmal-chi.vercel.app)로 앱과 소개 페이지를 열면 방문 수를 세려고 Vercel Web Analytics를 불러옵니다. GitHub Pages 주소(aueoj.github.io/sonmal)에서는 불러오지 않습니다. 쿠키를 쓰지 않습니다.</p>
+        <p>Vercel 안내에 따르면 언제 어느 페이지를 열었는지와 어디서 들어왔는지를 기록합니다. 페이지 주소 뒤에 붙은 값 일부도 남습니다. 국가와 지역, 기기 종류, 운영체제와 브라우저 판도 함께 기록합니다.</p>
+        <p>방문자는 요청으로 만든 해시 값으로 구분하고 이 값은 24시간 뒤 버립니다. 운영자는 개인을 알아볼 수 없는 합계만 봅니다. 자세한 내용은 <a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener">Vercel 안내</a>에 있습니다.</p>
+        <h3>문의 메일</h3>
+        <p>문의를 보내시면 메일 주소와 내용을 답변하는 데만 씁니다.</p>
       </div>
     </div>
   </section>
 
   <section aria-labelledby="keep-title">
     <div class="wrap split">
-      <h2 id="keep-title">보관 기간</h2>
+      <h2 id="keep-title">보관 기간과 파기</h2>
       <div class="prose">
+        <h3>보관 기간</h3>
         <p>운영자 서버에는 보관하는 개인정보가 없습니다.</p>
         <p>기기에 남기는 값은 브라우저에서 지울 때까지 그 기기에만 남습니다.</p>
         <p>방문 통계에서 방문자를 구분하는 값은 24시간 뒤 버려집니다. 합계 통계를 얼마나 보관하는지는 Vercel 요금제를 따릅니다.</p>
         <p>아래 업체가 접속하면서 받은 기록은 각 업체의 방침에 따라 보관됩니다.</p>
+        <h3>파기 절차와 방법</h3>
+        <p>운영자 서버에 쌓아 두는 개인정보가 없어 따로 파기할 자료가 없습니다.</p>
+        <p>방문 통계는 Vercel이 정한 기간이 지나면 Vercel이 지웁니다.</p>
+        <p>문의 메일은 처리를 마치면 메일함에서 지웁니다.</p>
+        <p>기기에 남기는 값은 브라우저 설정에서 이 사이트의 데이터를 삭제하면 바로 지워집니다.</p>
       </div>
     </div>
   </section>
 
   <section class="band" id="abroad" aria-labelledby="abroad-title">
     <div class="wrap split">
-      <h2 id="abroad-title">국외 업체</h2>
+      <h2 id="abroad-title">처리 위탁과 국외 이전</h2>
       <div class="prose">
-        <p>페이지를 열면 브라우저가 아래 업체에서 사이트와 파일을 내려받습니다. 이때 접속 IP와 브라우저 정보가 그 업체에 전달될 수 있습니다. 음성은 ‘말하기’를 누를 때만 브라우저 제조사에 전달됩니다. 업체 이름을 누르면 각 업체의 개인정보 처리방침을 볼 수 있습니다.</p>
-        <ul class="sources">
-          <li><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">Vercel Inc. (미국)</a><span>getsonmal.vercel.app 사이트 전송, 방문 통계</span></li>
-          <li><a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub, Inc. (미국)</a><span>aueoj.github.io/sonmal 사이트 전송</span></li>
-          <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google LLC (미국)</a><span>글꼴(fonts.googleapis.com, fonts.gstatic.com), 손과 얼굴 모델 파일(storage.googleapis.com), 크롬 음성 인식</span></li>
-          <li><a href="https://www.jsdelivr.com/terms/privacy-policy" target="_blank" rel="noopener">Volentio JSD Limited (영국)</a><span>손 인식 코드(cdn.jsdelivr.net)</span></li>
-          <li><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple Inc. (미국)</a><span>사파리 음성 인식</span></li>
-        </ul>
+        <p>Vercel의 방문 통계는 운영자를 대신해 처리하는 처리 위탁입니다. 사이트를 보내 주는 Vercel과 GitHub도 운영자가 맡긴 곳입니다. 나머지는 페이지가 파일을 내려받거나 브라우저가 음성 기능을 쓸 때 정보가 국외 업체로 전달되는 경우입니다. 업체 이름을 누르면 각 업체의 개인정보 처리방침을 볼 수 있습니다.</p>
+
+        <h3><a href="https://vercel.com/legal/privacy-notice" target="_blank" rel="noopener">Vercel Inc.</a> (미국, 처리 위탁)</h3>
+        <p><b>연락처</b> <a href="mailto:privacy@vercel.com">privacy@vercel.com</a></p>
+        <p><b>맡긴 일과 목적</b> getsonmal.vercel.app과 sonmal-chi.vercel.app 사이트 전송, 방문 수 집계</p>
+        <p><b>이전 항목</b> 접속 IP와 브라우저 정보. 방문 통계 항목은 위에 적은 것과 같습니다.</p>
+        <p><b>시기와 방법</b> vercel.app 주소로 페이지를 열 때 인터넷으로 전송됩니다.</p>
+        <p><b>보유 기간</b> 방문자를 구분하는 값은 24시간입니다. 그 밖에는 Vercel 방침과 요금제를 따릅니다.</p>
+        <p><b>거부 방법과 결과</b> aueoj.github.io/sonmal 주소로 열면 Vercel에 접속하지 않고 방문 통계도 불러오지 않습니다. 이때도 연습 기능은 모두 쓸 수 있습니다.</p>
+
+        <h3><a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub, Inc.</a> (미국, 처리 위탁)</h3>
+        <p><b>연락처</b> <a href="https://support.github.com/contact/privacy" target="_blank" rel="noopener">개인정보 문의 페이지</a>. 메일 주소는 확인하지 못했습니다.</p>
+        <p><b>맡긴 일과 목적</b> aueoj.github.io/sonmal 사이트 전송</p>
+        <p><b>이전 항목</b> 접속 IP와 브라우저 정보</p>
+        <p><b>시기와 방법</b> aueoj.github.io 주소로 페이지를 열 때 인터넷으로 전송됩니다.</p>
+        <p><b>보유 기간</b> GitHub 방침을 따릅니다.</p>
+        <p><b>거부 방법과 결과</b> getsonmal.vercel.app 주소로 열면 GitHub에 접속하지 않습니다. 이때는 Vercel 방문 통계를 불러옵니다.</p>
+
+        <h3><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google LLC</a> (미국)</h3>
+        <p><b>연락처</b> <a href="mailto:googlekrsupport@google.com">googlekrsupport@google.com</a> (Google 개인정보처리방침 한국어판의 문의 주소)</p>
+        <p><b>쓰는 곳과 목적</b> 글꼴(fonts.googleapis.com, fonts.gstatic.com)을 보여 주고 손과 얼굴 모델 파일(storage.googleapis.com)을 받습니다. 크롬에서는 음성 인식과 서버 목소리(크롬 Google 목소리)도 Google로 갑니다.</p>
+        <p><b>이전 항목</b> 글꼴과 모델 파일은 접속 IP와 브라우저 정보입니다. 음성 인식은 마이크 소리이고 서버 목소리는 읽을 글자입니다.</p>
+        <p><b>시기와 방법</b> 글꼴은 페이지를 열 때, 모델 파일은 카메라를 켤 때 내려받습니다. 마이크 소리는 ‘말하기’를 누를 때, 읽을 글자는 소리 내어 읽을 때 브라우저가 인터넷으로 보냅니다.</p>
+        <p><b>보유 기간</b> Google 방침을 따릅니다.</p>
+        <p><b>거부 방법과 결과</b> 카메라를 켜지 않으면 모델 파일을 받지 않습니다. 이때는 ‘카메라 없이 둘러보기’로 그림과 설명만 볼 수 있고 손 인식은 동작하지 않습니다. 말하기 대신 문장을 입력하면 마이크 소리를 보내지 않습니다. 글꼴을 브라우저에서 막으면 기본 글꼴로 보입니다. 서버 목소리는 손말 안에서 끌 수 없어서 거부하려면 다른 브라우저를 쓰셔야 합니다.</p>
+
+        <h3><a href="https://www.jsdelivr.com/terms/privacy-policy" target="_blank" rel="noopener">Volentio JSD Limited</a> (영국)</h3>
+        <p><b>연락처</b> <a href="mailto:legal@jsdelivr.com">legal@jsdelivr.com</a></p>
+        <p><b>쓰는 곳과 목적</b> 손 인식 코드(cdn.jsdelivr.net)를 받습니다.</p>
+        <p><b>이전 항목</b> 접속 IP와 브라우저 정보</p>
+        <p><b>시기와 방법</b> 카메라를 켤 때 인터넷으로 내려받습니다.</p>
+        <p><b>보유 기간</b> jsDelivr 방침을 따릅니다.</p>
+        <p><b>거부 방법과 결과</b> 카메라를 켜지 않으면 받지 않습니다. 이때는 손 인식이 동작하지 않습니다.</p>
+
+        <h3><a href="https://www.apple.com/kr/legal/privacy/" target="_blank" rel="noopener">Apple Inc.</a> (미국)</h3>
+        <p><b>연락처</b> <a href="https://www.apple.com/kr/legal/privacy/contact/" target="_blank" rel="noopener">개인정보 문의 페이지</a>. 메일 주소는 확인하지 못했습니다.</p>
+        <p><b>쓰는 곳과 목적</b> 사파리 음성 인식</p>
+        <p><b>이전 항목</b> 마이크 소리</p>
+        <p><b>시기와 방법</b> 사파리에서 ‘말하기’를 누를 때 브라우저가 인터넷으로 보냅니다.</p>
+        <p><b>보유 기간</b> Apple 방침을 따릅니다.</p>
+        <p><b>거부 방법과 결과</b> 말하기 대신 문장을 입력하면 보내지 않습니다. 음성 입력만 쓰지 못하고 나머지 기능은 그대로입니다.</p>
+
+        <h3>그 밖의 브라우저</h3>
+        <p>다른 브라우저에서는 음성 인식과 서버 목소리가 그 브라우저 제조사로 갑니다(예: Edge는 Microsoft). 각 제조사의 방침을 따릅니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="share-title">
+    <div class="wrap split">
+      <h2 id="share-title">제3자 제공과 아동</h2>
+      <div class="prose">
+        <p>운영자는 개인정보를 제3자에게 제공하지 않습니다.</p>
+        <p>만 14세 미만 아동의 개인정보를 따로 받지 않습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="safe-title">
+    <div class="wrap split">
+      <h2 id="safe-title">안전성 확보 조치</h2>
+      <div class="prose">
+        <p>카메라 영상과 음성, 기기에 남기는 값을 운영자 서버에 저장하지 않습니다.</p>
+        <p>페이지마다 콘텐츠 보안 정책(CSP)을 걸어 이 안내에 적은 주소 말고는 접속하지 못하게 막습니다.</p>
+        <p>코드를 고칠 때마다 허용한 곳 말고 접속하지 않는지 자동으로 점검합니다.</p>
+        <p>두 주소 모두 HTTPS로만 전송합니다.</p>
       </div>
     </div>
   </section>
@@ -96,7 +163,8 @@
     <div class="wrap split">
       <h2 id="rights-title">권리 행사 방법</h2>
       <div class="prose">
-        <p>개인정보에 관한 문의와 열람, 정정, 삭제, 처리 정지 요청은 <a href="mailto:yoonseul_ha@naver.com">yoonseul_ha@naver.com</a>으로 보내시면 됩니다.</p>
+        <p>개인정보에 관한 문의와 열람, 정정, 삭제, 처리 정지 요청은 <a href="mailto:yoonseul_ha@naver.com">yoonseul_ha@naver.com</a>으로 보내시면 됩니다. 요청을 받은 날부터 10일 안에 처리 결과를 알려 드립니다.</p>
+        <p>법정대리인이나 위임을 받은 대리인도 같은 방법으로 권리를 행사할 수 있습니다.</p>
         <p>기기에 남기는 값은 브라우저 설정에서 이 사이트의 데이터를 삭제하면 지워집니다. 카메라와 마이크 권한도 브라우저 설정에서 언제든 거둘 수 있습니다.</p>
         <p>위 업체가 받은 정보는 각 업체의 방침에 따라 그 업체에 요청할 수 있습니다.</p>
         <p>개인정보 침해로 도움이 필요하면 개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118)나 개인정보분쟁조정위원회(kopico.go.kr)에 문의할 수 있습니다.</p>
@@ -106,9 +174,9 @@
 
   <section class="band" aria-labelledby="owner-title">
     <div class="wrap split">
-      <h2 id="owner-title">운영자와 시행일</h2>
+      <h2 id="owner-title">보호책임자와 시행일</h2>
       <div class="prose">
-        <p>운영자와 개인정보 보호책임자는 aueoj입니다. 연락처는 <a href="mailto:yoonseul_ha@naver.com">yoonseul_ha@naver.com</a>입니다.</p>
+        <p>개인이 운영하는 서비스로, 운영자 본인(aueoj)이 개인정보 보호책임자를 맡습니다. 연락처는 <a href="mailto:yoonseul_ha@naver.com">yoonseul_ha@naver.com</a>입니다.</p>
         <p>이 안내는 2026년 11월 10일부터 시행합니다. 내용이 바뀌면 이 페이지에 새 시행일과 함께 알립니다.</p>
       </div>
     </div>
