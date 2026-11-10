@@ -1,0 +1,111 @@
+/* privacy.css — 개인정보 안내(privacy.html)에서만 불러온다.
+   tokens.css, landing.css 다음에 읽고 색은 그 두 파일의 토큰만 쓴다.
+   다른 화면은 이 파일을 부르지 않는다. */
+html, body { overflow-x: clip; }
+
+/* 본문 한 단. 한 줄 약 36자, 넓은 화면에서도 폭은 그대로 두고 양옆 여백만 는다 */
+.doc {
+  width: min(36em, 100% - 40px); margin-inline: auto;
+  padding-block: var(--s8) calc(var(--s8) * 2);
+  font-family: var(--kr); font-size: var(--t-lead); color: var(--ink-soft);
+  counter-reset: sec;
+}
+.doc :where(section) { padding: 0; }   /* landing.css 의 section 여백을 지운다. 아래 .part, .summary 가 이긴다 */
+.doc h2 { margin: 0; color: var(--ink); text-wrap: pretty; }
+.doc h3 { margin: var(--s7) 0 var(--s2); font-size: 17px; color: var(--ink); }
+.doc p { margin: 0 0 var(--s4); }
+.doc p:last-child { margin-bottom: 0; }
+
+/* 링크: 글자는 본문 색, 밑줄은 강조색. 마우스를 올리면 글자도 강조색 */
+.doc a {
+  color: var(--ink); text-decoration: underline; text-decoration-color: var(--indigo);
+  text-decoration-thickness: 1px; text-underline-offset: 3px; overflow-wrap: anywhere;
+  transition: color .15s var(--ease);
+}
+.doc a:hover { color: var(--indigo-hover); }
+.doc code {
+  padding: 0 var(--s1); border-radius: var(--r-sm); background: var(--panel-deep);
+  font-family: var(--sans); font-size: .92em; color: var(--ink); overflow-wrap: anywhere;
+}
+
+/* 머리: 제목, 시행일, 운영자, 연락처 */
+.doc-head h1 {
+  margin: 0; font-family: var(--kr); font-weight: 700; color: var(--ink);
+  font-size: clamp(32px, 5vw, 44px); line-height: 1.2; letter-spacing: -0.035em;
+}
+.doc-meta {
+  margin: var(--s5) 0 0; display: grid; grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--s1) var(--s5); font-size: var(--t-body);
+}
+.doc-meta dt { color: var(--muted); }
+.doc-meta dd { margin: 0; color: var(--ink); }
+
+/* 한눈에 보기와 목차 */
+.summary {
+  margin-top: var(--s7); padding: var(--s5) var(--s6);
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg);
+}
+.summary h2, .toc h2 { margin-bottom: var(--s3); font-size: var(--t-title); line-height: 1.3; letter-spacing: var(--track-tight); }
+.summary .points { margin-bottom: var(--s3); }
+.points { list-style: none; margin: 0; padding: 0; }
+.points li { position: relative; padding-left: var(--s5); }
+.points li + li { margin-top: var(--s2); }
+.points li::before {
+  content: ""; position: absolute; left: var(--s1); top: calc(.81em - 3px);
+  width: 6px; height: 6px; border-radius: 50%; background: var(--ink-soft);
+}
+.toc { margin-top: var(--s7); }
+.toc ol { margin: 0; padding-left: 1.6em; columns: 2; column-gap: var(--s7); }
+.toc li { break-inside: avoid; padding-block: var(--s1); }
+.toc li::marker { color: var(--muted); font-family: var(--sans); font-variant-numeric: tabular-nums; }
+
+/* 장: 가는 선으로 나누고 제목 앞에 목차와 같은 번호 */
+.part { margin-top: var(--s8); padding-top: var(--s8); border-top: 1px solid var(--line); }
+.part > h2 {
+  margin-bottom: var(--s5); font-size: clamp(22px, 2.6vw, 26px); line-height: 1.3; letter-spacing: -0.025em;
+  counter-increment: sec;
+}
+.part > h2::before {
+  content: counter(sec) "."; margin-right: var(--s2);
+  font-family: var(--sans); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+
+/* 업체마다 같은 항목을 같은 자리에 둔다 */
+.vendors { display: grid; gap: var(--s4); margin-top: var(--s6); }
+.vendor { padding: var(--s5); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.vendor h3 { margin: 0 0 var(--s3); }
+.vendor .where { font-size: var(--t-body); font-weight: 500; color: var(--muted); }
+.facts { margin: 0; border-top: 1px solid var(--line); }
+.facts > div {
+  display: grid; grid-template-columns: 8em minmax(0, 1fr); gap: var(--s4);
+  padding: var(--s3) 0; border-bottom: 1px solid var(--line);
+}
+.facts > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.facts dt { padding-top: 1px; font-size: var(--t-body); font-weight: 600; color: var(--ink); }
+.facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+/* 꼬리: 소개와 앱으로 돌아가는 길 */
+.foot-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s2) var(--s5); }
+.foot-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
+.foot-links a { display: inline-block; padding-block: var(--s1); }
+.foot-note { margin: 0; }
+
+@media (max-width: 640px) {
+  .doc { padding-top: var(--s7); }
+  .summary { padding: var(--s4); }
+  .toc ol { columns: 1; }
+  .vendor { padding: var(--s4); }
+  .facts > div { grid-template-columns: 1fr; gap: var(--s1); }
+}
+
+/* 종이에 찍을 때: 배경과 길잡이는 빼고 링크 주소만 덧붙인다 */
+@media print {
+  .skip, .top, .toc, .foot-links { display: none; }
+  html, body, .summary, .vendor { background: none; }
+  .doc { width: auto; padding: 0; }
+  .doc a { text-decoration: none; }
+  .points li::before { width: 0; height: 0; border: 3px solid var(--ink-soft); background: none; }   /* 배경은 안 찍히니 테두리로 점을 그린다 */
+  .doc a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em; color: var(--ink-soft); }
+  .vendor, .facts > div { break-inside: avoid; }
+  .doc h2, .doc h3 { break-after: avoid; }
+}
