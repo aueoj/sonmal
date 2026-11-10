@@ -73,7 +73,9 @@ export async function diagnose(err) {
   }
 
   let modErr = null, modelBlocked = false;
-  try {
+  // 카메라가 열린 적이 없으면 손 인식 코드와 모델 서버에 접속하지 않는다(privacy.html: 카메라를 켜지 않으면 받지 않는다)
+  const camOpened = rows.some(r => r.label === '카메라 열기' && r.state === 'ok');
+  if (camOpened) try {
     await import(/* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`);
     rows.push(ok('손 인식 모듈 내려받기'));
   } catch (e) {
@@ -81,7 +83,7 @@ export async function diagnose(err) {
     rows.push(bad('손 인식 모듈 내려받기', e?.message?.slice(0, 90) ?? ''));
   }
 
-  try {
+  if (camOpened) try {
     const r = await fetch(MODEL, { method: 'GET', headers: { Range: 'bytes=0-0' } });
     const good = r.ok || r.status === 206;
     modelBlocked = !good;
