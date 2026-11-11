@@ -2,7 +2,7 @@
 
 새 세션은 이 파일부터 읽는다. 끝낼 때 고쳐서 같이 커밋한다. 공통 규칙은 `~/Desktop/CLAUDE.md`.
 이 저장소는 **공개**다. 키, 계정 정보, 개인 메모는 여기에 쓰지 않는다.
-마지막 갱신: 2026-11-10
+마지막 갱신: 2026-11-12
 
 ## 현재 상태
 
@@ -32,7 +32,6 @@
 | 작업 | 브랜치 | 상태 | 다음 할 일 |
 |---|---|---|---|
 | 11/10 전반 점검에서 남은 것 | - | 사용자 결정 대기 | 카메라 끄기 버튼과 탭 숨김 때 멈춤, 둘러보기 표시와 '카메라 켜기', 모바일 말 고르기 위에 안내판 겹침, 모바일 문장 칸 줄 84px, 마이크 거부 안내가 바로 지워짐(`js/speech.js` onerror 뒤 onend), 묶음 순서(인사가 9번째)와 복습, 자유 모드가 읽는 71개 표시, radio 화살표 키, `dev/egress-audit.mjs`가 실제 카메라 경로를 안 탐, README 숫자 낡음 |
-| 개인정보 안내 공개 | main | 커밋함, 푸시 전 | 사용자 승인 후 푸시와 Vercel 배포, 배포본에서 /privacy 열리는지 확인 |
 | 접근성(흐린 글씨 대비 2.51~2.69, 진단 녹색 3.34, 안내판 그라데이션) | - | 보류 | 11/10 점검에서 나옴. 사용자가 UI 수정은 보류함 |
 | 음성 인식 끊김 수정 | main | 푸시함(`5c99a64`) | Chrome에서 실제 목소리로 확인 |
 | 새 낱말 '돈'(사전 2374: 값, 가격, 금액, 돈, 금전, 화폐) | - | 조사 끝남 | 1·5지 동그라미 그림 2장, 판정 `ring: true`, 낱말 수 95→96 표기 고치기 |
@@ -52,4 +51,4 @@
 
 1. 고친 뒤: `node dev/stamp.mjs` → `node dev/build.mjs` → `node dev/verify.mjs --repeat 2`(31가지, 약 10분). 푸시하면 CI도 같은 것을 돈다.
 2. 로컬 미리보기: Desktop `.claude/launch.json`의 `sonmal`(5210).
-3. Vercel 배포: `.git`, `node_modules`, `dev`, `docs`를 뺀 사본에서 `npx vercel@latest deploy --prod --yes`. 배포 전에 원격 main을 새로 받고 CI 통과를 확인한다.
+3. Vercel 배포: `.git`, `node_modules`, `dev`, `docs`를 뺀 사본에서 `npx vercel@latest link --project sonmal --yes` 다음 `npx vercel@latest deploy --prod --yes`. 저장소에 `.vercel`이 없어서 link를 빼면 새 프로젝트가 생긴다(11/12에 sonmal-deploy가 잘못 생김). link가 만든 `.env.local`은 배포 뒤 지운다. 11/12 배포에서 getsonmal.vercel.app/privacy가 열리는 것 확인. 배포 전에 원격 main을 새로 받고 CI 통과를 확인한다.
