@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611121501';
-import { getPose } from './jamoData.js?v=202611121501';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611121501';
-import { describe } from './poseFeatures.js?v=202611121501';
-import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611121501';
-import { Tracker } from './tracker.js?v=202611121501';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611121501';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611121501';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611121501';
-import { groupByIdea } from './lessons.js?v=202611121501';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611121501';
-import { createReader } from './reader.js?v=202611121501';
-import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611121501';
-import { diagnose } from './diagnose.js?v=202611121501';
-import { animate, stagger } from './vendor/anime.js?v=202611121501';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611121502';
+import { getPose } from './jamoData.js?v=202611121502';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611121502';
+import { describe } from './poseFeatures.js?v=202611121502';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611121502';
+import { Tracker } from './tracker.js?v=202611121502';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611121502';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611121502';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611121502';
+import { groupByIdea } from './lessons.js?v=202611121502';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611121502';
+import { createReader } from './reader.js?v=202611121502';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611121502';
+import { diagnose } from './diagnose.js?v=202611121502';
+import { animate, stagger } from './vendor/anime.js?v=202611121502';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -449,42 +449,7 @@ function onFrame(hands, face = null) {
 
   /* 단어는 손모양을 가릴 수 없다. 대신 '한 바퀴 동안 손이 보였고 그 사이에
      실제로 움직였는가'를 본다. 가만히 들고만 있으면 통과하지 않는다. */
-  if (current.role === 'word') {
-    /* 낱말 판정: 아무 동작이나 흔든다고 통과하지 않는다.
-       그림의 단계마다 손 수, 펴진 손가락, 고리, 엄지, 손 높이를 차례로 맞춰야 한다. */
-    const now = performance.now();
-    if (state.recall && state.wordProg.k === 0 && now - state.wordShown > 8000) setRecall(false);
-    const checks = checksOf(current.sign);
-    const n = checks.length;
-    const p = state.wordProg;
-    const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
-    // 얼굴 앞에 든 손(코에 댄 주먹)은 잠깐씩 놓친다. 그 사이에 버티던 것을 버리지 않는다(stepWord)
-    const res = stepWord(p, checks, feats, face, handSide(), now);
-    if (!res) {
-      if (!state.wordLost) state.wordLost = now;
-      if (now - state.wordLost > 700) el.seen.textContent = `${p.k + 1}/${n}단계  손이 보이지 않습니다`;
-      return;
-    }
-    state.wordLost = 0;
-    const { r, why } = res;
-    if (r.ok && why) { r.ok = false; r.hint = why; }
-    if (res.stepped) {
-      if (p.k >= n) { el.seen.textContent = ''; return completeWord(current); }
-      // 해낸 동작의 다음 그림을 보여 준다
-      state.wordStep = p.k;
-      paintWordStep(current.sign);
-      el.art.dataset.stepOk = p.k % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
-      mockForCheck(checks[p.k], true);
-    }
-
-    const part = p.hold ? Math.min(1, (now - p.hold) / WORD_HOLD_MS) : 0;
-    setFill((p.k + part) / n);
-    el.guide.dataset.state = r.ok ? 'near' : '';
-    el.seen.textContent = n > 1
-      ? `${p.k + 1}/${n}번째 동작  ${r.ok ? '좋아요, 그대로' : r.hint}`
-      : (r.ok ? '좋아요, 그대로' : r.hint);
-    return;
-  }
+  if (current.role === 'word') return judgeWordFrame(current, hands, face);
 
   const pose = getPose(current.jamo);
   if (!pose) return;
@@ -552,6 +517,42 @@ function onFrame(hands, face = null) {
   } else {
     state.holdSince = 0;
   }
+}
+
+/* 낱말 판정: 아무 동작이나 흔든다고 통과하지 않는다.
+   그림의 단계마다 손 수, 펴진 손가락, 고리, 엄지, 손 높이를 차례로 맞춰야 한다. */
+function judgeWordFrame(current, hands, face) {
+  const now = performance.now();
+  if (state.recall && state.wordProg.k === 0 && now - state.wordShown > 8000) setRecall(false);
+  const checks = checksOf(current.sign);
+  const n = checks.length;
+  const p = state.wordProg;
+  const feats = hands.map(hd => describe(hd.lm, hd.handedness, true));
+  // 얼굴 앞에 든 손(코에 댄 주먹)은 잠깐씩 놓친다. 그 사이에 버티던 것을 버리지 않는다(stepWord)
+  const res = stepWord(p, checks, feats, face, handSide(), now);
+  if (!res) {
+    if (!state.wordLost) state.wordLost = now;
+    if (now - state.wordLost > 700) el.seen.textContent = `${p.k + 1}/${n}단계  손이 보이지 않습니다`;
+    return;
+  }
+  state.wordLost = 0;
+  const { r, why } = res;
+  if (r.ok && why) { r.ok = false; r.hint = why; }
+  if (res.stepped) {
+    if (p.k >= n) { el.seen.textContent = ''; return completeWord(current); }
+    // 해낸 동작의 다음 그림을 보여 준다
+    state.wordStep = p.k;
+    paintWordStep(current.sign);
+    el.art.dataset.stepOk = p.k % 2 ? 'a' : 'b';   // 넘어가는 순간을 짧게 알린다
+    mockForCheck(checks[p.k], true);
+  }
+
+  const part = p.hold ? Math.min(1, (now - p.hold) / WORD_HOLD_MS) : 0;
+  setFill((p.k + part) / n);
+  el.guide.dataset.state = r.ok ? 'near' : '';
+  el.seen.textContent = n > 1
+    ? `${p.k + 1}/${n}번째 동작  ${r.ok ? '좋아요, 그대로' : r.hint}`
+    : (r.ok ? '좋아요, 그대로' : r.hint);
 }
 
 const BONES = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],
