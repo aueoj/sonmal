@@ -35,6 +35,7 @@
 | 접근성(흐린 글씨 대비 2.51~2.69, 진단 녹색 3.34, 안내판 그라데이션) | - | 보류 | 11/10 점검에서 나옴. 사용자가 UI 수정은 보류함 |
 | 음성 인식 끊김 수정 | main | 푸시함(`5c99a64`) | Chrome에서 실제 목소리로 확인 |
 | 새 낱말 '돈'(사전 2374: 값, 가격, 금액, 돈, 금전, 화폐) | - | 조사 끝남 | 1·5지 동그라미 그림 2장, 판정 `ring: true`, 낱말 수 95→96 표기 고치기 |
+| 구조 다듬기(oma-refactor: `matchToken` 단계 나누기, `onFrame` 낱말·지문자 판정 빼기, 말 맞추기 골든 테스트) | `refactor/oma-2026-11-12` | 푸시함, 검토 대기 | 사용자가 보고 main에 합칠지 정한다. 동작은 바꾸지 않았다 |
 | 옛 브랜치 `feat/basic-conversation-signs` | 원격 | 일부 살림(`7150eae`) | 남은 게 없으면 지우기 |
 
 ## 규칙
@@ -44,11 +45,12 @@
 - 외부 접속처나 기기 저장 항목이 바뀌면 `privacy.html`, 앱 '자료' 대화상자, `landing.html` 안내, `dev/egress-audit.mjs` 허용 목록을 같이 고친다.
 - 판 번호(`?v=`)는 손으로 고치지 않는다. 항상 `node dev/stamp.mjs`로 붙인다. 합칠 때 판 번호만 충돌하면 원격 것을 받고 stamp를 다시 돌린다.
 - 최신 npm의 `npm init -y`가 넣는 `"type": "commonjs"`를 package.json에 두지 않는다. 번들이 CI와 달라진다.
+- `dev/match-golden-test.mjs`는 말 맞추기 답(찾은 낱말과 지문자로 풀 앞부분)을 박아 둔다. 낱말이나 조사·어미 규칙을 일부러 바꿨으면 `node dev/match-golden-test.mjs --write`로 다시 박고 같은 커밋에 넣는다.
 - anime.js v4는 SVG의 `y`를 속성으로 넣는다. `translateY`를 쓰고, 지문자 그림(`.sheet-art`, 오른손용 scaleX(-1)) 대신 바깥 칸(`#guide-art`)을 움직인다.
 - 앱을 브라우저 패널에서 열면 소리를 계속 읽는다. 앱 확인은 음소거 헤드리스(playwright, `--mute-audio`, `speechSynthesis.speak` 막기)로 한다.
 
 ## 실행, 검증, 배포
 
-1. 고친 뒤: `node dev/stamp.mjs` → `node dev/build.mjs` → `node dev/verify.mjs --repeat 2`(31가지, 약 10분). 푸시하면 CI도 같은 것을 돈다.
+1. 고친 뒤: `node dev/stamp.mjs` → `node dev/build.mjs` → `node dev/verify.mjs --repeat 2`(33가지, 약 10분). 푸시하면 CI도 같은 것을 돈다.
 2. 로컬 미리보기: Desktop `.claude/launch.json`의 `sonmal`(5210).
 3. Vercel 배포: `.git`, `node_modules`, `dev`, `docs`를 뺀 사본에서 `npx vercel@latest link --project sonmal --yes` 다음 `npx vercel@latest deploy --prod --yes`. 저장소에 `.vercel`이 없어서 link를 빼면 새 프로젝트가 생긴다(11/12에 sonmal-deploy가 잘못 생김). link가 만든 `.env.local`은 배포 뒤 지운다. 11/12 배포에서 getsonmal.vercel.app/privacy가 열리는 것 확인. 배포 전에 원격 main을 새로 받고 CI 통과를 확인한다.
