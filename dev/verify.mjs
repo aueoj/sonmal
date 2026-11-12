@@ -38,6 +38,7 @@ const STATIC = [
   ['그림 연결', ['dev/art/ingest.mjs', '--check'], '연결된 그림 파일이 다 있는가'],
   ['말 기다림', ['dev/listen-test.mjs'], '첫 마디 전 5초는 끊지 않는가'],
   ['활용형', ['dev/morph-test.mjs'], '만들었어, 만든거야 같은 말도 기본형 수어로 찾는가'],
+  ['말 맞추기 답', ['dev/match-golden-test.mjs'], '말을 낱말에 맞춘 답(지문자로 풀 앞부분 포함)이 박아 둔 것과 같은가'],
   ['낱말 판정', ['dev/word-judge-test.mjs'], '틀린 손모양은 낱말을 통과하지 못하는가'],
   ['읽기', ['dev/reader-test.mjs'], '지은 지문자를 글자로 합쳐 읽는가']
 ];

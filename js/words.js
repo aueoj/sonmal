@@ -35,8 +35,8 @@
  * @property {1|2} [hands] 한 손인지 두 손인지
  */
 
-import { WORD_BANK } from './wordBank.js?v=202611101242';
-import { WORD_BASIS } from './wordArt.js?v=202611101242';
+import { WORD_BANK } from './wordBank.js?v=202611121505';
+import { WORD_BASIS } from './wordArt.js?v=202611121505';
 
 /* 화면에 올리는 단어: 사전 기준 그림이 검수되어 들어온 단어(basis 'sldict')의 wordBank 기록.
    그림이 없는 단어는 올리지 않는다. 그림 없이 동작을 글로만 보여 주지 않는다. */
@@ -148,13 +148,8 @@ function lookupPredicate(c) {
   return hit && isPredicate(hit) ? hit : null;
 }
 
-/**
- * 한 어절을 사전 낱말에 맞춘다.
- * @returns {{sign?:object, stem:string}} sign 이 있으면 그 수어, 없으면 지문자로 풀 앞부분
- */
-export function matchToken(token) {
-  const direct = lookupWord(token);
-  if (direct) return { sign: direct, stem: token };
+/** 조사와 어미를 하나씩, 둘까지 떼어 가며 사전 낱말을 찾는다('이름이' → '이름', '친구가' → '친구') */
+function matchByStripping(token) {
   const seen = new Set([token]);
   let frontier = [token];
   for (let depth = 0; depth < 2; depth++) {           // 조사 하나, 어미 하나까지만 뗀다
@@ -169,24 +164,39 @@ export function matchToken(token) {
     }
     frontier = next;
   }
-  // 용언 활용: 어미를 떼고(떼지 않은 것도), 줄어든 마지막 글자를 되돌린다
+  return null;
+}
+
+/** 줄어든 마지막 글자를 두 번까지 되돌려 용언을 찾는다(만났 → 만나, 슬펐 → 슬퍼 → 슬프) */
+function lookupUnconjugated(base) {
+  const hit = lookupPredicate(base);
+  if (hit) return hit;
+  for (const v of unconjugate(base)) {
+    const h = lookupPredicate(v);
+    if (h) return h;
+    for (const v2 of unconjugate(v)) {
+      const h2 = lookupPredicate(v2);
+      if (h2) return h2;
+    }
+  }
+  return null;
+}
+
+/** 용언 활용: 어미를 떼고(떼지 않은 것도), 줄어든 마지막 글자를 되돌린다 */
+function matchConjugated(token) {
   const bases = [token, ...strip(token, VERB_ENDINGS)];
   for (const b of [...bases]) for (const c of strip(b, VERB_ENDINGS)) bases.push(c);   // '었' + '거야' 처럼 둘까지
   for (const b of bases) {
     if (!b) continue;
-    const hit = lookupPredicate(b);
+    const hit = lookupUnconjugated(b);
     if (hit) return { sign: hit, stem: b };
-    for (const v of unconjugate(b)) {
-      const h = lookupPredicate(v);
-      if (h) return { sign: h, stem: b };
-      for (const v2 of unconjugate(v)) {      // 만났 → 만나, 슬펐 → 슬퍼 → 슬프
-        const h2 = lookupPredicate(v2);
-        if (h2) return { sign: h2, stem: b };
-      }
-    }
   }
-  /* 사전에 없을 때 지문자로 풀 부분. 한 글자짜리 조사는 세 음절 이상일 때만 뗀다.
-     '아이'의 '이', '사과'의 '과'처럼 낱말의 일부를 떼어 버리지 않으려는 것이다. */
+  return null;
+}
+
+/* 사전에 없을 때 지문자로 풀 부분. 한 글자짜리 조사는 세 음절 이상일 때만 뗀다.
+   '아이'의 '이', '사과'의 '과'처럼 낱말의 일부를 떼어 버리지 않으려는 것이다. */
+function spellStem(token) {
   let stem = token;
   for (const e of ENDINGS) if (e.length >= 2 && stem.endsWith(e) && syllables(stem) > syllables(e)) { stem = stem.slice(0, -e.length); break; }
   for (const p of PARTICLES) {
@@ -194,7 +204,17 @@ export function matchToken(token) {
     if (p.length === 1 && syllables(stem) < 3) continue;
     stem = stem.slice(0, -p.length); break;
   }
-  return { stem };
+  return stem;
+}
+
+/**
+ * 한 어절을 사전 낱말에 맞춘다. 그대로, 조사·어미를 떼고, 활용을 되돌려 차례로 찾는다.
+ * @returns {{sign?:object, stem:string}} sign 이 있으면 그 수어, 없으면 지문자로 풀 앞부분
+ */
+export function matchToken(token) {
+  const direct = lookupWord(token);
+  if (direct) return { sign: direct, stem: token };
+  return matchByStripping(token) ?? matchConjugated(token) ?? { stem: spellStem(token) };
 }
 
 /**
