@@ -72,7 +72,7 @@ export function createListener({ lang = 'ko-KR', silenceMs = 2200, pendingMs = 4
     settled = '';
     if (text) onResult?.(text);
     // 브라우저는 onerror 다음에 onend 를 부른다. 오류는 onError 가 이미 알렸으니
-    // 여기서 onEnd 를 또 부르면 '마이크가 막혀 있습니다' 같은 안내가 곧바로 지워진다
+    // 여기서 onEnd 를 또 부르면 '마이크가 막혔습니다' 같은 안내가 곧바로 지워진다
     if (failed) { failed = false; return; }
     onEnd?.();
   };

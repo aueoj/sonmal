@@ -751,9 +751,9 @@ function startListening() {
 }
 /* 음성 인식 오류마다 입력칸에 남길 안내. 다시 말하기를 누르거나 입력하기 전까지 남는다 */
 const LISTEN_ERROR = {
-  'not-allowed': '마이크가 막혀 있습니다. 직접 입력해 주세요',
-  'service-not-allowed': '음성 인식이 막혀 있습니다. 직접 입력해 주세요',
-  'audio-capture': '마이크를 찾지 못했습니다. 직접 입력해 주세요'
+  'not-allowed': '마이크가 막혔습니다. 입력해 주세요',
+  'service-not-allowed': '음성 인식이 막혔습니다. 입력해 주세요',
+  'audio-capture': '마이크가 없습니다. 입력해 주세요'
 };
 function stopListening() {
   document.body.classList.remove('listening');
