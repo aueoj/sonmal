@@ -53,6 +53,7 @@ const BROWSER = [
   ['그림', ['dev/art-audit.mjs'], '단어 그림이 자모 자리에 남지 않는가'],
   ['유출', ['dev/egress-audit.mjs'], '허용한 곳 말고 접속하지 않는가'],
   ['손', ['dev/hand-audit.mjs'], '왼손·오른손 전환이 맞는가'],
+  ['radio 키', ['dev/radio-audit.mjs'], '모드, 쓰는 손, 읽을 것이 화살표와 Home, End 로 옮겨 골라지는가'],
   ['되풀이', ['dev/loop-audit.mjs'], '끝나고 다시 처음으로 도는가'],
   ['문장 읽기', ['dev/loop-audit.mjs', '나 물'], '어절마다 읽고 끝에 문장 전체를 읽는가'],
   ['다시 그리기', ['dev/redraw-audit.mjs'], '같은 손을 들고 있는 동안 안내 줄을 프레임마다 다시 쓰지 않는가'],

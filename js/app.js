@@ -835,6 +835,32 @@ function setMode(mode, { restart = true } = {}) {
   }
 }
 
+/* ── radio 묶음 키보드 ─────────────────────────
+   표준 radio 그룹처럼 Tab 은 고른 칸 하나에만 서고, 화살표(←↑ 앞, →↓ 뒤, 끝에서 처음으로 돈다)와
+   Home, End 로 옮기면 그 칸이 바로 골라진다. 고르는 일은 각 버튼의 click 이 한다 */
+function wireRadioGroup(group) {
+  const radios = () => [...group.querySelectorAll('[role="radio"]')];
+  const sync = () => {
+    const list = radios();
+    const on = list.find(r => r.getAttribute('aria-checked') === 'true') ?? list[0];
+    for (const r of list) r.tabIndex = r === on ? 0 : -1;
+  };
+  group.addEventListener('keydown', e => {
+    const list = radios();
+    const i = list.indexOf(e.target.closest('[role="radio"]'));
+    if (i < 0) return;
+    const to = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: list.length - 1 }[e.key];
+    if (to === undefined || e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    const next = list[(to + list.length) % list.length];
+    next.focus();
+    if (next.getAttribute('aria-checked') !== 'true') next.click();
+  });
+  // 고른 칸은 클릭, 키, 코드(setHand 등) 어디서든 바뀐다. aria-checked 를 따라 Tab 자리를 옮긴다
+  new MutationObserver(sync).observe(group, { subtree: true, attributes: true, attributeFilter: ['aria-checked'] });
+  sync();
+}
+
 /* ── 시작 ──────────────────────────────────── */
 
 function init() {
@@ -900,6 +926,7 @@ function init() {
   el.readJamo.addEventListener('click', () => setReadKind('jamo'));
   el.freeClear.addEventListener('click', () => { el.freeLog.replaceChildren(); setReadKind(state.readKind); });
   document.body.dataset.mode = 'practice';
+  for (const g of document.querySelectorAll('[role="radiogroup"]')) wireRadioGroup(g);
 
   el.handRight.addEventListener('click', () => setHand('right'));
   el.handLeft.addEventListener('click', () => setHand('left'));
