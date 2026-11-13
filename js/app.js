@@ -298,6 +298,8 @@ function showWord(u) {
     const as = document.createElement('span');
     as.className = 'as-sign';
     as.textContent = `수어 표제어 '${w.word}'`;
+    // '무엇을'처럼 한 말이 표제어로 시작하면 덧붙인 것뿐이다. 폰 폭에서는 접어 문장 칸 줄이 세 줄로 늘지 않게 한다(app.css)
+    if (u.jamo.startsWith(w.word)) as.dataset.plain = '1';
     el.name.append(as);
   }
   paintWordMeta(w);

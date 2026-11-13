@@ -341,6 +341,9 @@ dialog a { color: var(--indigo); }
   .modeswitch .wide { display: none; }
   .modeswitch button { padding: 3px 10px; }
   .bar-end .handswitch button { padding: 3px 8px; }
+  /* 문장 칸 줄: 이름, 칸, '한국어 순서', 표정·사전 영상이 207px 폭에 들어가야 한다.
+     한 말이 표제어로 시작할 때('무엇을' → '무엇')의 표제어 알림은 접어 두 줄(57px)을 넘지 않게 한다 */
+  .as-sign[data-plain] { display: none; }
 }
 
 /* 손가락으로 누르는 기기에서는 위 줄 버튼도 44px 아래로 내려가지 않는다.

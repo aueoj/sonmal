@@ -42,6 +42,16 @@ for (const [w, h] of [[1440, 900], [1440, 760], [1280, 720], [820, 1180], [390, 
     if (o.refBottom > o.guideTop + 1) bad.push(`${w}x${h}: 말 고르기가 아래 안내판과 ${o.refBottom - o.guideTop}px 겹친다`);
     await p.click('#ref-toggle');
   }
+  // 폰 폭: 문장 칸 줄(이름, 칸, '한국어 순서', 표정·사전 영상)이 두 줄을 넘지 않는다
+  if (w <= 480) {
+    for (const text of ['무엇을 봐요', '감동했어요 감사합니다']) {
+      await p.fill('#typed', text); await p.press('#typed', 'Enter');
+      await p.waitForTimeout(300);
+      const head = await p.evaluate(() => Math.round(document.querySelector('.guide-head').getBoundingClientRect().height));
+      console.log(`     '${text}' 문장 칸 줄 ${head}px`);
+      if (head > 60) bad.push(`${w}x${h}: '${text}' 문장 칸 줄이 ${head}px — 두 줄(57px)을 넘었다`);
+    }
+  }
   if (w === 1440 && h === 900) await p.screenshot({ path: '/tmp/claude-0/-home-user-sonmal/1666e45b-ba5d-5fdf-99c9-cdf6defa90e5/scratchpad/inuse.png' });
   await p.close();
 }
