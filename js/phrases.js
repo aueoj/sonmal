@@ -1,6 +1,6 @@
 /* 한국어 연습 문장. 각 구성 낱말의 출처는 wordBank의 국립국어원 사전 항목이다.
    한국수어 어순·문법 번역이나 사전의 문장 용례로 주장하지 않는다. */
-import { planUtterance } from './words.js?v=202611121505';
+import { planUtterance } from './words.js?v=202611131538';
 /* 처음 배우는 사람이 위에서부터 고르도록 인사와 대화에 쓰는 묶음을 먼저, 나중에 더한 생활 낱말 묶음은 뒤에 둔다.
    말 고르기의 낱말 묶음(lessons.js)과 같은 차례다. */
 export const PHRASE_GROUPS = [
