@@ -7,8 +7,8 @@
  * 판정 로직을 그대로 확인하기 위한 개발용 경로다.
  */
 
-import { landmarksFor } from './mockHand.js?v=202611121505';
-import { ZONE_AT } from './matcher.js?v=202611121505';
+import { landmarksFor } from './mockHand.js?v=202611131538';
+import { ZONE_AT } from './matcher.js?v=202611131538';
 
 const TASKS_VISION = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
 const MODEL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
@@ -37,10 +37,13 @@ export class Tracker {
     this.faceDetector = null;
     this.face = null;          // { y: 코끝 높이, h: 얼굴 상자 높이, at: 본 시각 }
     this.frameNo = 0;
+    this.paused = false;       // 탭이 숨어 잠깐 멈춘 상태
+    this.gen = 0;              // 켜고 멈출 때마다 오른다. 앞 루프가 뒤늦게 돌지 않게 한다
   }
 
   async start() {
-    if (this.mock) { this.running = true; this._mockLoop(); return { mode: 'mock' }; }
+    const gen = ++this.gen;
+    if (this.mock) { this.running = true; this._mockLoop(gen); return { mode: 'mock' }; }
 
     // 권한과 장치를 먼저 확인한다. 모델 실패를 카메라 권한 실패와 구분한다.
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -48,15 +51,7 @@ export class Tracker {
     }
     let FaceDetector, fileset;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
-        audio: false
-      });
-      this.video.srcObject = stream;
-      // 카메라를 뽑거나, 다른 프로그램이 가져가거나, 권한을 거두면 영상이 끝난다
-      stream.getVideoTracks()[0]?.addEventListener('ended', () =>
-        this._lose('CameraEndedError', '카메라 영상이 끊어졌습니다'));
-      await this.video.play();
+      await this._openStream();
       const vision = await import(
         /* @vite-ignore */ `${TASKS_VISION}/vision_bundle.mjs`
       );
@@ -81,21 +76,81 @@ export class Tracker {
       throw error;
     }
     this.running = true;
-    this._loop();
+    this._loop(gen);
     // 얼굴 모델은 손 인식을 막지 않게 뒤에서 받는다. 실패하면 화면 비율로 어림한다
     this._loadFace(FaceDetector, fileset);
     return { mode: 'camera' };
   }
 
-  stop() {
-    this.running = false;
+  /* 카메라 영상을 연다. 처음 켤 때와 탭이 돌아와 다시 열 때 같이 쓴다.
+     gen 을 주면 권한과 장치를 기다리는 사이 다시 숨거나 껐을 때(세대가 바뀜) 영상에 붙이지 않고 놓는다(null) */
+  async _openStream(gen) {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+      audio: false
+    });
+    if (gen !== undefined && gen !== this.gen) { stream.getTracks().forEach(t => t.stop()); return null; }
+    this.video.srcObject = stream;
+    // 카메라를 뽑거나, 다른 프로그램이 가져가거나, 권한을 거두면 영상이 끝난다
+    stream.getVideoTracks()[0]?.addEventListener('ended', () =>
+      this._lose('CameraEndedError', '카메라 영상이 끊어졌습니다'));
+    await this.video.play();
+    return stream;
+  }
+
+  _releaseStream() {
     const s = this.video?.srcObject;
     if (s) { s.getTracks().forEach(t => t.stop()); this.video.srcObject = null; }
+  }
+
+  stop() {
+    this.gen++;                // 돌던 루프와 이어 켜던 것을 끊는다
+    this.running = false;
+    this.paused = false;
+    this._releaseStream();
     this.landmarker?.close();
     this.landmarker = null;
     this.faceDetector?.close();
     this.faceDetector = null;
     this.face = null;
+  }
+
+  /* 탭이 숨으면 카메라를 놓고 판정을 멈춘다. 손 인식 모델은 들고 있어 돌아오면 바로 잇는다.
+     멈췄으면 true */
+  pause() {
+    // 돌아와 카메라를 다시 여는 중(resume 이 getUserMedia 를 기다리는 중)에 또 숨었다.
+    // 세대를 올려 resume 이 연 영상을 놓게 하고, 멈춘 상태로 남는다
+    if (!this.running && this.paused) { this.gen++; this._releaseStream(); return true; }
+    if (!this.running) return false;
+    this.gen++;
+    this.running = false;
+    this.paused = true;
+    this._releaseStream();
+    this.face = null;
+    return true;
+  }
+
+  /* 멈춘 자리에서 잇는다. 카메라를 다시 열지 못하면 오류를 던진다(이때는 완전히 끈다) */
+  async resume() {
+    if (!this.paused) return false;
+    const gen = ++this.gen;
+    if (!this.mock) {
+      try {
+        const stream = await this._openStream(gen);
+        if (!stream) return false;   // 기다리는 사이 다시 숨었거나 껐다. 연 영상은 이미 놓았다
+        // 영상을 붙이고 재생을 기다리는 사이 다시 숨었거나 껐으면 방금 연 영상을 놓는다
+        if (gen !== this.gen) { if (this.video.srcObject === stream) this._releaseStream(); else stream.getTracks().forEach(t => t.stop()); return false; }
+      } catch (error) {
+        if (gen !== this.gen) return false;
+        this.stop();
+        throw error;
+      }
+    }
+    this.paused = false;
+    this.running = true;
+    this.fails = 0;
+    if (this.mock) this._mockLoop(gen); else this._loop(gen);
+    return true;
   }
 
   _lose(name, message) {
@@ -113,7 +168,8 @@ export class Tracker {
     try {
       try { this.faceDetector = await FaceDetector.createFromOptions(fileset, opts('GPU')); }
       catch { this.faceDetector = await FaceDetector.createFromOptions(fileset, opts('CPU')); }
-      if (!this.running) { this.faceDetector.close(); this.faceDetector = null; }
+      // 받는 사이 껐으면 닫는다. 탭이 숨어 잠깐 멈춘 것(paused)이면 돌아와 다시 쓰니 들고 있는다
+      if (!this.running && !this.paused) { this.faceDetector.close(); this.faceDetector = null; }
     } catch { this.faceDetector = null; }
   }
 
@@ -147,8 +203,8 @@ export class Tracker {
 
   setMockPose(pose) { this.mockPose = pose; }
 
-  _loop() {
-    if (!this.running) return;
+  _loop(gen) {
+    if (!this.running || gen !== this.gen) return;
     const now = performance.now();
     let res = null;
     if (this.video.readyState >= 2) {
@@ -168,11 +224,11 @@ export class Tracker {
       }
       this.onFrame(hands, this.currentFace(now));
     }
-    requestAnimationFrame(() => this._loop());
+    requestAnimationFrame(() => this._loop(gen));
   }
 
-  _mockLoop() {
-    if (!this.running) return;
+  _mockLoop(gen) {
+    if (!this.running || gen !== this.gen) return;
     /* 합성 손은 원래 얼굴 높이의 2.7 배쯤으로 컸다. 그러면 뺨, 머리 옆처럼 좁은 높이 안에서
        손 길이만큼 움직일 수가 없다. 실제 몸 비례에 가깝게(손이 얼굴 높이 남짓) 줄인다 */
     const shrink = pts => {
@@ -271,6 +327,6 @@ export class Tracker {
       hands.push({ lm: lm2.map(p => ({ ...p, x: p.x + at.x + gap - c2.x, y: p.y + at.y + dy2 - c2.y })), handedness: 'Left' });
     }
     this.onFrame(hands, this.currentFace());
-    setTimeout(() => this._mockLoop(), 60);
+    setTimeout(() => this._mockLoop(gen), 60);
   }
 }

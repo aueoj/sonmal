@@ -13,14 +13,14 @@
   worker-src 'self' blob:;
   form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="build" content="202611121505">
+<meta name="build" content="202611131538">
 <title>손말</title>
 <meta name="description" content="말하거나 손으로 하면 손말이 읽어 줍니다. 한글 지문자와 자주 쓰는 수어 연습.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css?v=202611121505">
-<link rel="stylesheet" href="css/app.css?v=202611121505">
+<link rel="stylesheet" href="css/tokens.css?v=202611131538">
+<link rel="stylesheet" href="css/app.css?v=202611131538">
 <!-- Vercel Web Analytics: 쿠키 없이 방문 수만 센다. vercel.app 에서만 부른다(로컬 점검·GitHub Pages 에선 404 라서) -->
 <script>if(location.hostname.endsWith(".vercel.app")){const s=document.createElement("script");s.defer=true;s.src="/_vercel/insights/script.js";document.head.appendChild(s)}</script>
 </head>
@@ -62,6 +62,13 @@ if (location.protocol === 'file:') {
 <main class="camera" id="camera" aria-label="카메라">
   <video id="cam" playsinline muted></video>
   <canvas id="overlay"></canvas>
+
+  <!-- 켜져 있는 동안 왼쪽 위에 둔다. 카메라면 끄기, 둘러보기면 합성 손이라고 알리고 카메라 켜기 -->
+  <div class="cam-state" id="cam-state" hidden>
+    <p class="cam-state-note" id="cam-state-note" hidden>카메라 없이 합성 손으로 둘러보는 중입니다</p>
+    <button type="button" class="cam-state-btn" id="cam-on" hidden>카메라 켜기</button>
+    <button type="button" class="cam-state-btn" id="cam-off">카메라 끄기</button>
+  </div>
 
   <div class="cam-empty" id="cam-empty">
     <div class="cam-prompt">
@@ -173,6 +180,6 @@ if (location.protocol === 'file:') {
   <form method="dialog"><button class="primary" type="submit">닫기</button></form>
 </dialog>
 
-<script type="module" src="app.min.js?v=202611121505"></script>
+<script type="module" src="app.min.js?v=202611131538"></script>
 </body>
 </html>

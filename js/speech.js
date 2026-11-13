@@ -40,6 +40,7 @@ export function createListener({ lang = 'ko-KR', silenceMs = 2200, pendingMs = 4
   let settled = '';        // 지금까지 확정된 말
   let wanted = false;      // 사용자가 아직 듣기를 원하는가
   let idle = null;
+  let failed = false;      // 오류로 끝났다. 뒤따르는 onend 가 오류 안내를 지우지 않게 한다
 
   const armIdle = (ms = silenceMs) => {
     clearTimeout(idle);
@@ -60,6 +61,7 @@ export function createListener({ lang = 'ko-KR', silenceMs = 2200, pendingMs = 4
   rec.onerror = e => {
     if (e.error === 'no-speech' || e.error === 'aborted') return;   // 흔하고 치명적이지 않다
     wanted = false;
+    failed = true;
     onError?.(e.error);
   };
 
@@ -69,12 +71,15 @@ export function createListener({ lang = 'ko-KR', silenceMs = 2200, pendingMs = 4
     const text = settled.trim();
     settled = '';
     if (text) onResult?.(text);
+    // 브라우저는 onerror 다음에 onend 를 부른다. 오류는 onError 가 이미 알렸으니
+    // 여기서 onEnd 를 또 부르면 '마이크가 막혔습니다' 같은 안내가 곧바로 지워진다
+    if (failed) { failed = false; return; }
     onEnd?.();
   };
 
   return {
     start() {
-      settled = ''; wanted = true;
+      settled = ''; wanted = true; failed = false;
       try { rec.start(); armIdle(startMs); } catch { /* 이미 듣는 중 */ }
     },
     stop() { wanted = false; clearTimeout(idle); try { rec.stop(); } catch {} },

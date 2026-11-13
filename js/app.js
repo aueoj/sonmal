@@ -9,21 +9,21 @@
  *     손이 보이는 동안 따라한 것으로 보아 단어를 읽어 준다
  */
 
-import { toFingerspell, composeFromJamo } from './hangul.js?v=202611121505';
-import { getPose } from './jamoData.js?v=202611121505';
-import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611121505';
-import { describe } from './poseFeatures.js?v=202611121505';
-import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611121505';
-import { Tracker } from './tracker.js?v=202611121505';
-import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611121505';
-import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611121505';
-import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611121505';
-import { groupByIdea } from './lessons.js?v=202611121505';
-import { loadProgress, markLearned, stageOf } from './progress.js?v=202611121505';
-import { createReader } from './reader.js?v=202611121505';
-import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611121505';
-import { diagnose } from './diagnose.js?v=202611121505';
-import { animate, stagger } from './vendor/anime.js?v=202611121505';
+import { toFingerspell, composeFromJamo } from './hangul.js?v=202611131538';
+import { getPose } from './jamoData.js?v=202611131538';
+import { jamoArt, wordArt, wordFilm, wordFrameCount, WORD_POSE_FILES } from './illustrations.js?v=202611131538';
+import { describe } from './poseFeatures.js?v=202611131538';
+import { scoreHands, detectLateralShift, MOTION_WINDOW_MS, SHIFT_MIN } from './matcher.js?v=202611131538';
+import { Tracker } from './tracker.js?v=202611131538';
+import { createListener, speak, support, hasKoreanVoice } from './speech.js?v=202611131538';
+import { planUtterance, SOURCES, WORD_SIGNS } from './words.js?v=202611131538';
+import { PHRASE_GROUPS, phrasePlan } from './phrases.js?v=202611131538';
+import { groupByIdea } from './lessons.js?v=202611131538';
+import { loadProgress, markLearned, stageOf } from './progress.js?v=202611131538';
+import { createReader } from './reader.js?v=202611131538';
+import { createSignReader, readableSigns, stepWord, checksOf, HOLD_MS as WORD_HOLD_MS } from './signReader.js?v=202611131538';
+import { diagnose } from './diagnose.js?v=202611131538';
+import { animate, stagger } from './vendor/anime.js?v=202611131538';
 
 const $ = id => document.getElementById(id);
 /* 움직임을 줄여 달라고 한 사용자에게는 anime.js 효과를 전부 건너뛴다 */
@@ -48,7 +48,8 @@ const el = {
   ref: $('ref'), refToggle: $('ref-toggle'), refWords: $('ref-words'), camTitle: $('cam-title'),
   meta: $('guide-meta'), seqNote: $('seq-note'),
   modePractice: $('mode-practice'), modeFree: $('mode-free'),
-  freeLog: $('free-log'), readWords: $('read-words'), readJamo: $('read-jamo'), freeClear: $('free-clear')
+  freeLog: $('free-log'), readWords: $('read-words'), readJamo: $('read-jamo'), freeClear: $('free-clear'),
+  camState: $('cam-state'), camStateNote: $('cam-state-note'), camOn: $('cam-on'), camOff: $('cam-off')
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
@@ -64,7 +65,7 @@ const REPEAT_MS = 1400;     // 다 하고 나서 처음으로 돌아가기까지
 
 const state = {
   seq: [], at: -1, got: [],
-  tracker: null, listener: null, live: false,
+  tracker: null, listener: null, live: false, paused: false,
   hand: 'right',
   holdSince: 0, trail: [], scores: [], motionSeen: false, lastStep: '',
   wordTimer: null, wordStep: 0, wordProg: { k: 0, hold: 0, motion: null }, wordLost: 0,
@@ -297,6 +298,8 @@ function showWord(u) {
     const as = document.createElement('span');
     as.className = 'as-sign';
     as.textContent = `수어 표제어 '${w.word}'`;
+    // '무엇을'처럼 한 말이 표제어로 시작하면 덧붙인 것뿐이다. 폰 폭에서는 접어 문장 칸 줄이 세 줄로 늘지 않게 한다(app.css)
+    if (u.jamo.startsWith(w.word)) as.dataset.plain = '1';
     el.name.append(as);
   }
   paintWordMeta(w);
@@ -377,7 +380,8 @@ function completeWord(u) {
   /* 넘어가기 전 잠깐 '해냈다'를 보인다. 그 사이 새 말을 골랐으면 새 말의 첫 칸을
      건너뛰지 않게 아무것도 하지 않는다(그때 seq 는 새 배열이다). */
   const seq = state.seq;
-  setTimeout(() => { if (state.seq !== seq) return; advance(); speakFinishedPart(); }, 420);
+  clearTimeout(state.completeTimer);
+  state.completeTimer = setTimeout(() => { if (state.seq !== seq) return; advance(); speakFinishedPart(); }, 420);
 }
 
 /* 한 어절을 다 하면 그 어절을 읽어 준다.
@@ -588,12 +592,21 @@ function drawLandmarks(ctx, lms, w, h) {
 
 /* ── 켜고 끄기 ─────────────────────────────── */
 
-async function startCamera({ demo = false } = {}) {
-  if (demo) MOCK = true;
+/* demo 가 true 면 합성 손으로 둘러본다. false 면 진짜 카메라를 연다(둘러보던 중이어도).
+   정하지 않으면 주소의 ?mock 을 따른다(점검 스크립트가 쓴다) */
+async function startCamera({ demo } = {}) {
+  if (demo !== undefined) MOCK = demo;
+  // 둘러보다가 카메라를 켜면 합성 손을 먼저 내린다
+  if (state.tracker) { state.tracker.stop(); state.tracker = null; }
+  state.live = false; state.paused = false;
+  el.camera.classList.remove('live');
+  paintCamState();
   el.btnCam.disabled = true; el.btnDemo.disabled = true;
   el.btnCam.textContent = '여는 중';
+  el.camTitle.textContent = '카메라를 켜는 중입니다';
   try {
-    state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK, onLost: cameraFailed });
+    const tracker = new Tracker({ video: el.video, onFrame, mock: MOCK, onLost: cameraFailed });
+    state.tracker = tracker;
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
     // other 를 주면 다른 손을 그 자모 손모양으로 띄운다(두 손 판정 점검용)
     if (MOCK) window.__sonmalMock = (jamo, zone = null, other = null) => {
@@ -612,29 +625,101 @@ async function startCamera({ demo = false } = {}) {
       if (!check) { state.tracker.setMockPose(null); state.tracker.mockTwoHands = false; state.tracker.mockPose2 = null; return; }
       applyMockCheck(check, moving);
     };
-    await state.tracker.start();
+    await tracker.start();
+    if (state.tracker !== tracker) return;   // 여는 사이에 끄거나 다른 것으로 켰다
     state.live = true;
     el.camera.classList.add('live');
+    resetCamButtons();
+    paintCamState();
     const cur = state.seq[state.at];
     if (cur?.role === 'word') showWord(cur);
-    else if (cur && state.tracker.mock) {
+    else if (cur && tracker.mock) {
       const cp = getPose(cur.jamo);
-      state.tracker.setMockPose(cp);
-      state.tracker.mockTwoHands = cp?.hands === 2;   // 카메라를 켜기 전에 정해진 칸도 맞춘다
-      state.tracker.mockPose2 = cp?.parts?.[1] ?? null;
+      tracker.setMockPose(cp);
+      tracker.mockTwoHands = cp?.hands === 2;   // 카메라를 켜기 전에 정해진 칸도 맞춘다
+      tracker.mockPose2 = cp?.parts?.[1] ?? null;
     }
+    if (document.hidden) pauseCamera();      // 뒤 탭에서 켜졌으면 돌아올 때까지 쉰다
   } catch (err) {
     await cameraFailed(err);
   }
 }
 
-/* 켜다 막혔을 때도, 쓰는 중에 끊겼을 때도(tracker 의 onLost) 같은 진단을 보인다 */
-async function cameraFailed(err) {
-  state.live = false;
-  el.camera.classList.remove('live');
-  el.overlay.getContext('2d').clearRect(0, 0, el.overlay.width, el.overlay.height);
+function resetCamButtons() {
   el.btnCam.disabled = false; el.btnDemo.disabled = false;
   el.btnCam.textContent = '카메라 켜기';
+}
+
+/* 영상 위 왼쪽 위의 작은 줄. 카메라를 쓰는 중이면 끄기, 둘러보는 중이면 그렇다고 알리고 카메라 켜기를 둔다 */
+function paintCamState() {
+  const demo = state.live && !!state.tracker?.mock;
+  el.camState.hidden = !state.live;
+  el.camStateNote.hidden = !demo;
+  el.camOn.hidden = !demo;
+  el.camOff.textContent = demo ? '둘러보기 끝내기' : '카메라 끄기';
+}
+
+function clearOverlay() {
+  el.overlay.getContext('2d').clearRect(0, 0, el.overlay.width, el.overlay.height);
+}
+
+/* 카메라 끄기. 영상과 손 인식을 멈추고 처음의 '카메라 켜기' 화면으로 돌아간다 */
+function stopCamera() {
+  const wasDemo = !!state.tracker?.mock;
+  state.tracker?.stop();
+  state.tracker = null;
+  state.live = false; state.paused = false;
+  el.camera.classList.remove('live');
+  clearOverlay();
+  resetCamButtons();
+  el.diag.hidden = true; el.camPrompt.hidden = false;
+  el.camTitle.textContent = wasDemo ? '둘러보기를 끝냈습니다' : '카메라를 껐습니다';
+  paintCamState();
+  // 끄는 순간 남은 것을 다 정리한다. 해낸 직후 넘어가기(420ms), 끝난 뒤 되풀이, 읽던 소리, 띄운 자막
+  clearTimeout(state.completeTimer); clearTimeout(state.repeatTimer); stopWordTimer();
+  try { speechSynthesis.cancel(); } catch { /* 소리 없는 브라우저 */ }
+  clearTimeout(say._t); el.spoken.hidden = true;
+  el.seen.textContent = ''; el.guide.dataset.state = ''; setFill(0);
+  state.holdSince = 0; state.scores = []; state.trail = []; state.lostSince = 0; state.motionSeen = false;
+  if (state.mode === 'free') {
+    state.reader.clear(); state.signReader.reset();
+    paintFreeIdle();
+  } else if (state.seq.length) {
+    // 하던 말을 첫 칸부터 다시 보인다. 낱말은 '카메라를 켜면…', 지문자는 손모양 설명이 '손이 보이지 않습니다'를 덮는다
+    state.settling = false;
+    state.at = -1; state.got = []; state.spokenPart = -1;
+    for (const n of el.seq.querySelectorAll('.unit[data-i]')) delete n.dataset.lock;
+    advance();
+  }
+  el.btnCam.focus();
+}
+
+/* 탭이 숨으면 카메라와 판정을 멈추고, 돌아오면 이어 간다 */
+function pauseCamera() {
+  if (!state.live || !state.tracker?.pause()) return;
+  state.paused = true;
+  clearOverlay();
+}
+async function resumeCamera() {
+  if (!state.paused || !state.tracker) return;
+  state.paused = false;
+  const tracker = state.tracker;
+  // 멈추기 전에 버티던 것은 버린다. 돌아온 손으로 처음부터 잰다
+  state.holdSince = 0; state.scores = []; state.trail = []; state.lostSince = 0;
+  state.wordProg.hold = 0;
+  state.reader?.clear(); state.signReader?.reset();
+  try { await tracker.resume(); }
+  catch (err) { if (state.tracker === tracker) { state.tracker = null; await cameraFailed(err); } }
+}
+
+/* 켜다 막혔을 때도, 쓰는 중에 끊겼을 때도(tracker 의 onLost) 같은 진단을 보인다 */
+async function cameraFailed(err) {
+  state.tracker?.stop(); state.tracker = null;
+  state.live = false; state.paused = false;
+  el.camera.classList.remove('live');
+  clearOverlay();
+  resetCamButtons();
+  paintCamState();
   el.camTitle.textContent = '카메라를 켜면 손을 읽어 드립니다';
   await showDiagnosis(err);   // 진단이 처음부터 다시 재면 진짜 실패를 놓친다
 }
@@ -664,6 +749,12 @@ function startListening() {
   el.typed.placeholder = '듣고 있습니다';
   state.listener.start();
 }
+/* 음성 인식 오류마다 입력칸에 남길 안내. 다시 말하기를 누르거나 입력하기 전까지 남는다 */
+const LISTEN_ERROR = {
+  'not-allowed': '마이크가 막혔습니다. 입력해 주세요',
+  'service-not-allowed': '음성 인식이 막혔습니다. 입력해 주세요',
+  'audio-capture': '마이크가 없습니다. 입력해 주세요'
+};
 function stopListening() {
   document.body.classList.remove('listening');
   el.typed.placeholder = '또는 문장 입력';
@@ -757,6 +848,32 @@ function setMode(mode, { restart = true } = {}) {
   }
 }
 
+/* ── radio 묶음 키보드 ─────────────────────────
+   표준 radio 그룹처럼 Tab 은 고른 칸 하나에만 서고, 화살표(←↑ 앞, →↓ 뒤, 끝에서 처음으로 돈다)와
+   Home, End 로 옮기면 그 칸이 바로 골라진다. 고르는 일은 각 버튼의 click 이 한다 */
+function wireRadioGroup(group) {
+  const radios = () => [...group.querySelectorAll('[role="radio"]')];
+  const sync = () => {
+    const list = radios();
+    const on = list.find(r => r.getAttribute('aria-checked') === 'true') ?? list[0];
+    for (const r of list) r.tabIndex = r === on ? 0 : -1;
+  };
+  group.addEventListener('keydown', e => {
+    const list = radios();
+    const i = list.indexOf(e.target.closest('[role="radio"]'));
+    if (i < 0) return;
+    const to = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: list.length - 1 }[e.key];
+    if (to === undefined || e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    const next = list[(to + list.length) % list.length];
+    next.focus();
+    if (next.getAttribute('aria-checked') !== 'true') next.click();
+  });
+  // 고른 칸은 클릭, 키, 코드(setHand 등) 어디서든 바뀐다. aria-checked 를 따라 Tab 자리를 옮긴다
+  new MutationObserver(sync).observe(group, { subtree: true, attributes: true, attributeFilter: ['aria-checked'] });
+  sync();
+}
+
 /* ── 시작 ──────────────────────────────────── */
 
 function init() {
@@ -822,6 +939,7 @@ function init() {
   el.readJamo.addEventListener('click', () => setReadKind('jamo'));
   el.freeClear.addEventListener('click', () => { el.freeLog.replaceChildren(); setReadKind(state.readKind); });
   document.body.dataset.mode = 'practice';
+  for (const g of document.querySelectorAll('[role="radiogroup"]')) wireRadioGroup(g);
 
   el.handRight.addEventListener('click', () => setHand('right'));
   el.handLeft.addEventListener('click', () => setHand('left'));
@@ -831,7 +949,10 @@ function init() {
       onInterim: t => { el.typed.value = t; },      // 들은 말은 입력칸에 그대로 보여 준다
       onResult: t => sayAndPractice(t),
       onEnd: stopListening,
-      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '다시 말해 주세요'; }
+      onError: code => {
+        stopListening(); el.typed.value = '';
+        el.typed.placeholder = LISTEN_ERROR[code] ?? '다시 말해 주세요';
+      }
     });
   } else {
     el.btnListen.disabled = true;
@@ -843,9 +964,12 @@ function init() {
   if (support.speak && !hasKoreanVoice())
     el.btnListen.title += ' 한국어 목소리가 없어 읽어 주는 소리는 나지 않을 수 있습니다.';
 
-  el.btnCam.addEventListener('click', () => startCamera());
+  el.btnCam.addEventListener('click', () => startCamera({ demo: false }));
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
-  el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera(); });
+  el.camOn.addEventListener('click', () => startCamera({ demo: false }));
+  el.camOff.addEventListener('click', stopCamera);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pauseCamera(); else resumeCamera(); });
+  el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera({ demo: false }); });
   el.diagDemo.addEventListener('click', () => {
     el.diag.hidden = true; el.camPrompt.hidden = false;
     startCamera({ demo: true });
@@ -894,6 +1018,10 @@ function init() {
   el.chart.innerHTML = [...'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣㅘㅚㅙㅝㅞㅟㅢㄲㄸㅃㅆㅉ']
     .map(j => `<button type="button" data-say="${j}" aria-label="${j} 연습">${jamoArt(j)}<span>${j}</span></button>`).join('');
   renderPicker();
+  // 아래 안내판의 실제 높이. 좁은 화면의 말 고르기가 그 위에서 끝난다(app.css)
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--guide-box', `${Math.ceil(el.guide.getBoundingClientRect().height)}px`);
+  }).observe(el.guide);
   el.refToggle.addEventListener('click', () => setRef(el.ref.hidden));
   el.ref.addEventListener('click', e => {
     const b = e.target.closest('[data-say]');
