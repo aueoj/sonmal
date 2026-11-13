@@ -736,6 +736,12 @@ function startListening() {
   el.typed.placeholder = '듣고 있습니다';
   state.listener.start();
 }
+/* 음성 인식 오류마다 입력칸에 남길 안내. 다시 말하기를 누르거나 입력하기 전까지 남는다 */
+const LISTEN_ERROR = {
+  'not-allowed': '마이크가 막혀 있어요. 입력해 주세요',
+  'service-not-allowed': '음성 인식이 막혀 있어요. 입력해 주세요',
+  'audio-capture': '마이크를 찾지 못했어요. 입력해 주세요'
+};
 function stopListening() {
   document.body.classList.remove('listening');
   el.typed.placeholder = '또는 문장 입력';
@@ -903,7 +909,10 @@ function init() {
       onInterim: t => { el.typed.value = t; },      // 들은 말은 입력칸에 그대로 보여 준다
       onResult: t => sayAndPractice(t),
       onEnd: stopListening,
-      onError: () => { stopListening(); el.typed.value = ''; el.typed.placeholder = '다시 말해 주세요'; }
+      onError: code => {
+        stopListening(); el.typed.value = '';
+        el.typed.placeholder = LISTEN_ERROR[code] ?? '다시 말해 주세요';
+      }
     });
   } else {
     el.btnListen.disabled = true;

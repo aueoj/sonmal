@@ -70,5 +70,19 @@ else if (after3 !== 2200) bad.push(`확정되고 ${after3}ms 만에 끝냈다 (2
 if (got3 !== '오늘 날씨가 좋아요') bad.push(`늦게 온 말을 넘기지 못했다: "${got3}"`);
 console.log(`늦은 결과 뒤 끝내기까지  ${after3 ?? '-'}ms, 넘긴 말 "${got3}"`);
 
+// 4. 마이크를 거부하면(onerror 다음에 onend) 오류만 알리고 onEnd 로 안내를 지우지 않는다
+let errs4 = [], ends4 = 0;
+const d = createListener({ onError: e => errs4.push(e), onEnd: () => { ends4 += 1; } });
+d.start();
+const sr4 = FakeSR.last;
+sr4.onerror({ error: 'not-allowed' });
+sr4.onend();
+if (errs4.join() !== 'not-allowed') bad.push(`거부 오류를 알리지 않았다: ${errs4.join()}`);
+if (ends4) bad.push('거부 오류 뒤 onEnd 가 불려 안내가 지워진다');
+// 다음에 다시 듣고 끝나면 onEnd 는 평소대로 불린다
+d.start(); wait(5000); wait(10);
+if (ends4 !== 1) bad.push(`거부 뒤 다시 들은 것이 끝나도 onEnd 가 ${ends4}번 불렸다 (1번이어야 한다)`);
+console.log(`거부 오류 ${errs4.join() || '-'}, 뒤따른 onEnd ${ends4 ? '불림(다시 들은 뒤)' : '안 불림'}`);
+
 for (const s of bad) console.log('  ✕ ' + s);
 process.exit(bad.length ? 1 : 0);
