@@ -672,7 +672,7 @@ function stopCamera() {
   clearOverlay();
   resetCamButtons();
   el.diag.hidden = true; el.camPrompt.hidden = false;
-  el.camTitle.textContent = wasDemo ? '둘러보기를 끝냈어요' : '카메라를 껐어요';
+  el.camTitle.textContent = wasDemo ? '둘러보기를 끝냈습니다' : '카메라를 껐습니다';
   paintCamState();
   el.seen.textContent = ''; el.guide.dataset.state = ''; setFill(0);
   state.holdSince = 0; state.scores = []; state.trail = [];
@@ -738,9 +738,9 @@ function startListening() {
 }
 /* 음성 인식 오류마다 입력칸에 남길 안내. 다시 말하기를 누르거나 입력하기 전까지 남는다 */
 const LISTEN_ERROR = {
-  'not-allowed': '마이크가 막혀 있어요. 입력해 주세요',
-  'service-not-allowed': '음성 인식이 막혀 있어요. 입력해 주세요',
-  'audio-capture': '마이크를 찾지 못했어요. 입력해 주세요'
+  'not-allowed': '마이크가 막혀 있습니다. 직접 입력해 주세요',
+  'service-not-allowed': '음성 인식이 막혀 있습니다. 직접 입력해 주세요',
+  'audio-capture': '마이크를 찾지 못했습니다. 직접 입력해 주세요'
 };
 function stopListening() {
   document.body.classList.remove('listening');

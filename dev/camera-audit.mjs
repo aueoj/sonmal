@@ -1,6 +1,6 @@
 /* 카메라 끄기, 탭 숨김, 둘러보기 표시를 본다.
  *
- *  1. 둘러보기(합성 손)에서는 '합성 손으로 둘러보고 있어요'와 '카메라 켜기'가 보인다
+ *  1. 둘러보기(합성 손)에서는 '합성 손으로 둘러보는 중입니다'와 '카메라 켜기'가 보인다
  *  2. 탭이 숨으면 판정이 멈추고(칸이 더 차지 않는다), 돌아오면 이어 간다
  *  3. '둘러보기 끝내기'를 누르면 처음 화면으로 돌아가고 '카메라 켜기'가 살아 있다
  *  4. 가짜 카메라로 '카메라 켜기'를 누르면 진짜 카메라 경로로 켜지고, 둘러보기 표시는 사라진다
@@ -97,7 +97,7 @@ check(s.stream && s.tracks === 'live' && s.live, `돌아오면 다시 연다 (�
 await p.click('#cam-off');
 await p.waitForTimeout(300);
 s = await st();
-check(!s.live && !s.stream && s.prompt && s.title === '카메라를 껐어요', `끄기 → 라이브=${s.live} 영상=${s.stream} 제목="${s.title}"`);
+check(!s.live && !s.stream && s.prompt && s.title === '카메라를 껐습니다', `끄기 → 라이브=${s.live} 영상=${s.stream} 제목="${s.title}"`);
 const focus = await p.evaluate(() => document.activeElement?.id);
 check(focus === 'btn-cam', `끈 뒤 초점이 카메라 켜기에 (${focus})`);
 
