@@ -59,6 +59,7 @@ const BROWSER = [
   ['배치', ['dev/layout-audit.mjs'], '가이드가 영상의 1/3을 넘지 않는가'],
   ['진단', ['dev/diag-audit.mjs'], '카메라가 막히면 이유를 말하는가'],
   ['카메라 없이', ['dev/nocam-audit.mjs'], '카메라 없이도 둘러볼 수 있는가'],
+  ['카메라 끄기', ['dev/camera-audit.mjs'], '끄면 놓고, 탭이 숨으면 쉬고, 둘러보기임을 알리는가'],
   ['숨김', ['dev/hidden-audit.mjs'], 'hidden 이 실제로 숨는가'],
   ['프레임', ['dev/embed-audit.mjs'], '프레임 안에서 무엇이 막히는가'],
   ['자유 모드', ['dev/free-audit.mjs'], '고르지 않고 한 수어를 읽어 바로 들려주는가'],

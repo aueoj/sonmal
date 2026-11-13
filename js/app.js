@@ -48,7 +48,8 @@ const el = {
   ref: $('ref'), refToggle: $('ref-toggle'), refWords: $('ref-words'), camTitle: $('cam-title'),
   meta: $('guide-meta'), seqNote: $('seq-note'),
   modePractice: $('mode-practice'), modeFree: $('mode-free'),
-  freeLog: $('free-log'), readWords: $('read-words'), readJamo: $('read-jamo'), freeClear: $('free-clear')
+  freeLog: $('free-log'), readWords: $('read-words'), readJamo: $('read-jamo'), freeClear: $('free-clear'),
+  camState: $('cam-state'), camStateNote: $('cam-state-note'), camOn: $('cam-on'), camOff: $('cam-off')
 };
 
 let MOCK = new URLSearchParams(location.search).has('mock');
@@ -64,7 +65,7 @@ const REPEAT_MS = 1400;     // 다 하고 나서 처음으로 돌아가기까지
 
 const state = {
   seq: [], at: -1, got: [],
-  tracker: null, listener: null, live: false,
+  tracker: null, listener: null, live: false, paused: false,
   hand: 'right',
   holdSince: 0, trail: [], scores: [], motionSeen: false, lastStep: '',
   wordTimer: null, wordStep: 0, wordProg: { k: 0, hold: 0, motion: null }, wordLost: 0,
@@ -588,12 +589,21 @@ function drawLandmarks(ctx, lms, w, h) {
 
 /* ── 켜고 끄기 ─────────────────────────────── */
 
-async function startCamera({ demo = false } = {}) {
-  if (demo) MOCK = true;
+/* demo 가 true 면 합성 손으로 둘러본다. false 면 진짜 카메라를 연다(둘러보던 중이어도).
+   정하지 않으면 주소의 ?mock 을 따른다(점검 스크립트가 쓴다) */
+async function startCamera({ demo } = {}) {
+  if (demo !== undefined) MOCK = demo;
+  // 둘러보다가 카메라를 켜면 합성 손을 먼저 내린다
+  if (state.tracker) { state.tracker.stop(); state.tracker = null; }
+  state.live = false; state.paused = false;
+  el.camera.classList.remove('live');
+  paintCamState();
   el.btnCam.disabled = true; el.btnDemo.disabled = true;
   el.btnCam.textContent = '여는 중';
+  el.camTitle.textContent = '카메라를 켜는 중입니다';
   try {
-    state.tracker = new Tracker({ video: el.video, onFrame, mock: MOCK, onLost: cameraFailed });
+    const tracker = new Tracker({ video: el.video, onFrame, mock: MOCK, onLost: cameraFailed });
+    state.tracker = tracker;
     // 모의 입력일 때만: 점검 스크립트가 '상대의 손'을 흉내 낼 수 있게 한다
     // other 를 주면 다른 손을 그 자모 손모양으로 띄운다(두 손 판정 점검용)
     if (MOCK) window.__sonmalMock = (jamo, zone = null, other = null) => {
@@ -612,29 +622,89 @@ async function startCamera({ demo = false } = {}) {
       if (!check) { state.tracker.setMockPose(null); state.tracker.mockTwoHands = false; state.tracker.mockPose2 = null; return; }
       applyMockCheck(check, moving);
     };
-    await state.tracker.start();
+    await tracker.start();
+    if (state.tracker !== tracker) return;   // 여는 사이에 끄거나 다른 것으로 켰다
     state.live = true;
     el.camera.classList.add('live');
+    resetCamButtons();
+    paintCamState();
     const cur = state.seq[state.at];
     if (cur?.role === 'word') showWord(cur);
-    else if (cur && state.tracker.mock) {
+    else if (cur && tracker.mock) {
       const cp = getPose(cur.jamo);
-      state.tracker.setMockPose(cp);
-      state.tracker.mockTwoHands = cp?.hands === 2;   // 카메라를 켜기 전에 정해진 칸도 맞춘다
-      state.tracker.mockPose2 = cp?.parts?.[1] ?? null;
+      tracker.setMockPose(cp);
+      tracker.mockTwoHands = cp?.hands === 2;   // 카메라를 켜기 전에 정해진 칸도 맞춘다
+      tracker.mockPose2 = cp?.parts?.[1] ?? null;
     }
+    if (document.hidden) pauseCamera();      // 뒤 탭에서 켜졌으면 돌아올 때까지 쉰다
   } catch (err) {
     await cameraFailed(err);
   }
 }
 
-/* 켜다 막혔을 때도, 쓰는 중에 끊겼을 때도(tracker 의 onLost) 같은 진단을 보인다 */
-async function cameraFailed(err) {
-  state.live = false;
-  el.camera.classList.remove('live');
-  el.overlay.getContext('2d').clearRect(0, 0, el.overlay.width, el.overlay.height);
+function resetCamButtons() {
   el.btnCam.disabled = false; el.btnDemo.disabled = false;
   el.btnCam.textContent = '카메라 켜기';
+}
+
+/* 영상 위 왼쪽 위의 작은 줄. 카메라를 쓰는 중이면 끄기, 둘러보는 중이면 그렇다고 알리고 카메라 켜기를 둔다 */
+function paintCamState() {
+  const demo = state.live && !!state.tracker?.mock;
+  el.camState.hidden = !state.live;
+  el.camStateNote.hidden = !demo;
+  el.camOn.hidden = !demo;
+  el.camOff.textContent = demo ? '둘러보기 끝내기' : '카메라 끄기';
+}
+
+function clearOverlay() {
+  el.overlay.getContext('2d').clearRect(0, 0, el.overlay.width, el.overlay.height);
+}
+
+/* 카메라 끄기. 영상과 손 인식을 멈추고 처음의 '카메라 켜기' 화면으로 돌아간다 */
+function stopCamera() {
+  const wasDemo = !!state.tracker?.mock;
+  state.tracker?.stop();
+  state.tracker = null;
+  state.live = false; state.paused = false;
+  el.camera.classList.remove('live');
+  clearOverlay();
+  resetCamButtons();
+  el.diag.hidden = true; el.camPrompt.hidden = false;
+  el.camTitle.textContent = wasDemo ? '둘러보기를 끝냈어요' : '카메라를 껐어요';
+  paintCamState();
+  el.seen.textContent = ''; el.guide.dataset.state = ''; setFill(0);
+  state.holdSince = 0; state.scores = []; state.trail = [];
+  const cur = state.seq[state.at];
+  if (state.mode === 'practice' && cur?.role === 'word') showWord(cur);
+  el.btnCam.focus();
+}
+
+/* 탭이 숨으면 카메라와 판정을 멈추고, 돌아오면 이어 간다 */
+function pauseCamera() {
+  if (!state.live || !state.tracker?.pause()) return;
+  state.paused = true;
+  clearOverlay();
+}
+async function resumeCamera() {
+  if (!state.paused || !state.tracker) return;
+  state.paused = false;
+  const tracker = state.tracker;
+  // 멈추기 전에 버티던 것은 버린다. 돌아온 손으로 처음부터 잰다
+  state.holdSince = 0; state.scores = []; state.trail = []; state.lostSince = 0;
+  state.wordProg.hold = 0;
+  state.reader?.clear(); state.signReader?.reset();
+  try { await tracker.resume(); }
+  catch (err) { if (state.tracker === tracker) { state.tracker = null; await cameraFailed(err); } }
+}
+
+/* 켜다 막혔을 때도, 쓰는 중에 끊겼을 때도(tracker 의 onLost) 같은 진단을 보인다 */
+async function cameraFailed(err) {
+  state.tracker?.stop(); state.tracker = null;
+  state.live = false; state.paused = false;
+  el.camera.classList.remove('live');
+  clearOverlay();
+  resetCamButtons();
+  paintCamState();
   el.camTitle.textContent = '카메라를 켜면 손을 읽어 드립니다';
   await showDiagnosis(err);   // 진단이 처음부터 다시 재면 진짜 실패를 놓친다
 }
@@ -843,9 +913,12 @@ function init() {
   if (support.speak && !hasKoreanVoice())
     el.btnListen.title += ' 한국어 목소리가 없어 읽어 주는 소리는 나지 않을 수 있습니다.';
 
-  el.btnCam.addEventListener('click', () => startCamera());
+  el.btnCam.addEventListener('click', () => startCamera({ demo: false }));
   el.btnDemo.addEventListener('click', () => startCamera({ demo: true }));
-  el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera(); });
+  el.camOn.addEventListener('click', () => startCamera({ demo: false }));
+  el.camOff.addEventListener('click', stopCamera);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pauseCamera(); else resumeCamera(); });
+  el.diagRetry.addEventListener('click', () => { el.diag.hidden = true; el.camPrompt.hidden = false; startCamera({ demo: false }); });
   el.diagDemo.addEventListener('click', () => {
     el.diag.hidden = true; el.camPrompt.hidden = false;
     startCamera({ demo: true });

@@ -63,6 +63,13 @@ if (location.protocol === 'file:') {
   <video id="cam" playsinline muted></video>
   <canvas id="overlay"></canvas>
 
+  <!-- 켜져 있는 동안 왼쪽 위에 둔다. 카메라면 끄기, 둘러보기면 합성 손이라고 알리고 카메라 켜기 -->
+  <div class="cam-state" id="cam-state" hidden>
+    <p class="cam-state-note" id="cam-state-note" hidden>카메라 없이 합성 손으로 둘러보고 있어요</p>
+    <button type="button" class="cam-state-btn" id="cam-on" hidden>카메라 켜기</button>
+    <button type="button" class="cam-state-btn" id="cam-off">카메라 끄기</button>
+  </div>
+
   <div class="cam-empty" id="cam-empty">
     <div class="cam-prompt">
       <div>
