@@ -82,12 +82,14 @@ export class Tracker {
     return { mode: 'camera' };
   }
 
-  /* 카메라 영상을 연다. 처음 켤 때와 탭이 돌아와 다시 열 때 같이 쓴다 */
-  async _openStream() {
+  /* 카메라 영상을 연다. 처음 켤 때와 탭이 돌아와 다시 열 때 같이 쓴다.
+     gen 을 주면 권한과 장치를 기다리는 사이 다시 숨거나 껐을 때(세대가 바뀜) 영상에 붙이지 않고 놓는다(null) */
+  async _openStream(gen) {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
       audio: false
     });
+    if (gen !== undefined && gen !== this.gen) { stream.getTracks().forEach(t => t.stop()); return null; }
     this.video.srcObject = stream;
     // 카메라를 뽑거나, 다른 프로그램이 가져가거나, 권한을 거두면 영상이 끝난다
     stream.getVideoTracks()[0]?.addEventListener('ended', () =>
@@ -116,6 +118,9 @@ export class Tracker {
   /* 탭이 숨으면 카메라를 놓고 판정을 멈춘다. 손 인식 모델은 들고 있어 돌아오면 바로 잇는다.
      멈췄으면 true */
   pause() {
+    // 돌아와 카메라를 다시 여는 중(resume 이 getUserMedia 를 기다리는 중)에 또 숨었다.
+    // 세대를 올려 resume 이 연 영상을 놓게 하고, 멈춘 상태로 남는다
+    if (!this.running && this.paused) { this.gen++; this._releaseStream(); return true; }
     if (!this.running) return false;
     this.gen++;
     this.running = false;
@@ -131,8 +136,9 @@ export class Tracker {
     const gen = ++this.gen;
     if (!this.mock) {
       try {
-        const stream = await this._openStream();
-        // 여는 사이에 다시 숨었거나 껐으면 방금 연 영상을 놓는다
+        const stream = await this._openStream(gen);
+        if (!stream) return false;   // 기다리는 사이 다시 숨었거나 껐다. 연 영상은 이미 놓았다
+        // 영상을 붙이고 재생을 기다리는 사이 다시 숨었거나 껐으면 방금 연 영상을 놓는다
         if (gen !== this.gen) { if (this.video.srcObject === stream) this._releaseStream(); else stream.getTracks().forEach(t => t.stop()); return false; }
       } catch (error) {
         if (gen !== this.gen) return false;
@@ -162,7 +168,8 @@ export class Tracker {
     try {
       try { this.faceDetector = await FaceDetector.createFromOptions(fileset, opts('GPU')); }
       catch { this.faceDetector = await FaceDetector.createFromOptions(fileset, opts('CPU')); }
-      if (!this.running) { this.faceDetector.close(); this.faceDetector = null; }
+      // 받는 사이 껐으면 닫는다. 탭이 숨어 잠깐 멈춘 것(paused)이면 돌아와 다시 쓰니 들고 있는다
+      if (!this.running && !this.paused) { this.faceDetector.close(); this.faceDetector = null; }
     } catch { this.faceDetector = null; }
   }
 

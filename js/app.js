@@ -380,7 +380,8 @@ function completeWord(u) {
   /* 넘어가기 전 잠깐 '해냈다'를 보인다. 그 사이 새 말을 골랐으면 새 말의 첫 칸을
      건너뛰지 않게 아무것도 하지 않는다(그때 seq 는 새 배열이다). */
   const seq = state.seq;
-  setTimeout(() => { if (state.seq !== seq) return; advance(); speakFinishedPart(); }, 420);
+  clearTimeout(state.completeTimer);
+  state.completeTimer = setTimeout(() => { if (state.seq !== seq) return; advance(); speakFinishedPart(); }, 420);
 }
 
 /* 한 어절을 다 하면 그 어절을 읽어 준다.
@@ -674,10 +675,22 @@ function stopCamera() {
   el.diag.hidden = true; el.camPrompt.hidden = false;
   el.camTitle.textContent = wasDemo ? '둘러보기를 끝냈습니다' : '카메라를 껐습니다';
   paintCamState();
+  // 끄는 순간 남은 것을 다 정리한다. 해낸 직후 넘어가기(420ms), 끝난 뒤 되풀이, 읽던 소리, 띄운 자막
+  clearTimeout(state.completeTimer); clearTimeout(state.repeatTimer); stopWordTimer();
+  try { speechSynthesis.cancel(); } catch { /* 소리 없는 브라우저 */ }
+  clearTimeout(say._t); el.spoken.hidden = true;
   el.seen.textContent = ''; el.guide.dataset.state = ''; setFill(0);
-  state.holdSince = 0; state.scores = []; state.trail = [];
-  const cur = state.seq[state.at];
-  if (state.mode === 'practice' && cur?.role === 'word') showWord(cur);
+  state.holdSince = 0; state.scores = []; state.trail = []; state.lostSince = 0; state.motionSeen = false;
+  if (state.mode === 'free') {
+    state.reader.clear(); state.signReader.reset();
+    paintFreeIdle();
+  } else if (state.seq.length) {
+    // 하던 말을 첫 칸부터 다시 보인다. 낱말은 '카메라를 켜면…', 지문자는 손모양 설명이 '손이 보이지 않습니다'를 덮는다
+    state.settling = false;
+    state.at = -1; state.got = []; state.spokenPart = -1;
+    for (const n of el.seq.querySelectorAll('.unit[data-i]')) delete n.dataset.lock;
+    advance();
+  }
   el.btnCam.focus();
 }
 
