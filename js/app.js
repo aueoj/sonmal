@@ -967,6 +967,10 @@ function init() {
   el.chart.innerHTML = [...'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅛㅜㅠㅡㅣㅘㅚㅙㅝㅞㅟㅢㄲㄸㅃㅆㅉ']
     .map(j => `<button type="button" data-say="${j}" aria-label="${j} 연습">${jamoArt(j)}<span>${j}</span></button>`).join('');
   renderPicker();
+  // 아래 안내판의 실제 높이. 좁은 화면의 말 고르기가 그 위에서 끝난다(app.css)
+  new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--guide-box', `${Math.ceil(el.guide.getBoundingClientRect().height)}px`);
+  }).observe(el.guide);
   el.refToggle.addEventListener('click', () => setRef(el.ref.hidden));
   el.ref.addEventListener('click', e => {
     const b = e.target.closest('[data-say]');

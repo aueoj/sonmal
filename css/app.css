@@ -324,6 +324,9 @@ dialog a { color: var(--indigo); }
   .guide-name { font-size: var(--t-lead); }
   .say-btn kbd { display: none; }
   .cam-empty, .ref { padding-top: 64px; }
+  /* 좁은 화면에서는 아래 안내판이 화면의 1/3 남짓을 덮는다. 말 고르기를 그 위에서 끝내 겹치지 않게 한다
+     (--guide-box 는 app.js 가 아래 안내판의 실제 높이로 넣는다) */
+  .ref { bottom: var(--guide-box, 36vh); padding-bottom: var(--s5); }
   .cam-state { left: var(--s3); right: var(--s3); }
   .modeswitch button { padding: 3px 9px; }
 }
